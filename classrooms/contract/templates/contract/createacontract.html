@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Create a New Contract</title>
+</head>
+<body>
+	<h1>Now u can create ur first contract</h1>
+	<form method="POST" enctype="multipart/form-data">{% csrf_token %}
+		{{ form.as_p }}
+		<button type="submit">Create a Contract</button>
+	</form>
+</body>
+</html>

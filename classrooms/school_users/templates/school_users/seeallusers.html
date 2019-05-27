@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>All users page</title>
+</head>
+<body>
+	{% if head_users %}
+		<h1>Showing all heads of schools</h1><br>
+		{% for head in head_users %}
+			<label>{{ head.name }}</label><br>
+			<label>{{ head.profile.username }}</label><br>
+			<a href="{% url 'users:delete_user' head.head_id 'head' %}" data-baloon="Remove this item from the cart" class="text-danger">Delete Head</a><br>
+		{% endfor %}
+	{% endif %}
+	{% if teacher_users %}
+		<h1>Showing all teachers of schools</h1><br>
+		{% for teacher in teacher_users %}
+			<label>{{ teacher.name }}</label><br>
+			<label>{{ teacher.profile.username }}</label><br>
+			<a href="{% url 'users:delete_user' teacher.teacher_id 'teacher' %}" data-baloon="Remove this item from the cart" class="text-danger">Delete Teacher</a><br>
+		{% endfor %}
+	{% endif %}
+	{% if admin_users %}
+		<h1>Showing all admins of schools</h1><br>
+		{% for admin in admin_users %}
+			<label>{{ admin.name }}</label><br>
+			<label>{{ admin.profile.username }}</label><br>
+			<a href="{% url 'users:delete_user' admin.admin_id 'admin' %}" data-baloon="Remove this item from the cart" class="text-danger">Delete Admin</a><br>
+		{% endfor %}
+	{% endif %}
+	{% if supervisor_users %}
+		<h1>Showing all supervisors of schools</h1><br>
+		{% for supervisor in supervisor_users %}
+			<label>{{ supervisor.name }}</label><br>
+			<label>{{ supervisor.profile.username }}</label><br>
+			<a href="{% url 'users:delete_user' supervisor.supervisor_id 'supervisor' %}" data-baloon="Remove this item from the cart" class="text-danger">Delete Supervisor</a><br>
+		{% endfor %}
+	{% endif %}
+	{% if parent_users %}
+		<h1>Showing all parents of schools</h1><br>
+		{% for parent in parent_users %}
+			<label>{{ parent.name }}</label><br>
+			<label>{{ parent.profile.username }}</label><br>
+			<a href="{% url 'users:delete_user' parent.parent_id 'parent' %}" data-baloon="Remove this item from the cart" class="text-danger">Delete Parent</a><br>
+		{% endfor %}
+	{% endif %}
+	{% if student_users %}
+		<h1>Showing all students of schools</h1><br>
+		{% for student in student_users %}
+			<label>{{ student.name }}</label><br>
+			<label>{{ student.profile.username }}</label><br>
+			<a href="{% url 'users:set_parents' student.student_id %}" data-baloon="Remove this item from the cart" class="text-danger">Set Parents</a><br>
+			<a href="{% url 'users:delete_user' student.student_id 'student' %}" data-baloon="Remove this item from the cart" class="text-danger">Delete Student</a><br>
+		{% endfor %}
+	{% endif %}
+</body>
+</html>
+<!-- <i class="fas fa-trash"></i> -->

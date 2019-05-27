@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>School Creation</title>
+</head>
+<body>
+	<h1>Showing all schools</h1><br>
+	{% for school in schools %}
+		<label>Name of the School: {{ school.school_name }}</label><br>
+		<label>Enrollment Year: {{ school.enrollment_year }}</label><br>
+		{% if school.classes %}
+			<label>Escolas:</label><br>
+			{% for class in school.classes.all %}
+				<label>Name of the Class: {{ class.class_name }}</label><br>
+				<label>Level of the Class: {{ class.class_level }}</label><br>
+				<a href="{% url 'school:verifyvalidchain' class.class_id %}" data-baloon="Remove this item from the cart" class="text-danger">Verify valid chain for this class</a><br>
+				<a href="{% url 'school:update_class' class.class_id %}" data-baloon="Remove this item from the cart" class="text-danger">Update this class</a><br>
+				<a href="{% url 'school:delete_class' class.class_id %}" data-baloon="Remove this item from the cart" class="text-danger">Delete this class</a><br>
+			{% endfor %}
+		{% endif %}
+		{% if school.chains %}
+			<label>Chains: </label><br>
+			{% for chain in school.chains.all %}
+				<label>New Chain</label><br>
+				<label>Chain name: {{ chain.name }}</label><br>
+				<label>Chain date: {{ chain.timestamp }}</label><br>
+				{% if chain.block_set %}
+					<label>Blocks for this chain</label><br>
+					{% for block in chain.block_set.all %}
+						<label>{{ block.hash }}</label><br>
+						<label>{{ block.previous_hash }}</label><br>
+						<label>{{ block.time_stamp }}</label><br>
+						<label>{{ block.index }}</label><br>
+						<label>{{ block.nonce }}</label><br>
+					{% endfor %}
+				{% endif %}
+			{% endfor %}
+		{% endif %}
+		<a href="{% url 'school:add_class' school.school_id %}" data-baloon="Remove this item from the cart" class="text-danger">Add Class To School</a><br>
+		<a href="{% url 'school:update_school' school.school_id %}" data-baloon="Remove this item from the cart" class="text-danger">Update School</a><br>
+		<a href="{% url 'school:delete_school' school.school_id %}" data-baloon="Remove this item from the cart" class="text-danger">Delete School</a><br>
+		<a href="{% url 'school:create_block' %}" data-baloon="Remove this item from the cart" class="text-danger">Create a new block</a><br>
+	{% endfor %}
+</body>
+</html>
+<!-- <i class="fas fa-trash"></i> -->

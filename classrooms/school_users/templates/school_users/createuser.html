@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{% load static %}
+	<script src="{%  static 'js/jquery-2.2.4.min.js' %}"></script>
+	<title>User Creation page</title>
+</head>
+<body>
+	<h1>User creation</h1>
+	<form method="POST">{% csrf_token %}
+		<label>First name: </label>
+		{{ form.first_name }}
+		<br>
+		<label>Last name: </label>
+		{{ form.last_name }}
+		<br>
+		<label>Email: </label>
+		{{ form.email }}
+		<br>
+		<label>Username: </label>
+		{{ form.username }}
+		<br>
+		<label>Password: </label>
+		{{ form.password1 }}
+		<br>
+		<label>Password Confirmation: </label>
+		{{ form.password2 }}
+		<br>
+		<select id="select_form">
+			<option id="" value="" selected></option>
+			<option value="head_school">Diretor</option>
+			<option value="teacher">Professor</option>
+			<option value="admin">Admin</option>
+			<option value="supervisor">Supervisor</option>
+			<option value="parent">Pai/Mãe</option>
+			<option value="student">Estudante</option>
+		</select>
+		<div id="pai">
+		</div>
+		<input type="hidden" id="selected_user" name="selected_user" value="0">
+		
+		<button type="submit">Sign In</button>
+	</form>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#pai').children('div').hide();
+		$('#pai').children('div').remove();
+		$('#select_form').on('change',function(){
+			var selectValor = $(this).val();
+			if (selectValor == '') {
+				$('#pai').children('div').remove();
+				document.getElementById('selected_user').value = '0'
+			}
+			else if(selectValor == 'head_school'){
+				$('#pai').children('#teacher').remove();
+				$('#pai').children('#admin').remove();
+				$('#pai').children('#supervisor').remove();
+				$('#pai').append('<div id="head_school"><p>Este é o formulário para um Diretor</p>{{ form2.as_p }}')
+				document.getElementById('selected_user').value = '1'
+			}
+			else if(selectValor == 'teacher'){
+				$('#pai').children('#head_school').remove();
+				$('#pai').children('#admin').remove();
+				$('#pai').children('#supervisor').remove();
+				$('#pai').children('#parent').remove();
+				$('#pai').children('#student').remove();
+				$('#pai').append('<div id="teacher"><p>Este é o formulário para um Professor</p>{{ form3.as_p }}')
+				document.getElementById('selected_user').value = '2'
+			}
+			else if(selectValor == 'admin'){
+				$('#pai').children('#head_school').remove();
+				$('#pai').children('#teacher').remove();
+				$('#pai').children('#supervisor').remove();
+				$('#pai').children('#parent').remove();
+				$('#pai').children('#student').remove();
+				$('#pai').append('<div id="admin"><p>Este é o formulário para um Admin</p>{{ form4.as_p }}')
+				document.getElementById('selected_user').value = '3'
+			}
+			else if(selectValor == 'supervisor'){
+				$('#pai').children('#head_school').remove();
+				$('#pai').children('#teacher').remove();
+				$('#pai').children('#admin').remove();
+				$('#pai').children('#parent').remove();
+				$('#pai').children('#student').remove();
+				$('#pai').append('<div id="supervisor"><p>Este é o formulário para um Supervisor</p>{{ form5.as_p }}')
+				document.getElementById('selected_user').value = '4'
+			}
+			else if(selectValor == 'parent'){
+				$('#pai').children('#head_school').remove();
+				$('#pai').children('#teacher').remove();
+				$('#pai').children('#admin').remove();
+				$('#pai').children('#supervisor').remove();
+				$('#pai').children('#student').remove();
+				$('#pai').append('<div id="parent"><p>Este é o formulário para um Pai/Mãe</p>{{ form6.as_p }}')
+				document.getElementById('selected_user').value = '5'
+			}
+			else if(selectValor == 'student'){
+				$('#pai').children('#head_school').remove();
+				$('#pai').children('#teacher').remove();
+				$('#pai').children('#admin').remove();
+				$('#pai').children('#supervisor').remove();
+				$('#pai').children('#parent').remove();
+				$('#pai').append('<div id="student"><p>Este é o formulário para um Estudante</p>{{ form6.as_p }}')
+				document.getElementById('selected_user').value = '6'
+			}
+			$('#pai').children('div').hide();
+			$('#pai').children('#'+selectValor).show();
+		});
+	});
+</script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>My contracts page</title>
+</head>
+<body>
+	{% if contracts %}
+		{% if request.user.is_superuser %}
+			<h1>Showing all the contracts</h1><br>
+		{% else %}
+			<h1>Showing the contracts for {{ request.user.username }}</h1><br>
+		{% endif %}
+		{% for contract in contracts %}
+			<label>Name of Contract: {{ contract.name }}</label><br>
+			<label>Date of Contract: {{ contract.date }}</label><br>
+			<label>Contract: </label><a href="{{ contract.pdf.url }}">{{ contract.pdf }}</a><br>
+			{% if request.user.is_superuser %}
+				<a href="{% url 'contracts:updatecontract' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-danger">Update contract</a><br>
+				<a href="{% url 'contracts:delete_contract' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-danger">Delete contract</a><br>
+			{% else %}
+				<a href="{% url 'contracts:set_signed' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-danger">Sign contract</a><br>
+			{% endif %}
+		{% endfor %}
+	{% endif %}
+</body>
+</html>
+<!-- <i class="fas fa-trash"></i> -->

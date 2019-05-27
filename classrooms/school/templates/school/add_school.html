@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>School Creation</title>
+</head>
+<body>
+	<h1>Now u can add ur first school</h1>
+	<form method="POST">{% csrf_token %}
+		{{ form.as_p }}
+		<button type="submit">Add a school</button>
+	</form>
+</body>
+</html>

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Update a Contract</title>
+</head>
+<body>
+	<h1>Update Contract</h1>
+	<form method="POST" enctype="multipart/form-data">{% csrf_token %}
+		{{ form.as_p }}
+		<button type="submit">Update Contract</button>
+	</form>
+</body>
+</html>

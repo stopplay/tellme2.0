@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Class Creation</title>
+</head>
+<body>
+	<h1>Now u can add ur classes</h1>
+	<form method="POST">{% csrf_token %}
+		{{ form.as_p }}
+		<button type="submit">Add a class</button>
+	</form>
+</body>
+</html>

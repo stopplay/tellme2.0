@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Class Update</title>
+</head>
+<body>
+	<h1>Update the Class</h1>
+	<form method="POST">{% csrf_token %}
+		{{ form.as_p }}
+		<button type="submit">Update the Class</button>
+	</form>
+</body>
+</html>

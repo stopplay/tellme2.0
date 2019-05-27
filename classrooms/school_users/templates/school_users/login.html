@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+	<div class="col-md-12">
+		<div class="row">
+			<form method="POST">{% csrf_token %}
+				<div class="form-group">
+					<input type="text" class="form-control form-control-user" id="username" name="username" placeholder="Login">
+				</div>
+				<div class="form-group">
+					<input type="password" class="form-control form-control-user" id="password" name="password" placeholder="Senha">
+				</div>
+				<!-- <div class="form-group">
+				<div class="custom-control custom-checkbox small">
+				<input type="checkbox" class="custom-control-input" id="customCheck">
+				<label class="custom-control-label" for="customCheck">Lembre-se de Mim</label>
+				</div>
+				</div> -->
+				<button type="submit" class="btn btn-primary btn-user btn-block">
+					Entrar
+				</button>
+			</form>
+		</div>
+	</div>
+</body>
+</html>
