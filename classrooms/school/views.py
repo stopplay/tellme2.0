@@ -10,6 +10,7 @@ from block.models import *
 import pdb
 from block.utils import SymmetricEncryption, JsonApi, EncryptionApi
 import datetime
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
@@ -29,9 +30,12 @@ def create_school(request):
 		return render(request, 'school/add_school.html', {'form':form})
 	return render(request, 'school/add_school.html', {'form':form})
 
+@login_required
 def seeallschools(request):
-	schools = School.objects.all()
-	return render(request, 'school/seeallschools.html', {'schools':schools})
+	if request.user.is_superuser:
+		schools = School.objects.all()
+		return render(request, 'school/seeallschools.html', {'schools':schools})
+	return HttpResponse('U cannot access this page cos u are not admin!')
 
 def update_school(request, school_id=None):
 	instance = School.objects.get(school_id=school_id)
