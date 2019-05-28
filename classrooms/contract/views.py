@@ -9,6 +9,16 @@ from django.utils.encoding import force_bytes, force_text
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth.decorators import login_required
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.permissions import AllowAny
+from rest_framework.status import (
+    HTTP_400_BAD_REQUEST,
+    HTTP_404_NOT_FOUND,
+    HTTP_200_OK
+)
+from rest_framework.response import Response
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 class ContractsViewSet(viewsets.ModelViewSet):
@@ -68,6 +78,20 @@ def seemycontracts(request):
 	elif request.user.is_superuser:
 		contracts = Contract.objects.all()
 	return render(request, 'contract/seemycontracts.html', {'contracts':contracts})
+
+@csrf_exempt
+@api_view(['GET'])
+def seemycontracts_rest(request):
+	contracts = []
+	if Supervisor.objects.filter(profile=request.user).count()>=1:
+		contracts = Contract.objects.filter(counter_signe=Supervisor.objects.get(profile=request.user))
+	elif Parent.objects.filter(profile=request.user).count()>=1:
+		contracts += Contract.objects.filter(first_auth_signe=Parent.objects.get(profile=request.user))
+		contracts += Contract.objects.filter(second_auth_signe=Parent.objects.get(profile=request.user))
+	elif request.user.is_superuser:
+		contracts = Contract.objects.all()
+	contracts_rest = ContractSerializer(contracts, many=True)
+	return Response({'contracts':contracts_rest.data})
 	
 def set_signed(request, contract_id = None):
 	contract = Contract.objects.get(contract_id=contract_id)

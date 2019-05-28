@@ -11,7 +11,16 @@ import pdb
 from block.utils import SymmetricEncryption, JsonApi, EncryptionApi
 import datetime
 from django.contrib.auth.decorators import login_required
-
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.permissions import AllowAny
+from rest_framework.status import (
+    HTTP_400_BAD_REQUEST,
+    HTTP_404_NOT_FOUND,
+    HTTP_200_OK
+)
+from rest_framework.response import Response
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 class SchoolsViewSet(viewsets.ModelViewSet):
@@ -35,6 +44,15 @@ def seeallschools(request):
 	if request.user.is_superuser:
 		schools = School.objects.all()
 		return render(request, 'school/seeallschools.html', {'schools':schools})
+	return HttpResponse('U cannot access this page cos u are not admin!')
+
+@csrf_exempt
+@api_view(['GET'])
+def seeallschools_rest(request):
+	if request.user.is_superuser:
+		schools = School.objects.all()
+		schools_rest = SchoolSerializer(schools, many=True)
+		return Response({'schools':schools_rest.data})
 	return HttpResponse('U cannot access this page cos u are not admin!')
 
 def update_school(request, school_id=None):

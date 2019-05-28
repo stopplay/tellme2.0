@@ -14,6 +14,7 @@ urlpatterns = [
     url('', include(router.urls)),
     url('add_school/', views.create_school),
     url('seeallschools/', views.seeallschools),
+    url('seeallschools_rest/', views.seeallschools_rest),
     path('update_school/<int:school_id>', views.update_school, name='update_school'),
     path('delete_school/<int:school_id>', views.delete_school, name='delete_school'),
     path('add_class/<int:school_id>', views.add_class, name='add_class'),
