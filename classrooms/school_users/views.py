@@ -7,6 +7,16 @@ from .forms import *
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.permissions import AllowAny
+from rest_framework.status import (
+    HTTP_400_BAD_REQUEST,
+    HTTP_404_NOT_FOUND,
+    HTTP_200_OK
+)
+from rest_framework.response import Response
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 @login_required
@@ -104,3 +114,61 @@ def do_login(request):
             nextpage = request.GET.get('next','/contracts/seemycontracts')
             return redirect(nextpage)
     return render(request, 'school_users/login.html')
+
+def my_jwt_response_handler(token, user=None, request=None):
+    return {
+        'token': token,
+        'user': UserSerializer(user, context={'request': request}).data
+    }
+
+@api_view(['GET','POST'])
+def current_user(request):
+    """
+    Determine the current user by their token, and return their data
+    """
+
+    serializer = UserSerializer(request.user)
+    return Response(serializer.data)
+
+@csrf_exempt
+@api_view(["POST"])
+@permission_classes((AllowAny,))
+def do_login_rest(request):
+    username = request.data.get("username")
+    password = request.data.get("password")
+    if username is None or password is None:
+        return Response({'error': 'Please provide both username and password'},
+                        status=HTTP_400_BAD_REQUEST)
+    user = authenticate(username=username, password=password)
+    if not user:
+        return Response({'error': 'Invalid Credentials'},
+                        status=HTTP_404_NOT_FOUND)
+    login(request,user)
+    token, _ = Token.objects.get_or_create(user=user)
+    return Response({'token': token.key},
+                    status=HTTP_200_OK)
+
+@csrf_exempt
+@api_view(['GET'])
+def seeallusers_rest(request):
+	if request.user.is_superuser:
+		head_common_users = Head.objects.all()
+		head_users = HeadSerializer(head_common_users, many=True)
+		teacher_common_users = Teacher.objects.all()
+		teacher_users = HeadSerializer(teacher_common_users, many=True)
+		admin_common_users = Admin.objects.all()
+		admin_users = HeadSerializer(admin_common_users, many=True)
+		supervisor_common_users = Supervisor.objects.all()
+		supervisor_users = HeadSerializer(supervisor_common_users, many=True)
+		parent_common_users = Parent.objects.all()
+		parent_users = HeadSerializer(parent_common_users, many=True)
+		student_common_users = Student.objects.all()
+		student_users = HeadSerializer(student_common_users, many=True)
+		context = {'head_users':head_users.data,
+				   'teacher_users':teacher_users.data,
+				   'admin_users':admin_users.data,
+				   'supervisor_users':supervisor_users.data,
+				   'parent_users':parent_users.data,
+				   'student_users':student_users.data}
+		return Response(context)
+	pass
