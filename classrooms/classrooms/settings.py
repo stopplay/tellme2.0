@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'school',
     'contract',
     'school_users',
-    
+
 ]
 
 MIDDLEWARE = [
@@ -61,7 +61,7 @@ ROOT_URLCONF = 'classrooms.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['%s/school/templates/' % (BASE_DIR), '%s/school_users/templates/' % (BASE_DIR), '%s/contract/templates/' % (BASE_DIR)],
+        'DIRS': ['%s/school/templates/' % (BASE_DIR), '%s/school_users/templates/' % (BASE_DIR), '%s/contract/templates/' % (BASE_DIR), '%s/classrooms/templates/' % (BASE_DIR)],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -133,7 +133,7 @@ EMAIL_PORT = 587
 
 STATIC_URL = '/static/'
 STATIC_ROOT = 'static'
-STATICFILES_DIRS = [('js',os.path.join(BASE_DIR, 'static', 'js'))]
+STATICFILES_DIRS = [('js',os.path.join(BASE_DIR, 'static', 'js')), ('css',os.path.join(BASE_DIR, 'static', 'css'))]
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',

@@ -1,27 +1,48 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>My contracts page</title>
-</head>
-<body>
+{% extends 'base.html'%}
+
+{% block content %}
+<div class="table-responsive">
 	{% if contracts %}
-		{% if request.user.is_superuser %}
-			<h1>Showing all the contracts</h1><br>
-		{% else %}
-			<h1>Showing the contracts for {{ request.user.username }}</h1><br>
-		{% endif %}
-		{% for contract in contracts %}
-			<label>Name of Contract: {{ contract.name }}</label><br>
-			<label>Date of Contract: {{ contract.date }}</label><br>
-			<label>Contract: </label><a href="{{ contract.pdf.url }}">{{ contract.pdf }}</a><br>
-			{% if request.user.is_superuser %}
-				<a href="{% url 'contracts:updatecontract' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-danger">Update contract</a><br>
-				<a href="{% url 'contracts:delete_contract' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-danger">Delete contract</a><br>
-			{% else %}
-				<a href="{% url 'contracts:set_signed' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-danger">Sign contract</a><br>
-			{% endif %}
-		{% endfor %}
+	{% if request.user.is_superuser %}
+	<h1 align="center">Showing all the contracts</h1><br>
+	{% else %}
+	<h1 align="center">Showing the contracts for {{ request.user.username }}</h1><br>
 	{% endif %}
-</body>
-</html>
+	<table class="table table-bordered table-hover">
+		<caption>Contracts list</caption>
+		<thead class="thead-dark">
+			<tr>
+				<th scope="col">Name of Contract</th>
+				<th scope="col">Date of Contract</th>
+				<th scope="col">Contract</th>
+				<th scope="col">Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for contract in contracts %}
+			<tr>
+				<th scope="row">{{ contract.name }}</th>
+				<td>{{ contract.date }}</td>
+				<td><a href="{{ contract.pdf.url }}">{{ contract.pdf }}</a></td>
+				{% if request.user.is_superuser %}
+				<td>
+					<div class="btn-tollbar">
+						<div class="btn-group mr-2" role="group" aria-label="First group">
+							<button type="button" class="btn btn-primary btn-sm btn-info btn-block"><a href="{% url 'contracts:updatecontract' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-light">Update contract</a></button>
+						</div>
+						<div class="btn-group mr-2" role="group" aria-label="Second group">
+							<button type="button" class="btn btn-primary btn-sm btn-danger btn-block"><a href="{% url 'contracts:delete_contract' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-light">Delete contract</a></button>
+						</div>
+					</div>
+				</td>
+				{% else %}
+				<a href="{% url 'contracts:set_signed' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-danger">Sign contract</a><br>
+				{% endif %}
+				{% endfor %}
+				{% endif %}
+			</tr>
+		</tbody>
+	</table>
+</div>
+{% endblock %}
 <!-- <i class="fas fa-trash"></i> -->
