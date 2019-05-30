@@ -54,6 +54,14 @@ def seeclassbyid(request, class_id=None):
         return render(request,'school/seeclassbyid.html',{'classe':classe})
     return HttpResponse('U cannot access this page cos u are not admin!')
 
+#weverton
+@login_required
+def seechainbyname(request, chain_name=None):
+    if request.user.is_superuser:
+        chain = Chain.objects.get(name=chain_name)
+        return render(request,'school/seechainbyname.html',{'chain':chain})
+    return HttpResponse('U cannot access this page cos u are not admin!')
+    
 @csrf_exempt
 @api_view(['GET'])
 def seeallschools_rest(request):

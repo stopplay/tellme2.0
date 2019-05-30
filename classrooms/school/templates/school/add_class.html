@@ -1,13 +1,30 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Class Creation</title>
-</head>
-<body>
-	<h1>Now u can add ur classes</h1>
-	<form method="POST">{% csrf_token %}
-		{{ form.as_p }}
-		<button type="submit">Add a class</button>
-	</form>
-</body>
-</html>
+{% extends 'base.html'%}
+
+{% block title %} See all Schools {% endblock %}
+
+{% block content %}
+<!-- Default form subscription -->
+<script>
+$(document).ready(function() {
+  $('.container').removeClass('container');
+});
+</script>
+<div class="formscontainer">
+	<div class="formsbox">
+		<form method="POST" class="text-center border border-dark p-5"> {% csrf_token %}
+
+		    <p class="h4 mb-4">You can add your Class</p>
+
+		    {{ form.as_p }}
+
+		    <!-- Sign in button -->
+		    <button class="btn btn-dark btn-block" type="submit">Add the Class</button>
+
+
+		</form>
+		<!-- Default form subscription -->
+	</div>
+
+</div>
+
+{% endblock %}

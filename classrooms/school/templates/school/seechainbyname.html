@@ -1,0 +1,57 @@
+{% extends 'base.html'%}
+
+{% block title %} See all Schools {% endblock %}
+
+{% block content %}
+<h3>Chain Details</h3>
+<div class="table-responsive">
+	<table class="table table-bordered table-hover">
+		<caption> Chain Details</caption>
+		<thead class="thead-dark">
+			<tr>
+				<th scope="col">Chain name</th>
+				<th scope="col">Chain date</th>
+				<th scope="col">Blocks for this chain</th>
+
+
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+
+				<th scope="row">{{ chain.name }}</th>
+				<td>{{ chain.time_stamp }}</td>
+        {% if chain.block_set %}
+				<td>
+          {% for block in chain.block_set.all %}
+          <label>{{ block.hash }}</label><br>
+          <label>{{ block.previous_hash }}</label><br>
+          <label>{{ block.time_stamp }}</label><br>
+          <label>{{ block.index }}</label><br>
+          <label>{{ block.nonce }}</label><br>
+          <a class="btn btn-secondary" href="{% url 'school:create_block' %}" data-baloon="Remove this item from the cart" class="text-danger">Create a new block</a>
+          <br>
+          <br>
+          {% endfor %}
+        {% endif %}
+        </td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+    <label>Chain name: {{ chain.name }}</label><br>
+    <label>Chain date: {{ chain.time_stamp }}</label><br>
+    {% if chain.block_set %}
+      <label>Blocks for this chain:</label><br>
+      {% for block in chain.block_set.all %}
+        <label>{{ block.hash }}</label><br>
+        <label>{{ block.previous_hash }}</label><br>
+        <label>{{ block.time_stamp }}</label><br>
+        <label>{{ block.index }}</label><br>
+        <label>{{ block.nonce }}</label><br>
+
+      {% endfor %}
+    {% endif %}
+
+{% endblock %}

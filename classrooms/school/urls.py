@@ -14,6 +14,7 @@ app_name = 'school'
 urlpatterns = [
     url('', include(router.urls)),
     path('seeclassbyid/<int:class_id>', views.seeclassbyid, name="seeclassbyid"),
+    path('seechainbyname/<chain_name>', views.seechainbyname, name="seechainbyname"),
     url('add_school/', views.create_school, name="add_school"),
     url('seeallschools/', views.seeallschools, name="seeallschools"),
     url('seeallschools_rest/', views.seeallschools_rest),

@@ -1,19 +1,59 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-  </head>
-  <body>
+{% extends 'base.html'%}
+
+{% block title %} See all Schools {% endblock %}
+
+{% block content %}
+<h3>{{classe.class_name}} Class Details</h3>
+<div class="table-responsive">
+	<table class="table table-bordered table-hover">
+		<caption> {{classe.class_name}} Class Details</caption>
+		<thead class="thead-dark">
+			<tr>
+				<th scope="col">Class Id</th>
+				<th scope="col">Class Name</th>
+				<th scope="col">Class Level</th>
+        <th scope="col">Students</th>
+        <th scope="col">Teachers</th>
+
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+
+				<th scope="row">{{ classe.class_id }}</th>
+				<td>{{ classe.class_name }}</td>
+				<td>{{ classe.class_level }}</td>
+        {% if class.students %}
+        <td>{% for student in classe.students.all %}
+            <label> {{ student.name }} </label>
+            {% endfor %}
+        </td>
+        {% endif %}
+
+        {% if class.teachers %}
+        <td>
+          {% for teacher in classe.teachers.all %}
+          <label> {{ teacher.name }} </label>
+          {% endfor %}
+        </td>
+        {% endif %}
+			</tr>
+		</tbody>
+	</table>
+</div>
 
     <label>Class Id: {{ classe.class_id }}</label>
-    <label>Class Name: {{ classe.name }}</label>
-    <label></label>
-    <label></label>
-    <label></label>
-    {{ class.class_id }}
-    {% endfor %}
+    <label>Class Name: {{ classe.class_name }}</label>
+    <label>Class Level: {{ classe.class_level }}</label>
+    {% if class.students %}
+      {% for student in classe.students.all %}
+        <label> {{ student.name }} </label>
+      {% endfor %}
+    {% endif %}
+    {% if class.teachers %}
+      {% for teacher in classe.teachers.all %}
+        <label> {{ teacher.name }} </label>
+      {% endfor %}
+    {% endif %}
 
-
-  </body>
-</html>
+{% endblock %}
