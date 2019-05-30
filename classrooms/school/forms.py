@@ -16,7 +16,7 @@ class ClassModelForm(forms.ModelForm):
 	"""docstring for UserModelForm"""
 	class Meta:
 		model = Class
-		fields = ['class_name', 'class_level']
+		fields = ['class_name', 'class_level', 'class_unit']
 		widgets = {
 			'class_name': forms.TextInput(attrs={'maxlength':255}),
 			'class_level': forms.NumberInput(),

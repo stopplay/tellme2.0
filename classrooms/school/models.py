@@ -16,6 +16,8 @@ class Class(models.Model):
 	"""docstring for Class"""
 	class_id = models.AutoField(primary_key=True)
 	class_name = models.TextField()
+	CLASS_UNIT_CHOICES = [('Morning','Morning'), ('Afternoon','Afternoon'), ('Evening','Evening')]
+	class_unit = models.CharField(max_length = 500, choices = CLASS_UNIT_CHOICES, default = '1', blank = True, null = True)
 	class_level = models.IntegerField()
 	students = models.ManyToManyField(Student)
 	teachers = models.ManyToManyField(Teacher)
