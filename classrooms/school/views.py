@@ -82,7 +82,7 @@ def add_class(request, school_id=None):
 	form = ClassModelForm(request.POST or None)
 	if form.is_valid():
 		classroom = form.save(commit=False)
-		newchain = Chain.objects.create(name="{0}-{1}-{2}".format(school_to_add_class.school_name, classroom.class_name, school_to_add_class.enrollment_year))
+		newchain = Chain.objects.create(name="{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, school_to_add_class.enrollment_year, classroom.class_unit, classroom.class_name))
 		school_to_add_class.chains.add(newchain)
 		classroom.save()
 		newclassroom = Class.objects.get(class_id=classroom.class_id)
@@ -99,7 +99,7 @@ def update_class(request, class_id=None):
 	form = ClassModelForm(request.POST or None, instance=class_to_update)
 	if form.is_valid():
 		classroom = form.save(commit=False)
-		chain_to_be_updated.name = "{0}-{1}-{2}".format(school_to_update_class.school_name, classroom.class_name, school_to_update_class.enrollment_year)
+		chain_to_be_updated.name = "{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, school_to_add_class.enrollment_year, classroom.class_unit, classroom.class_name)
 		chain_to_be_updated.save(update_fields=['name'])
 		classroom.save(update_fields=['class_name','class_level'])
 		return redirect('/schools/seeallschools')
@@ -108,7 +108,7 @@ def update_class(request, class_id=None):
 def delete_class(request, class_id=None):
 	class_to_delete = Class.objects.get(class_id=class_id)
 	school_to_delete_class = School.objects.get(classes__class_id__exact=class_to_delete.class_id)
-	name_of_chain = "{0}-{1}-{2}".format(school_to_delete_class.school_name, class_to_delete.class_name, school_to_delete_class.enrollment_year)
+	name_of_chain = "{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, school_to_add_class.enrollment_year, classroom.class_unit, classroom.class_name)
 	if (Chain.objects.filter(name=name_of_chain).count()>=1):
 		Chain.objects.get(name=name_of_chain).delete()
 	class_to_delete.delete()
