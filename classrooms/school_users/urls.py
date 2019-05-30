@@ -13,8 +13,8 @@ from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
 app_name = 'users'
 urlpatterns = [
     # url('', include(router.urls)),
-    url('create_user/', views.create_user),
-    url('seeallusers/', views.seeallusers),
+    url('create_user/', views.create_user, name="create_user"),
+    url('seeallusers/', views.seeallusers, name="seeallusers"),
     url('seeallusers_rest/', views.seeallusers_rest),
     path('delete_user/<int:user_id>/<type_of_user>', views.delete_user, name='delete_user'),
     path('set_parents/<int:student_id>/', views.set_parents, name='set_parents'),

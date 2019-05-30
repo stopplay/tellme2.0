@@ -6,14 +6,16 @@ from . import views
 router = routers.DefaultRouter()
 router.register(r'schools', views.SchoolsViewSet)
 
+
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 
 app_name = 'school'
 urlpatterns = [
     url('', include(router.urls)),
-    url('add_school/', views.create_school),
-    url('seeallschools/', views.seeallschools),
+    url('seeclassbyid/', views.seeallclasses, name="seeclassbyid"),
+    url('add_school/', views.create_school, name="add_school"),
+    url('seeallschools/', views.seeallschools, name="seeallschools"),
     url('seeallschools_rest/', views.seeallschools_rest),
     path('update_school/<int:school_id>', views.update_school, name='update_school'),
     path('delete_school/<int:school_id>', views.delete_school, name='delete_school'),

@@ -46,6 +46,14 @@ def seeallschools(request):
 		return render(request, 'school/seeallschools.html', {'schools':schools})
 	return HttpResponse('U cannot access this page cos u are not admin!')
 
+#weverton
+@login_required
+def seeclassbyid(request, class_id=None):
+    if request.user.is_superuser:
+        classe = Class.objects.get(class_id=class_id)
+        return render(request,'school/seeclassbyid.html',{'classe':classe})
+    return HttpResponse('U cannot access this page cos u are not admin!')
+
 @csrf_exempt
 @api_view(['GET'])
 def seeallschools_rest(request):
