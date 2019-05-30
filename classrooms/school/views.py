@@ -21,6 +21,7 @@ from rest_framework.status import (
 from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from django.views.decorators.csrf import csrf_exempt
+import pdb
 
 # Create your views here.
 class SchoolsViewSet(viewsets.ModelViewSet):
@@ -80,7 +81,25 @@ def update_school(request, school_id=None):
 		return redirect('/schools/seeallschools')
 	return render(request, 'school/update_school.html', {'form':form})
 
+@csrf_exempt
+@api_view(['POST'])
+def update_school_rest(request, school_id=None):
+	pdb.set_trace()
+	instance = School.objects.get(school_id=school_id)
+	instance.school_name = request.POST.get('school_name')
+	instance.enrollment_year = request.POST.get('enrollment_year')
+	instance.save(update_fields=['school_name', 'enrollment_year'])
+	schools_rest = SchoolSerializer(instance)
+	return Response({'schools':schools_rest.data})
+
 def delete_school(request, school_id=None):
+	school_to_delete = School.objects.get(school_id=school_id)
+	school_to_delete.delete()
+	return HttpResponse('This school has been deleted correctly')
+
+@csrf_exempt
+@api_view(['GET'])
+def delete_school_rest(request, school_id=None):
 	school_to_delete = School.objects.get(school_id=school_id)
 	school_to_delete.delete()
 	return HttpResponse('This school has been deleted correctly')
