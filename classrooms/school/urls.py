@@ -13,7 +13,7 @@ router.register(r'schools', views.SchoolsViewSet)
 app_name = 'school'
 urlpatterns = [
     url('', include(router.urls)),
-    url('seeclassbyid/', views.seeallclasses, name="seeclassbyid"),
+    path('seeclassbyid/<int:class_id>', views.seeclassbyid, name="seeclassbyid"),
     url('add_school/', views.create_school, name="add_school"),
     url('seeallschools/', views.seeallschools, name="seeallschools"),
     url('seeallschools_rest/', views.seeallschools_rest),
