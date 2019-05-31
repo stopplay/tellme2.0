@@ -23,6 +23,7 @@ urlpatterns = [
     path('delete_school/<int:school_id>', views.delete_school, name='delete_school'),
     path('delete_school_rest/<int:school_id>', views.delete_school_rest, name='delete_school_rest'),
     path('add_class/<int:school_id>', views.add_class, name='add_class'),
+    path('add_class_rest/<int:school_id>', views.add_class_rest, name='add_class_rest'),
     path('update_class/<int:class_id>', views.update_class, name='update_class'),
     path('verifyvalidchain/<int:class_id>', views.verifyvalidchain, name='verifyvalidchain'),
     path('delete_class/<int:class_id>', views.delete_class, name='delete_class'),

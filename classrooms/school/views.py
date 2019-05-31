@@ -21,7 +21,6 @@ from rest_framework.status import (
 from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from django.views.decorators.csrf import csrf_exempt
-import pdb
 
 # Create your views here.
 class SchoolsViewSet(viewsets.ModelViewSet):
@@ -117,8 +116,19 @@ def add_class(request, school_id=None):
 		return redirect('/schools/seeallschools')
 	return render(request, 'school/add_class.html', {'form':form})
 
+@csrf_exempt
+@api_view(['POST'])
+def add_class_rest(request, school_id=None):
+	school_to_add_class = School.objects.get(school_id=school_id)
+	classroom = Class.objects.create(class_name=request.POST.get('class_name'), class_level=request.POST.get('class_level'), class_unit=request.POST.get('class_unit'))
+	newchain = Chain.objects.create(name="{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, school_to_add_class.enrollment_year, classroom.class_unit, classroom.class_name))
+	school_to_add_class.chains.add(newchain)
+	newclassroom = Class.objects.get(class_id=classroom.class_id)
+	school_to_add_class.classes.add(newclassroom)
+	school_rest = SchoolSerializer(school_to_add_class)
+	return Response({'school_with_new_class':school_rest.data})
+
 def update_class(request, class_id=None):
-	pdb.set_trace()
 	class_to_update = Class.objects.get(class_id=class_id)
 	school_to_update_class = School.objects.get(classes__class_id__exact=class_to_update.class_id)
 	name_of_chain = "{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, school_to_add_class.enrollment_year, classroom.class_unit, classroom.class_name)
