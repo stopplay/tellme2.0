@@ -12,7 +12,7 @@ $(document).ready(function() {
 
 	<div class="formsdiv border border-dark p-5">
 	<p class="h4 mb-5">You can Create your Contract</p>
-	<form method="POST" class="text-left "> {% csrf_token %}
+	<form method="POST" class="text-left" enctype="multipart/form-data"> {% csrf_token %}
 		{{ form.as_p }}
 		<br>
 		
