@@ -29,11 +29,12 @@
           <label>{{ block.time_stamp }}</label><br>
           <label>{{ block.index }}</label><br>
           <label>{{ block.nonce }}</label><br>
-          <a class="btn btn-secondary" href="{% url 'school:create_block' %}" data-baloon="Remove this item from the cart" class="text-danger">Create a new block</a>
+
           <br>
           <br>
           {% endfor %}
         {% endif %}
+				<a class="btn btn-secondary" href="{% url 'school:create_block' %}" data-baloon="Remove this item from the cart" class="text-danger">Create a new block</a>
         </td>
 			</tr>
 		</tbody>

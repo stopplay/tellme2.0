@@ -8,6 +8,8 @@ class BlockModelForm(forms.ModelForm):
 		model = Block
 		fields = ['data', 'chain', 'contract']
 		widgets = {
+			'data' : forms.TextInput(attrs={'class' : 'form-control'}),
+			'data' : forms.Textarea(attrs={'style':'resize:none;'})
 			# 'school_name': forms.TextInput(attrs={'maxlength':255}),
 			# 'enrollment_year': forms.NumberInput(),
 		}

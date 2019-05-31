@@ -1,46 +1,80 @@
-<!DOCTYPE html>
-<html>
-<head>
-	{% load static %}
-	<script src="{%  static 'js/jquery-2.2.4.min.js' %}"></script>
-	<title>User Creation page</title>
-</head>
-<body>
-	<h1>User creation</h1>
-	<form method="POST">{% csrf_token %}
-		<label>First name: </label>
-		{{ form.first_name }}
-		<br>
-		<label>Last name: </label>
-		{{ form.last_name }}
-		<br>
-		<label>Email: </label>
-		{{ form.email }}
-		<br>
-		<label>Username: </label>
-		{{ form.username }}
-		<br>
-		<label>Password: </label>
-		{{ form.password1 }}
-		<br>
-		<label>Password Confirmation: </label>
-		{{ form.password2 }}
-		<br>
-		<select id="select_form">
-			<option id="" value="" selected></option>
-			<option value="head_school">Diretor</option>
-			<option value="teacher">Professor</option>
-			<option value="admin">Admin</option>
-			<option value="supervisor">Supervisor</option>
-			<option value="parent">Pai/Mãe</option>
-			<option value="student">Estudante</option>
-		</select>
+{% extends 'base.html'%}
+
+{% block title %} See all Schools {% endblock %}
+
+{% block content %}
+<script>
+$(document).ready(function() {
+  $('.container').removeClass('container');
+});
+</script>
+<div class="formscontainer">
+
+	<div class="formsbox border border-dark p-5">
+		<p class="h4 mb-4">You can Create your User</p>
+		<form method="POST" class="text-center "> {% csrf_token %}
+
+			<div class="labelandform">
+					<label>First name: </label>
+			</div>
+			<div class="labelandform">
+					{{ form.first_name }}
+			</div>
+			<div class="labelandform">
+				<label>Last name: </label>
+			</div>
+			<div class="labelandform">
+					{{ form.last_name }}
+			</div>
+			<div class="labelandform">
+				<label>Email: </label>
+			</div>
+			<div class="labelandform">
+					{{ form.email }}
+			</div>
+
+			<div class="labelandform">
+				<label>Username: </label>
+			</div>
+			<div class="labelandform">
+				{{ form.username }}
+			</div>
+			<div class="labelandform">
+				<label>Password: </label>
+			</div>
+			<div class="labelandform">
+				{{ form.password1 }}
+			</div>
+			<div class="labelandform">
+				<label>Password Confirmation: </label>
+			</div>
+		<div class="labelandform">
+				{{ form.password2 }}
+			</div>
+			<div class="labelandform">
+			<select id="select_form">
+				<option id="" value="" selected>Select Type of User</option>
+				<option value="head_school">Diretor</option>
+				<option value="teacher">Professor</option>
+				<option value="admin">Admin</option>
+				<option value="supervisor">Supervisor</option>
+				<option value="parent">Pai/Mãe</option>
+				<option value="student">Estudante</option>
+			</select>
+		</div>
 		<div id="pai">
 		</div>
 		<input type="hidden" id="selected_user" name="selected_user" value="0">
-		
-		<button type="submit">Sign In</button>
+
+		<button class="btn btn-dark" type="submit">Sign In</button>
 	</form>
+
+
+</div>
+
+</div>
+
+
 <script type="text/javascript">
 	$(document).ready(function(){
 		$('#pai').children('div').hide();
@@ -108,5 +142,4 @@
 		});
 	});
 </script>
-</body>
-</html>
+{% endblock %}

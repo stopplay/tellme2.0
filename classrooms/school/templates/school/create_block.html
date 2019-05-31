@@ -1,13 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Block Creation</title>
-</head>
-<body>
-	<h1>Create a new BLock</h1>
-	<form method="POST">{% csrf_token %}
-		{{ form.as_p }}
-		<button type="submit">Create a block</button>
-	</form>
-</body>
-</html>
+{% extends 'base.html'%}
+
+{% block title %} See all Schools {% endblock %}
+
+{% block content %}
+<script>
+$(document).ready(function() {
+	$('.container').removeClass('container');
+});
+</script>
+<div class="formscontainer">
+
+	<div class="formsdiv border border-dark p-5">
+		<p class="h4 mb-5" align="left">You can Create your Block</p>
+		<form method="POST" class="text-left"> {% csrf_token %}
+			{{ form.as_p }}
+			<button class="btn btn-dark" type="submit">Create a block</button>
+		</form>
+
+	</div>
+
+</div>
+{% endblock %}

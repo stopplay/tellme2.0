@@ -8,6 +8,6 @@ class ContractModelForm(forms.ModelForm):
 		model = Contract
 		fields = ['name', 'date', 'pdf', 'first_auth_signe', 'second_auth_signe', 'counter_signe']
 		widgets = {
-			'name': forms.TextInput(attrs={'maxlength':255}),
-			'date': forms.DateInput(attrs={'type':'date'})
+			'name': forms.TextInput(attrs={'maxlength':255, 'class':'labelandform'}),
+			'date': forms.DateInput(attrs={'type':'date', 'class':'labelandform'})
 		}
