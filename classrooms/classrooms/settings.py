@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 import datetime
+from corsheaders.defaults import *
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -43,7 +44,7 @@ INSTALLED_APPS = [
     'school',
     'contract',
     'school_users',
-
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -169,3 +170,9 @@ JWT_AUTH = {
     'JWT_ALLOW_REFRESH': True,
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=30),
 }
+
+CORS_ORIGIN_ALLOW_ALL=True
+CORS_ALLOW_CREDENTIALS=True
+
+CORS_EXPOSE_HEADERS = ['Access-Control-Allow-Origin']
+CORS_ALLOW_HEADERS = default_headers + ('access-control-allow-origin',)
