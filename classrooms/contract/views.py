@@ -19,6 +19,7 @@ from rest_framework.status import (
 from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from django.views.decorators.csrf import csrf_exempt
+import datetime
 
 # Create your views here.
 class ContractsViewSet(viewsets.ModelViewSet):
@@ -98,15 +99,18 @@ def set_signed(request, contract_id = None):
 	if Supervisor.objects.filter(profile=request.user).count()>=1:
 		supervisor = Supervisor.objects.get(profile=request.user)
 		contract.counter_signed = True
-		contract.save(update_fields=['counter_signed'])
+		contract.counter_signed_timestamp = datetime.datetime.now()
+		contract.save(update_fields=['counter_signed', 'counter_signed_timestamp'])
 	elif Parent.objects.filter(profile=request.user).count()>=1:
 		parent = Parent.objects.get(profile=request.user)
 		if contract.first_auth_signe == parent:
 			contract.first_auth_signed = True
-			contract.save(update_fields=['first_auth_signed'])
+			contract.first_auth_signed_timestamp = datetime.datetime.now()
+			contract.save(update_fields=['first_auth_signed', 'first_auth_signed_timestamp'])
 		if contract.second_auth_signe == parent:
 			contract.second_auth_signed = True
-			contract.save(update_fields=['second_auth_signed'])
+			contract.second_auth_signed_timestamp = datetime.datetime.now()
+			contract.save(update_fields=['second_auth_signed', 'second_auth_signed_timestamp'])
 	contract = Contract.objects.get(contract_id=contract_id)
 	if contract.first_auth_signed and contract.second_auth_signed and contract.counter_signed:
 		contract.all_signed = True
