@@ -131,7 +131,7 @@ def add_class_rest(request, school_id=None):
 def update_class(request, class_id=None):
 	class_to_update = Class.objects.get(class_id=class_id)
 	school_to_update_class = School.objects.get(classes__class_id__exact=class_to_update.class_id)
-	name_of_chain = "{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, school_to_add_class.enrollment_year, classroom.class_unit, classroom.class_name)
+	name_of_chain = "{0}-{1}-{2}-{3}".format(school_to_update_class.school_name, school_to_update_class.enrollment_year, class_to_update.class_unit, class_to_update.class_name)
 	chain_to_be_updated = Chain.objects.get(name=name_of_chain)
 	form = ClassModelForm(request.POST or None, instance=class_to_update)
 	if form.is_valid():
