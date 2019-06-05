@@ -138,7 +138,7 @@ EMAIL_PORT = 587
 
 STATIC_URL = '/static/'
 STATIC_ROOT = 'static'
-STATICFILES_DIRS = [('js',os.path.join(BASE_DIR, 'static', 'js')), ('css',os.path.join(BASE_DIR, 'static', 'css'))]
+STATICFILES_DIRS = [('js',os.path.join(BASE_DIR, 'static', 'js')), ('css',os.path.join(BASE_DIR, 'static', 'css')), ('fonts',os.path.join(BASE_DIR, 'static', 'fonts')), ('sass',os.path.join(BASE_DIR, 'static', 'sass')), ('img',os.path.join(BASE_DIR, 'static', 'img')), ('webfonts',os.path.join(BASE_DIR, 'static', 'webfonts'))]
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',

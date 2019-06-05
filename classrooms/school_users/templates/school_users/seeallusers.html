@@ -1,203 +1,249 @@
 {% extends 'base.html'%}
 
-{% block title %} See all Users {% endblock %}
+{% block title %} See all Schools {% endblock %}
 
 {% block content %}
-{% if head_users %}
-<div class="table-responsive">
-	<h1 align="center">Showing all heads of schools</h1><br>
-	<table class="table table-bordered table-hover">
-		<caption>Heads List</caption>
-		<thead class="thead-dark">
-			<tr>
-				<th scope="col">Name</th>
-				<th scope="col">Username</th>
-				<th scope="col">Action</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for head in head_users %}
-			<tr>
-				<th scope="row">{{ head.name }}</th>
-				<td>{{ head.profile.username }}</td>
 
-				<td>
-					<div class="btn-tollbar">
-						<div class="btn-group mr-2" role="group" aria-label="Second group"><a href="{% url 'users:delete_user' head.head_id 'head' %}" data-baloon="Remove this item from the cart" class="text-light">Delete Head</a><br>
-							<button type="button" class="btn btn-primary btn-sm btn-danger btn-block"></button>
-						</div>
-					</div>
-				</td>
-			</tr>
-			{% endfor %}
-		</tbody>
-	</table>
+<div class="content">
+  <div class="container-fluid">
+    <div class="row">
+      {% if head_users %}
+      <div class="col-md-12">
+        <div class="card strpied-tabled-with-hover">
+          <div class="card-header ">
+            <h4 class="card-title">Showing all heads of schools</h4>
+            <p class="card-category">Here is a subtitle for this table</p>
+          </div>
+
+          <div class="card-body table-full-width table-responsive">
+            <table class="table table-hover table-striped">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Username</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for head in head_users %}
+                <tr>
+                  <th scope="row">{{ head.name }}</th>
+                  <td>{{ head.profile.username }}</td>
+
+                  <td>
+                    <div class="btn-tollbar">
+                      <div class="btn-group mr-2" role="group" aria-label="Second group"><a href="{% url 'users:delete_user' head.head_id 'head' %}" data-baloon="Remove this item from the cart" class="text-light">Delete Head</a><br>
+                        <button type="button" class="btn btn-primary btn-sm btn-danger btn-block"></button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      {% if teacher_users %}
+      <div class="col-md-12">
+        <div class="card strpied-tabled-with-hover">
+          <div class="card-header ">
+            <h4 class="card-title">Showing all teachers of schools</h4>
+            <p class="card-category">Here is a subtitle for this table</p>
+          </div>
+
+          <div class="card-body table-full-width table-responsive">
+            <table class="table table-hover table-striped">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col">Teacher's name</th>
+                  <th scope="col">Username</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for teacher in teacher_users %}
+                <tr>
+                  <th scope="row">{{ teacher.name }}</th>
+                  <td>{{ teacher.profile.username }}</td>
+                  <td>
+                    <div class="btn-tollbar">
+                      <div class="btn-group mr-2" role="group" aria-label="Second group">
+                        <button type="button" class="btn btn-primary btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' teacher.teacher_id 'teacher' %}" data-baloon="Remove this item from the cart" class="text-light">Delete Teacher</a><</button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      {% if admin_users %}
+      <div class="col-md-12">
+        <div class="card strpied-tabled-with-hover">
+          <div class="card-header ">
+            <h4 class="card-title">Showing all admins of schools</h4>
+            <p class="card-category">Here is a subtitle for this table</p>
+          </div>
+
+          <div class="card-body table-full-width table-responsive">
+            <table class="table table-hover table-striped">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col">Admin's name</th>
+                  <th scope="col">Username</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for admin in admin_users %}
+                <tr>
+                  <th scope="row">{{ admin.name }}</th>
+                  <td>{{ admin.profile.username }}</td>
+                  <td>
+                    <div class="btn-tollbar">
+                      <div class="btn-group mr-2" role="group" aria-label="Second group">
+                        <button type="button" class="btn btn-primary btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' admin.admin_id 'admin' %}" data-baloon="Remove this item from the cart" class="text-light">Delete Admin</a><br></button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+
+      {% if supervisor_users %}
+      <div class="col-md-12">
+        <div class="card strpied-tabled-with-hover">
+          <div class="card-header ">
+            <h4 class="card-title">Showing all supervisors of schools</h4>
+            <p class="card-category">Here is a subtitle for this table</p>
+          </div>
+
+          <div class="card-body table-full-width table-responsive">
+            <table class="table table-hover table-striped">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col">Supervisor's name</th>
+                  <th scope="col">Username</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for supervisor in supervisor_users %}
+                <tr>
+                  <th scope="row">{{ supervisor.name }}</th>
+                  <td>{{ supervisor.profile.username }}</td>
+                  <td>
+                    <div class="btn-tollbar">
+                      <div class="btn-group mr-2" role="group" aria-label="Second group">
+                        <button type="button" class="btn btn-primary btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' supervisor.supervisor_id 'supervisor' %}" data-baloon="Remove this item from the cart" class="text-light">Delete Supervisor</a></button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      {% if parent_users %}
+      <div class="col-md-12">
+        <div class="card strpied-tabled-with-hover">
+          <div class="card-header ">
+            <h4 class="card-title">Showing all parents of schools</h4>
+            <p class="card-category">Here is a subtitle for this table</p>
+          </div>
+
+          <div class="card-body table-full-width table-responsive">
+            <table class="table table-hover table-striped">
+              <thead class="thead-dark">
+          			<tr>
+          				<th scope="col">Parent's name</th>
+          				<th scope="col">Username</th>
+          				<th scope="col">Action</th>
+          			</tr>
+          		</thead>
+          		<tbody>
+          			{% for parent in parent_users %}
+          			<tr>
+          				<th scope="row">{{ parent.name }}</th>
+          				<td>{{ parent.profile.username }}</td>
+          				<td>
+          					<div class="btn-tollbar">
+          						<div class="btn-group mr-2" role="group" aria-label="Second group">
+          							<button type="button" class="btn btn-primary btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' parent.parent_id 'parent' %}" data-baloon="Remove this item from the cart" class="text-light">Delete Parent</a></button>
+          						</div>
+          					</div>
+          				</td>
+          			</tr>
+          			{% endfor %}
+          		</tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+
+      {% if student_users %}
+      <div class="col-md-12">
+        <div class="card strpied-tabled-with-hover">
+          <div class="card-header ">
+            <h4 class="card-title">Showing all students of school</h4>
+            <p class="card-category">Here is a subtitle for this table</p>
+          </div>
+
+          <div class="card-body table-full-width table-responsive">
+            <table class="table table-hover table-striped">
+              <thead class="">
+          			<tr>
+          				<th>Student's Name</th>
+          				<th>Username</th>
+          				<th>Action</th>
+
+          			</tr>
+          		</thead>
+          		<tbody>
+          			{% for student in student_users %}
+          			<tr>
+          				<th scope="row">{{ student.name }}</th>
+          				<td>{{ student.profile.username }}</td>
+          				<td>
+          					<div class="btn-tollbar">
+          						<div class="btn-group mr-2" role="group" aria-label="First group">
+          							<button type="button" class="btn btn-primary btn-sm btn-info btn-block"><a href="{% url 'users:set_parents' student.student_id %}" data-baloon="Remove this item from the cart" class="text-light">Set Parents</a></button>
+          						</div>
+          						<div class="btn-group mr-2" role="group" aria-label="Second group">
+          							<button type="button" class="btn btn-primary btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' student.student_id 'student' %}" data-baloon="Remove this item from the cart" class="text-light">Delete Student</a></button>
+          						</div>
+          					</div>
+          				</td>
+          			</tr>
+          			{% endfor %}
+          		</tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+
+    </div>
+  </div>
 </div>
-{% endif %}
-
-
-{% if teacher_users %}
-<div class="table-responsive">
-	<table class="table table-bordered table-hover">
-		<h1 align="center">Showing all teachers of schools</h1><br>
-		<caption>Teachers list</caption>
-		<thead class="thead-dark">
-			<tr>
-				<th scope="col">Teacher's name</th>
-				<th scope="col">Username</th>
-				<th scope="col">Action</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for teacher in teacher_users %}
-			<tr>
-				<th scope="row">{{ teacher.name }}</th>
-				<td>{{ teacher.profile.username }}</td>
-				<td>
-					<div class="btn-tollbar">
-						<div class="btn-group mr-2" role="group" aria-label="Second group">
-							<button type="button" class="btn btn-primary btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' teacher.teacher_id 'teacher' %}" data-baloon="Remove this item from the cart" class="text-light">Delete Teacher</a><</button>
-						</div>
-					</div>
-				</td>
-			</tr>
-			{% endfor %}
-		</tbody>
-	</table>
-</div>
-{% endif %}
-
-
-{% if admin_users %}
-<div class="table-responsive">
-	<table class="table table-bordered table-hover">
-		<h1 align="center">Showing all admins of schools</h1><br>
-		<caption>Admins list</caption>
-		<thead class="thead-dark">
-			<tr>
-				<th scope="col">Admin's name</th>
-				<th scope="col">Username</th>
-				<th scope="col">Action</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for admin in admin_users %}
-			<tr>
-				<th scope="row">{{ admin.name }}</th>
-				<td>{{ admin.profile.username }}</td>
-				<td>
-					<div class="btn-tollbar">
-						<div class="btn-group mr-2" role="group" aria-label="Second group">
-							<button type="button" class="btn btn-primary btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' admin.admin_id 'admin' %}" data-baloon="Remove this item from the cart" class="text-light">Delete Admin</a><br></button>
-						</div>
-					</div>
-				</td>
-			</tr>
-			{% endfor %}
-		</tbody>
-	</table>
-</div>
-{% endif %}
-
-
-{% if supervisor_users %}
-<div class="table-responsive">
-	<table class="table table-bordered table-hover">
-		<h1 align="center">Showing all supervisors of schools</h1>
-		<caption>Supervisors list</caption>
-		<thead class="thead-dark">
-			<tr>
-				<th scope="col">Supervisor's name</th>
-				<th scope="col">Username</th>
-				<th scope="col">Action</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for supervisor in supervisor_users %}
-			<tr>
-				<th scope="row">{{ supervisor.name }}</th>
-				<td>{{ supervisor.profile.username }}</td>
-				<td>
-					<div class="btn-tollbar">
-						<div class="btn-group mr-2" role="group" aria-label="Second group">
-							<button type="button" class="btn btn-primary btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' supervisor.supervisor_id 'supervisor' %}" data-baloon="Remove this item from the cart" class="text-light">Delete Supervisor</a></button>
-						</div>
-					</div>
-				</td>
-			</tr>
-			{% endfor %}
-		</tbody>
-	</table>
-</div>
-{% endif %}
-
-
-{% if parent_users %}
-<div class="table-responsive">
-	<table class="table table-bordered table-hover">
-		<h1 align="center">Showing all parents of schools</h1>
-		<caption>Parents list</caption>
-		<thead class="thead-dark">
-			<tr>
-				<th scope="col">Parent's name</th>
-				<th scope="col">Username</th>
-				<th scope="col">Action</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for parent in parent_users %}
-			<tr>
-				<th scope="row">{{ parent.name }}</th>
-				<td>{{ parent.profile.username }}</td>
-				<td>
-					<div class="btn-tollbar">
-						<div class="btn-group mr-2" role="group" aria-label="Second group">
-							<button type="button" class="btn btn-primary btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' parent.parent_id 'parent' %}" data-baloon="Remove this item from the cart" class="text-light">Delete Parent</a></button>
-						</div>
-					</div>
-				</td>
-			</tr>
-			{% endfor %}
-		</tbody>
-	</table>
-</div>
-{% endif %}
-
-
-{% if student_users %}
-<div class="table-responsive">
-	<table class="table table-bordered table-hover">
-		<h1 align="center">Showing all students of schools</h1>
-		<caption>Students list</caption>
-		<thead class="thead-dark">
-			<tr>
-				<th scope="col">Student's Name</th>
-				<th scope="col">Username</th>
-				<th scope="col">Action</th>
-
-			</tr>
-		</thead>
-		<tbody>
-			{% for student in student_users %}
-			<tr>
-				<th scope="row">{{ student.name }}</th>
-				<td>{{ student.profile.username }}</td>
-				<td>
-					<div class="btn-tollbar">
-						<div class="btn-group mr-2" role="group" aria-label="First group">
-							<button type="button" class="btn btn-primary btn-sm btn-info btn-block"><a href="{% url 'users:set_parents' student.student_id %}" data-baloon="Remove this item from the cart" class="text-light">Set Parents</a></button>
-						</div>
-						<div class="btn-group mr-2" role="group" aria-label="Second group">
-							<button type="button" class="btn btn-primary btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' student.student_id 'student' %}" data-baloon="Remove this item from the cart" class="text-light">Delete Student</a></button>
-						</div>
-					</div>
-				</td>
-			</tr>
-			{% endfor %}
-		</tbody>
-	</table>
-</div>
-{% endif %}
-
 {% endblock %}
-<!-- <i class="fas fa-trash"></i> -->

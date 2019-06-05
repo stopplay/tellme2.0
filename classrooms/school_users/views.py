@@ -17,56 +17,58 @@ from rest_framework.status import (
 from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from django.views.decorators.csrf import csrf_exempt
+import pdb
 
 # Create your views here.
 @login_required
 def create_user(request):
-	if request.user.is_superuser:
-		form = UserModelForm(request.POST or None)
-		form2 = HeadModelForm(request.POST or None)
-		form3 = TeacherModelForm(request.POST or None)
-		form4 = AdminModelForm(request.POST or None)
-		form5 = SupervisorModelForm(request.POST or None)
-		form6 = ParentModelForm(request.POST or None)
-		form7 = StudentModelForm(request.POST or None)
-		selected_user = request.POST.get('selected_user', 0)
-		if form.is_valid():
-			user = form.save(commit=False)
-			user.save()
-			user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
-			if selected_user == '1':
-				if form2.is_valid():
-					user_creation = form2.save(commit=False)
-					user_creation.profile = user_profile
-					user_creation.save()
-			elif selected_user == '2':
-				if form3.is_valid():
-					user_creation = form3.save(commit=False)
-					user_creation.profile = user_profile
-					user_creation.save()
-			elif selected_user == '3':
-				if form4.is_valid():
-					user_creation = form4.save(commit=False)
-					user_creation.profile = user_profile
-					user_creation.save()
-			if selected_user == '4':
-				if form2.is_valid():
-					user_creation = form5.save(commit=False)
-					user_creation.profile = user_profile
-					user_creation.save()
-			elif selected_user == '5':
-				if form3.is_valid():
-					user_creation = form6.save(commit=False)
-					user_creation.profile = user_profile
-					user_creation.save()
-			elif selected_user == '6':
-				if form4.is_valid():
-					user_creation = form7.save(commit=False)
-					user_creation.profile = user_profile
-					user_creation.save()
-			return redirect('/users/create_user')
-		return render(request, 'school_users/createuser.html', {'form':form,'form2':form2,'form3':form3,'form4':form4,'form5':form5,'form6':form6,'form7':form7})
-	return HttpResponse('U are not able to see this page, cos u are not admin')
+    
+    if request.user.is_superuser:
+        form = UserModelForm(request.POST or None)
+        form2 = HeadModelForm(request.POST or None)
+        form3 = TeacherModelForm(request.POST or None)
+        form4 = AdminModelForm(request.POST or None)
+        form5 = SupervisorModelForm(request.POST or None)
+        form6 = ParentModelForm(request.POST or None)
+        form7 = StudentModelForm(request.POST or None)
+        selected_user = request.POST.get('selected_user', 0)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.save()
+            user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
+            if selected_user == '1':
+                if form2.is_valid():
+                    user_creation = form2.save(commit=False)
+                    user_creation.profile = user_profile
+                    user_creation.save()
+            elif selected_user == '2':
+                if form3.is_valid():
+                    user_creation = form3.save(commit=False)
+                    user_creation.profile = user_profile
+                    user_creation.save()
+            elif selected_user == '3':
+                if form4.is_valid():
+                    user_creation = form4.save(commit=False)
+                    user_creation.profile = user_profile
+                    user_creation.save()
+            elif selected_user == '4':
+                if form2.is_valid():
+                    user_creation = form5.save(commit=False)
+                    user_creation.profile = user_profile
+                    user_creation.save()
+            elif selected_user == '5':
+                if form3.is_valid():
+                    user_creation = form6.save(commit=False)
+                    user_creation.profile = user_profile
+                    user_creation.save()
+            elif selected_user == '6':
+                if form4.is_valid():
+                    user_creation = form7.save(commit=False)
+                    user_creation.profile = user_profile
+                    user_creation.save()
+            return redirect('/users/create_user')
+    return render(request, 'school_users/createuser.html', {'form':form,'form2':form2,'form3':form3,'form4':form4,'form5':form5,'form6':form6,'form7':form7})
+    return HttpResponse('U are not able to see this page, cos u are not admin')
 
 @login_required
 def seeallusers(request):
