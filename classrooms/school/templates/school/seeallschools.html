@@ -28,8 +28,11 @@
               <tbody>
                 <tr>
                   <th>{{ school.school_name }}
+
+
+
                     <div class="dropdown show">
-                      <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <a class="btn btn-secondary dropdown-toggle btn-sm" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Action
                       </a>
                       <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
@@ -48,7 +51,7 @@
                     <label>Name of the Class: {{ class.class_name }}</label><br>
                     <label>Enrollment Year: {{ school.enrollment_year }}</label><br>
                     <div class="dropdown show">
-                      <a class="btn btn-secondary dropdown-toggle" href="" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <a class="btn btn-secondary dropdown-toggle btn-sm" href="" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Action
                       </a>
 
@@ -68,25 +71,25 @@
                     {% for chain in school.chains.all %}
                     <div>
                       <label>Chain name: {{ chain.name }}</label>
-                        <div>
+                      <div>
                         <a class="btn btn-secondary btn-sm" href="{% url 'school:seechainbyname' chain.name %}" role="button" data-baloon="Remove this item from the cart" class="text-danger">See Chain details</a>
-                        </div>
-                        </div>
+                      </div>
+                    </div>
 
-                        {% endfor %}
-
-
-                      </td>
-                      {% endif %}
-                    </tr>
                     {% endfor %}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
 
+
+                  </td>
+                  {% endif %}
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
+
     </div>
-    {% endblock %}
+  </div>
+</div>
+{% endblock %}
