@@ -84,6 +84,14 @@ def seemycontracts(request):
 		contracts = Contract.objects.all()
 	return render(request, 'contract/seemycontracts.html', {'contracts':contracts})
 
+#weverton
+@login_required
+def seecontractdetails(request, contract_id=None):
+    if request.user.is_superuser:
+        contract = Contract.objects.get(contract_id=contract_id)
+        return render(request,'contract/seecontractdetails.html',{'contract':contract})
+    return HttpResponse('U cannot access this page cos u are not admin!')
+
 @csrf_exempt
 @api_view(['GET'])
 def seemycontracts_rest(request):
@@ -97,7 +105,7 @@ def seemycontracts_rest(request):
 		contracts = Contract.objects.all()
 	contracts_rest = ContractSerializer(contracts, many=True)
 	return Response({'contracts':contracts_rest.data})
-	
+
 def set_signed(request, contract_id = None):
 	contract = Contract.objects.get(contract_id=contract_id)
 	form = BlockModelFormByContract(request.POST or None)

@@ -21,12 +21,12 @@
                     </div>
                     <div class="card-body table-full-width table-responsive">
                         <table class="table table-hover table-striped">
-                          <thead class="thead-dark">
+                          <thead >
                       			<tr>
-                      				<th scope="col">Name of Contract</th>
-                      				<th scope="col">Date of Contract</th>
-                      				<th scope="col">Contract</th>
-                      				<th scope="col">Actions</th>
+                      				<th>Name of Contract</th>
+                      				<th>Date of Contract</th>
+                      				<th >Contract</th>
+                      				<th >Actions</th>
                       			</tr>
                       		</thead>
                       		<tbody>
@@ -34,22 +34,47 @@
                       			<tr>
                       				<th scope="row">{{ contract.name }}</th>
                       				<td>{{ contract.date }}</td>
+                              <td>
                               {% if contract.pdf %}
-                      				  <td><a href="{{ contract.pdf.url }}">{{ contract.pdf }}</a></td>
+                      				  <a href="{{ contract.pdf.url }}">{{ contract.pdf }}</a>
                               {% endif %}
-                      				{% if request.user.is_superuser %}
+                              </td>
+
                       				<td>
-                      					<div class="btn-tollbar">
-                      						<div class="btn-group mr-2" role="group" aria-label="First group">
-                      							<button type="button" class="btn btn-primary btn-sm btn-info btn-block"><a href="{% url 'contracts:updatecontract' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-light">Update contract</a></button>
+                              {% if request.user.is_superuser %}
+                      					<div class="btn-tollbar px-2">
+
+                                  <div class="dropdown show">
+                                    <a class="btn btn-secondary dropdown-toggle btn-sm" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                      Action
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                      <a class="dropdown-item" href="{% url 'contracts:updatecontract' contract.contract_id %}" data-baloon="Remove this item from the cart">Update contract</a>
+                                      <a class="dropdown-item" href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart">Contract Details</a>
+
+                                    </div>
+                                  </div>
+                                </div>
+                                {% if contract.first_auth_signed or contract.second_auth_signed or contract.counter_signed %}
+                                {% else %}
+                                <div class="btn-tollbar">
+
+                      						<div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
+                      							<button type="button" class="btn btn-primary btn-sm btn-danger btn-block"><a href="{% url 'contracts:delete_contract' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-light">Delete Contract</a></button>
                       						</div>
-                      						<div class="btn-group mr-2" role="group" aria-label="Second group">
-                      							<button type="button" class="btn btn-primary btn-sm btn-danger btn-block"><a href="{% url 'contracts:delete_contract' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-light">Delete contract</a></button>
-                      						</div>
+
+
                       					</div>
+                                {% endif %}
+                                {% else %}
+                                <div class="btn-tollbar">
+                                <div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
+                                  <button type="button" class="btn btn-primary btn-sm btn-danger btn-block"><a href="{% url 'contracts:set_signed' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-danger">Sign contract</a></button>
+                                </div>
+                                </div>
                       				</td>
-                      				{% else %}
-                      				<a href="{% url 'contracts:set_signed' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-danger">Sign contract</a><br>
+
+                      				   <!-- <td><a href="{% url 'contracts:set_signed' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-danger">Sign contract</a><br></td>-->
                       				{% endif %}
                       				{% endfor %}
                       				{% endif %}

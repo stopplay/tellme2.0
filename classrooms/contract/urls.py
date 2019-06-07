@@ -13,6 +13,7 @@ app_name = 'contracts'
 urlpatterns = [
     url('', include(router.urls)),
     url('createacontract/', views.createacontract, name="createacontract"),
+    path('seecontractdetails/<int:contract_id>', views.seecontractdetails, name="seecontractdetails"),
     url('seemycontracts/', views.seemycontracts, name="seemycontracts"),
     path('set_signed/<int:contract_id>', views.set_signed, name='set_signed'),
     path('updatecontract/<int:contract_id>', views.updatecontract, name='updatecontract'),

@@ -1,0 +1,350 @@
+{% extends 'base.html'%}
+
+{% block title %} Contract Details {% endblock %}
+
+{% block content %}
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Contract Details</h4>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="row">
+                                <div class="col-md-4 pr-1">
+                                    <div class="form-group">
+                                        <label>CONTRACT ID</label>
+                                        <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.contract_id_sponte}}">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 px-1">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">CONTRACT FREE CLASS ID SPONTE</label>
+                                        <input type="email" class="form-control" disabled="" placeholder="" value="{{contract.contract_free_class_id_sponte}}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 pr-1">
+                                    <div class="form-group">
+                                        <label>SITUATION ID </label>
+                                        <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.situation_id_sponte}}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 pl-1">
+                                    <div class="form-group">
+                                        <label>SITUATION </label>
+                                        <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.situation_sponte}}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>STUDENT NAME</label>
+                                        <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.student_name_sponte}}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 pr-1">
+                                    <div class="form-group">
+                                        <label>STUDENT ID</label>
+                                        <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.student_id_sponte}}">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 px-1">
+                                    <div class="form-group">
+                                        <label>COURSE ID</label>
+                                        <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.course_id_sponte}}">
+                                    </div>
+                                </div>
+                                <div class="col-md-4 pl-1">
+                                    <div class="form-group">
+                                        <label>CLASS ID</label>
+                                        <input type="number" class="form-control" disabled="" placeholder="" value="{{contract.class_id_sponte}}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>CLASS NAME</label>
+                                        <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.class_name_sponte}}">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>COURSE NAME</label>
+                                        <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.course_name_sponte}}">
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-4 pr-1">
+                                    <div class="form-group">
+                                        <label>CONTRACT TYPE ID</label>
+                                        <input type="number" class="form-control" disabled="" placeholder="" value="{{contract.contract_type_id}}">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 px-2">
+                                    <div class="form-group">
+                                        <label>INITIAL DATE</label>
+                                        <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.initial_date_sponte}}">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 pl-1">
+                                    <div class="form-group">
+                                        <label>END DATE</label>
+                                        <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.end_date_sponte}}">
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                              <div class="col-md-4 pr-1">
+                                  <div class="form-group">
+                                      <label>DATE OF REGISTRATION</label>
+                                      <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.date_of_registration_sponte}}">
+                                  </div>
+                              </div>
+
+                              <div class="col-md-4 px-1">
+                                  <div class="form-group">
+                                      <label>TYPE OF REGISTRATION</label>
+                                      <input type="number" class="form-control" disabled="" placeholder="" value="{{contract.type_of_registration_sponte}}">
+                                  </div>
+                              </div>
+
+                            </div>
+
+                            <div class="row">
+                              <div class="col-md-12">
+                                  <div class="form-group">
+                                      <label>CONTRACTOR</label>
+                                      <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.contractor_sponte}}">
+                                  </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-12">
+                                  <div class="form-group">
+                                      <label>NAME OF CURRICULAR MATRIX</label>
+                                      <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.name_of_curricular_matrix_sponte}}">
+                                  </div>
+                              </div>
+                            </div>
+
+
+
+
+                            <div class="row">
+
+                              <div class="col-md-4 pr-1">
+                                  <div class="form-group">
+                                      <label>FINANCIAL LAUNCHED</label>
+                                      <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.financial_launched_sponte}}">
+                                  </div>
+                              </div>
+
+
+                                <div class="col-md-4 px-1">
+                                    <div class="form-group">
+                                        <label>CONTRACT NUMBER</label>
+                                        <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.contract_number_sponte}}">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 pl-1">
+                                    <div class="form-group">
+                                        <label>CLOSING DATE</label>
+                                        <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.closing_date_sponte}}">
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                              <div class="col-md-12">
+                                  <div class="form-group">
+                                      <label>CONTRACT NAME</label>
+                                      <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.name}}">
+                                  </div>
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <div class="col-md-4 pr-1">
+                                <div class="form-group">
+                                    <label>CONTRACT DATE</label>
+                                    <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.date}}">
+                                </div>
+                              </div>
+
+                              <div class="form-group col-md-4 px-4">
+                                  <label>PDF</label>
+                                  {% if contract.pdf %}
+                                    <div><a href="{{ contract.pdf.url }}">{{contract.pdf}}</a></div>
+                                  {% else %}
+                                  <input type="text" class="form-control" disabled="" placeholder="" value="NONE">
+                                  {% endif %}
+                              </div>
+
+
+                            </div>
+
+
+                            {% if request.user.is_superuser %}
+                            <div class="row">
+                              <div class="col-md-4 pr-1">
+                                <div class="form-group">
+                                    <label>FIRST AUGH SIGNED</label>
+                                    {% if contract.first_auth_signed %}
+                                    <div>
+                                   <span class="badge badge-pill badge-success text-success" >.</span>
+                                   </div>
+                                    {% else %}
+                                    <div>
+                                    <span class="badge badge-pill badge-danger text-danger" >.</span>
+                                    </div>
+                                    {% endif %}
+                                    <!--<input type="text" class="form-control" disabled="" placeholder="" value="{{contract.first_auth_signed}}">-->
+                                </div>
+                              </div>
+
+                              <div class="col-md-4 px-1">
+                                <div class="form-group">
+                                    <label>SECOND AUGH SIGNED</label>
+
+                                    {% if contract.second_auth_signed %}
+                                    <div>
+                                   <span class="badge badge-pill badge-success text-success" >.</span>
+                                   </div>
+                                    {% else %}
+                                    <div>
+                                    <span class="badge badge-pill badge-danger text-danger" >.</span>
+                                    </div>
+                                    {% endif %}
+                                  <!--  <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.second_auth_signed}}">-->
+                                </div>
+                              </div>
+                            </div>
+
+
+                            <div class="row">
+                              <div class="col-md-4 pr-1">
+                                <div class="form-group">
+                                    <label>COUNTER SIGNED</label>
+                                    {% if contract.counter_signed %}
+                                    <div>
+                                   <span class="badge badge-pill badge-success text-success" >.</span>
+                                   </div>
+                                    {% else %}
+                                    <div>
+                                    <span class="badge badge-pill badge-danger text-danger" >.</span>
+                                    </div>
+                                    {% endif %}
+                                    <!--<input type="text" class="form-control" disabled="" placeholder="" value="{{contract.counter_signed}}">-->
+                                </div>
+                              </div>
+
+                              <div class="col-md-4 px-1">
+                                <div class="form-group">
+                                    <label>ALL SIGNED</label>
+                                    {% if contract.all_signed %}
+                                    <div>
+                                   <span class="badge badge-pill badge-success text-success" >.</span>
+                                   </div>
+                                    {% else %}
+                                    <div>
+                                    <span class="badge badge-pill badge-danger text-danger" >.</span>
+                                    </div>
+                                    {% endif %}
+                                    <!--<input type="text" class="form-control" disabled="" placeholder="" value="{{contract.all_signed}}">-->
+                                </div>
+                              </div>
+
+
+                            </div>
+
+
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>FIRST AUTH SIGNE</label>
+                                    <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.first_auth_signe}}">
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>SECOND AUTH SIGNE</label>
+                                    <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.second_auth_signe}}">
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>COUNTER SIGNE</label>
+
+                                    <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.counter_signe}}">
+
+                                </div>
+                              </div>
+
+                            </div>
+
+
+                            <div class="row">
+                              <div class="col-md-4 pr-1">
+                                <div class="form-group">
+                                    <label>FIRST AUTH SIGNED TIMESTAMP</label>
+                                    <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.first_auth_signed_timestamp}}">
+                                </div>
+                              </div>
+
+                              <div class="col-md-4 px-1">
+                                <div class="form-group">
+                                    <label>SECOND AUTH SIGNED TIMESTAMP</label>
+                                    <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.second_auth_signed_timestamp}}">
+                                </div>
+                              </div>
+
+                              <div class="col-md-4 pl-1">
+                                <div class="form-group">
+                                    <label>COUNTER SIGNED TIMESTAMP</label>
+
+                                    <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.counter_signed_timestamp}}">
+
+                                </div>
+                              </div>
+
+                            </div>
+                            {% endif %}
+
+                            <div class="clearfix"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+</div>
+</div>
+</div>
+{% endblock %}
