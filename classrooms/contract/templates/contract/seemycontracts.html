@@ -34,7 +34,9 @@
                       			<tr>
                       				<th scope="row">{{ contract.name }}</th>
                       				<td>{{ contract.date }}</td>
-                      				<td><a href="{{ contract.pdf.url }}">{{ contract.pdf }}</a></td>
+                              {% if contract.pdf %}
+                      				  <td><a href="{{ contract.pdf.url }}">{{ contract.pdf }}</a></td>
+                              {% endif %}
                       				{% if request.user.is_superuser %}
                       				<td>
                       					<div class="btn-tollbar">

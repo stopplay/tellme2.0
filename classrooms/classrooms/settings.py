@@ -27,7 +27,7 @@ SECRET_KEY = 'z8^yw$9(6#o@o#p@qy%=nb^qxg0ebribt7ngud#+x0n^d-#md7'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['52.212.87.244', '127.0.0.1']
 
 
 # Application definition
@@ -45,7 +45,15 @@ INSTALLED_APPS = [
     'contract',
     'school_users',
     'corsheaders',
+    'data_wizard',
+    'data_wizard.sources',
 ]
+
+DATA_WIZARD = {
+    'BACKEND': 'data_wizard.backends.threading',
+    'LOADER': 'data_wizard.loaders.FileLoader',
+    'PERMISSION': 'rest_framework.permissions.IsAdminUser',
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

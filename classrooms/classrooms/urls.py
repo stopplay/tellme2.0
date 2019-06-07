@@ -20,6 +20,7 @@ from django.conf.urls.static import static
 from classrooms import settings
 
 urlpatterns = [
+    path('datawizard/', include('data_wizard.urls')),
     path('admin/', admin.site.urls),
     url('contracts/', include('contract.urls')),
     url('schools/', include('school.urls')),
