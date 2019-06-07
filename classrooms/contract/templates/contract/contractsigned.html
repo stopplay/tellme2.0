@@ -2,7 +2,13 @@
 
 
 Hi {{ user.name }},
-U had signed ur contract!
+U had signed ur contract and down u'll see the details of the signe!
+
+Timestamp of the singe = {{ timestamp }}
+data = {{ block.data }}
+Hash = {{ block.hash }}
+Previous hash = {{ block.previous_hash }}
+Chain = {{ block.chain.name }}
 
 
 {% endautoescape %}

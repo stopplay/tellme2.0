@@ -44,6 +44,7 @@ class Parent(models.Model):
 	name = models.CharField(max_length = 750, null=True, blank=True)
 	profile = models.OneToOneField(User, on_delete = models.SET_NULL, null=True, blank=True)
 	authorised = models.BooleanField(default=False)
+	relationship = models.TextField(null=True, blank=True)
 
 	def __str__(self):
 		return '{}'.format(self.name)
@@ -53,8 +54,8 @@ class Student(models.Model):
 	student_id = models.AutoField(primary_key = True)
 	name = models.CharField(max_length = 750, null=True, blank=True)
 	profile = models.OneToOneField(User, on_delete = models.SET_NULL, null=True, blank=True)
-	father = models.ForeignKey('Parent', on_delete = models.SET_NULL, null=True, blank=True, related_name='father')
-	mother = models.ForeignKey('Parent', on_delete = models.SET_NULL, null=True, blank=True, related_name='mother')
+	first_parent = models.ForeignKey('Parent', on_delete = models.SET_NULL, null=True, blank=True, related_name='first_parent')
+	second_parent = models.ForeignKey('Parent', on_delete = models.SET_NULL, null=True, blank=True, related_name='second_parent')
 
 	def __str__(self):
 		return '{}'.format(self.name)

@@ -20,6 +20,9 @@ from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from django.views.decorators.csrf import csrf_exempt
 import datetime
+from block.utils import SymmetricEncryption, JsonApi, EncryptionApi
+from block.models import *
+from block.forms import *
 
 # Create your views here.
 class ContractsViewSet(viewsets.ModelViewSet):
@@ -96,26 +99,95 @@ def seemycontracts_rest(request):
 	
 def set_signed(request, contract_id = None):
 	contract = Contract.objects.get(contract_id=contract_id)
-	if Supervisor.objects.filter(profile=request.user).count()>=1:
-		supervisor = Supervisor.objects.get(profile=request.user)
-		contract.counter_signed = True
-		contract.counter_signed_timestamp = datetime.datetime.now()
-		contract.save(update_fields=['counter_signed', 'counter_signed_timestamp'])
-	elif Parent.objects.filter(profile=request.user).count()>=1:
-		parent = Parent.objects.get(profile=request.user)
-		if contract.first_auth_signe == parent:
-			contract.first_auth_signed = True
-			contract.first_auth_signed_timestamp = datetime.datetime.now()
-			contract.save(update_fields=['first_auth_signed', 'first_auth_signed_timestamp'])
-		if contract.second_auth_signe == parent:
-			contract.second_auth_signed = True
-			contract.second_auth_signed_timestamp = datetime.datetime.now()
-			contract.save(update_fields=['second_auth_signed', 'second_auth_signed_timestamp'])
-	contract = Contract.objects.get(contract_id=contract_id)
-	if contract.first_auth_signed and contract.second_auth_signed and contract.counter_signed:
-		contract.all_signed = True
-		contract.save(update_fields=['all_signed'])
-	return redirect('/contracts/seemycontracts')
+	form = BlockModelFormByContract(request.POST or None)
+	if request.method == 'POST':
+		if form.is_valid():
+			block = form.save(commit=False)
+			block.data = contract.name
+			block.contract = contract
+			if block.chain.__len__()<1:
+				block.index = 0
+				block.previous_hash = 'Basic hash for the chain'
+				block.time_stamp=datetime.datetime.now(tz=pytz.utc)
+				block.nonce = SymmetricEncryption.generate_salt(26)
+				while not block.valid_hash():
+					block.nonce = SymmetricEncryption.generate_salt(26)
+				block.hash = block.__hash__()
+				block.save()
+			else:
+				block.index=block.chain.last_block.index + 1
+				block.time_stamp=datetime.datetime.now(tz=pytz.utc)
+				block.previous_hash=block.chain.last_block.hash
+				block.nonce=SymmetricEncryption.generate_salt(26)
+				while not block.valid_hash():
+					block.nonce = SymmetricEncryption.generate_salt(26)
+				block.hash = block.__hash__()
+				if block.is_valid_block(block.chain.last_block):
+					print(block.is_valid_block(block.chain.last_block))
+					block.save()
+			if Supervisor.objects.filter(profile=request.user).count()>=1:
+				attachments = []
+				supervisor = Supervisor.objects.get(profile=request.user)
+				contract.counter_signed = True
+				contract.counter_signed_timestamp = datetime.datetime.now()
+				contract.save(update_fields=['counter_signed', 'counter_signed_timestamp'])
+				content = contract.pdf.read()
+				attachment = (contract.pdf.name, content, 'application/pdf')
+				attachments.append(attachment)
+				mail_subject = 'Contract has been signed'
+				message = render_to_string('contract/contractsigned.html', {
+					'user': supervisor,
+					'timestamp': contract.counter_signed_timestamp,
+					'block': block,
+				})
+				to_email = supervisor.profile.email
+				email = EmailMessage(
+					mail_subject, message, to=[to_email], attachments=attachments
+				)
+				email.send()
+			elif Parent.objects.filter(profile=request.user).count()>=1:
+				attachments = []
+				parent = Parent.objects.get(profile=request.user)
+				if contract.first_auth_signe == parent:
+					contract.first_auth_signed = True
+					contract.first_auth_signed_timestamp = datetime.datetime.now()
+					contract.save(update_fields=['first_auth_signed', 'first_auth_signed_timestamp'])
+					content = contract.pdf.read()
+					attachment = (contract.pdf.name, content, 'application/pdf')
+					attachments.append(attachment)
+					mail_subject = 'Contract has been signed'
+					message = render_to_string('contract/contractsigned.html', {
+						'user': parent,
+						'timestamp': contract.first_auth_signed_timestamp,
+						'block': block,
+					})
+					to_email = parent.profile.email
+					email = EmailMessage(
+						mail_subject, message, to=[to_email], attachments=attachments
+					)
+				if contract.second_auth_signe == parent:
+					contract.second_auth_signed = True
+					contract.second_auth_signed_timestamp = datetime.datetime.now()
+					contract.save(update_fields=['second_auth_signed', 'second_auth_signed_timestamp'])
+					content = contract.pdf.read()
+					attachment = (contract.pdf.name, content, 'application/pdf')
+					attachments.append(attachment)
+					mail_subject = 'Contract has been signed'
+					message = render_to_string('contract/contractsigned.html', {
+						'user': parent,
+						'timestamp': contract.second_auth_signed_timestamp,
+						'block': block,
+					})
+					to_email = parent.profile.email
+					email = EmailMessage(
+						mail_subject, message, to=[to_email], attachments=attachments
+					)
+			contract = Contract.objects.get(contract_id=contract_id)
+			if contract.first_auth_signed and contract.second_auth_signed and contract.counter_signed:
+				contract.all_signed = True
+				contract.save(update_fields=['all_signed'])
+			return redirect('/contracts/seemycontracts')
+	return render(request, 'contract/createblockcontract.html', {'form':form})
 
 def updatecontract(request, contract_id=None):
 	instance = Contract.objects.get(contract_id=contract_id)

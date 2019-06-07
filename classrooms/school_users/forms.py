@@ -79,7 +79,7 @@ class SetParentsModelForm(forms.ModelForm):
 	"""docstring for ManagerModelForm"""
 	class Meta:
 		model = Student
-		fields = ['father','mother']
+		fields = ['first_parent','second_parent']
 		# widgets = {
 		# 	'name': forms.TextInput(attrs={'maxlength':255}),
 		# }

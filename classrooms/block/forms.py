@@ -13,3 +13,9 @@ class BlockModelForm(forms.ModelForm):
 			# 'school_name': forms.TextInput(attrs={'maxlength':255}),
 			# 'enrollment_year': forms.NumberInput(),
 		}
+
+class BlockModelFormByContract(forms.ModelForm):
+	"""docstring for UserModelForm"""
+	class Meta:
+		model = Block
+		fields = ['chain']
