@@ -120,44 +120,46 @@ def set_signed(request, contract_id = None):
 def updatecontract(request, contract_id=None):
 	instance = Contract.objects.get(contract_id=contract_id)
 	form = ContractModelForm(request.POST or None, request.FILES, instance=instance)
-	if form.is_valid():
-		contract = form.save(commit=False)
-		attachments = []
-		content = contract.pdf.read()
-		attachment = (contract.pdf.name, content, 'application/pdf')
-		attachments.append(attachment)
-		mail_subject = 'Contract to be signed'
-		message = render_to_string('contract/sendcontract.html', {
-			'user': contract.first_auth_signe,
-		})
-		to_email = contract.first_auth_signe.profile.email
-		email = EmailMessage(
-			mail_subject, message, to=[to_email], attachments=attachments
-		)
-		email.send()
-		mail_subject = 'Contract to be signed'
-		message = render_to_string('contract/sendcontract.html', {
-			'user': contract.second_auth_signe,
-		})
-		to_email = contract.second_auth_signe.profile.email
-		email = EmailMessage(
-			mail_subject, message, to=[to_email], attachments=attachments
-		)
-		email.send()
-		mail_subject = 'Contract to be signed'
-		message = render_to_string('contract/sendcontract.html', {
-			'user': contract.counter_signe,
-		})
-		to_email = contract.counter_signe.profile.email
-		email = EmailMessage(
-			mail_subject, message, to=[to_email], attachments=attachments
-		)
-		email.send()
-		contract.counter_signed = False
-		contract.first_auth_signed = False
-		contract.second_auth_signed = False
-		contract.save(update_fields=['name', 'date', 'pdf', 'first_auth_signe', 'first_auth_signed', 'second_auth_signe', 'second_auth_signed', 'counter_signe', 'counter_signed'])
-		return redirect('/contracts/seemycontracts')
+	if request.method=='POST':
+		if form.is_valid():
+			contract = form.save(commit=False)
+			attachments = []
+			if (contract.pdf):
+				content = contract.pdf.read()
+				attachment = (contract.pdf.name, content, 'application/pdf')
+				attachments.append(attachment)
+				mail_subject = 'Contract to be signed'
+				message = render_to_string('contract/sendcontract.html', {
+					'user': contract.first_auth_signe,
+				})
+				to_email = contract.first_auth_signe.profile.email
+				email = EmailMessage(
+					mail_subject, message, to=[to_email], attachments=attachments
+				)
+				email.send()
+				mail_subject = 'Contract to be signed'
+				message = render_to_string('contract/sendcontract.html', {
+					'user': contract.second_auth_signe,
+				})
+				to_email = contract.second_auth_signe.profile.email
+				email = EmailMessage(
+					mail_subject, message, to=[to_email], attachments=attachments
+				)
+				email.send()
+				mail_subject = 'Contract to be signed'
+				message = render_to_string('contract/sendcontract.html', {
+					'user': contract.counter_signe,
+				})
+				to_email = contract.counter_signe.profile.email
+				email = EmailMessage(
+					mail_subject, message, to=[to_email], attachments=attachments
+				)
+				email.send()
+				contract.counter_signed = False
+				contract.first_auth_signed = False
+				contract.second_auth_signed = False
+				contract.save(update_fields=['name', 'date', 'pdf', 'first_auth_signe', 'first_auth_signed', 'second_auth_signe', 'second_auth_signed', 'counter_signe', 'counter_signed'])
+				return redirect('/contracts/seemycontracts')
 	return render(request, 'contract/updatecontract.html', {'form':form})
 
 def delete_contract(request, contract_id = None):
