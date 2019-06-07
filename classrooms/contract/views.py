@@ -34,41 +34,42 @@ class ContractsViewSet(viewsets.ModelViewSet):
 
 def createacontract(request):
 	form = ContractModelForm(request.POST or None, request.FILES)
-	if form.is_valid():
-		contract = form.save(commit=False)
-		attachments = []
-		content = contract.pdf.read()
-		attachment = (contract.pdf.name, content, 'application/pdf')
-		attachments.append(attachment)
-		mail_subject = 'Contract to be signed'
-		message = render_to_string('contract/sendcontract.html', {
-			'user': contract.first_auth_signe,
-		})
-		to_email = contract.first_auth_signe.profile.email
-		email = EmailMessage(
-			mail_subject, message, to=[to_email], attachments=attachments
-		)
-		email.send()
-		mail_subject = 'Contract to be signed'
-		message = render_to_string('contract/sendcontract.html', {
-			'user': contract.second_auth_signe,
-		})
-		to_email = contract.second_auth_signe.profile.email
-		email = EmailMessage(
-			mail_subject, message, to=[to_email], attachments=attachments
-		)
-		email.send()
-		mail_subject = 'Contract to be signed'
-		message = render_to_string('contract/sendcontract.html', {
-			'user': contract.counter_signe,
-		})
-		to_email = contract.counter_signe.profile.email
-		email = EmailMessage(
-			mail_subject, message, to=[to_email], attachments=attachments
-		)
-		email.send()
-		contract.save()
-		return redirect('/contracts/seemycontracts')
+	if request.method == 'POST':
+		if form.is_valid():
+			contract = form.save(commit=False)
+			attachments = []
+			content = contract.pdf.read()
+			attachment = (contract.pdf.name, content, 'application/pdf')
+			attachments.append(attachment)
+			mail_subject = 'Contract to be signed'
+			message = render_to_string('contract/sendcontract.html', {
+				'user': contract.first_auth_signe,
+			})
+			to_email = contract.first_auth_signe.profile.email
+			email = EmailMessage(
+				mail_subject, message, to=[to_email], attachments=attachments
+			)
+			email.send()
+			mail_subject = 'Contract to be signed'
+			message = render_to_string('contract/sendcontract.html', {
+				'user': contract.second_auth_signe,
+			})
+			to_email = contract.second_auth_signe.profile.email
+			email = EmailMessage(
+				mail_subject, message, to=[to_email], attachments=attachments
+			)
+			email.send()
+			mail_subject = 'Contract to be signed'
+			message = render_to_string('contract/sendcontract.html', {
+				'user': contract.counter_signe,
+			})
+			to_email = contract.counter_signe.profile.email
+			email = EmailMessage(
+				mail_subject, message, to=[to_email], attachments=attachments
+			)
+			email.send()
+			contract.save()
+			return redirect('/contracts/seemycontracts')
 	return render(request, 'contract/createacontract.html', {'form':form})
 
 @login_required
