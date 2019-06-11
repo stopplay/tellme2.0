@@ -71,7 +71,7 @@
                   <td>
                     <div class="btn-tollbar">
                       <div class="btn-group mr-2" role="group" aria-label="Second group">
-                        <button type="button" class="btn btn-primary btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' teacher.teacher_id 'teacher' %}" data-baloon="Remove this item from the cart" class="text-light">Delete Teacher</a><</button>
+                        <button type="button" class="btn btn-primary btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' teacher.teacher_id 'teacher' %}" data-baloon="Remove this item from the cart" class="text-light">Delete Teacher</a></button>
                       </div>
                     </div>
                   </td>
@@ -214,6 +214,8 @@
           			<tr>
           				<th>Student's Name</th>
           				<th>Username</th>
+                  <th>First auth responsible</th>
+                  <th>Second auth responsible</th>
           				<th>Action</th>
 
           			</tr>
@@ -223,6 +225,8 @@
           			<tr>
           				<th scope="row">{{ student.name }}</th>
           				<td>{{ student.profile.username }}</td>
+                  <td>{{ student.first_parent.name }} </td>
+                  <td>{{ student.second_parent.name }}</td>
           				<td>
           					<div class="btn-tollbar">
           						<div class="btn-group mr-2" role="group" aria-label="First group">
