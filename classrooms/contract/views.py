@@ -23,6 +23,7 @@ import datetime
 from block.utils import SymmetricEncryption, JsonApi, EncryptionApi
 from block.models import *
 from block.forms import *
+from school_users.models import *
 
 # Create your views here.
 class ContractsViewSet(viewsets.ModelViewSet):
@@ -201,6 +202,7 @@ def set_signed(request, contract_id = None):
 def updatecontract(request, contract_id=None):
 	instance = Contract.objects.get(contract_id=contract_id)
 	form = ContractModelForm(request.POST or None, request.FILES, instance=instance)
+	students = Student.objects.all()
 	if request.method=='POST':
 		if form.is_valid():
 			contract = form.save(commit=False)
@@ -241,7 +243,7 @@ def updatecontract(request, contract_id=None):
 				contract.second_auth_signed = False
 				contract.save(update_fields=['name', 'date', 'pdf', 'first_auth_signe', 'first_auth_signed', 'second_auth_signe', 'second_auth_signed', 'counter_signe', 'counter_signed'])
 				return redirect('/contracts/seemycontracts')
-	return render(request, 'contract/updatecontract.html', {'form':form})
+	return render(request, 'contract/updatecontract.html', {'form':form, 'students':students})
 
 def delete_contract(request, contract_id = None):
 	contract_to_delete = Contract.objects.get(contract_id=contract_id)
