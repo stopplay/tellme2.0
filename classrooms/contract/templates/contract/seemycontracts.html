@@ -12,8 +12,8 @@
                     <div class="card-header ">
                         {% if contracts %}
                         {% if request.user.is_superuser %}
-                        <h4 class="card-title">Showing all the contracts</h4>
-                        <p class="card-category">Here is a subtitle for this table</p>
+                        <h4 class="card-title">Contract(s)</h4>
+                        
                         {% else %}
                         <h4 class="card-title">Showing the contracts for {{ request.user.username }}</h4>
                         <p class="card-category">Here is a subtitle for this table</p>

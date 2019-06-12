@@ -10,8 +10,8 @@
       <div class="col-md-12">
         <div class="card strpied-tabled-with-hover">
           <div class="card-header ">
-            <h4 class="card-title">Showing All Schools</h4>
-            <p class="card-category">Here is a subtitle for this table</p>
+            <h4 class="card-title">School(s)</h4>
+            
           </div>
           <div class="card-body table-full-width table-responsive">
             <table class="table table-hover table-striped">
@@ -32,7 +32,7 @@
 
 
                     <div class="dropdown show">
-                      <a class="btn btn-secondary dropdown-toggle btn-sm" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <a class="btn btn-danger dropdown-toggle btn-sm" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Action
                       </a>
                       <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
@@ -51,7 +51,7 @@
                     <label>Name of the Class: {{ class.class_name }}</label><br>
                     <label>Enrollment Year: {{ school.enrollment_year }}</label><br>
                     <div class="dropdown show">
-                      <a class="btn btn-secondary dropdown-toggle btn-sm" href="" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <a class="btn btn-danger dropdown-toggle btn-sm" href="" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Action
                       </a>
 
@@ -67,17 +67,18 @@
                   </td>
                   {% endif %}
                   {% if school.chains %}
-                  <td>
+                  <td style="display: block;">
                     {% for chain in school.chains.all %}
-                    <div>
+                    <div style="display: block;">
                       <label>Chain name: {{ chain.name }}</label>
+                      <br>
                       <div>
                         <a class="btn btn-secondary btn-sm" href="{% url 'school:seechainbyname' chain.name %}" role="button" data-baloon="Remove this item from the cart" class="text-danger">See Chain details</a>
                       </div>
-                    </div>
 
+                      </div>
+                      <br><br>
                     {% endfor %}
-
 
                   </td>
                   {% endif %}
