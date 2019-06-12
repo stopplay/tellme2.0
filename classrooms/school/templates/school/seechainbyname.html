@@ -30,19 +30,18 @@
                       				<th>{{ chain.name }}</th>
                       				<td>{{ chain.time_stamp }}</td>
                               {% if chain.block_set %}
-                      				<td>
+                      				<td style="display: block;">
                                 {% for block in chain.block_set.all %}
-                                <div><label>Hash: {{ block.hash }}</label><br></div>
-                                <div><label>Previous hash: {{ block.previous_hash }}</label><br></div>
-                                <div><label>Time Stamp: {{ block.time_stamp }}</label><br></div>
-                                <div><label>Block Index: {{ block.index }}</label><br></div>
-                                <div><label>Block Nonce:{{ block.nonce }}</label><br></div>
+                                <div style="display: block;"><label><b>Hash:</b> {{ block.hash }}</label></div>
+                                <div style="display: block;"><label><b>Previous hash:</b> {{ block.previous_hash }}</label></div>
+                                <div style="display: block;"><label><b>Time Stamp:</b> {{ block.time_stamp }}</label></div>
+                                <div style="display: block;"><label><b>Block Index:</b> {{ block.index }}</label></div>
+                                <div style="display: block;"><label><b>Block Nonce:</b> {{ block.nonce }}</label></div>
 
                                 <br>
                                 <br>
                                 {% endfor %}
                               {% endif %}
-                      				<a class="btn btn-secondary" href="{% url 'school:create_block' %}" data-baloon="Remove this item from the cart" class="text-danger">Create a new block</a>
                               </td>
                       			</tr>
                       		</tbody>

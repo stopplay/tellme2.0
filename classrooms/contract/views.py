@@ -83,20 +83,19 @@ def createacontract(request):
 
 @login_required
 def seemycontracts(request):
-	contracts = []
-	is_parent = False
-	is_supervisor = False
-	if Supervisor.objects.filter(profile=request.user).count()>=1:
-		is_supervisor = True
-		contracts = Contract.objects.filter(counter_signe=Supervisor.objects.get(profile=request.user))
-	elif Parent.objects.filter(profile=request.user).count()>=1:
-		is_parent = True
-		parent = Parent.objects.get(profile=request.user)
-		contracts += Contract.objects.filter(first_auth_signe=Parent.objects.get(profile=request.user))
-		contracts += Contract.objects.filter(second_auth_signe=Parent.objects.get(profile=request.user))
-	elif request.user.is_superuser:
-		contracts = Contract.objects.all()
-	return render(request, 'contract/seemycontracts.html', {'contracts':contracts, 'is_parent':is_parent, 'is_supervisor':is_supervisor, 'parent':parent})
+    contracts = []
+    is_parent = False
+    is_supervisor = False
+    if Supervisor.objects.filter(profile=request.user).count()>=1:
+        is_supervisor = True
+        contracts = Contract.objects.filter(counter_signe=Supervisor.objects.get(profile=request.user))
+    elif Parent.objects.filter(profile=request.user).count()>=1:
+        is_parent = True
+        contracts += Contract.objects.filter(first_auth_signe=Parent.objects.get(profile=request.user))
+        contracts += Contract.objects.filter(second_auth_signe=Parent.objects.get(profile=request.user))
+    elif request.user.is_superuser:
+        contracts = Contract.objects.all()
+    return render(request, 'contract/seemycontracts.html', {'contracts':contracts, 'is_parent':is_parent, 'is_supervisor':is_supervisor})
 
 #weverton
 @login_required

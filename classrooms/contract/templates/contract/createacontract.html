@@ -13,10 +13,10 @@ $(document).ready(function() {
 <div class="content">
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-md-8">
-				<div class="card w-60">
+			<div class="col-md-9">
+				<div class="card w-50">
 					<div class="card-header">
-						<h5 class="card-title" align="center">You Can Create a New Contract</h5>
+						<h4 class="card-title" align="left">Create a New Contract</h4>
 					</div>
 					<div class="card-body">
 						<div class="row">
@@ -24,7 +24,7 @@ $(document).ready(function() {
 								<div class="form-group">
 									<form method="POST" class="" enctype="multipart/form-data"> {% csrf_token %}
 										{{ form.as_p }}
-										<select id="select_form">
+										<select id="select_form" style="max-width: 250%;">
 											<option id="" value="" selected>Select a student</option>
 											{% for student in students %}
 												<option value="{{ student.student_id }}">{{ student.name }}</option>
@@ -32,7 +32,7 @@ $(document).ready(function() {
 										</select><br>
 										<input type="hidden" id="selected_user" name="selected_user" value="0">
 
-                    <div><button type="submit" class="btn btn-info btn-fill btn-sm pull-left">Create a Contract</button></div>
+                    <div><button type="submit" class="btn btn-info btn-fill btn-sm pull-left mt-2">Create a Contract</button></div>
 
 									</form>
 								</div>
