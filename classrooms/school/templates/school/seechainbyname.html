@@ -32,11 +32,11 @@
                               {% if chain.block_set %}
                       				<td>
                                 {% for block in chain.block_set.all %}
-                                <label>{{ block.hash }}</label><br>
-                                <label>{{ block.previous_hash }}</label><br>
-                                <label>{{ block.time_stamp }}</label><br>
-                                <label>{{ block.index }}</label><br>
-                                <label>{{ block.nonce }}</label><br>
+                                <div><label>Hash: {{ block.hash }}</label><br></div>
+                                <div><label>Previous hash: {{ block.previous_hash }}</label><br></div>
+                                <div><label>Time Stamp: {{ block.time_stamp }}</label><br></div>
+                                <div><label>Block Index: {{ block.index }}</label><br></div>
+                                <div><label>Block Nonce:{{ block.nonce }}</label><br></div>
 
                                 <br>
                                 <br>

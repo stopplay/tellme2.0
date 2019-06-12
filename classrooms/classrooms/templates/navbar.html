@@ -1,5 +1,5 @@
-
-    <div class="sidebar" data-image="">
+{% load static %}
+    <div class="sidebar" data-image="" background-color="#14348e">
         <!--
     Tip 1: You can change the color of the sidebar using: data-color="purple | blue | green | orange | red"
 
@@ -7,19 +7,12 @@
 -->
         <div class="sidebar-wrapper">
             <div class="logo">
+
                 <a href="" class="simple-text">
-                    Brand
+                    <img src="{% static 'img/logotell.png'%}" alt="">
                 </a>
             </div>
             <ul class="nav">
-
-              <li class="">
-                  <a class="nav-link" href="#">
-                      <i class="fas fa-chart-pie"></i>
-                      <p>Dashboard</p>
-                  </a>
-              </li>
-
 
 
               <li class="nav-item">

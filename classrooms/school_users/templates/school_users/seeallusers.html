@@ -209,7 +209,7 @@
           </div>
 
           <div class="card-body table-full-width table-responsive">
-            <table class="table table-hover table-striped">
+            <table class="display" id="studentstable">
               <thead class="">
           			<tr>
           				<th>Student's Name</th>
@@ -250,4 +250,9 @@
     </div>
   </div>
 </div>
+<script type="text/javascript">
+  $(document).ready( function () {
+    $('#studentstable').DataTable();
+} );
+</script>
 {% endblock %}
