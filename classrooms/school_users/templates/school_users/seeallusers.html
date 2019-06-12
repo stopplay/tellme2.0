@@ -16,7 +16,7 @@
           </div>
 
           <div class="card-body table-full-width table-responsive">
-            <table class="table table-hover table-striped">
+            <table class="table table-hover table-striped display mb-4" id="headstable">
               <thead>
                 <tr>
                   <th >Name</th>
@@ -55,7 +55,7 @@
           </div>
 
           <div class="card-body table-full-width table-responsive">
-            <table class="table table-hover table-striped display" id="teacherstable">
+            <table class="table table-hover table-striped display mb-4" id="teacherstable">
               <thead>
                 <tr>
                   <th scope="col">Teacher's name</th>
@@ -93,7 +93,7 @@
           </div>
 
           <div class="card-body table-full-width table-responsive">
-            <table class="table table-hover table-striped">
+            <table class="table table-hover table-striped display mb-4" id="adminstable">
               <thead class="thead-dark">
                 <tr>
                   <th scope="col">Admin's name</th>
@@ -132,7 +132,7 @@
           </div>
 
           <div class="card-body table-full-width table-responsive">
-            <table class="table table-hover table-striped">
+            <table class="table table-hover table-striped display mb-4" id="supervisorstable">
               <thead >
                 <tr>
                   <th >Supervisor's name</th>
@@ -148,7 +148,7 @@
                   <td>
                     <div class="btn-tollbar">
                       <div class="btn-group mr-2" role="group" aria-label="Second group">
-                        <button type="button" class="btn btn-primary btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' supervisor.supervisor_id 'supervisor' %}" data-baloon="Remove this item from the cart" class="text-light">Delete Supervisor</a></button>
+                        <button type="button" class="btn btn-primary btn-sm btn-danger btn-block "><a href="{% url 'users:delete_user' supervisor.supervisor_id 'supervisor' %}" data-baloon="Remove this item from the cart" class="text-light">Delete Supervisor</a></button>
                       </div>
                     </div>
                   </td>
@@ -170,7 +170,7 @@
           </div>
 
           <div class="card-body table-full-width table-responsive">
-            <table class="table table-hover table-striped display" id="parentstable">
+            <table class="table table-hover table-striped display mb-4" id="parentstable">
               <thead>
           			<tr>
           				<th >Parent's name</th>
@@ -209,7 +209,7 @@
           </div>
 
           <div class="card-body table-full-width table-responsive">
-            <table class="table table-hover table-striped display" id="studentstable">
+            <table class="table table-hover table-striped display mb-4" id="studentstable">
               <thead class="">
           			<tr>
           				<th>Student's Name</th>
@@ -250,21 +250,18 @@
     </div>
   </div>
 </div>
+
+
+
+
 <script type="text/javascript">
   $(document).ready( function () {
     $('#studentstable').DataTable();
-} );
-</script>
-
-<script type="text/javascript">
-  $(document).ready( function () {
     $('#teacherstable').DataTable();
-} );
-</script>
-
-<script type="text/javascript">
-  $(document).ready( function () {
     $('#parentstable').DataTable();
+    $('#supervisorstable').DataTable();
+    $('#headstable').DataTable();
+    $('#adminstable').DataTable();
 } );
 </script>
 {% endblock %}
