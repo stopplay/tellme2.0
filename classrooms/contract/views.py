@@ -34,52 +34,55 @@ class ContractsViewSet(viewsets.ModelViewSet):
     # filter_backends = (DjangoFilterBackend)
     # filterset_fields = ['__all__']
 
+@login_required
 def createacontract(request):
-	form = ContractModelForm(request.POST or None, request.FILES)
-	students = Student.objects.all()
-	if request.method == 'POST':
-		if form.is_valid():
-			selected_user = request.POST.get('selected_user', 0)
-			student = Student.objects.get(student_id = selected_user)
-			contract = form.save(commit=False)
-			if student.first_parent and student.second_parent:
-				contract.first_auth_signe = student.first_parent
-				contract.second_auth_signe = student.second_parent
-				attachments = []
-				content = contract.pdf.read()
-				attachment = (contract.pdf.name, content, 'application/pdf')
-				attachments.append(attachment)
-				mail_subject = 'Contract to be signed'
-				message = render_to_string('contract/sendcontract.html', {
-					'user': contract.first_auth_signe,
-				})
-				to_email = contract.first_auth_signe.profile.email
-				email = EmailMessage(
-					mail_subject, message, to=[to_email], attachments=attachments
-				)
-				email.send()
-				mail_subject = 'Contract to be signed'
-				message = render_to_string('contract/sendcontract.html', {
-					'user': contract.second_auth_signe,
-				})
-				to_email = contract.second_auth_signe.profile.email
-				email = EmailMessage(
-					mail_subject, message, to=[to_email], attachments=attachments
-				)
-				email.send()
-				mail_subject = 'Contract to be signed'
-				message = render_to_string('contract/sendcontract.html', {
-					'user': contract.counter_signe,
-				})
-				to_email = contract.counter_signe.profile.email
-				email = EmailMessage(
-					mail_subject, message, to=[to_email], attachments=attachments
-				)
-				email.send()
-				contract.save()
-				return redirect('/contracts/seemycontracts')
-			return HttpResponse('This student dont have at least one of the parents associated to him.')
-	return render(request, 'contract/createacontract.html', {'form':form, 'students':students})
+	if request.user.is_superuser:
+		form = ContractModelForm(request.POST or None, request.FILES)
+		students = Student.objects.all()
+		if request.method == 'POST':
+			if form.is_valid():
+				selected_user = request.POST.get('selected_user', 0)
+				student = Student.objects.get(student_id = selected_user)
+				contract = form.save(commit=False)
+				if student.first_parent and student.second_parent:
+					contract.first_auth_signe = student.first_parent
+					contract.second_auth_signe = student.second_parent
+					attachments = []
+					content = contract.pdf.read()
+					attachment = (contract.pdf.name, content, 'application/pdf')
+					attachments.append(attachment)
+					mail_subject = 'Contract to be signed'
+					message = render_to_string('contract/sendcontract.html', {
+						'user': contract.first_auth_signe,
+					})
+					to_email = contract.first_auth_signe.profile.email
+					email = EmailMessage(
+						mail_subject, message, to=[to_email], attachments=attachments
+					)
+					email.send()
+					mail_subject = 'Contract to be signed'
+					message = render_to_string('contract/sendcontract.html', {
+						'user': contract.second_auth_signe,
+					})
+					to_email = contract.second_auth_signe.profile.email
+					email = EmailMessage(
+						mail_subject, message, to=[to_email], attachments=attachments
+					)
+					email.send()
+					mail_subject = 'Contract to be signed'
+					message = render_to_string('contract/sendcontract.html', {
+						'user': contract.counter_signe,
+					})
+					to_email = contract.counter_signe.profile.email
+					email = EmailMessage(
+						mail_subject, message, to=[to_email], attachments=attachments
+					)
+					email.send()
+					contract.save()
+					return redirect('/contracts/seemycontracts')
+				return HttpResponse('This student dont have at least one of the parents associated to him.')
+		return render(request, 'contract/createacontract.html', {'form':form, 'students':students})
+	return HttpResponse('U cannot access this page cos u are not admin!')
 
 @login_required
 def seemycontracts(request):
@@ -217,56 +220,59 @@ def set_signed(request, contract_id = None):
 			return redirect('/contracts/seemycontracts')
 	return render(request, 'contract/createblockcontract.html', {'form':form})
 
+@login_required
 def updatecontract(request, contract_id=None):
-	instance = Contract.objects.get(contract_id=contract_id)
-	form = ContractModelForm(request.POST or None, request.FILES, instance=instance)
-	students = Student.objects.all()
-	if request.method=='POST':
-		if form.is_valid():
-			selected_user = request.POST.get('selected_user', 0)
-			student = Student.objects.get(student_id = selected_user)
-			contract = form.save(commit=False)
-			if student.first_parent and student.second_parent:
-				contract.first_auth_signe = student.first_parent
-				contract.second_auth_signe = student.second_parent
-				attachments = []
-				content = contract.pdf.read()
-				attachment = (contract.pdf.name, content, 'application/pdf')
-				attachments.append(attachment)
-				mail_subject = 'Contract to be signed'
-				message = render_to_string('contract/sendcontract.html', {
-					'user': contract.first_auth_signe,
-				})
-				to_email = contract.first_auth_signe.profile.email
-				email = EmailMessage(
-					mail_subject, message, to=[to_email], attachments=attachments
-				)
-				email.send()
-				mail_subject = 'Contract to be signed'
-				message = render_to_string('contract/sendcontract.html', {
-					'user': contract.second_auth_signe,
-				})
-				to_email = contract.second_auth_signe.profile.email
-				email = EmailMessage(
-					mail_subject, message, to=[to_email], attachments=attachments
-				)
-				email.send()
-				mail_subject = 'Contract to be signed'
-				message = render_to_string('contract/sendcontract.html', {
-					'user': contract.counter_signe,
-				})
-				to_email = contract.counter_signe.profile.email
-				email = EmailMessage(
-					mail_subject, message, to=[to_email], attachments=attachments
-				)
-				email.send()
-				contract.counter_signed = False
-				contract.first_auth_signed = False
-				contract.second_auth_signed = False
-				contract.save(update_fields=['name', 'date', 'pdf', 'first_auth_signe', 'first_auth_signed', 'second_auth_signe', 'second_auth_signed', 'counter_signe', 'counter_signed'])
-				return redirect('/contracts/seemycontracts')
-			return HttpResponse('This student dont have at least one of the parents associated to him.')
-	return render(request, 'contract/updatecontract.html', {'form':form, 'students':students})
+	if request.user.is_superuser:
+		instance = Contract.objects.get(contract_id=contract_id)
+		form = ContractModelForm(request.POST or None, request.FILES, instance=instance)
+		students = Student.objects.all()
+		if request.method=='POST':
+			if form.is_valid():
+				selected_user = request.POST.get('selected_user', 0)
+				student = Student.objects.get(student_id = selected_user)
+				contract = form.save(commit=False)
+				if student.first_parent and student.second_parent:
+					contract.first_auth_signe = student.first_parent
+					contract.second_auth_signe = student.second_parent
+					attachments = []
+					content = contract.pdf.read()
+					attachment = (contract.pdf.name, content, 'application/pdf')
+					attachments.append(attachment)
+					mail_subject = 'Contract to be signed'
+					message = render_to_string('contract/sendcontract.html', {
+						'user': contract.first_auth_signe,
+					})
+					to_email = contract.first_auth_signe.profile.email
+					email = EmailMessage(
+						mail_subject, message, to=[to_email], attachments=attachments
+					)
+					email.send()
+					mail_subject = 'Contract to be signed'
+					message = render_to_string('contract/sendcontract.html', {
+						'user': contract.second_auth_signe,
+					})
+					to_email = contract.second_auth_signe.profile.email
+					email = EmailMessage(
+						mail_subject, message, to=[to_email], attachments=attachments
+					)
+					email.send()
+					mail_subject = 'Contract to be signed'
+					message = render_to_string('contract/sendcontract.html', {
+						'user': contract.counter_signe,
+					})
+					to_email = contract.counter_signe.profile.email
+					email = EmailMessage(
+						mail_subject, message, to=[to_email], attachments=attachments
+					)
+					email.send()
+					contract.counter_signed = False
+					contract.first_auth_signed = False
+					contract.second_auth_signed = False
+					contract.save(update_fields=['name', 'date', 'pdf', 'first_auth_signe', 'first_auth_signed', 'second_auth_signe', 'second_auth_signed', 'counter_signe', 'counter_signed'])
+					return redirect('/contracts/seemycontracts')
+				return HttpResponse('This student dont have at least one of the parents associated to him.')
+		return render(request, 'contract/updatecontract.html', {'form':form, 'students':students})
+	return HttpResponse('U cannot access this page cos u are not admin!')
 
 def delete_contract(request, contract_id = None):
 	contract_to_delete = Contract.objects.get(contract_id=contract_id)

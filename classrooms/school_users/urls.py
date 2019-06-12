@@ -19,6 +19,7 @@ urlpatterns = [
     path('delete_user/<int:user_id>/<type_of_user>', views.delete_user, name='delete_user'),
     path('set_parents/<int:student_id>/', views.set_parents, name='set_parents'),
     url('login/', views.do_login, name='login'),
+    url('logout', views.do_logout, name='logout'),
     url('api/login', obtain_jwt_token, name='login_rest'),
     url('current_user/', views.current_user, name='current_user'),
 

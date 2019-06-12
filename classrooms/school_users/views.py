@@ -22,7 +22,6 @@ import pdb
 # Create your views here.
 @login_required
 def create_user(request):
-    
     if request.user.is_superuser:
         form = UserModelForm(request.POST or None)
         form2 = HeadModelForm(request.POST or None)
@@ -68,7 +67,7 @@ def create_user(request):
                     user_creation.save()
             return redirect('/users/create_user')
     return render(request, 'school_users/createuser.html', {'form':form,'form2':form2,'form3':form3,'form4':form4,'form5':form5,'form6':form6,'form7':form7})
-    return HttpResponse('U are not able to see this page, cos u are not admin')
+    return HttpResponse('U cannot access this page cos u are not admin!')
 
 @login_required
 def seeallusers(request):
@@ -80,7 +79,7 @@ def seeallusers(request):
 		parent_users = Parent.objects.all()
 		student_users = Student.objects.all()
 		return render(request, 'school_users/seeallusers.html', {'head_users':head_users,'teacher_users':teacher_users,'admin_users':admin_users,'supervisor_users':supervisor_users,'parent_users':parent_users,'student_users':student_users})
-	return HttpResponse('U are not able to see this page, cos u are not admin')
+	return HttpResponse('U cannot access this page cos u are not admin!')
 
 def delete_user(request, user_id=None, type_of_user=None):
 	if(type_of_user=='head'):
@@ -173,4 +172,7 @@ def seeallusers_rest(request):
 				   'parent_users':parent_users.data,
 				   'student_users':student_users.data}
 		return Response(context)
-	pass
+
+def do_logout(request):
+    logout(request)
+    return redirect('/users/login')
