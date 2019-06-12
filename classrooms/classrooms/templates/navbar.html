@@ -17,16 +17,11 @@
 
               <li class="nav-item">
                   <div class="nav-link">
-                    <i class="fas fa-file-contract"></i>
-                      <p>Contracts</p>
+                    <a style="color:#FFFFFF;" href="{% url 'contracts:seemycontracts'%}"><i class="fas fa-file-contract"></i>
+                      <p>Contracts</p></a>
                   </div>
               </li>
 
-              <li class="nav-item">
-                <div>
-                  <a class="nav-link" href="{% url 'contracts:seemycontracts'%}">See My Contracts</a>
-                  </div>
-              </li>
               <li>
                 <div>
               <a class="nav-link" href="{% url 'contracts:createacontract' %}">Create New Contract</a>
@@ -35,17 +30,13 @@
 
 
               <li class="nav-item">
-                  <div class="nav-link">
-                    <i class="fas fa-graduation-cap"></i>
-                      <p >School</p>
-                  </div>
+                <div class="nav-link">
+                  <a style="color:#FFFFFF;" href="{% url 'school:seeallschools' %}">  <i class="fas fa-graduation-cap"></i>
+                    <p>School(s)</p></a>
+                </div>
               </li>
 
-              <li class="nav-item">
-                <div>
-                  <a class="nav-link" href="{% url 'school:seeallschools' %}">See All Schools</a>
-                  </div>
-              </li>
+
               <li>
                 <div>
               <a class="nav-link" href="{% url 'school:add_school' %}">Add new School</a>
@@ -55,19 +46,13 @@
 
 
               <li class="nav-item">
-                  <div class="nav-link">
-
-                    <i class="fas fa-user"></i>
-                      <p>Users</p>
-                  </div>
+                <div class="nav-link">
+                  <a style="color:#FFFFFF;" href="{% url 'school:seeallschools' %}">   <i class="fas fa-user"></i>
+                    <p>Users</p></a>
+                </div>                    
 
               </li>
 
-              <li class="nav-item">
-                <div>
-                  <a class="nav-link" href="{% url 'users:seeallusers' %}">See All Users</a>
-                  </div>
-              </li>
               <li>
                 <div>
               <a class="nav-link" href="{% url 'users:create_user' %}">Create a User</a>
