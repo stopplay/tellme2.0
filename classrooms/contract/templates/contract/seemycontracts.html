@@ -20,7 +20,7 @@
                         {% endif %}
                     </div>
                     <div class="card-body table-full-width table-responsive">
-                        <table class="table table-hover table-striped">
+                        <table class="table table-hover table-striped display" id="contractstable">
                           <thead >
                       			<tr>
                       				<th>Name of Contract</th>
@@ -88,4 +88,9 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+  $(document).ready( function () {
+    $('#contractstable').DataTable();
+} );
+</script>
 {% endblock %}
