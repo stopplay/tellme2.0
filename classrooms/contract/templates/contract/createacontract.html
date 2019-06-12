@@ -24,6 +24,13 @@ $(document).ready(function() {
 								<div class="form-group">
 									<form method="POST" class="" enctype="multipart/form-data"> {% csrf_token %}
 										{{ form.as_p }}
+										<select id="select_form">
+											<option id="" value="" selected>Select a student</option>
+											{% for student in students %}
+												<option value="{{ student.student_id }}">{{ student.name }}</option>
+											{% endfor %}
+										</select><br>
+										<input type="hidden" id="selected_user" name="selected_user" value="0">
 
                     <div><button type="submit" class="btn btn-info btn-fill btn-sm pull-left">Create a Contract</button></div>
 
@@ -38,6 +45,19 @@ $(document).ready(function() {
 		</div>
 	</div>
 </div>
-
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#select_form').on('change',function(){
+			var selectValor = $(this).val();
+			if (selectValor == '') {
+				$('#pai').children('div').remove();
+				document.getElementById('selected_user').value = '0'
+			}
+			else{
+				document.getElementById('selected_user').value = selectValor
+			}
+		});
+	});
+</script>
 
 {% endblock %}
