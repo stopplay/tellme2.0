@@ -104,7 +104,7 @@ def set_parents(request, student_id):
 	form = SetParentsModelForm(request.POST or None, instance=instance)
 	if form.is_valid():
 		new_student = form.save(commit=False)
-		new_student.save(update_fields=['father','mother'])
+		new_student.save(update_fields=['first_parent','second_parent'])
 		return redirect('/users/seeallusers')
 	return render(request, 'school_users/set_parents.html', {'form':form})
 

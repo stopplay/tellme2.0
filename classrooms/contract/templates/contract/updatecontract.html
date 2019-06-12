@@ -19,7 +19,7 @@
 
 										{{ form.as_p }}
 										<select id="select_form">
-											<option id="" value="" selected></option>
+											<option id="" value="" selected>Select a student</option>
 											{% for student in students %}
 												<option value="{{ student.student_id }}">{{ student.name }}</option>
 											{% endfor %}
