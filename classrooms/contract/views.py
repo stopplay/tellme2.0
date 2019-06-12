@@ -183,6 +183,7 @@ def set_signed(request, contract_id = None):
 					email = EmailMessage(
 						mail_subject, message, to=[to_email], attachments=attachments
 					)
+					email.send()
 				if contract.second_auth_signe == parent:
 					contract.second_auth_signed = True
 					contract.second_auth_signed_timestamp = datetime.datetime.now()
@@ -200,6 +201,7 @@ def set_signed(request, contract_id = None):
 					email = EmailMessage(
 						mail_subject, message, to=[to_email], attachments=attachments
 					)
+					email.send()
 			contract = Contract.objects.get(contract_id=contract_id)
 			if contract.first_auth_signed and contract.second_auth_signed and contract.counter_signed:
 				contract.all_signed = True
