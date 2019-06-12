@@ -21,7 +21,7 @@
                       <p>Contract(s)</p></a>
                   </div>
               </li>
-              {% if request.is_superuser %}
+              {% if request.user.is_superuser %}
                 <li>
                   <div>
                 <a class="nav-link" href="{% url 'contracts:createacontract' %}">Create New Contract</a>
