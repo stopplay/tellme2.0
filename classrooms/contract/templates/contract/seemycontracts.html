@@ -13,7 +13,7 @@
                         {% if contracts %}
                         {% if request.user.is_superuser %}
                         <h4 class="card-title">Contract(s)</h4>
-                        
+
                         {% else %}
                         <h4 class="card-title">Showing the contracts for {{ request.user.username }}</h4>
                         <p class="card-category">Here is a subtitle for this table</p>
@@ -21,11 +21,12 @@
                     </div>
                     <div class="card-body table-full-width table-responsive">
                         <table class="table table-hover table-striped display" id="contractstable">
-                          <thead >
+                          <thead>
                       			<tr>
                       				<th>Name of Contract</th>
                       				<th>Date of Contract</th>
                       				<th >Contract</th>
+                              <th>Sign</th>
                       				<th >Actions</th>
                       			</tr>
                       		</thead>
@@ -39,7 +40,55 @@
                       				  <a href="{{ contract.pdf.url }}">{{ contract.pdf }}</a>
                               {% endif %}
                               </td>
+                              {% if request.user.is_superuser %}
+                              <td><!--sign-->
 
+                                <label>FIRST AUGH SIGNED</label>
+                                {% if contract.first_auth_signed %}
+                                <div>
+                               <span class="badge badge-pill badge-success text-success" >.</span>
+                               </div>
+                                {% else %}
+                                <div>
+                                <span class="badge badge-pill badge-danger text-danger" >.</span>
+                                </div>
+                                {% endif %}
+                                <label>SECOND AUGH SIGNED</label>
+
+                                {% if contract.second_auth_signed %}
+                                <div>
+                               <span class="badge badge-pill badge-success text-success" >.</span>
+                               </div>
+                                {% else %}
+                                <div>
+                                <span class="badge badge-pill badge-danger text-danger" >.</span>
+                                </div>
+                                {% endif %}
+
+                                <label>COUNTER SIGNED</label>
+                                {% if contract.counter_signed %}
+                                <div>
+                               <span class="badge badge-pill badge-success text-success" >.</span>
+                               </div>
+                                {% else %}
+                                <div>
+                                <span class="badge badge-pill badge-danger text-danger" >.</span>
+                                </div>
+                                {% endif %}
+
+                                <label>ALL SIGNED</label>
+                                {% if contract.all_signed %}
+                                <div>
+                               <span class="badge badge-pill badge-success text-success" >.</span>
+                               </div>
+                                {% else %}
+                                <div>
+                                <span class="badge badge-pill badge-danger text-danger" >.</span>
+                                </div>
+                                {% endif %}
+
+                              </td>
+                              {% endif %}
                       				<td>
                               {% if request.user.is_superuser %}
                       					<div class="btn-tollbar px-2">
