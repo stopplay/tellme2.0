@@ -26,9 +26,9 @@
                       				<th>Name of Contract</th>
                       				<th>Date of Contract</th>
                       				<th >Contract</th>
-                              {% if request.user.is_superuser %}
+
                               <th>Sign</th>
-                              {% endif %}
+
                       				<th >Actions</th>
                       			</tr>
                       		</thead>
@@ -42,7 +42,7 @@
                       				  <a href="{{ contract.pdf.url }}">{{ contract.pdf }}</a>
                               {% endif %}
                               </td>
-                              {% if request.user.is_superuser %}
+
                               <td><!--sign-->
 
                                 <label>FIRST AUGH SIGNED</label>
@@ -90,7 +90,7 @@
                                 {% endif %}
 
                               </td>
-                              {% endif %}
+                              
                       				<td>
                               {% if request.user.is_superuser %}
                       					<div class="btn-tollbar px-2">
@@ -126,6 +126,7 @@
                                     <button type="button" class="btn btn-success btn-sm btn-block" style="cursor: not-allowed;">Signed</button>
                                   </div>
                                   </div>
+
                                   {% else %}
                                   <!--Vermelho-->
                                     <div class="btn-tollbar">
@@ -168,6 +169,9 @@
                                       </div>
                                     {% endif %}
                                   {% endif %}
+                                  <div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
+                      							<button type="button" class="btn btn-dark btn-sm btn-block"><a href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-light">Contract Details</a></button>
+                      						</div>
                                 {% endif %}
                       				</td>
 
