@@ -55,7 +55,7 @@
           </div>
 
           <div class="card-body table-full-width table-responsive">
-            <table class="table table-hover table-striped">
+            <table class="table table-hover table-striped display" id="teacherstable">
               <thead>
                 <tr>
                   <th scope="col">Teacher's name</th>
@@ -170,7 +170,7 @@
           </div>
 
           <div class="card-body table-full-width table-responsive">
-            <table class="table table-hover table-striped">
+            <table class="table table-hover table-striped display" id="parentstable">
               <thead>
           			<tr>
           				<th >Parent's name</th>
@@ -209,7 +209,7 @@
           </div>
 
           <div class="card-body table-full-width table-responsive">
-            <table class="display" id="studentstable">
+            <table class="table table-hover table-striped display" id="studentstable">
               <thead class="">
           			<tr>
           				<th>Student's Name</th>
@@ -229,7 +229,7 @@
                   <td>{{ student.second_parent.name }}</td>
           				<td>
           					<div class="btn-tollbar">
-          						<div class="btn-group mr-2" role="group" aria-label="First group">
+          						<div class="btn-group mb-2" role="group" aria-label="First group">
           							<button type="button" class="btn btn-primary btn-sm btn-info btn-block"><a href="{% url 'users:set_parents' student.student_id %}" data-baloon="Remove this item from the cart" class="text-light">Set Parents</a></button>
           						</div>
           						<div class="btn-group mr-2" role="group" aria-label="Second group">
@@ -253,6 +253,18 @@
 <script type="text/javascript">
   $(document).ready( function () {
     $('#studentstable').DataTable();
+} );
+</script>
+
+<script type="text/javascript">
+  $(document).ready( function () {
+    $('#teacherstable').DataTable();
+} );
+</script>
+
+<script type="text/javascript">
+  $(document).ready( function () {
+    $('#parentstable').DataTable();
 } );
 </script>
 {% endblock %}
