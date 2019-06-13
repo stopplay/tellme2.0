@@ -23,18 +23,18 @@
                         <table class="table table-hover table-striped display row-border mb-4" id="contractstable">
                           <thead>
                       			<tr>
+                              <th>Contract ID</th>
                       				<th>Name of Contract</th>
                       				<th>Date of Contract</th>
                       				<th >Contract</th>
-
                               <th>Sign</th>
-
                       				<th >Actions</th>
                       			</tr>
                       		</thead>
                       		<tbody class="">
                       			{% for contract in contracts %}
                       			<tr class="pb-5">
+                              <th>{{contract.contract_id_sponte}}</th>
                       				<th scope="row">{{ contract.name }}</th>
                       				<td>{{ contract.date }}</td>
                               <td>
@@ -90,7 +90,7 @@
                                 {% endif %}
 
                               </td>
-                              
+
                       				<td>
                               {% if request.user.is_superuser %}
                       					<div class="btn-tollbar px-2">
