@@ -103,10 +103,8 @@ def seemycontracts(request):
 #weverton
 @login_required
 def seecontractdetails(request, contract_id=None):
-    if request.user.is_superuser:
-        contract = Contract.objects.get(contract_id=contract_id)
-        return render(request,'contract/seecontractdetails.html',{'contract':contract})
-    return HttpResponse('U cannot access this page cos u are not admin!')
+    contract = Contract.objects.get(contract_id=contract_id)
+    return render(request,'contract/seecontractdetails.html',{'contract':contract})
 
 @csrf_exempt
 @api_view(['GET'])
