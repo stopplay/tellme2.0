@@ -14,7 +14,7 @@ urlpatterns = [
     url('', include(router.urls)),
     url('createacontract/', views.createacontract, name="createacontract"),
     path('seecontractdetails/<int:contract_id>', views.seecontractdetails, name="seecontractdetails"),
-    url('seemycontracts/', views.seemycontracts, name="seemycontracts"),
+    url('seeallcontracts/', views.seemycontracts, name="seemycontracts"),
     path('set_signed/<int:contract_id>', views.set_signed, name='set_signed'),
     path('updatecontract/<int:contract_id>', views.updatecontract, name='updatecontract'),
     path('delete_contract/<int:contract_id>', views.delete_contract, name='delete_contract'),

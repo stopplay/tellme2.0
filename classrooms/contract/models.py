@@ -4,7 +4,7 @@ from school_users.models import *
 # Create your models here.
 class Contract(models.Model):
 	"""docstring for Contract"""
-	contract_id = models.AutoField(primary_key=True)
+	# Data from Sponte #
 	contract_id_sponte = models.IntegerField(null=True, blank=True)
 	contract_free_class_id_sponte = models.IntegerField(null=True, blank=True)
 	situation_id_sponte = models.IntegerField(null=True, blank=True)
@@ -25,6 +25,9 @@ class Contract(models.Model):
 	financial_launched_sponte = models.TextField(null=True, blank=True)
 	contract_number_sponte = models.TextField(null=True, blank=True)
 	closing_date_sponte = models.TextField(null=True, blank=True)
+	# end of Data from Sponte #
+	# Basic data of the contract #
+	contract_id = models.AutoField(primary_key=True)
 	name = models.TextField(null=True, blank=True)
 	date = models.DateField(null=True, blank=True)
 	first_auth_signed = models.BooleanField(default=False)
@@ -38,3 +41,7 @@ class Contract(models.Model):
 	first_auth_signed_timestamp = models.DateTimeField(null=True, blank=True)
 	second_auth_signed_timestamp = models.DateTimeField(null=True, blank=True)
 	counter_signed_timestamp = models.DateTimeField(null=True, blank=True)
+	first_auth_hash = models.CharField(max_length=255, null=True, blank=True)
+	second_auth_hash = models.CharField(max_length=255, null=True, blank=True)
+	counter_auth_hash = models.CharField(max_length=255, null=True, blank=True)
+	# end of Basic data of the contract #

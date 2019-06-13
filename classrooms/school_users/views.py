@@ -112,7 +112,7 @@ def do_login(request):
         user = authenticate(username=request.POST['username'], password=request.POST['password'])
         if user is not None:
             login(request, user)
-            nextpage = request.GET.get('next','/contracts/seemycontracts')
+            nextpage = request.GET.get('next','/contracts/seeallcontracts')
             return redirect(nextpage)
     return render(request, 'school_users/login.html')
 
