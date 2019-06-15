@@ -25,6 +25,15 @@ from block.models import *
 from block.forms import *
 from school_users.models import *
 from django.http import HttpResponse, Http404, HttpResponseRedirect
+from PyPDF2 import PdfFileMerger
+from io import BytesIO
+import urllib
+from weasyprint import HTML
+import tempfile
+import os
+from django.template.loader import render_to_string
+import pdb
+from classrooms import settings
 
 # Create your views here.
 class ContractsViewSet(viewsets.ModelViewSet):
@@ -33,6 +42,32 @@ class ContractsViewSet(viewsets.ModelViewSet):
     serializer_class = ContractSerializer
     # filter_backends = (DjangoFilterBackend)
     # filterset_fields = ['__all__']
+
+def printorder(request, order_id=None):
+    try:
+        message = render_to_string('contract/contracttorender.html', {
+                'contract': contract,
+            })
+        html_string = '<!doctype html><html><head><meta charset="utf-8"><title>Contract:' + str(contract.contract_id) + '</title></head><body>' + message + '</body></html>'
+        html = HTML(string=html_string)
+        result = html.write_pdf()
+
+        # Creating http response
+        response = HttpResponse(content_type='application/pdf;')
+        response['Content-Disposition'] = 'inline; filename=receipt.pdf'
+        response['Content-Transfer-Encoding'] = 'binary'
+        with tempfile.NamedTemporaryFile(delete=True) as output:
+            output.write(result)
+            output.flush()
+
+            output_filepath = output.name
+            output = open(output.name, 'rb')
+            pdf_data = output.read()
+            return HttpResponse(pdf_data, content_type='application/pdf')
+
+    except Exception as e:
+        print('error', e)
+        return HttpResponse("Error Rendering PDF", status=400)
 
 @login_required
 def createacontract(request):
@@ -155,6 +190,31 @@ def set_signed(request, contract_id = None):
 			if Supervisor.objects.filter(profile=request.user).count()>=1:
 				attachments = []
 				supervisor = Supervisor.objects.get(profile=request.user)
+				try:
+					message = render_to_string('contract/contracttorender.html', {
+			                'block': block,
+			                'user': supervisor,
+			            })
+					html_string = '<!doctype html><html><head><meta charset="utf-8"><title>Contract:' + str(contract.contract_id) + '</title></head><body>' + message + '</body></html>'
+					html = HTML(string=html_string)
+					result = html.write_pdf()
+					merger = PdfFileMerger()
+
+
+					# Creating http response
+					response = HttpResponse(content_type='application/pdf;')
+					response['Content-Disposition'] = 'inline; filename=receipt.pdf'
+					response['Content-Transfer-Encoding'] = 'binary'
+					with tempfile.NamedTemporaryFile(delete=True) as output:
+						output.write(result)
+						output.flush()
+						merger.append(settings.MEDIA_ROOT+'/'+contract.pdf.name)
+						merger.append(os.path.realpath(output.name))
+						merger.write(settings.MEDIA_ROOT+'/'+contract.pdf.name)
+						merger.close()
+				except Exception as e:
+					print('error', e)
+					return HttpResponse("Error Rendering PDF", status=400)
 				contract.counter_signed = True
 				contract.counter_signed_timestamp = datetime.datetime.now()
 				contract.save(update_fields=['counter_signed', 'counter_signed_timestamp'])
@@ -176,6 +236,31 @@ def set_signed(request, contract_id = None):
 				attachments = []
 				parent = Parent.objects.get(profile=request.user)
 				if contract.first_auth_signe == parent:
+					try:
+						message = render_to_string('contract/contracttorender.html', {
+				                'block': block,
+				                'user': parent,
+				            })
+						html_string = '<!doctype html><html><head><meta charset="utf-8"><title>Contract:' + str(contract.contract_id) + '</title></head><body>' + message + '</body></html>'
+						html = HTML(string=html_string)
+						result = html.write_pdf()
+						merger = PdfFileMerger()
+
+
+						# Creating http response
+						response = HttpResponse(content_type='application/pdf;')
+						response['Content-Disposition'] = 'inline; filename=receipt.pdf'
+						response['Content-Transfer-Encoding'] = 'binary'
+						with tempfile.NamedTemporaryFile(delete=True) as output:
+							output.write(result)
+							output.flush()
+							merger.append(settings.MEDIA_ROOT+'/'+contract.pdf.name)
+							merger.append(os.path.realpath(output.name))
+							merger.write(settings.MEDIA_ROOT+'/'+contract.pdf.name)
+							merger.close()
+					except Exception as e:
+						print('error', e)
+						return HttpResponse("Error Rendering PDF", status=400)
 					contract.first_auth_signed = True
 					contract.first_auth_signed_timestamp = datetime.datetime.now()
 					contract.save(update_fields=['first_auth_signed', 'first_auth_signed_timestamp'])
@@ -194,6 +279,31 @@ def set_signed(request, contract_id = None):
 					)
 					email.send()
 				if contract.second_auth_signe == parent:
+					try:
+						message = render_to_string('contract/contracttorender.html', {
+				                'block': block,
+				                'user': parent,
+				            })
+						html_string = '<!doctype html><html><head><meta charset="utf-8"><title>Contract:' + str(contract.contract_id) + '</title></head><body>' + message + '</body></html>'
+						html = HTML(string=html_string)
+						result = html.write_pdf()
+						merger = PdfFileMerger()
+
+
+						# Creating http response
+						response = HttpResponse(content_type='application/pdf;')
+						response['Content-Disposition'] = 'inline; filename=receipt.pdf'
+						response['Content-Transfer-Encoding'] = 'binary'
+						with tempfile.NamedTemporaryFile(delete=True) as output:
+							output.write(result)
+							output.flush()
+							merger.append(settings.MEDIA_ROOT+'/'+contract.pdf.name)
+							merger.append(os.path.realpath(output.name))
+							merger.write(settings.MEDIA_ROOT+'/'+contract.pdf.name)
+							merger.close()
+					except Exception as e:
+						print('error', e)
+						return HttpResponse("Error Rendering PDF", status=400)
 					contract.second_auth_signed = True
 					contract.second_auth_signed_timestamp = datetime.datetime.now()
 					contract.save(update_fields=['second_auth_signed', 'second_auth_signed_timestamp'])
