@@ -1,14 +1,14 @@
 {% autoescape off %}
 
 
-Hi {{ user.name }},
-U had signed ur contract and down u'll see the details of the signe!
+Olá {{ user.name }},
+Seu contrato assinado está anexado abaixo e assinado. Quando todas as partes tiverem assinado o contrato, consulte o contrato assinado em anexo.
 
-Timestamp of the singe = {{ timestamp }}
-data = {{ block.data }}
+Horário da assinatura = {{ timestamp }}
+Dados = {{ block.data }}
 Hash = {{ block.hash }}
-Previous hash = {{ block.previous_hash }}
-Chain = {{ block.chain.name }}
+Hash anterior = {{ block.previous_hash }}
+Cadeia = {{ block.chain.name }}
 
 
 {% endautoescape %}

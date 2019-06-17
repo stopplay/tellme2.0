@@ -325,7 +325,7 @@ def set_signed(request, contract_id = None):
 			if contract.first_auth_signed and contract.second_auth_signed and contract.counter_signed:
 				contract.all_signed = True
 				contract.save(update_fields=['all_signed'])
-			return redirect('/contracts/seemycontracts')
+			return redirect('/contracts/seeallcontracts')
 	return render(request, 'contract/createblockcontract.html', {'form':form})
 
 @login_required
