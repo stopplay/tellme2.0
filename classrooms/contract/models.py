@@ -44,4 +44,5 @@ class Contract(models.Model):
 	first_auth_hash = models.CharField(max_length=255, null=True, blank=True)
 	second_auth_hash = models.CharField(max_length=255, null=True, blank=True)
 	counter_auth_hash = models.CharField(max_length=255, null=True, blank=True)
+	chain = models.ForeignKey('block.Chain', on_delete=models.SET_NULL, null=True, blank=True)
 	# end of Basic data of the contract #

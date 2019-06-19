@@ -18,4 +18,4 @@ class BlockModelFormByContract(forms.ModelForm):
 	"""docstring for UserModelForm"""
 	class Meta:
 		model = Block
-		fields = ['chain']
+		fields = []

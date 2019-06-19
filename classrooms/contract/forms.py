@@ -6,7 +6,7 @@ class ContractModelForm(forms.ModelForm):
 	"""docstring for ManagerModelForm"""
 	class Meta:
 		model = Contract
-		fields = ['name', 'date', 'pdf', 'counter_signe']
+		fields = ['name', 'date', 'pdf', 'counter_signe', 'chain']
 		widgets = {
 			'name': forms.TextInput(attrs={'maxlength':255, 'class':'labelandform'}),
 			'date': forms.DateInput(attrs={'type':'date', 'class':'labelandform'})

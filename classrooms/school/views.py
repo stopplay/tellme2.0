@@ -28,7 +28,7 @@ class SchoolsViewSet(viewsets.ModelViewSet):
     queryset = School.objects.all()
     serializer_class = SchoolSerializer
     # filter_backends = (DjangoFilterBackend)
-    # filterset_fields = ['__all__']
+    filterset_fields = '__all__'
 
 def create_school(request):
 	form = SchoolModelForm(request.POST or None)

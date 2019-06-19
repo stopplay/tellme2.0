@@ -21,6 +21,8 @@ class Class(models.Model):
 	class_level = models.IntegerField()
 	students = models.ManyToManyField(Student)
 	teachers = models.ManyToManyField(Teacher)
+	def __str__(self):
+		return self.class_name
 
 	def preliminary_students(self):
 		"""Remember to do this as well later, confirm student"""

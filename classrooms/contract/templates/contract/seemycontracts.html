@@ -94,7 +94,9 @@
                       				<td>
                               {% if request.user.is_superuser %}
                       					<div class="btn-tollbar px-2">
-
+                                  {% if contract.first_auth_signed or contract.second_auth_signed or contract.counter_signed %}
+                                  <a class="btn btn-secondary btn-sm" href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart">Contract Details</a>
+                                  {% else %}
                                   <div class="dropdown show">
                                     <a class="btn btn-secondary dropdown-toggle btn-sm" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                       Action
@@ -104,6 +106,7 @@
                                       <a class="dropdown-item" href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart">Contract Details</a>
 
                                     </div>
+                                    {% endif %}
                                   </div>
                                 </div>
                                 {% if contract.first_auth_signed or contract.second_auth_signed or contract.counter_signed %}

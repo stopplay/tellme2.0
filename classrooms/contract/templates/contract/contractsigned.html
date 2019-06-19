@@ -1,14 +1,16 @@
 {% autoescape off %}
 
+Prezado(a) {{ user.name }},
 
-Olá {{ user.name }},
-Seu contrato assinado está anexado abaixo e assinado. Quando todas as partes tiverem assinado o contrato, consulte o contrato assinado em anexo.
+Segue em anexo o contrato assinado eletronicamente por você através do app da sua escola {{ school.school_name }}.
 
-Horário da assinatura = {{ timestamp }}
-Dados = {{ block.data }}
-Hash = {{ block.hash }}
-Hash anterior = {{ block.previous_hash }}
-Cadeia = {{ block.chain.name }}
+Esse contrato também está disponível no ícone “Matrícula” no menu do aplicativo.
 
+Caso desconheça tal procedimento, por favor entrar em contato com a secretaria da escola e através do e-mail matricula@agendatellme.com.br .
+
+Obrigado!
+
+Nome da escola
+Powered by Tellme School
 
 {% endautoescape %}
