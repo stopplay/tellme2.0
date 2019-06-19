@@ -21,6 +21,7 @@ urlpatterns = [
     url('login/', views.do_login, name='login'),
     url('logout', views.do_logout, name='logout'),
     url('api/login', obtain_jwt_token, name='login_rest'),
+    url('api/refresh_token', refresh_jwt_token, name='refresh_token'),
     url('current_user/', views.current_user, name='current_user'),
 
 ]
