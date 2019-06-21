@@ -35,6 +35,7 @@ class Contract(models.Model):
 	counter_signed = models.BooleanField(default=False)
 	all_signed = models.BooleanField(default=False)
 	pdf = models.FileField(null=True, blank=True)
+	terms_of_contract = models.FileField(null=True, blank=True)
 	first_auth_signe = models.ForeignKey(Parent, on_delete=models.SET_NULL, null=True, blank=True, related_name='first_responsible', default=None)
 	second_auth_signe = models.ForeignKey(Parent, on_delete=models.SET_NULL, null=True, blank=True, related_name='second_responsible', default=None)
 	counter_signe = models.ForeignKey(Supervisor, on_delete=models.SET_NULL, null=True, blank=True, related_name='financial_responsible', default=None)

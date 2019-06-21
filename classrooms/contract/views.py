@@ -96,7 +96,7 @@ def write_pdf(request, contract=None, whosigned=None):
 @login_required
 def createacontract(request):
 	if request.user.is_superuser:
-		form = ContractModelForm(request.POST or None, request.FILES)
+		form = CreateContractModelForm(request.POST or None, request.FILES)
 		students = Student.objects.all()
 		if request.method == 'POST':
 			if form.is_valid():
@@ -289,7 +289,7 @@ def set_signed(request, contract_id = None):
 def updatecontract(request, contract_id=None):
 	if request.user.is_superuser:
 		instance = Contract.objects.get(contract_id=contract_id)
-		form = ContractModelForm(request.POST or None, request.FILES, instance=instance)
+		form = UpdateContractModelForm(request.POST or None, request.FILES, instance=instance)
 		students = Student.objects.all()
 		if request.method=='POST':
 			if form.is_valid():
