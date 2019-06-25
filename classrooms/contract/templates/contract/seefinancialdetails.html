@@ -1,0 +1,95 @@
+{% extends 'base.html'%}
+
+{% block title %} See Financial Details {% endblock %}
+
+{% block content %}
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card strpied-tabled-with-hover">
+                    <div class="card-header ">
+                        {% if request.user.is_superuser %}
+                        <h4 class="card-title">Financial(s)</h4>
+                        {% else %}
+                        <h4 class="card-title">Financial(s) for {{ request.user.username }}</h4>
+
+                        {% endif %}
+                    </div>
+                    <div class="card-body table-full-width table-responsive">
+                        <table class="table table-hover table-striped display row-border mb-4" id="contractstable">
+                          <thead>
+                      			<tr>
+                              <th>Status da operação</th>
+                              <th>Codigo Unidade</th>
+                      				<th>Conta a Receber ID</th>
+                      				<th>Aluno</th>
+                      				<th>Número de Parcelas</th>
+                              <th>Número do contrato</th>
+                      				<th>Situação do contrato</th>
+                              <th>Curso</th>
+                              <th>Série</th>
+                              <th>Turma</th>
+                              <th>Total Valor Bruto</th>
+                              <th>Total Valor Liquido</th>
+                              <th>Total Decsonto Reais</th>
+                              <th>Categoria</th>
+                              <th>Tipo de Plano</th>
+                              <th>Parcelas</th>
+                      			</tr>
+                      		</thead>
+                      		<tbody class="">
+                      			{% for financial in financials %}
+                              <tr class="pb-5">
+                                {% for mindata in financial %}
+                                  {% if mindata.tag == 'Aluno' %}
+                                    <th>
+                                      {% for aluno in mindata %}
+                                        <label>{{ aluno.text }}</label><br>
+                                        <label>{{ aluno.text }}</label><br>
+                                        <label>{{ aluno.text }}</label><br><br>
+                                      {% endfor %}
+                                    </th>
+                                  {% elif mindata.tag == 'Parcelas' %}
+                                    <th>
+                                    {% for parcela in mindata %}
+                                      <label>{{ parcela.text }}</label><br>
+                                      <label>{{ parcela.text }}</label><br>
+                                      <label>{{ parcela.text }}</label><br>
+                                      <label>{{ parcela.text }}</label><br>
+                                      <label>{{ parcela.text }}</label><br>
+                                      <label>{{ parcela.text }}</label><br>
+                                      <label>{{ parcela.text }}</label><br>
+                                      <label>{{ parcela.text }}</label><br>
+                                      <label>{{ parcela.text }}</label><br>
+                                      <label>{{ parcela.text }}</label><br>
+                                      <label>{{ parcela.text }}</label><br>
+                                      <label>{{ parcela.text }}</label><br>
+                                      <label>{{ parcela.text }}</label><br><br>
+                                    {% endfor %}
+                                    </th>
+                                  {% else %}
+                                    {% if mindata.tag == 'RetornoOperacao'%}
+                                    {% else %}
+                                      <th>{{ mindata.text }}</th>
+                                    {% endif %}
+                                  {% endif %}
+                                {% endfor %}
+                              </tr>
+                            {% endfor %}
+                      		</tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+  $(document).ready( function () {
+    $('#contractstable').DataTable();
+} );
+</script>
+{% endblock %}

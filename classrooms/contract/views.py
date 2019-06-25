@@ -42,7 +42,7 @@ from django.contrib.staticfiles import finders
 from school.models import *
 from django_filters.rest_framework import DjangoFilterBackend
 from django.contrib.sites.shortcuts import get_current_site
-import pdb
+from . import services
 
 try:
     from StringIO import StringIO
@@ -145,19 +145,19 @@ def createacontract(request):
 
 @login_required
 def seemycontracts(request):
-    contracts = []
-    is_parent = False
-    is_supervisor = False
-    if Supervisor.objects.filter(profile=request.user).count()>=1:
-        is_supervisor = True
-        contracts = Contract.objects.filter(counter_signe=Supervisor.objects.get(profile=request.user))
-    elif Parent.objects.filter(profile=request.user).count()>=1:
-        is_parent = True
-        contracts += Contract.objects.filter(first_auth_signe=Parent.objects.get(profile=request.user))
-        contracts += Contract.objects.filter(second_auth_signe=Parent.objects.get(profile=request.user))
-    elif request.user.is_superuser:
-        contracts = Contract.objects.all()
-    return render(request, 'contract/seemycontracts.html', {'contracts':contracts, 'is_parent':is_parent, 'is_supervisor':is_supervisor})
+	contracts = []
+	is_parent = False
+	is_supervisor = False
+	if Supervisor.objects.filter(profile=request.user).count()>=1:
+		is_supervisor = True
+		contracts = Contract.objects.filter(counter_signe=Supervisor.objects.get(profile=request.user))
+	elif Parent.objects.filter(profile=request.user).count()>=1:
+		is_parent = True
+		contracts += Contract.objects.filter(first_auth_signe=Parent.objects.get(profile=request.user))
+		contracts += Contract.objects.filter(second_auth_signe=Parent.objects.get(profile=request.user))
+	elif request.user.is_superuser:
+		contracts = Contract.objects.all()
+	return render(request, 'contract/seemycontracts.html', {'contracts':contracts, 'is_parent':is_parent, 'is_supervisor':is_supervisor})
 
 #weverton
 @login_required
@@ -184,7 +184,6 @@ def seemycontracts_rest(request):
 	return Response({'contracts':contracts_rest.data, 'is_parent':is_parent, 'is_supervisor':is_supervisor})
 
 def set_signed(request, contract_id = None):
-	pdb.set_trace()
 	contract = Contract.objects.get(contract_id=contract_id)
 	form = BlockModelFormByContract()
 	block = form.save(commit=False)
@@ -344,3 +343,14 @@ def delete_contract(request, contract_id = None):
 	contract_to_delete = Contract.objects.get(contract_id=contract_id)
 	contract_to_delete.delete()
 	return redirect('/contracts/seemycontracts')
+
+def seefinancialdetails(request, contract_id = None):
+	contract = Contract.objects.get(contract_id=contract_id)
+	sParametrosBusca = 'ResponsavelID='+str(Parent.objects.get(profile = request.user).responsible_id_sponte)+';'
+	if contract.contract_id_sponte:
+		sParametrosBusca += 'ContratoID='+str(contract.contract_id_sponte)+';'
+	if contract.contract_free_class_id_sponte:
+		sParametrosBusca += 'ContratoAulaLivreID='+str(contract.contract_free_class_id_sponte)+';'
+	financials = services.get_financeiro('39324', 'JRpWbRP80CbK', sParametrosBusca)
+
+	return render(request, 'contract/seefinancialdetails.html', {'financials':financials})
