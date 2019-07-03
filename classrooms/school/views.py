@@ -21,6 +21,7 @@ from rest_framework.status import (
 from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from django.views.decorators.csrf import csrf_exempt
+from school_users.models import *
 
 # Create your views here.
 class SchoolsViewSet(viewsets.ModelViewSet):
@@ -187,3 +188,19 @@ def verifyvalidchain(request, class_id=None):
 	if verify:
 		return HttpResponse('The chain for this class is valid!')
 	return HttpResponse('The chain for this class is not valid!')
+
+def add_head_to_school(request, school_id=None):
+	pass
+
+@login_required
+def add_teacher_to_class(request, class_id=None):
+	if request.user.is_superuser:
+		class_to_add_teacher = Class.objects.get(class_id=class_id)
+		form = ClassAddTeachersModelForm(request.POST or None, instance=class_to_add_teacher)
+		if form.is_valid():
+			newclass = form.save(commit=False)
+			newclass.save()
+			form.save_m2m()
+			return redirect('/schools/seeallschools')
+		return render(request, 'school/add_teacher_to_class.html', {'form':form})
+	return HttpResponse('U cannot access this page cos u are not admin!')

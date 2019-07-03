@@ -29,21 +29,21 @@
 														<tr>
 
 															<th >{{ classe.class_id }}</th>
-															<td>{{ classe.class_name }}</td>
-															<td>{{ classe.class_level }}</td>
-											        {% if class.students %}
-											        <td>{% for student in classe.students.all %}
+															<th>{{ classe.class_name }}</th>
+															<th>{{ classe.class_level }}</th>
+											        {% if classe.students %}
+											        <th align="center">{% for student in classe.students.all %}
 											            <label> {{ student.name }} </label>
 											            {% endfor %}
-											        </td>
+											        </th>
 											        {% endif %}
 
-											        {% if class.teachers %}
-											        <td>
+											        {% if classe.teachers %}
+											        <th align="center">
 											          {% for teacher in classe.teachers.all %}
-											          <label> {{ teacher.name }} </label>
+						                                  <Label>{{ teacher.name }}</label><br>
 											          {% endfor %}
-											        </td>
+											        </th>
 											        {% endif %}
 														</tr>
 													</tbody>

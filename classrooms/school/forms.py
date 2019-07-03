@@ -21,3 +21,10 @@ class ClassModelForm(forms.ModelForm):
 			'class_name': forms.TextInput(attrs={'maxlength':255}),
 			'class_level': forms.NumberInput(),
 		}
+
+class ClassAddTeachersModelForm(forms.ModelForm):
+	"""docstring for ClassAddTeachersModelForm"""
+	class Meta:
+		model = Class
+		fields = ['teachers']
+		
