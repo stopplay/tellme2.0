@@ -23,5 +23,6 @@ urlpatterns = [
     url('api/login', obtain_jwt_token, name='login_rest'),
     url('api/refresh_token', refresh_jwt_token, name='refresh_token'),
     url('current_user/', views.current_user, name='current_user'),
-
+    path('create_head_to_school/<int:school_id>', views.create_head_to_school, name='create_head_to_school'),
+    path('create_supervisor_to_school/<int:school_id>', views.create_supervisor_to_school, name='create_supervisor_to_school'),
 ]

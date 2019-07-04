@@ -6,17 +6,21 @@ class SchoolModelForm(forms.ModelForm):
 	"""docstring for UserModelForm"""
 	class Meta:
 		model = School
-		fields = ['school_name', 'enrollment_year']
+		fields = ['school_name', 'sponte_client_number', 'country', 'state', 'city']
 		widgets = {
 			'school_name': forms.TextInput(attrs={'maxlength':255}),
 			'enrollment_year': forms.NumberInput(),
+			'sponte_client_number': forms.NumberInput(attrs={'required':False}),
+			'country': forms.TextInput(attrs={'required':False}),
+			'state': forms.TextInput(attrs={'required':False}),
+			'city': forms.TextInput(attrs={'required':False}),
 		}
 
 class ClassModelForm(forms.ModelForm):
 	"""docstring for UserModelForm"""
 	class Meta:
 		model = Class
-		fields = ['class_name', 'class_level', 'class_unit']
+		fields = ['class_name', 'class_level', 'class_unit', 'enrollment_class_year']
 		widgets = {
 			'class_name': forms.TextInput(attrs={'maxlength':255}),
 			'class_level': forms.NumberInput(),
@@ -27,4 +31,10 @@ class ClassAddTeachersModelForm(forms.ModelForm):
 	class Meta:
 		model = Class
 		fields = ['teachers']
+
+class ClassAddStudentsModelForm(forms.ModelForm):
+	"""docstring for ClassAddTeachersModelForm"""
+	class Meta:
+		model = Class
+		fields = ['students']
 		

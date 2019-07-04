@@ -18,6 +18,9 @@ from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from django.views.decorators.csrf import csrf_exempt
 import pdb
+from school.models import *
+from django.contrib import messages
+import pdb
 
 # Create your views here.
 @login_required
@@ -66,8 +69,49 @@ def create_user(request):
                     user_creation.profile = user_profile
                     user_creation.save()
             return redirect('/users/create_user')
-    return render(request, 'school_users/createuser.html', {'form':form,'form2':form2,'form3':form3,'form4':form4,'form5':form5,'form6':form6,'form7':form7})
+        return render(request, 'school_users/createuser.html', {'form':form,'form2':form2,'form3':form3,'form4':form4,'form5':form5,'form6':form6,'form7':form7})
     return HttpResponse('U cannot access this page cos u are not admin!')
+
+@login_required
+def create_head_to_school(request, school_id=None):
+    if request.user.is_superuser:
+        school_to_add_head = School.objects.get(school_id=school_id)
+        form = UserModelForm(request.POST or None)
+        form2 = HeadModelForm(request.POST or None)
+        if form.is_valid() and form2.is_valid():
+            user = form.save(commit=False)
+            user.save()
+            user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
+            user_creation = form2.save(commit=False)
+            user_creation.profile = user_profile
+            user_creation.save()
+            head_to_add = get_object_or_404(Head, profile=user_profile)
+            school_to_add_head.head = head_to_add
+            school_to_add_head.save(update_fields=['head'])
+            messages.success(request, 'Diretor adicionado com sucesso à escola {}'.format(school_to_add_head.school_name))
+            return redirect('/users/create_supervisor_to_school/{}'.format(school_id))
+        return render(request, 'school_users/create_head_to_school.html', {'form':form, 'form2':form2, 'school':school_to_add_head})
+
+@login_required
+def create_supervisor_to_school(request, school_id=None):
+    if request.user.is_superuser:
+        pdb.set_trace()
+        school_to_add_head = School.objects.get(school_id=school_id)
+        form = UserModelForm(request.POST or None)
+        form2 = SupervisorModelForm(request.POST or None)
+        if form.is_valid() and form2.is_valid():
+            user = form.save(commit=False)
+            user.save()
+            user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
+            user_creation = form2.save(commit=False)
+            user_creation.profile = user_profile
+            user_creation.save()
+            supervisor_to_add = get_object_or_404(Supervisor, profile=user_profile)
+            school_to_add_head.adminorsupervisor = supervisor_to_add
+            school_to_add_head.save(update_fields=['adminorsupervisor'])
+            messages.success(request, 'Admin/Supervisor adicionado com sucesso à escola {}'.format(school_to_add_head.school_name))
+            return redirect('/schools/seeallschools/'.format(school_id))
+        return render(request, 'school_users/create_supervisor_to_school.html', {'form':form, 'form2':form2, 'school':school_to_add_head})
 
 @login_required
 def seeallusers(request):

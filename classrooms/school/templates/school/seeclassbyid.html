@@ -33,7 +33,7 @@
 															<th>{{ classe.class_level }}</th>
 											        {% if classe.students %}
 											        <th align="center">{% for student in classe.students.all %}
-											            <label> {{ student.name }} </label>
+											            <label> {{ student.name }} </label><br>
 											            {% endfor %}
 											        </th>
 											        {% endif %}

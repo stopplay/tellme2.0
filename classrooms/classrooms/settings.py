@@ -33,6 +33,8 @@ ALLOWED_HOSTS = ['52.212.87.244', '127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
+    'jet.dashboard',
+    'jet',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -188,3 +190,5 @@ CORS_ALLOW_CREDENTIALS=True
 
 CORS_EXPOSE_HEADERS = ['Access-Control-Allow-Origin']
 CORS_ALLOW_HEADERS = default_headers + ('access-control-allow-origin',)
+
+MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'

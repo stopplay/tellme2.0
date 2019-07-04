@@ -22,6 +22,7 @@ from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from django.views.decorators.csrf import csrf_exempt
 from school_users.models import *
+from django.contrib import messages
 
 # Create your views here.
 class SchoolsViewSet(viewsets.ModelViewSet):
@@ -37,13 +38,21 @@ def create_school(request):
 		school = form.save(commit=False)
 		school.save()
 		form = SchoolModelForm()
-		return render(request, 'school/add_school.html', {'form':form})
+		school_to_add_head = School.objects.get(school_id=school.school_id)
+		messages.success(request, 'School added correctly!')
+		return redirect('/users/create_head_to_school/{}'.format(school_to_add_head.school_id))
 	return render(request, 'school/add_school.html', {'form':form})
 
 @login_required
 def seeallschools(request):
 	if request.user.is_superuser:
 		schools = School.objects.all()
+		return render(request, 'school/seeallschools.html', {'schools':schools})
+	elif Head.objects.filter(profile=request.user).count()>=1:
+		schools = School.objects.filter(head=Head.objects.get(profile=request.user))
+		return render(request, 'school/seeallschools.html', {'schools':schools})
+	elif Supervisor.objects.filter(profile=request.user).count()>=1:
+		schools = School.objects.filter(adminorsupervisor=Supervisor.objects.get(profile=request.user))
 		return render(request, 'school/seeallschools.html', {'schools':schools})
 	return HttpResponse('U cannot access this page cos u are not admin!')
 
@@ -77,7 +86,7 @@ def update_school(request, school_id=None):
 	form = SchoolModelForm(request.POST or None, instance=instance)
 	if form.is_valid():
 		school = form.save(commit=False)
-		school.save(update_fields=['school_name', 'enrollment_year'])
+		school.save(update_fields=['school_name', 'head', 'sponte_client_number', 'country', 'state', 'city'])
 		return redirect('/schools/seeallschools')
 	return render(request, 'school/update_school.html', {'form':form})
 
@@ -109,7 +118,7 @@ def add_class(request, school_id=None):
 	form = ClassModelForm(request.POST or None)
 	if form.is_valid():
 		classroom = form.save(commit=False)
-		newchain = Chain.objects.create(name="{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, school_to_add_class.enrollment_year, classroom.class_unit, classroom.class_name))
+		newchain = Chain.objects.create(name="{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, classroom.class_year, classroom.class_unit, classroom.class_name))
 		school_to_add_class.chains.add(newchain)
 		classroom.save()
 		newclassroom = Class.objects.get(class_id=classroom.class_id)
@@ -122,7 +131,7 @@ def add_class(request, school_id=None):
 def add_class_rest(request, school_id=None):
 	school_to_add_class = School.objects.get(school_id=school_id)
 	classroom = Class.objects.create(class_name=request.POST.get('class_name'), class_level=request.POST.get('class_level'), class_unit=request.POST.get('class_unit'))
-	newchain = Chain.objects.create(name="{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, school_to_add_class.enrollment_year, classroom.class_unit, classroom.class_name))
+	newchain = Chain.objects.create(name="{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, classroom.class_year, classroom.class_unit, classroom.class_name))
 	school_to_add_class.chains.add(newchain)
 	newclassroom = Class.objects.get(class_id=classroom.class_id)
 	school_to_add_class.classes.add(newclassroom)
@@ -132,12 +141,12 @@ def add_class_rest(request, school_id=None):
 def update_class(request, class_id=None):
 	class_to_update = Class.objects.get(class_id=class_id)
 	school_to_update_class = School.objects.get(classes__class_id__exact=class_to_update.class_id)
-	name_of_chain = "{0}-{1}-{2}-{3}".format(school_to_update_class.school_name, school_to_update_class.enrollment_year, class_to_update.class_unit, class_to_update.class_name)
+	name_of_chain = "{0}-{1}-{2}-{3}".format(school_to_update_class.school_name, class_to_update.class_year, class_to_update.class_unit, class_to_update.class_name)
 	chain_to_be_updated = Chain.objects.get(name=name_of_chain)
 	form = ClassModelForm(request.POST or None, instance=class_to_update)
 	if form.is_valid():
 		classroom = form.save(commit=False)
-		chain_to_be_updated.name = "{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, school_to_add_class.enrollment_year, classroom.class_unit, classroom.class_name)
+		chain_to_be_updated.name = "{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, classroom.class_year, classroom.class_unit, classroom.class_name)
 		chain_to_be_updated.save(update_fields=['name'])
 		classroom.save(update_fields=['class_name','class_level'])
 		return redirect('/schools/seeallschools')
@@ -146,7 +155,7 @@ def update_class(request, class_id=None):
 def delete_class(request, class_id=None):
 	class_to_delete = Class.objects.get(class_id=class_id)
 	school_to_delete_class = School.objects.get(classes__class_id__exact=class_to_delete.class_id)
-	name_of_chain = "{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, school_to_add_class.enrollment_year, classroom.class_unit, classroom.class_name)
+	name_of_chain = "{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, class_to_delete_class_year, classroom.class_unit, classroom.class_name)
 	if (Chain.objects.filter(name=name_of_chain).count()>=1):
 		Chain.objects.get(name=name_of_chain).delete()
 	class_to_delete.delete()
@@ -203,4 +212,22 @@ def add_teacher_to_class(request, class_id=None):
 			form.save_m2m()
 			return redirect('/schools/seeallschools')
 		return render(request, 'school/add_teacher_to_class.html', {'form':form})
+	return HttpResponse('U cannot access this page cos u are not admin!')
+
+@login_required
+def select_head_to_school(request, school_id=None):
+	if request.user.is_superuser:
+		school_to_select_head = School.objects.get(school_id=school_id)
+		form = SchoolAddHeadModelForm(request.POST or None, instance=school_to_select_head)
+
+def add_student_to_class(request, class_id=None):
+	if request.user.is_superuser:
+		class_to_add_student = Class.objects.get(class_id=class_id)
+		form = ClassAddStudentsModelForm(request.POST or None, instance=class_to_add_student)
+		if form.is_valid():
+			newclass = form.save(commit=False)
+			newclass.save()
+			form.save_m2m()
+			return redirect('/schools/seeallschools')
+		return render(request, 'school/add_student_to_class.html', {'form':form})
 	return HttpResponse('U cannot access this page cos u are not admin!')
