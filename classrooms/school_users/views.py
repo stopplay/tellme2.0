@@ -20,7 +20,6 @@ from django.views.decorators.csrf import csrf_exempt
 import pdb
 from school.models import *
 from django.contrib import messages
-import pdb
 
 # Create your views here.
 @login_required
@@ -95,7 +94,6 @@ def create_head_to_school(request, school_id=None):
 @login_required
 def create_supervisor_to_school(request, school_id=None):
     if request.user.is_superuser:
-        pdb.set_trace()
         school_to_add_head = School.objects.get(school_id=school_id)
         form = UserModelForm(request.POST or None)
         form2 = SupervisorModelForm(request.POST or None)

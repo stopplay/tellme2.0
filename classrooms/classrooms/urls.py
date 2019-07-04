@@ -18,15 +18,17 @@ from django.contrib import admin
 from django.urls import include, path, re_path
 from django.conf.urls.static import static
 from classrooms import settings
+from school.views import seeallschools
 
 urlpatterns = [
     path('datawizard/', include('data_wizard.urls')),
     url(r'^jet/', include('jet.urls', 'jet')),  # Django JET URLS
     url(r'^jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
     path('admin/', admin.site.urls),
+    url(r'^$', seeallschools),
     url('contracts/', include('contract.urls')),
     url('schools/', include('school.urls')),
-    url('users/', include('school_users.urls')),
+    url('users/', include('school_users.urls')),   
 ]
 if settings.DEBUG:
         urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

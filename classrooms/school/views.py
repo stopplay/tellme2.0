@@ -104,7 +104,8 @@ def update_school_rest(request, school_id=None):
 def delete_school(request, school_id=None):
 	school_to_delete = School.objects.get(school_id=school_id)
 	school_to_delete.delete()
-	return HttpResponse('This school has been deleted correctly')
+	messages.success(request, 'Escola excluída com sucessso!')
+	return redirect('/schools/seeallschools')
 
 @csrf_exempt
 @api_view(['GET'])
@@ -118,7 +119,7 @@ def add_class(request, school_id=None):
 	form = ClassModelForm(request.POST or None)
 	if form.is_valid():
 		classroom = form.save(commit=False)
-		newchain = Chain.objects.create(name="{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, classroom.class_year, classroom.class_unit, classroom.class_name))
+		newchain = Chain.objects.create(name="{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name))
 		school_to_add_class.chains.add(newchain)
 		classroom.save()
 		newclassroom = Class.objects.get(class_id=classroom.class_id)
@@ -131,7 +132,7 @@ def add_class(request, school_id=None):
 def add_class_rest(request, school_id=None):
 	school_to_add_class = School.objects.get(school_id=school_id)
 	classroom = Class.objects.create(class_name=request.POST.get('class_name'), class_level=request.POST.get('class_level'), class_unit=request.POST.get('class_unit'))
-	newchain = Chain.objects.create(name="{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, classroom.class_year, classroom.class_unit, classroom.class_name))
+	newchain = Chain.objects.create(name="{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name))
 	school_to_add_class.chains.add(newchain)
 	newclassroom = Class.objects.get(class_id=classroom.class_id)
 	school_to_add_class.classes.add(newclassroom)
@@ -141,12 +142,12 @@ def add_class_rest(request, school_id=None):
 def update_class(request, class_id=None):
 	class_to_update = Class.objects.get(class_id=class_id)
 	school_to_update_class = School.objects.get(classes__class_id__exact=class_to_update.class_id)
-	name_of_chain = "{0}-{1}-{2}-{3}".format(school_to_update_class.school_name, class_to_update.class_year, class_to_update.class_unit, class_to_update.class_name)
+	name_of_chain = "{0}-{1}-{2}-{3}".format(school_to_update_class.school_name, class_to_update.enrollment_class_year, class_to_update.class_unit, class_to_update.class_name)
 	chain_to_be_updated = Chain.objects.get(name=name_of_chain)
 	form = ClassModelForm(request.POST or None, instance=class_to_update)
 	if form.is_valid():
 		classroom = form.save(commit=False)
-		chain_to_be_updated.name = "{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, classroom.class_year, classroom.class_unit, classroom.class_name)
+		chain_to_be_updated.name = "{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name)
 		chain_to_be_updated.save(update_fields=['name'])
 		classroom.save(update_fields=['class_name','class_level'])
 		return redirect('/schools/seeallschools')
@@ -155,7 +156,7 @@ def update_class(request, class_id=None):
 def delete_class(request, class_id=None):
 	class_to_delete = Class.objects.get(class_id=class_id)
 	school_to_delete_class = School.objects.get(classes__class_id__exact=class_to_delete.class_id)
-	name_of_chain = "{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, class_to_delete_class_year, classroom.class_unit, classroom.class_name)
+	name_of_chain = "{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, class_to_delete_enrollment_class_year, classroom.class_unit, classroom.class_name)
 	if (Chain.objects.filter(name=name_of_chain).count()>=1):
 		Chain.objects.get(name=name_of_chain).delete()
 	class_to_delete.delete()

@@ -12,6 +12,7 @@ class School(models.Model):
 	head = models.ForeignKey(Head, on_delete=models.SET_NULL,verbose_name = 'Diretor', null=True, blank=True)
 	adminorsupervisor = models.ForeignKey(Supervisor, on_delete=models.SET_NULL, verbose_name = 'Admin/Supervisor', null=True, blank=True)
 	sponte_client_number = models.IntegerField(null=True, blank=True, verbose_name = 'Número do Cliente Sponte')
+	sponte_token = models.TextField(null=True, blank=True, verbose_name = 'Token do Sponte')
 	country = models.TextField(null=True, blank=True, verbose_name = 'País')
 	state = models.TextField(null=True, blank=True, verbose_name = 'Estado')
 	city = models.TextField(null=True, blank=True, verbose_name = 'Cidade')
