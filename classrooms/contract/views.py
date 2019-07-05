@@ -43,6 +43,7 @@ from school.models import *
 from django_filters.rest_framework import DjangoFilterBackend
 from django.contrib.sites.shortcuts import get_current_site
 from . import services
+from school_users.views import current_user
 
 try:
     from StringIO import StringIO
@@ -142,6 +143,74 @@ def createacontract(request):
 				return HttpResponse('This student dont have at least one of the parents associated to him.')
 		return render(request, 'contract/createacontract.html', {'form':form, 'students':students})
 	return HttpResponse('U cannot access this page cos u are not admin!')
+
+@csrf_exempt
+def createacontract_rest(request):
+	is_superuser = current_user(request).data.get("is_superuser")
+	if is_superuser:
+		received_json_data=json.loads(request.body)
+		contract_id_sponte = received_json_data.get("contract_id_sponte")
+		contract_free_class_id_sponte = received_json_data.get("contract_free_class_id_sponte")
+		situation_id_sponte = received_json_data.get("situation_id_sponte")
+		situation_sponte = received_json_data.get("situation_sponte")
+		student_name_sponte = received_json_data.get("student_name_sponte")
+		student_id_sponte = received_json_data.get("student_id_sponte")
+		course_id_sponte = received_json_data.get("course_id_sponte")
+		class_id_sponte = received_json_data.get("class_id_sponte")
+		course_name_sponte = received_json_data.get("course_name_sponte")
+		contract_type_id = received_json_data.get("contract_type_id")
+		initial_date_sponte = received_json_data.get("initial_date_sponte")
+		end_date_sponte = received_json_data.get("end_date_sponte")
+		date_of_registration_sponte = received_json_data.get("date_of_registration_sponte")
+		type_of_registration_sponte = received_json_data.get("type_of_registration_sponte")
+		contractor_sponte = received_json_data.get("contractor_sponte")
+		name_of_curricular_matrix_sponte = received_json_data.get("name_of_curricular_matrix_sponte")
+		financial_launched_sponte = received_json_data.get("financial_launched_sponte")
+		contract_number_sponte = received_json_data.get("contract_number_sponte")
+		closing_date_sponte = received_json_data.get("closing_date_sponte")
+		name = received_json_data.get("name")
+		date = received_json_data.get("date")
+		pdf = received_json_data.get("pdf")
+		terms_of_contract = received_json_data.get("terms_of_contract")
+		student_id = received_json_data.get("student_id")
+		counter_signe = received_json_data.get("counter_signe")
+		chain = received_json_data.get("chain")
+		student = Student.objects.get(student_id=student_id)
+		newcontract = Contract.objects.create(contract_id_sponte = contract_id_sponte, contract_free_class_id_sponte=contract_free_class_id_sponte, situation_id_sponte=situation_id_sponte, situation_sponte=situation_sponte, student_name_sponte=student_name_sponte, student_id_sponte=student_id_sponte, course_id_sponte=course_id_sponte, class_id_sponte=class_id_sponte, course_name_sponte=course_name_sponte, contract_type_id=contract_type_id, initial_date_sponte=initial_date_sponte, end_date_sponte=end_date_sponte, date_of_registration_sponte=date_of_registration_sponte, type_of_registration_sponte=type_of_registration_sponte, contractor_sponte=contractor_sponte, name_of_curricular_matrix_sponte=name_of_curricular_matrix_sponte, financial_launched_sponte=financial_launched_sponte, contract_number_sponte=contract_number_sponte, closing_date_sponte=closing_date_sponte, name=name, date=date, pdf=pdf, terms_of_contract=terms_of_contract, first_auth_signe=student.first_parent, second_auth_signe=student.second_parent, counter_signe=counter_signe, chain=chain)
+		contract = Contract.objects.get(contract_id_sponte = contract_id_sponte, contract_free_class_id_sponte=contract_free_class_id_sponte, situation_id_sponte=situation_id_sponte, situation_sponte=situation_sponte, student_name_sponte=student_name_sponte, student_id_sponte=student_id_sponte, course_id_sponte=course_id_sponte, class_id_sponte=class_id_sponte, course_name_sponte=course_name_sponte, contract_type_id=contract_type_id, initial_date_sponte=initial_date_sponte, end_date_sponte=end_date_sponte, date_of_registration_sponte=date_of_registration_sponte, type_of_registration_sponte=type_of_registration_sponte, contractor_sponte=contractor_sponte, name_of_curricular_matrix_sponte=name_of_curricular_matrix_sponte, financial_launched_sponte=financial_launched_sponte, contract_number_sponte=contract_number_sponte, closing_date_sponte=closing_date_sponte, name=name, date=date, pdf=pdf, terms_of_contract=terms_of_contract, first_auth_signe=student.first_parent, second_auth_signe=student.second_parent, counter_signe=counter_signe, chain=chain)
+		attachments = []
+		content = contract.pdf.read()
+		attachment = (contract.pdf.name, content, 'application/pdf')
+		attachments.append(attachment)
+		mail_subject = 'Contract to be signed'
+		message = render_to_string('contract/sendcontract.html', {
+			'user': contract.first_auth_signe,
+		})
+		to_email = contract.first_auth_signe.profile.email
+		email = EmailMessage(
+			mail_subject, message, to=[to_email], attachments=attachments
+		)
+		email.send()
+		mail_subject = 'Contract to be signed'
+		message = render_to_string('contract/sendcontract.html', {
+			'user': contract.second_auth_signe,
+		})
+		to_email = contract.second_auth_signe.profile.email
+		email = EmailMessage(
+			mail_subject, message, to=[to_email], attachments=attachments
+		)
+		email.send()
+		mail_subject = 'Contract to be signed'
+		message = render_to_string('contract/sendcontract.html', {
+			'user': contract.counter_signe,
+		})
+		to_email = contract.counter_signe.profile.email
+		email = EmailMessage(
+			mail_subject, message, to=[to_email], attachments=attachments
+		)
+		email.send()
+		contract_rest = ContractSerializer(contract)
+		return Response({'contracts':contracts_rest.data,})
 
 @login_required
 def seemycontracts(request):
@@ -346,11 +415,13 @@ def delete_contract(request, contract_id = None):
 
 def seefinancialdetails(request, contract_id = None):
 	contract = Contract.objects.get(contract_id=contract_id)
-	sParametrosBusca = 'ResponsavelID='+str(Parent.objects.get(profile = request.user).responsible_id_sponte)+';'
-	if contract.contract_id_sponte:
-		sParametrosBusca += 'ContratoID='+str(contract.contract_id_sponte)+';'
-	if contract.contract_free_class_id_sponte:
-		sParametrosBusca += 'ContratoAulaLivreID='+str(contract.contract_free_class_id_sponte)+';'
-	financials = services.get_financeiro('39324', 'JRpWbRP80CbK', sParametrosBusca)
-
-	return render(request, 'contract/seefinancialdetails.html', {'financials':financials})
+	if (contract.all_signed):
+		sParametrosBusca = 'ResponsavelID='+str(Parent.objects.get(profile = request.user).responsible_id_sponte)+';'
+		if contract.contract_id_sponte:
+			sParametrosBusca += 'ContratoID='+str(contract.contract_id_sponte)+';'
+		if contract.contract_free_class_id_sponte:
+			sParametrosBusca += 'ContratoAulaLivreID='+str(contract.contract_free_class_id_sponte)+';'
+		financials = services.get_financeiro('39324', 'JRpWbRP80CbK', sParametrosBusca)
+		return render(request, 'contract/seefinancialdetails.html', {'financials':financials})
+	else:
+		return HttpResponse('Não é possível ver agora! Quando o contrato for assinado por todos você poderá ver os detalhes financeiros!')
