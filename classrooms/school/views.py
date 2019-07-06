@@ -32,16 +32,19 @@ class SchoolsViewSet(viewsets.ModelViewSet):
     # filter_backends = (DjangoFilterBackend)
     filterset_fields = '__all__'
 
+@login_required
 def create_school(request):
-	form = SchoolModelForm(request.POST or None)
-	if form.is_valid():
-		school = form.save(commit=False)
-		school.save()
-		form = SchoolModelForm()
-		school_to_add_head = School.objects.get(school_id=school.school_id)
-		messages.success(request, 'School added correctly!')
-		return redirect('/users/create_head_to_school/{}'.format(school_to_add_head.school_id))
-	return render(request, 'school/add_school.html', {'form':form})
+	if request.user.is_superuser:
+		form = SchoolModelForm(request.POST or None)
+		if form.is_valid():
+			school = form.save(commit=False)
+			school.save()
+			form = SchoolModelForm()
+			school_to_add_head = School.objects.get(school_id=school.school_id)
+			messages.success(request, 'School added correctly!')
+			return redirect('/users/create_head_to_school/{}'.format(school_to_add_head.school_id))
+		return render(request, 'school/add_school.html', {'form':form})
+	return HttpResponse('U cannot access this page cos u are not admin!')
 
 @login_required
 def seeallschools(request):
@@ -49,11 +52,13 @@ def seeallschools(request):
 		schools = School.objects.all()
 		return render(request, 'school/seeallschools.html', {'schools':schools})
 	elif Head.objects.filter(profile=request.user).count()>=1:
+		is_supervisor = True
 		schools = School.objects.filter(head=Head.objects.get(profile=request.user))
-		return render(request, 'school/seeallschools.html', {'schools':schools})
+		return render(request, 'school/seeallschools.html', {'schools':schools, 'is_supervisor':is_supervisor})
 	elif Supervisor.objects.filter(profile=request.user).count()>=1:
+		is_supervisor = True
 		schools = School.objects.filter(adminorsupervisor=Supervisor.objects.get(profile=request.user))
-		return render(request, 'school/seeallschools.html', {'schools':schools})
+		return render(request, 'school/seeallschools.html', {'schools':schools, 'is_supervisor':is_supervisor})
 	return HttpResponse('U cannot access this page cos u are not admin!')
 
 #weverton
@@ -62,6 +67,10 @@ def seeclassbyid(request, class_id=None):
     if request.user.is_superuser:
         classe = Class.objects.get(class_id=class_id)
         return render(request,'school/seeclassbyid.html',{'classe':classe})
+    elif Head.objects.filter(profile=request.user).count()>=1:
+    	is_supervisor = True
+    	classe = Class.objects.get(class_id=class_id)
+    	return render(request,'school/seeclassbyid.html',{'classe':classe, 'is_supervisor':is_supervisor})
     return HttpResponse('U cannot access this page cos u are not admin!')
 
 #weverton
@@ -70,6 +79,10 @@ def seechainbyname(request, chain_name=None):
     if request.user.is_superuser:
         chain = Chain.objects.get(name=chain_name)
         return render(request,'school/seechainbyname.html',{'chain':chain})
+    elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
+    	is_supervisor = True
+    	chain = Chain.objects.get(name=chain_name)
+    	return render(request,'school/seechainbyname.html',{'chain':chain, 'is_supervisor':is_supervisor})
     return HttpResponse('U cannot access this page cos u are not admin!')
     
 @csrf_exempt
@@ -81,14 +94,27 @@ def seeallschools_rest(request):
 		return Response({'schools':schools_rest.data})
 	return HttpResponse('U cannot access this page cos u are not admin!')
 
+@login_required
 def update_school(request, school_id=None):
-	instance = School.objects.get(school_id=school_id)
-	form = SchoolModelForm(request.POST or None, instance=instance)
-	if form.is_valid():
-		school = form.save(commit=False)
-		school.save(update_fields=['school_name', 'head', 'sponte_client_number', 'country', 'state', 'city'])
-		return redirect('/schools/seeallschools')
-	return render(request, 'school/update_school.html', {'form':form})
+	if request.user.is_superuser:
+		instance = School.objects.get(school_id=school_id)
+		form = SchoolModelForm(request.POST or None, instance=instance)
+		if form.is_valid():
+			school = form.save(commit=False)
+			school.save(update_fields=['school_name', 'head', 'sponte_client_number', 'country', 'state', 'city'])
+			messages.success(request, 'A escola foi atualizada com sucesso!')
+			return redirect('/schools/seeallschools')
+		return render(request, 'school/update_school.html', {'form':form})
+	elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
+		is_supervisor = True
+		instance = School.objects.get(school_id=school_id)
+		form = SchoolModelForm(request.POST or None, instance=instance)
+		if form.is_valid():
+			school = form.save(commit=False)
+			school.save(update_fields=['school_name', 'head', 'sponte_client_number', 'country', 'state', 'city'])
+			messages.success(request, 'A escola foi atualizada com sucesso!')
+			return redirect('/schools/seeallschools')
+		return render(request, 'school/update_school.html', {'form':form, 'is_supervisor':is_supervisor})
 
 @csrf_exempt
 @api_view(['POST'])
@@ -114,18 +140,36 @@ def delete_school_rest(request, school_id=None):
 	school_to_delete.delete()
 	return HttpResponse('This school has been deleted correctly')
 
+@login_required
 def add_class(request, school_id=None):
-	school_to_add_class = School.objects.get(school_id=school_id)
-	form = ClassModelForm(request.POST or None)
-	if form.is_valid():
-		classroom = form.save(commit=False)
-		newchain = Chain.objects.create(name="{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name))
-		school_to_add_class.chains.add(newchain)
-		classroom.save()
-		newclassroom = Class.objects.get(class_id=classroom.class_id)
-		school_to_add_class.classes.add(newclassroom)
-		return redirect('/schools/seeallschools')
-	return render(request, 'school/add_class.html', {'form':form})
+	if request.user.is_superuser:
+		school_to_add_class = School.objects.get(school_id=school_id)
+		form = ClassModelForm(request.POST or None)
+		if form.is_valid():
+			classroom = form.save(commit=False)
+			newchain = Chain.objects.create(name="{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name))
+			school_to_add_class.chains.add(newchain)
+			classroom.save()
+			newclassroom = Class.objects.get(class_id=classroom.class_id)
+			school_to_add_class.classes.add(newclassroom)
+			messages.success(request, 'Classe adicionada com sucesso!')
+			return redirect('/schools/seeallschools')
+		return render(request, 'school/add_class.html', {'form':form})
+	elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
+		is_supervisor = True
+		school_to_add_class = School.objects.get(school_id=school_id)
+		form = ClassModelForm(request.POST or None)
+		if form.is_valid():
+			classroom = form.save(commit=False)
+			newchain = Chain.objects.create(name="{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name))
+			school_to_add_class.chains.add(newchain)
+			classroom.save()
+			newclassroom = Class.objects.get(class_id=classroom.class_id)
+			school_to_add_class.classes.add(newclassroom)
+			messages.success(request, 'Classe adicionada com sucesso!')
+			return redirect('/schools/seeallschools')
+		return render(request, 'school/add_class.html', {'form':form, 'is_supervisor':is_supervisor})
+
 
 @csrf_exempt
 @api_view(['POST'])
@@ -139,28 +183,51 @@ def add_class_rest(request, school_id=None):
 	school_rest = SchoolSerializer(school_to_add_class)
 	return Response({'school_with_new_class':school_rest.data})
 
+@login_required
 def update_class(request, class_id=None):
-	class_to_update = Class.objects.get(class_id=class_id)
-	school_to_update_class = School.objects.get(classes__class_id__exact=class_to_update.class_id)
-	name_of_chain = "{0}-{1}-{2}-{3}".format(school_to_update_class.school_name, class_to_update.enrollment_class_year, class_to_update.class_unit, class_to_update.class_name)
-	chain_to_be_updated = Chain.objects.get(name=name_of_chain)
-	form = ClassModelForm(request.POST or None, instance=class_to_update)
-	if form.is_valid():
-		classroom = form.save(commit=False)
-		chain_to_be_updated.name = "{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name)
-		chain_to_be_updated.save(update_fields=['name'])
-		classroom.save(update_fields=['class_name','class_level'])
-		return redirect('/schools/seeallschools')
-	return render(request, 'school/update_class.html', {'form':form})
+	if request.user.is_superuser:
+		class_to_update = Class.objects.get(class_id=class_id)
+		school_to_update_class = School.objects.get(classes__class_id__exact=class_to_update.class_id)
+		name_of_chain = "{0}-{1}-{2}-{3}".format(school_to_update_class.school_name, class_to_update.enrollment_class_year, class_to_update.class_unit, class_to_update.class_name)
+		chain_to_be_updated = Chain.objects.get(name=name_of_chain)
+		form = ClassModelForm(request.POST or None, instance=class_to_update)
+		if form.is_valid():
+			classroom = form.save(commit=False)
+			chain_to_be_updated.name = "{0}-{1}-{2}-{3}".format(school_to_update_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name)
+			chain_to_be_updated.save(update_fields=['name'])
+			classroom.save(update_fields=['class_name','class_level'])
+			messages.success(request, 'Classe atualizada com sucesso!')
+			return redirect('/schools/seeallschools')
+		return render(request, 'school/update_class.html', {'form':form})
+	elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
+		is_supervisor = True
+		class_to_update = Class.objects.get(class_id=class_id)
+		school_to_update_class = School.objects.get(classes__class_id__exact=class_to_update.class_id)
+		name_of_chain = "{0}-{1}-{2}-{3}".format(school_to_update_class.school_name, class_to_update.enrollment_class_year, class_to_update.class_unit, class_to_update.class_name)
+		chain_to_be_updated = Chain.objects.get(name=name_of_chain)
+		form = ClassModelForm(request.POST or None, instance=class_to_update)
+		if form.is_valid():
+			classroom = form.save(commit=False)
+			chain_to_be_updated.name = "{0}-{1}-{2}-{3}".format(school_to_update_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name)
+			chain_to_be_updated.save(update_fields=['name'])
+			classroom.save(update_fields=['class_name','class_level'])
+			messages.success(request, 'Classe atualizada com sucesso!')
+			return redirect('/schools/seeallschools')
+		return render(request, 'school/update_class.html', {'form':form, 'is_supervisor':is_supervisor})
 
+@login_required
 def delete_class(request, class_id=None):
-	class_to_delete = Class.objects.get(class_id=class_id)
-	school_to_delete_class = School.objects.get(classes__class_id__exact=class_to_delete.class_id)
-	name_of_chain = "{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, class_to_delete_enrollment_class_year, classroom.class_unit, classroom.class_name)
-	if (Chain.objects.filter(name=name_of_chain).count()>=1):
-		Chain.objects.get(name=name_of_chain).delete()
-	class_to_delete.delete()
-	return redirect('/schools/seeallschools')
+	if request.user.is_superuser or Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
+		class_to_delete = Class.objects.get(class_id=class_id)
+		school_to_delete_class = School.objects.get(classes__class_id__exact=class_to_delete.class_id)
+		name_of_chain = "{0}-{1}-{2}-{3}".format(school_to_delete_class.school_name, class_to_delete.enrollment_class_year, class_to_delete.class_unit, class_to_delete.class_name)
+		if (Chain.objects.filter(name=name_of_chain).count()>=1):
+			chain_to_delete = school_to_delete_class.chains.get(name=name_of_chain)
+			chain_to_delete.delete()
+		class_to_delete.delete()
+		messages.success(request, 'Esta classe foi deletada corretamente')
+		return redirect('/schools/seeallschools')
+
 
 def create_block(request):
 	form = BlockModelForm(request.POST or None)
@@ -192,12 +259,14 @@ def create_block(request):
 def verifyvalidchain(request, class_id=None):
 	class_to_verify_chain = Class.objects.get(class_id=class_id)
 	school_to_verify_chain = School.objects.get(classes__class_id__exact=class_to_verify_chain.class_id)
-	name_of_chain = "{0}-{1}-{2}".format(school_to_verify_chain.school_name, class_to_verify_chain.class_name, school_to_verify_chain.enrollment_year)
+	name_of_chain = "{0}-{1}-{2}-{3}".format(school_to_verify_chain.school_name, class_to_verify_chain.enrollment_class_year, class_to_verify_chain.class_unit, class_to_verify_chain.class_name)
 	chain_to_be_verified = Chain.objects.get(name=name_of_chain)
 	verify = chain_to_be_verified.is_valid_chain()
 	if verify:
-		return HttpResponse('The chain for this class is valid!')
-	return HttpResponse('The chain for this class is not valid!')
+		messages.success(request, 'O chain para esta classe é válido!')
+		return redirect('/schools/seeallschools')
+	messages.error(request, 'O chain para esta classe não é válido')
+	return redirect('/schools/seeallschools')
 
 def add_head_to_school(request, school_id=None):
 	pass
@@ -213,6 +282,16 @@ def add_teacher_to_class(request, class_id=None):
 			form.save_m2m()
 			return redirect('/schools/seeallschools')
 		return render(request, 'school/add_teacher_to_class.html', {'form':form})
+	elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
+		is_supervisor = True
+		class_to_add_teacher = Class.objects.get(class_id=class_id)
+		form = ClassAddTeachersModelForm(request.POST or None, instance=class_to_add_teacher)
+		if form.is_valid():
+			newclass = form.save(commit=False)
+			newclass.save()
+			form.save_m2m()
+			return redirect('/schools/seeallschools')
+		return render(request, 'school/add_teacher_to_class.html', {'form':form, 'is_supervisor':is_supervisor})
 	return HttpResponse('U cannot access this page cos u are not admin!')
 
 @login_required
@@ -231,4 +310,14 @@ def add_student_to_class(request, class_id=None):
 			form.save_m2m()
 			return redirect('/schools/seeallschools')
 		return render(request, 'school/add_student_to_class.html', {'form':form})
+	elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
+		is_supervisor = True
+		class_to_add_student = Class.objects.get(class_id=class_id)
+		form = ClassAddStudentsModelForm(request.POST or None, instance=class_to_add_student)
+		if form.is_valid():
+			newclass = form.save(commit=False)
+			newclass.save()
+			form.save_m2m()
+			return redirect('/schools/seeallschools')
+		return render(request, 'school/add_student_to_class.html', {'form':form, 'is_supervisor':is_supervisor})
 	return HttpResponse('U cannot access this page cos u are not admin!')

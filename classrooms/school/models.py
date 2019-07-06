@@ -11,11 +11,13 @@ class School(models.Model):
 	chains = models.ManyToManyField(Chain)
 	head = models.ForeignKey(Head, on_delete=models.SET_NULL,verbose_name = 'Diretor', null=True, blank=True)
 	adminorsupervisor = models.ForeignKey(Supervisor, on_delete=models.SET_NULL, verbose_name = 'Admin/Supervisor', null=True, blank=True)
-	sponte_client_number = models.IntegerField(null=True, blank=True, verbose_name = 'Número do Cliente Sponte')
-	sponte_token = models.TextField(null=True, blank=True, verbose_name = 'Token do Sponte')
+	sponte_client_number = models.IntegerField(null=True, blank=True, verbose_name = 'TellMe ID')
+	sponte_token = models.TextField(null=True, blank=True, verbose_name = 'Token TellMe')
 	country = models.TextField(null=True, blank=True, verbose_name = 'País')
 	state = models.TextField(null=True, blank=True, verbose_name = 'Estado')
 	city = models.TextField(null=True, blank=True, verbose_name = 'Cidade')
+	students = models.ManyToManyField(Student)
+	teachers = models.ManyToManyField(Teacher)
 
 class Class(models.Model):
 	"""docstring for Class"""

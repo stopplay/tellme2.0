@@ -26,9 +26,10 @@ urlpatterns = [
     url(r'^jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
     path('admin/', admin.site.urls),
     url(r'^$', seeallschools),
+    url('chain/', include('block.urls')),
     url('contracts/', include('contract.urls')),
     url('schools/', include('school.urls')),
-    url('users/', include('school_users.urls')),   
+    url('users/', include('school_users.urls')),
 ]
 if settings.DEBUG:
         urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

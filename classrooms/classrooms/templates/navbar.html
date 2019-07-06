@@ -21,7 +21,7 @@
                       <p>Contract(s)</p></a>
                   </div>
               </li>
-              {% if request.user.is_superuser %}
+              {% if request.user.is_superuser or is_supervisor %}
                 <li>
                   <div>
                 <a class="nav-link" href="{% url 'contracts:createacontract' %}">Create New Contract</a>
@@ -35,15 +35,17 @@
                       <p>School(s)</p></a>
                   </div>
                 </li>
+              {% endif %}
 
-
+              {% if request.user.is_superuser %}
                 <li>
                   <div>
                 <a class="nav-link" href="{% url 'school:add_school' %}">Add new School</a>
                 </div>
                 </li>
+              {% endif %}
 
-
+              {% if request.user.is_superuser or is_supervisor %}
 
                 <li class="nav-item">
                   <div class="nav-link">

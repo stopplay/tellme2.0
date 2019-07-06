@@ -25,55 +25,37 @@ class HeadModelForm(forms.ModelForm):
 	"""docstring for ManagerModelForm"""
 	class Meta:
 		model = Head
-		fields = ['name']
-		widgets = {
-			'name': forms.TextInput(attrs={'maxlength':255}),
-		}
+		fields = []
 
 class TeacherModelForm(forms.ModelForm):
 	"""docstring for ManagerModelForm"""
 	class Meta:
 		model = Teacher
-		fields = ['name']
-		widgets = {
-			'name': forms.TextInput(attrs={'maxlength':255}),
-		}
+		fields = []
 
 class AdminModelForm(forms.ModelForm):
 	"""docstring for ManagerModelForm"""
 	class Meta:
 		model = Admin
-		fields = ['name']
-		widgets = {
-			'name': forms.TextInput(attrs={'maxlength':255}),
-		}
+		fields = []
 
 class SupervisorModelForm(forms.ModelForm):
 	"""docstring for ManagerModelForm"""
 	class Meta:
 		model = Supervisor
-		fields = ['name']
-		widgets = {
-			'name': forms.TextInput(attrs={'maxlength':255}),
-		}
+		fields = []
 
 class ParentModelForm(forms.ModelForm):
 	"""docstring for ManagerModelForm"""
 	class Meta:
 		model = Parent
-		fields = ['name']
-		widgets = {
-			'name': forms.TextInput(attrs={'maxlength':255}),
-		}
+		fields = []
 
 class StudentModelForm(forms.ModelForm):
 	"""docstring for ManagerModelForm"""
 	class Meta:
 		model = Student
-		fields = ['name']
-		widgets = {
-			'name': forms.TextInput(attrs={'maxlength':255}),
-		}
+		fields = []
 
 class SetParentsModelForm(forms.ModelForm):
 	"""docstring for ManagerModelForm"""

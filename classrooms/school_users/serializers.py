@@ -44,8 +44,8 @@ class ParentSerializer(serializers.ModelSerializer):
 class StudentSerializer(serializers.ModelSerializer):
     """docstring for StudentSerializer"""
     profile = UserSerializer()
-    father = ParentSerializer()
-    mother = ParentSerializer()
+    first_parent = ParentSerializer()
+    second_parent = ParentSerializer()
     class Meta:
         model = Student
         fields = '__all__'

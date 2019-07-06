@@ -19,6 +19,7 @@
 
                         {% endif %}
                     </div>
+                    <form method="POST" enctype="multipart/form-data"> {% csrf_token %}
                     <div class="card-body table-full-width table-responsive">
                         <table class="table table-hover table-striped display row-border mb-4" id="contractstable">
                           <thead>
@@ -45,7 +46,7 @@
 
                               <td><!--sign-->
 
-                                <label>FIRST AUGH SIGNED</label>
+                                <label>FIRST AUTH SIGNED</label>
                                 {% if contract.first_auth_signed %}
                                 <div>
                                <span class="badge badge-pill badge-success text-success" >.</span>
@@ -55,7 +56,7 @@
                                 <span class="badge badge-pill badge-danger text-danger" >.</span>
                                 </div>
                                 {% endif %}
-                                <label>SECOND AUGH SIGNED</label>
+                                <label>SECOND AUTH SIGNED</label>
 
                                 {% if contract.second_auth_signed %}
                                 <div>
@@ -172,10 +173,14 @@
                                       </div>
                                     {% endif %}
                                   {% endif %}
-                                  <div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
-                      							<button type="button" class="btn btn-dark btn-sm btn-block"><a href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-light">Contract Details</a></button>
-                      						</div>
                                 {% endif %}
+                                    <div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
+                                        <button type="button" class="btn btn-dark btn-sm btn-block"><a href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-light">Contract Details</a></button>
+                                      </div>
+                                    {% if is_supervisor %}
+                                      <input type="checkbox" name="checks" value="{{ contract.contract_id }}">
+                                    {% endif %}
+
                       				</td>
 
                       				   <!-- <td><a href="{% url 'contracts:set_signed' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-danger">Sign contract</a><br></td>-->
@@ -186,6 +191,10 @@
                       		</tbody>
                         </table>
                     </div>
+                    {% if is_supervisor %}
+                    <button type="submit" class="btn btn-dark btn-sm btn-block">Sign selected contracts</button>
+                    {% endif %}
+                    </form>
                 </div>
             </div>
 

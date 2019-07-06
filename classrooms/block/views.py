@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 from rest_framework.permissions import AllowAny
-from rest_framework import generics
+from rest_framework import viewsets, generics, status
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -94,3 +94,9 @@ class TransactionsList(APIView):
                 block_obj.save()
                 headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+class ChainViewSet(viewsets.ModelViewSet):
+    """docstring for ContinentsViewSet"""
+    queryset = Chain.objects.all()
+    serializer_class = ChainSerializer
+    # filter_backends = (DjangoFilterBackend)
