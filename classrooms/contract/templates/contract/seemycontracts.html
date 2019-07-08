@@ -1,6 +1,6 @@
 {% extends 'base.html'%}
 
-{% block title %} See My Contracts {% endblock %}
+{% block title %} Contrato(s) {% endblock %}
 
 {% block content %}
 
@@ -12,10 +12,10 @@
                     <div class="card-header ">
                         {% if contracts %}
                         {% if request.user.is_superuser %}
-                        <h4 class="card-title">Contract(s)</h4>
+                        <h4 class="card-title">Contrato(s)</h4>
 
                         {% else %}
-                        <h4 class="card-title">Contract(s) for {{ request.user.username }}</h4>
+                        <h4 class="card-title">Contrato(s) do {{ request.user.username }}</h4>
 
                         {% endif %}
                     </div>
@@ -24,18 +24,18 @@
                         <table class="table table-hover table-striped display row-border mb-4" id="contractstable">
                           <thead>
                       			<tr>
-                              <th>Contract ID</th>
-                      				<th>Name of Contract</th>
-                      				<th>Date of Contract</th>
-                      				<th >Contract</th>
-                              <th>Sign</th>
-                      				<th >Actions</th>
+                              <th>Id do Contrato</th>
+                      				<th>Nome do Contrato</th>
+                      				<th>Data do Contrato</th>
+                      				<th >Contrato</th>
+                              <th>Assinaturas</th>
+                      				<th >Ações</th>
                       			</tr>
                       		</thead>
                       		<tbody class="">
                       			{% for contract in contracts %}
                       			<tr class="pb-5">
-                              <th>{{contract.contract_id_sponte}}</th>
+                              <th>{{contract.contract_id}}</th>
                       				<th scope="row">{{ contract.name }}</th>
                       				<td>{{ contract.date }}</td>
                               <td>
@@ -46,7 +46,7 @@
 
                               <td><!--sign-->
 
-                                <label>FIRST AUTH SIGNED</label>
+                                <label>PRIMEIRO RESPONSÁVEL ASSINADO</label>
                                 {% if contract.first_auth_signed %}
                                 <div>
                                <span class="badge badge-pill badge-success text-success" >.</span>
@@ -56,7 +56,7 @@
                                 <span class="badge badge-pill badge-danger text-danger" >.</span>
                                 </div>
                                 {% endif %}
-                                <label>SECOND AUTH SIGNED</label>
+                                <label>SEGUNDO RESPONSÁVEL ASSINADO</label>
 
                                 {% if contract.second_auth_signed %}
                                 <div>
@@ -68,7 +68,7 @@
                                 </div>
                                 {% endif %}
 
-                                <label>COUNTER SIGNED</label>
+                                <label>DIRETOR RESPONSÁVEL ASSINADO</label>
                                 {% if contract.counter_signed %}
                                 <div>
                                <span class="badge badge-pill badge-success text-success" >.</span>
@@ -96,15 +96,15 @@
                               {% if request.user.is_superuser %}
                       					<div class="btn-tollbar px-2">
                                   {% if contract.first_auth_signed or contract.second_auth_signed or contract.counter_signed %}
-                                  <a class="btn btn-secondary btn-sm" href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart">Contract Details</a>
+                                  <a class="btn btn-secondary btn-sm" href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart">Detalhes do Contrato</a>
                                   {% else %}
                                   <div class="dropdown show">
                                     <a class="btn btn-secondary dropdown-toggle btn-sm" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                      Action
+                                      Ações
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                      <a class="dropdown-item" href="{% url 'contracts:updatecontract' contract.contract_id %}" data-baloon="Remove this item from the cart">Update contract</a>
-                                      <a class="dropdown-item" href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart">Contract Details</a>
+                                      <a class="dropdown-item" href="{% url 'contracts:updatecontract' contract.contract_id %}" data-baloon="Remove this item from the cart">Atualizar Contrato</a>
+                                      <a class="dropdown-item" href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart">Detalhes do Contrato</a>
 
                                     </div>
                                     {% endif %}
@@ -115,7 +115,7 @@
                                 <div class="btn-tollbar">
 
                       						<div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
-                      							<button type="button" class="btn btn-primary btn-sm btn-danger btn-block"><a href="{% url 'contracts:delete_contract' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-light">Delete Contract</a></button>
+                      							<button type="button" class="btn btn-primary btn-sm btn-danger btn-block"><a href="{% url 'contracts:delete_contract' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Contrato</a></button>
                       						</div>
 
 
@@ -127,7 +127,7 @@
                                   <!--Verde-->
                                   <div class="btn-tollbar">
                                   <div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
-                                    <button type="button" class="btn btn-success btn-sm btn-block" style="cursor: not-allowed;">Signed</button>
+                                    <button type="button" class="btn btn-success btn-sm btn-block" style="cursor: not-allowed;">Assinado</button>
                                   </div>
                                   </div>
 
@@ -135,7 +135,7 @@
                                   <!--Vermelho-->
                                     <div class="btn-tollbar">
                                     <div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
-                                      <button type="button" class="btn btn-primary btn-sm btn-danger btn-block"><a href="{% url 'contracts:set_signed' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-light">Sign contract</a></button>
+                                      <button type="button" class="btn btn-primary btn-sm btn-danger btn-block"><a href="{% url 'contracts:set_signed' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-light">Assinar Contrato</a></button>
                                     </div>
                                     </div>
                                   {% endif %}
@@ -145,40 +145,45 @@
                                     <!--verde-->
                                   <div class="btn-tollbar">
                                   <div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
-                                    <button type="button" class="btn btn-success btn-sm btn-block" style="cursor: not-allowed;">Signed</button>
+                                    <button type="button" class="btn btn-success btn-sm btn-block" style="cursor: not-allowed;">Assinado</button>
                                   </div>
                                   </div>
-                                    {% else %}
-                                    <!--Vermelho-->
-                                      <div class="btn-tollbar">
-                                      <div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
-                                        <button type="button" class="btn btn-primary btn-sm btn-danger btn-block"><a href="{% url 'contracts:set_signed' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-light">Sign contract</a></button>
-                                      </div>
-                                      </div>
+
+                                  {% else %}
+                                  <!--Vermelho-->
+                                    <div class="btn-tollbar">
+                                    <div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
+                                      <button type="button" class="btn btn-primary btn-sm btn-danger btn-block"><a href="{% url 'contracts:set_signed' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-light">Assinar Contrato</a></button>
+                                    </div>
+                                    </div>
                                     {% endif %}
                                   {% elif request.user == contract.second_auth_signe.profile %}
                                     {% if contract.second_auth_signed %}
                                     <!--verde-->
                                   <div class="btn-tollbar">
-                                  <div class="btn-group mr-2 pull-right" role="group">
-                                    <button  type="button" class="btn btn-success btn-sm" style="cursor: not-allowed;">Signed </button>
+                                  <div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
+                                    <button type="button" class="btn btn-success btn-sm btn-block" style="cursor: not-allowed;">Assinado</button>
                                   </div>
                                   </div>
-                                    {% else %}
-                                    <!--Vermelho-->
-                                      <div class="btn-tollbar">
-                                      <div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
-                                        <button type="button" class="btn btn-primary btn-sm btn-danger btn-block"><a href="{% url 'contracts:set_signed' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-light">Sign contract</a></button>
-                                      </div>
-                                      </div>
+
+                                  {% else %}
+                                  <!--Vermelho-->
+                                    <div class="btn-tollbar">
+                                    <div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
+                                      <button type="button" class="btn btn-primary btn-sm btn-danger btn-block"><a href="{% url 'contracts:set_signed' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-light">Assinar Contrato</a></button>
+                                    </div>
+                                    </div>
                                     {% endif %}
                                   {% endif %}
                                 {% endif %}
                                     <div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
-                                        <button type="button" class="btn btn-dark btn-sm btn-block"><a href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-light">Contract Details</a></button>
+                                        <button type="button" class="btn btn-dark btn-sm btn-block"><a href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-light">Detalhes do Contrato</a></button>
                                       </div>
                                     {% if is_supervisor %}
-                                      <input type="checkbox" name="checks" value="{{ contract.contract_id }}">
+                                      {% if contract.counter_signed %}
+                                      {% else %}
+                                        <input type="checkbox" name="checks" value="{{ contract.contract_id }}">
+                                      {% endif %}
                                     {% endif %}
 
                       				</td>
@@ -192,7 +197,7 @@
                         </table>
                     </div>
                     {% if is_supervisor %}
-                    <button type="submit" class="btn btn-dark btn-sm btn-block">Sign selected contracts</button>
+                      <button type="submit" class="btn btn-dark btn-sm btn-block">Assinar Contratos Selecionados</button>
                     {% endif %}
                     </form>
                 </div>

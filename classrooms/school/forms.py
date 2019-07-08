@@ -6,12 +6,13 @@ class SchoolModelForm(forms.ModelForm):
 	"""docstring for UserModelForm"""
 	class Meta:
 		model = School
-		fields = ['school_name', 'sponte_client_number', 'sponte_token', 'country', 'state', 'city']
+		fields = ['school_name', 'sponte_client_number', 'sponte_token', 'tell_me_school_id', 'country', 'state', 'city']
 		widgets = {
 			'school_name': forms.TextInput(attrs={'maxlength':255}),
 			'enrollment_year': forms.NumberInput(),
 			'sponte_client_number': forms.NumberInput(attrs={'required':False}),
 			'sponte_token': forms.TextInput(attrs={'required':False}),
+			'tell_me_school_id': forms.TextInput(attrs={'required':False}),
 			'country': forms.TextInput(attrs={'required':False}),
 			'state': forms.TextInput(attrs={'required':False}),
 			'city': forms.TextInput(attrs={'required':False}),

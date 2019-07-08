@@ -16,6 +16,8 @@ class SchoolSerializer(serializers.ModelSerializer):
 	chains = ChainSerializer(read_only=True, many=True)
 	head = HeadSerializer()
 	adminorsupervisor = SupervisorSerializer()
+	students = StudentSerializer(read_only=True, many=True)
+	teachers = TeacherSerializer(read_only=True, many=True)
 	class Meta:
 		model = School
 		fields = '__all__'

@@ -61,16 +61,28 @@ def seeallschools(request):
 		return render(request, 'school/seeallschools.html', {'schools':schools, 'is_supervisor':is_supervisor})
 	return HttpResponse('U cannot access this page cos u are not admin!')
 
+@login_required
+def seeschooldetails(request, school_id = None):
+	if request.user.is_superuser:
+		school = School.objects.get(school_id=school_id)
+		return render(request, 'school/seeschooldetails.html', {'school':school})
+	elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
+		is_supervisor = True
+		school = School.objects.get(school_id=school_id)
+		return render(request, 'school/seeschooldetails.html', {'school':school, 'is_supervisor':is_supervisor})
+
 #weverton
 @login_required
 def seeclassbyid(request, class_id=None):
     if request.user.is_superuser:
         classe = Class.objects.get(class_id=class_id)
-        return render(request,'school/seeclassbyid.html',{'classe':classe})
+        school = School.objects.get(classes__class_id__exact=classe.class_id)
+        return render(request,'school/seeclassbyid.html',{'classe':classe, 'school':school})
     elif Head.objects.filter(profile=request.user).count()>=1:
     	is_supervisor = True
     	classe = Class.objects.get(class_id=class_id)
-    	return render(request,'school/seeclassbyid.html',{'classe':classe, 'is_supervisor':is_supervisor})
+    	school = School.objects.get(classes__class_id__exact=classe.class_id)
+    	return render(request,'school/seeclassbyid.html',{'classe':classe,'school':school, 'is_supervisor':is_supervisor})
     return HttpResponse('U cannot access this page cos u are not admin!')
 
 #weverton
@@ -260,9 +272,9 @@ def verifyvalidchain(request, class_id=None):
 	class_to_verify_chain = Class.objects.get(class_id=class_id)
 	school_to_verify_chain = School.objects.get(classes__class_id__exact=class_to_verify_chain.class_id)
 	name_of_chain = "{0}-{1}-{2}-{3}".format(school_to_verify_chain.school_name, class_to_verify_chain.enrollment_class_year, class_to_verify_chain.class_unit, class_to_verify_chain.class_name)
-	chain_to_be_verified = Chain.objects.get(name=name_of_chain)
+	chain_to_be_verified = Chain.objects.get(id=class_id)
 	verify = chain_to_be_verified.is_valid_chain()
-	if verify:
+	if verify or chain_to_be_verified.block_set.count()==0:
 		messages.success(request, 'O chain para esta classe é válido!')
 		return redirect('/schools/seeallschools')
 	messages.error(request, 'O chain para esta classe não é válido')
@@ -272,27 +284,78 @@ def add_head_to_school(request, school_id=None):
 	pass
 
 @login_required
-def add_teacher_to_class(request, class_id=None):
+def add_teachers_to_school(request, school_id=None):
+	if request.user.is_superuser:
+		school = School.objects.get(school_id=school_id)
+		teacher_users = Teacher.objects.all()
+		if request.method == 'POST':
+			select_all = request.POST.get('variable')
+			school.teachers.clear()
+			if select_all:
+				school.teachers.add(*student_users)
+			else:
+				some_var = request.POST.getlist('checks')
+				for var in some_var:
+					teacher = Teacher.objects.get(teacher_id=var)
+					school.teachers.add(teacher)
+			messages.success(request, 'Professores alterados na escola com sucesso')
+			return redirect('/schools/seeallschools')
+		return render(request, 'school/add_teachers_to_school.html', {'teacher_users':teacher_users, 'school':school})
+	elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
+		is_supervisor = True
+		school = School.objects.get(school_id=school_id)
+		teacher_users = Teacher.objects.all()
+		if request.method == 'POST':
+			select_all = request.POST.get('variable')
+			school.teachers.clear()
+			if select_all:
+				school.teachers.add(*student_users)
+			else:
+				some_var = request.POST.getlist('checks')
+				for var in some_var:
+					teacher = Teacher.objects.get(teacher_id=var)
+					school.teachers.add(teacher)
+			messages.success(request, 'Professores alterados na escola com sucesso')
+			return redirect('/schools/seeallschools')
+		return render(request, 'school/add_teachers_to_school.html', {'is_supervisor':is_supervisor, 'student_users':student_users, 'school':school})
+
+@login_required
+def add_teachers_to_class(request, class_id=None):
 	if request.user.is_superuser:
 		class_to_add_teacher = Class.objects.get(class_id=class_id)
-		form = ClassAddTeachersModelForm(request.POST or None, instance=class_to_add_teacher)
-		if form.is_valid():
-			newclass = form.save(commit=False)
-			newclass.save()
-			form.save_m2m()
+		school = School.objects.get(classes__class_id__exact=class_to_add_teacher.class_id)
+		teacher_users = school.teachers.all()
+		if request.method == 'POST':
+			select_all = request.POST.get('variable')
+			class_to_add_teacher.teachers.clear()
+			if select_all:
+				school.teachers.add(*teacher_users)
+			else:
+				some_var = request.POST.getlist('checks')
+				for var in some_var:
+					teacher = Teacher.objects.get(teacher_id=var)
+					class_to_add_teacher.teachers.add(teacher)
+			messages.success(request, 'Professores alterados na classe com sucesso!')
 			return redirect('/schools/seeallschools')
-		return render(request, 'school/add_teacher_to_class.html', {'form':form})
+		return render(request, 'school/add_teacher_to_class.html', {'teacher_users':teacher_users, 'class':class_to_add_teacher})
 	elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
 		is_supervisor = True
 		class_to_add_teacher = Class.objects.get(class_id=class_id)
-		form = ClassAddTeachersModelForm(request.POST or None, instance=class_to_add_teacher)
-		if form.is_valid():
-			newclass = form.save(commit=False)
-			newclass.save()
-			form.save_m2m()
+		school = School.objects.get(classes__class_id__exact=class_to_add_teacher.class_id)
+		teacher_users = school.teachers.all()
+		if request.method == 'POST':
+			select_all = request.POST.get('variable')
+			class_to_add_teacher.teachers.clear()
+			if select_all:
+				class_to_add_teacher.teachers.add(*teacher_users)
+			else:
+				some_var = request.POST.getlist('checks')
+				for var in some_var:
+					teacher = Teacher.objects.get(teacher_id=var)
+					class_to_add_teacher.teachers.add(teacher)
+			messages.success(request, 'Professores alterados na classe com sucesso!')
 			return redirect('/schools/seeallschools')
-		return render(request, 'school/add_teacher_to_class.html', {'form':form, 'is_supervisor':is_supervisor})
-	return HttpResponse('U cannot access this page cos u are not admin!')
+		return render(request, 'school/add_teacher_to_class.html', {'is_supervisor':is_supervisor, 'teacher_users':teacher_users, 'class':class_to_add_teacher})
 
 @login_required
 def select_head_to_school(request, school_id=None):
@@ -300,24 +363,75 @@ def select_head_to_school(request, school_id=None):
 		school_to_select_head = School.objects.get(school_id=school_id)
 		form = SchoolAddHeadModelForm(request.POST or None, instance=school_to_select_head)
 
-def add_student_to_class(request, class_id=None):
+@login_required
+def add_students_to_school(request, school_id=None):
+	if request.user.is_superuser:
+		school = School.objects.get(school_id=school_id)
+		student_users = Student.objects.all()
+		if request.method == 'POST':
+			select_all = request.POST.get('variable')
+			school.students.clear()
+			if select_all:
+				school.students.add(*student_users)
+			else:
+				some_var = request.POST.getlist('checks')
+				for var in some_var:
+					student = Student.objects.get(student_id=var)
+					school.students.add(student)
+			messages.success(request, 'Estudantes alterados na escola com sucesso!')
+			return redirect('/schools/seeallschools')
+		return render(request, 'school/add_students_to_school.html', {'student_users':student_users, 'school':school})
+	elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
+		is_supervisor = True
+		school = School.objects.get(school_id=school_id)
+		student_users = Student.objects.all()
+		if request.method == 'POST':
+			select_all = request.POST.get('variable')
+			school.students.clear()
+			if select_all:
+				school.students.add(*student_users)
+			else:
+				some_var = request.POST.getlist('checks')
+				for var in some_var:
+					student = Student.objects.get(student_id=var)
+					school.students.add(student)
+			messages.success(request, 'Estudantes alterados na escola com sucesso!')
+			return redirect('/schools/seeallschools')
+		return render(request, 'school/add_students_to_school.html', {'is_supervisor':is_supervisor, 'student_users':student_users, 'school':school})
+
+def add_students_to_class(request, class_id=None):
 	if request.user.is_superuser:
 		class_to_add_student = Class.objects.get(class_id=class_id)
-		form = ClassAddStudentsModelForm(request.POST or None, instance=class_to_add_student)
-		if form.is_valid():
-			newclass = form.save(commit=False)
-			newclass.save()
-			form.save_m2m()
+		school = School.objects.get(classes__class_id__exact=class_to_add_student.class_id)
+		student_users = school.students.all()
+		if request.method == 'POST':
+			select_all = request.POST.get('variable')
+			class_to_add_student.students.clear()
+			if select_all:
+				class_to_add_student.students.add(*student_users)
+			else:
+				some_var = request.POST.getlist('checks')
+				for var in some_var:
+					student = Student.objects.get(student_id=var)
+					class_to_add_student.students.add(student)
+			messages.success(request, 'Estudantes alterados na classe com sucesso')
 			return redirect('/schools/seeallschools')
-		return render(request, 'school/add_student_to_class.html', {'form':form})
+		return render(request, 'school/add_students_to_class.html', {'student_users':student_users, 'class':class_to_add_student})
 	elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
 		is_supervisor = True
 		class_to_add_student = Class.objects.get(class_id=class_id)
-		form = ClassAddStudentsModelForm(request.POST or None, instance=class_to_add_student)
-		if form.is_valid():
-			newclass = form.save(commit=False)
-			newclass.save()
-			form.save_m2m()
+		school = School.objects.get(classes__class_id__exact=class_to_add_student.class_id)
+		student_users = school.students.all()
+		if request.method == 'POST':
+			select_all = request.POST.get('variable')
+			class_to_add_student.students.clear()
+			if select_all:
+				class_to_add_student.students.add(*student_users)
+			else:
+				some_var = request.POST.getlist('checks')
+				for var in some_var:
+					student = Student.objects.get(student_id=var)
+					class_to_add_student.students.add(student)
+			messages.success(request, 'Estudantes alterados na classe com sucesso')
 			return redirect('/schools/seeallschools')
-		return render(request, 'school/add_student_to_class.html', {'form':form, 'is_supervisor':is_supervisor})
-	return HttpResponse('U cannot access this page cos u are not admin!')
+		return render(request, 'school/add_students_to_class.html', {'is_supervisor':is_supervisor, 'student_users':student_users, 'class':class_to_add_student})

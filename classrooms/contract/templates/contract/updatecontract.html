@@ -1,6 +1,6 @@
 {% extends 'base.html'%}
 
-{% block title %} Update Contract {% endblock %}
+{% block title %} Atualizar Contrato {% endblock %}
 
 {% block content %}
 <div class="content">
@@ -9,7 +9,7 @@
 			<div class="col-md-9">
 				<div class="card w-50">
 					<div class="card-header">
-						<h4 class="card-title">Update the contract</h4>
+						<h4 class="card-title">Atualizar o Contrato</h4>
 					</div>
 					<div class="card-body">
 						<div class="row">
@@ -17,14 +17,14 @@
 								<div class="form-group">
 									<form method="POST" enctype="multipart/form-data">{% csrf_token %}
 										<select id="select_form" style="max-width: 250%;">
-											<option id="" value="" selected>Select a student</option>
+											<option id="" value="" selected>Selecione um estudante</option>
 											{% for student in students %}
 												<option value="{{ student.student_id }}">{{ student.name }}</option>
 											{% endfor %}
 										</select><br>
 										{{ form.as_p }}
 										<input type="hidden" id="selected_user" name="selected_user" value="0">
-										<div><button type="submit" class="btn btn-info btn-fill btn-sm pull-left mt-2">Update Contract</button></div>
+										<div><button type="submit" class="btn btn-info btn-fill btn-sm pull-left mt-2">Atualizar Contrato</button></div>
 									</form>
 								</div>
 							</div>

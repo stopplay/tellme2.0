@@ -117,8 +117,8 @@ class Student(models.Model):
 	original_name_sponte = models.TextField(null=True, blank=True)
 	course_of_interest_sponte = models.TextField(null=True, blank=True)
 	profile = models.OneToOneField(User, on_delete = models.SET_NULL, null=True, blank=True)
-	first_parent = models.ForeignKey('Parent', on_delete = models.SET_NULL, null=True, blank=True, related_name='first_parent')
-	second_parent = models.ForeignKey('Parent', on_delete = models.SET_NULL, null=True, blank=True, related_name='second_parent')
+	first_parent = models.ForeignKey('Parent', on_delete = models.SET_NULL, null=True, blank=True, related_name='first_parent', verbose_name='Responsável Financeiro')
+	second_parent = models.ForeignKey('Parent', on_delete = models.SET_NULL, null=True, blank=True, related_name='second_parent', verbose_name='Responsável Didático')
 
 	def __str__(self):
 		return '{}'.format(self.name)

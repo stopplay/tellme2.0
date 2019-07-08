@@ -2,7 +2,7 @@ from django.forms import ModelForm
 from django import forms
 from .models import *
 
-class CreateContractModelForm(forms.ModelForm):
+class ContractModelFormWithSponte(forms.ModelForm):
 	"""docstring for ManagerModelForm"""
 	class Meta:
 		model = Contract
@@ -12,7 +12,7 @@ class CreateContractModelForm(forms.ModelForm):
 			'date': forms.DateInput(attrs={'type':'date', 'class':'labelandform'})
 		}
 
-class UpdateContractModelForm(forms.ModelForm):
+class ContractModelFormWithoutSponte(forms.ModelForm):
 	"""docstring for ManagerModelForm"""
 	class Meta:
 		model = Contract

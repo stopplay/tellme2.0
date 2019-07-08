@@ -93,7 +93,9 @@ class Chain(models.Model):
 	"""
     allows for multiple blockchain entities to exist simultaneously
     """
+
 	time_stamp = models.DateTimeField(auto_now_add=True)
+	id = models.AutoField(primary_key=True)
 	name = models.CharField(max_length=255)
 	def __str__(self):
 		return self.name

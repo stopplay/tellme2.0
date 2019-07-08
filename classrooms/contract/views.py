@@ -98,8 +98,8 @@ def write_pdf(request, contract=None, whosigned=None):
 @login_required
 def createacontract(request):
 	if request.user.is_superuser:
-		form = CreateContractModelForm(request.POST or None, request.FILES)
-		students = Student.objects.all()
+		form = ContractModelFormWithoutSponte(request.POST or None, request.FILES)
+		students = Student.objects.all().order_by('name')
 		if request.method == 'POST':
 			if form.is_valid():
 				selected_user = request.POST.get('selected_user', 0)
@@ -137,73 +137,6 @@ def createacontract(request):
 						'user': contract.counter_signe,
 					})
 					to_email = contract.counter_signe.profile.email
-					email = EmailMessage(
-						mail_subject, message, to=[to_email], attachments=attachments
-					)
-					email.send()
-					mail_subject = 'Contract to be signed'
-					message = render_to_string('contract/sendcontract.html', {
-						'user': contract.director_signe,
-					})
-					to_email = contract.director_signe.profile.email
-					email = EmailMessage(
-						mail_subject, message, to=[to_email], attachments=attachments
-					)
-					email.send()
-					contract.save()
-					return redirect('/contracts/seeallcontracts')
-				return HttpResponse('This student dont have at least one of the parents associated to him.')
-		return render(request, 'contract/createacontract.html', {'form':form, 'students':students})
-	elif Head.objects.filter(profile=request.user).count()>=1:
-		is_supervisor = True
-		form = CreateContractModelForm(request.POST or None, request.FILES)
-		students = Student.objects.all()
-		if request.method == 'POST':
-			if form.is_valid():
-				selected_user = request.POST.get('selected_user', 0)
-				student = Student.objects.get(student_id = selected_user)
-				contract = form.save(commit=False)
-				school = School.objects.get(chains__name__exact=contract.chain.name)
-				if student.first_parent and student.second_parent:
-					contract.counter_signe = school.head
-					contract.first_auth_signe = student.first_parent
-					contract.second_auth_signe = student.second_parent
-					attachments = []
-					content = contract.pdf.read()
-					attachment = (contract.pdf.name, content, 'application/pdf')
-					attachments.append(attachment)
-					mail_subject = 'Contract to be signed'
-					message = render_to_string('contract/sendcontract.html', {
-						'user': contract.first_auth_signe,
-					})
-					to_email = contract.first_auth_signe.profile.email
-					email = EmailMessage(
-						mail_subject, message, to=[to_email], attachments=attachments
-					)
-					email.send()
-					mail_subject = 'Contract to be signed'
-					message = render_to_string('contract/sendcontract.html', {
-						'user': contract.second_auth_signe,
-					})
-					to_email = contract.second_auth_signe.profile.email
-					email = EmailMessage(
-						mail_subject, message, to=[to_email], attachments=attachments
-					)
-					email.send()
-					mail_subject = 'Contract to be signed'
-					message = render_to_string('contract/sendcontract.html', {
-						'user': contract.counter_signe,
-					})
-					to_email = contract.counter_signe.profile.email
-					email = EmailMessage(
-						mail_subject, message, to=[to_email], attachments=attachments
-					)
-					email.send()
-					mail_subject = 'Contract to be signed'
-					message = render_to_string('contract/sendcontract.html', {
-						'user': contract.director_signe,
-					})
-					to_email = contract.director_signe.profile.email
 					email = EmailMessage(
 						mail_subject, message, to=[to_email], attachments=attachments
 					)
@@ -211,7 +144,65 @@ def createacontract(request):
 					contract.save()
 					messages.success(request, 'Contrato criado com sucesso!')
 					return redirect('/contracts/seeallcontracts')
-				return HttpResponse('This student dont have at least one of the parents associated to him.')
+				messages.warning(request, 'O estudante não tem pelo menos um dos pais associados a ele!')
+		return render(request, 'contract/createacontract.html', {'form':form, 'students':students})
+	elif Head.objects.filter(profile=request.user).count()>=1:
+		is_supervisor = True
+		form = ContractModelFormWithoutSponte(request.POST or None, request.FILES)
+		chains = []
+		students_ids = []
+		for school in School.objects.filter(head=Head.objects.get(profile=request.user)):
+			for student in school.students.all():
+				students_ids += [(student.student_id)]
+			for chain in Chain.objects.filter(school=school):
+				chains += [(chain.id)]
+		form.fields["chain"].queryset = Chain.objects.filter(id__in=chains)
+		students = Student.objects.filter(student_id__in=students_ids)
+		if request.method == 'POST':
+			if form.is_valid():
+				selected_user = request.POST.get('selected_user', 0)
+				student = Student.objects.get(student_id = selected_user)
+				contract = form.save(commit=False)
+				school = School.objects.get(chains__name__exact=contract.chain.name)
+				if student.first_parent and student.second_parent:
+					contract.counter_signe = school.head
+					contract.first_auth_signe = student.first_parent
+					contract.second_auth_signe = student.second_parent
+					attachments = []
+					content = contract.pdf.read()
+					attachment = (contract.pdf.name, content, 'application/pdf')
+					attachments.append(attachment)
+					mail_subject = 'Contract to be signed'
+					message = render_to_string('contract/sendcontract.html', {
+						'user': contract.first_auth_signe,
+					})
+					to_email = contract.first_auth_signe.profile.email
+					email = EmailMessage(
+						mail_subject, message, to=[to_email], attachments=attachments
+					)
+					email.send()
+					mail_subject = 'Contract to be signed'
+					message = render_to_string('contract/sendcontract.html', {
+						'user': contract.second_auth_signe,
+					})
+					to_email = contract.second_auth_signe.profile.email
+					email = EmailMessage(
+						mail_subject, message, to=[to_email], attachments=attachments
+					)
+					email.send()
+					mail_subject = 'Contract to be signed'
+					message = render_to_string('contract/sendcontract.html', {
+						'user': contract.counter_signe,
+					})
+					to_email = contract.counter_signe.profile.email
+					email = EmailMessage(
+						mail_subject, message, to=[to_email], attachments=attachments
+					)
+					email.send()
+					contract.save()
+					messages.success(request, 'Contrato criado com sucesso!')
+					return redirect('/contracts/seeallcontracts')
+				messages.warning(request, 'O estudante não tem pelo menos um dos pais associados a ele!')
 		return render(request, 'contract/createacontract.html', {'form':form, 'students':students, 'is_supervisor':is_supervisor})
 	return HttpResponse('U cannot access this page cos u are not admin!')
 
@@ -219,8 +210,15 @@ def createacontract(request):
 def updatecontract(request, contract_id=None):
 	if request.user.is_superuser:
 		instance = Contract.objects.get(contract_id=contract_id)
-		form = UpdateContractModelForm(request.POST or None, request.FILES, instance=instance)
-		students = Student.objects.all()
+		if instance.chain:
+			school = School.objects.get(chains__id__exact=instance.chain.id)
+			if not (school.sponte_client_number==None and school.sponte_token==None):
+				form = ContractModelFormWithSponte(request.POST or None, request.FILES, instance=instance)
+			else:
+				form = ContractModelFormWithoutSponte(request.POST or None, request.FILES, instance=instance)
+		else:
+			form = ContractModelFormWithoutSponte(request.POST or None, request.FILES, instance=instance)
+		students = Student.objects.all().order_by('name')
 		if request.method=='POST':
 			if form.is_valid():
 				selected_user = request.POST.get('selected_user', 0)
@@ -269,7 +267,7 @@ def updatecontract(request, contract_id=None):
 					contract.save(update_fields=['name', 'date', 'pdf', 'terms_of_contract', 'first_auth_signe', 'first_auth_signed', 'second_auth_signe', 'second_auth_signed', 'counter_signe', 'counter_signed', 'all_signed', 'chain'])
 					messages.success(request, 'Contrato atualizado com sucesso!')
 					return redirect('/contracts/seeallcontracts')
-				return HttpResponse('This student dont have at least one of the parents associated to him.')
+				messages.warning(request, 'O estudante não tem pelo menos um dos pais associados a ele!')
 		return render(request, 'contract/updatecontract.html', {'form':form, 'students':students})
 	return HttpResponse('U cannot access this page cos u are not admin!')
 
@@ -369,7 +367,8 @@ def seecontractdetails(request, contract_id=None):
 	if Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
 		is_supervisor = True
 	contract = Contract.objects.get(contract_id=contract_id)
-	return render(request,'contract/seecontractdetails.html',{'contract':contract, 'is_supervisor':is_supervisor})
+	student = Student.objects.get(first_parent = contract.first_auth_signe, second_parent = contract.second_auth_signe)
+	return render(request,'contract/seecontractdetails.html',{'contract':contract, 'is_supervisor':is_supervisor, 'student':student})
 
 @csrf_exempt
 @api_view(['GET'])
@@ -391,104 +390,150 @@ def seemycontracts_rest(request):
 
 def set_signed(request, contract_id = None):
 	contract = Contract.objects.get(contract_id=contract_id)
-	form = BlockModelFormByContract()
-	block = form.save(commit=False)
-	block.data = contract.name
-	block.contract = contract
-	block.chain = contract.chain
-	if block.chain.__len__()<1:
-		block.index = 0
-		block.previous_hash = 'Basic hash for the chain'
-		block.time_stamp=datetime.datetime.now(tz=pytz.utc)
-		block.nonce = SymmetricEncryption.generate_salt(26)
-		while not block.valid_hash():
-			block.nonce = SymmetricEncryption.generate_salt(26)
-		block.hash = block.__hash__()
-		block.save()
-	else:
-		block.index=block.chain.last_block.index + 1
-		block.time_stamp=datetime.datetime.now(tz=pytz.utc)
-		block.previous_hash=block.chain.last_block.hash
-		block.nonce=SymmetricEncryption.generate_salt(26)
-		while not block.valid_hash():
-			block.nonce = SymmetricEncryption.generate_salt(26)
-		block.hash = block.__hash__()
-		if block.is_valid_block(block.chain.last_block):
-			print(block.is_valid_block(block.chain.last_block))
-			block.save()
 	if Head.objects.filter(profile=request.user).count()>=1:
-		attachments = []
-		head = Head.objects.get(profile=request.user)
-		contract.counter_signed = True
-		contract.counter_signed_timestamp = datetime.datetime.now()
-		contract.counter_auth_hash = block.hash
-		contract.save(update_fields=['counter_signed', 'counter_signed_timestamp', 'counter_auth_hash'])
-		write_pdf(request, contract, 'director')
-		content = contract.pdf.read()
-		attachment = (contract.pdf.name, content, 'application/pdf')
-		attachments.append(attachment)
-		mail_subject = 'Contract has been signed'
-		message = render_to_string('contract/contractsigned.html', {
-			'user': head,
-			'timestamp': contract.counter_signed_timestamp,
-			'block': block,
-			'school': School.objects.get(chains__name__exact=block.chain.name),
-		})
-		to_email = head.profile.email
-		email = EmailMessage(
-			mail_subject, message, to=[to_email], attachments=attachments
-		)
-		email.send()
-	elif Parent.objects.filter(profile=request.user).count()>=1:
-		attachments = []
+		if contract.counter_signed:
+			messages.warning(request, 'O diretor já assinou este contrato!')
+			return redirect('/contracts/seeallcontracts')
+	if Parent.objects.filter(profile=request.user).count()>=1:
 		parent = Parent.objects.get(profile=request.user)
 		if contract.first_auth_signe == parent:
-			contract.first_auth_signed = True
-			contract.first_auth_signed_timestamp = datetime.datetime.now()
-			contract.first_auth_hash = block.hash
-			contract.save(update_fields=['first_auth_signed', 'first_auth_signed_timestamp', 'first_auth_hash'])
-			write_pdf(request, contract, 'first_auth')
-			content = contract.pdf.read()
-			attachment = (contract.pdf.name, content, 'application/pdf')
-			attachments.append(attachment)
-			mail_subject = 'Contract has been signed'
-			message = render_to_string('contract/contractsigned.html', {
-				'user': parent,
-				'timestamp': contract.first_auth_signed_timestamp,
-				'block': block,
-				'school': School.objects.get(chains__name__exact=block.chain.name),
-			})
-			to_email = parent.profile.email
-			email = EmailMessage(
-				mail_subject, message, to=[to_email], attachments=attachments
-			)
-			email.send()
+			if contract.first_auth_signed:
+				messages.warning(request, 'O primeiro responsável já assinou este contrato!')
+				return redirect('/contracts/seeallcontracts')
 		if contract.second_auth_signe == parent:
-			contract.second_auth_signed = True
-			contract.second_auth_signed_timestamp = datetime.datetime.now()
-			contract.second_auth_hash = block.hash
-			contract.save(update_fields=['second_auth_signed', 'second_auth_signed_timestamp', 'second_auth_hash'])
-			write_pdf(request, contract, 'second_auth')
+			if contract.second_auth_signed:
+				messages.warning(request, 'O segundo responsável já assinou este contrato!')
+				return redirect('/contracts/seeallcontracts')
+	if Head.objects.filter(profile=request.user).count()>=1 or Parent.objects.filter(profile=request.user).count()>=1:
+		if Head.objects.filter(profile=request.user).count()>=1:
+			form = BlockModelFormByContract()
+			block = form.save(commit=False)
+			block.data = contract.name
+			block.contract = contract
+			block.chain = contract.chain
+			if block.chain.__len__()<1:
+				block.index = 0
+				block.previous_hash = 'Basic hash for the chain'
+				block.time_stamp=datetime.datetime.now(tz=pytz.utc)
+				block.nonce = SymmetricEncryption.generate_salt(26)
+				while not block.valid_hash():
+					block.nonce = SymmetricEncryption.generate_salt(26)
+				block.hash = block.__hash__()
+				block.save()
+			else:
+				block.index=block.chain.last_block.index + 1
+				block.time_stamp=datetime.datetime.now(tz=pytz.utc)
+				block.previous_hash=block.chain.last_block.hash
+				block.nonce=SymmetricEncryption.generate_salt(26)
+				while not block.valid_hash():
+					block.nonce = SymmetricEncryption.generate_salt(26)
+				block.hash = block.__hash__()
+				if block.is_valid_block(block.chain.last_block):
+					print(block.is_valid_block(block.chain.last_block))
+					block.save()
+			attachments = []
+			head = Head.objects.get(profile=request.user)
+			contract.counter_signed = True
+			contract.counter_signed_timestamp = datetime.datetime.now()
+			contract.counter_auth_hash = block.hash
+			contract.save(update_fields=['counter_signed', 'counter_signed_timestamp', 'counter_auth_hash'])
+			write_pdf(request, contract, 'director')
 			content = contract.pdf.read()
 			attachment = (contract.pdf.name, content, 'application/pdf')
 			attachments.append(attachment)
 			mail_subject = 'Contract has been signed'
 			message = render_to_string('contract/contractsigned.html', {
-				'user': parent,
-				'timestamp': contract.second_auth_signed_timestamp,
+				'user': head,
+				'timestamp': contract.counter_signed_timestamp,
 				'block': block,
 				'school': School.objects.get(chains__name__exact=block.chain.name),
 			})
-			to_email = parent.profile.email
+			to_email = head.profile.email
 			email = EmailMessage(
 				mail_subject, message, to=[to_email], attachments=attachments
 			)
 			email.send()
-	contract = Contract.objects.get(contract_id=contract_id)
-	if contract.first_auth_signed and contract.second_auth_signed and contract.counter_signed:
-		contract.all_signed = True
-		messages.success(request, 'Todos os responsáveis desse contrato assinaram!')
-		contract.save(update_fields=['all_signed'])
+			messages.success(request, 'Assinado com sucesso!')
+		elif Parent.objects.filter(profile=request.user).count()>=1:
+			form = BlockModelFormByContract()
+			block = form.save(commit=False)
+			block.data = contract.name
+			block.contract = contract
+			block.chain = contract.chain
+			if block.chain.__len__()<1:
+				block.index = 0
+				block.previous_hash = 'Basic hash for the chain'
+				block.time_stamp=datetime.datetime.now(tz=pytz.utc)
+				block.nonce = SymmetricEncryption.generate_salt(26)
+				while not block.valid_hash():
+					block.nonce = SymmetricEncryption.generate_salt(26)
+				block.hash = block.__hash__()
+				block.save()
+			else:
+				block.index=block.chain.last_block.index + 1
+				block.time_stamp=datetime.datetime.now(tz=pytz.utc)
+				block.previous_hash=block.chain.last_block.hash
+				block.nonce=SymmetricEncryption.generate_salt(26)
+				while not block.valid_hash():
+					block.nonce = SymmetricEncryption.generate_salt(26)
+				block.hash = block.__hash__()
+				if block.is_valid_block(block.chain.last_block):
+					print(block.is_valid_block(block.chain.last_block))
+					block.save()
+			attachments = []
+			parent = Parent.objects.get(profile=request.user)
+			if contract.first_auth_signe == parent:
+				contract.first_auth_signed = True
+				contract.first_auth_signed_timestamp = datetime.datetime.now()
+				contract.first_auth_hash = block.hash
+				contract.save(update_fields=['first_auth_signed', 'first_auth_signed_timestamp', 'first_auth_hash'])
+				write_pdf(request, contract, 'first_auth')
+				content = contract.pdf.read()
+				attachment = (contract.pdf.name, content, 'application/pdf')
+				attachments.append(attachment)
+				mail_subject = 'Contract has been signed'
+				message = render_to_string('contract/contractsigned.html', {
+					'user': parent,
+					'timestamp': contract.first_auth_signed_timestamp,
+					'block': block,
+					'school': School.objects.get(chains__name__exact=block.chain.name),
+				})
+				to_email = parent.profile.email
+				email = EmailMessage(
+					mail_subject, message, to=[to_email], attachments=attachments
+				)
+				email.send()
+				messages.success(request, 'Assinado com sucesso!')
+			if contract.second_auth_signe == parent:
+				contract.second_auth_signed = True
+				contract.second_auth_signed_timestamp = datetime.datetime.now()
+				contract.second_auth_hash = block.hash
+				contract.save(update_fields=['second_auth_signed', 'second_auth_signed_timestamp', 'second_auth_hash'])
+				write_pdf(request, contract, 'second_auth')
+				content = contract.pdf.read()
+				attachment = (contract.pdf.name, content, 'application/pdf')
+				attachments.append(attachment)
+				mail_subject = 'Contract has been signed'
+				message = render_to_string('contract/contractsigned.html', {
+					'user': parent,
+					'timestamp': contract.second_auth_signed_timestamp,
+					'block': block,
+					'school': School.objects.get(chains__name__exact=block.chain.name),
+				})
+				to_email = parent.profile.email
+				email = EmailMessage(
+					mail_subject, message, to=[to_email], attachments=attachments
+				)
+				email.send()
+				messages.success(request, 'Assinado com sucesso!')
+			contract = Contract.objects.get(contract_id=contract_id)
+			if contract.first_auth_signed and contract.second_auth_signed and contract.counter_signed:
+				contract.all_signed = True
+				messages.success(request, 'Todos os responsáveis desse contrato assinaram!')
+				contract.save(update_fields=['all_signed'])
+			return redirect('/contracts/seeallcontracts')
+	else:
+		messages.warning(request, 'Você não é diretor nem pai do estudante deste contrato!')
 	return redirect('/contracts/seeallcontracts')
 
 def delete_contract(request, contract_id = None):

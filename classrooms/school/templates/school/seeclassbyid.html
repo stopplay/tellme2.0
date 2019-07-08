@@ -1,6 +1,6 @@
 {% extends 'base.html'%}
 
-{% block title %} See all Schools {% endblock %}
+{% block title %} Detalhes da Classe {% endblock %}
 
 {% block content %}
 
@@ -10,18 +10,18 @@
             <div class="col-md-12">
                 <div class="card strpied-tabled-with-hover">
                     <div class="card-header ">
-                        <h4 class="card-title">{{classe.class_name}} Class Details</h4>
+                        <h4 class="card-title">Detalhes da Classe {{classe.class_name}} - Escola {{ school.school_name }}</h4>
                         <p class="card-category">Here is a subtitle for this table</p>
                     </div>
                     <div class="card-body table-full-width table-responsive">
                         <table class="table table-hover table-striped">
 													<thead class="">
 														<tr>
-															<th >Class Id</th>
-															<th >Class Name</th>
-															<th >Class Level</th>
-											        <th >Students</th>
-											        <th >Teachers</th>
+															<th >Id da Classe</th>
+															<th >Nome da Classe</th>
+															<th >Nível da Classe</th>
+											        <th >Estudantes</th>
+											        <th >Professores</th>
 
 														</tr>
 													</thead>

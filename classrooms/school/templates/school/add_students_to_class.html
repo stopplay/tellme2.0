@@ -1,6 +1,6 @@
 {% extends 'base.html'%}
 
-{% block title %} Selecionar Professores Para a Classe {% endblock %}
+{% block title %} Selecionar Estudantes Para a Classe {% endblock %}
 
 {% block content %}
 
@@ -10,38 +10,43 @@
       <div class="col-md-12">
         <div class="card strpied-tabled-with-hover">
           <div class="card-header ">
-            <h4 class="card-title">Professor(es)</h4>
+            <h4 class="card-title">Estudante(s)</h4>
 
           </div>
           <form method="POST" enctype="multipart/form-data"> {% csrf_token %}
           <div class="card-body table-full-width table-responsive">
-            <table class="table table-hover table-striped display mb-4" id="teacherstable">
+            <table class="table table-hover table-striped display mb-4" id="studentstable">
               <thead class="">
           			<tr>
                   <th><input id="check" type="checkbox" name="select_all"></th>
           				<th>Nome</th>
-          				<th>Nome do Usuário</th>
+          				<th>Nome de Usuário</th>
+                  <th>Responsável Financeiro</th>
+                  <th>Responsável Didático</th>
+
           			</tr>
           		</thead>
           		<tbody>
-          			{% for teacher in teacher_users %}
+          			{% for student in student_users %}
           			<tr>
                   <th>
-                    {% if teacher in class.teachers.all %}
-                      <input type="checkbox" name="checks" value="{{ teacher.teacher_id }}" checked="true">
+                    {% if student in class.students.all %}
+                      <input type="checkbox" name="checks" value="{{ student.student_id }}" checked="true">
                     {% else %}
-                      <input type="checkbox" name="checks" value="{{ teacher.teacher_id }}">
+                      <input type="checkbox" name="checks" value="{{ student.student_id }}">
                     {% endif %}
                   </th>
-          				<th scope="row">{{ teacher.name }}</th>
-          				<td>{{ teacher.profile.username }}</td>
+          				<th scope="row">{{ student.name }}</th>
+          				<td>{{ student.profile.username }}</td>
+                  <td>{{ student.first_parent.name }} </td>
+                  <td>{{ student.second_parent.name }}</td>
           			</tr>
           			{% endfor %}
           		</tbody>
             </table>
           </div>
           <input type="hidden"id="variable" name="variable" name="variable">
-          <button type="submit" class="btn btn-dark btn-sm btn-block">Associar os Professores Selecionados à Classe</button>
+          <button type="submit" class="btn btn-dark btn-sm btn-block">Associar os Estudantes Selecionados à Classe</button>
         </form>
         </div>
       </div>
@@ -54,13 +59,13 @@
 
 <script type="text/javascript">
   $(document).ready( function () {
-    $('#teacherstable').DataTable();
+    $('#studentstable').DataTable();
 } );
 </script>
 <script type="text/javascript">
   $(document).ready(function () {
     $('#check').on('change',function () {
-        var table = $('#teacherstable');
+        var table = $('#studentstable');
         var check = document.getElementsByName('select_all');
         var checkboxes = table.children('tbody').children('tr').children('th').children('input');
         if (check[0].checked == true) {

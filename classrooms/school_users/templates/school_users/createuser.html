@@ -1,6 +1,6 @@
 {% extends 'base.html'%}
 
-{% block title %} Create new User {% endblock %}
+{% block title %} Criar um Novo Usuário {% endblock %}
 
 {% block content %}
 <script>
@@ -16,7 +16,7 @@ $(document).ready(function() {
 			<div class="col-md-8">
 				<div class="card">
 					<div class="card-header">
-						<h4 class="card-title">Add a New User</h4>
+						<h4 class="card-title">Criar um Novo Usuário</h4>
 					</div>
 					<div class="card-body">
 						<div class="row">
@@ -24,15 +24,45 @@ $(document).ready(function() {
 								<div class="form-group">
 									<form method="POST" class=""> {% csrf_token %}
 
+										<div class="clearfix"></div>
+										<div class="labelandform">
+										<select class="custom-select " id="select_form">
+											<option id="" value="" selected>Selecione o Tipo de Usuário</option>
+											<option value="head_school">Diretor</option>
+											<option value="teacher">Professor</option>
+											<option value="admin">Admin</option>
+											<option value="supervisor">Supervisor</option>
+											<option value="parent">Pai/Mãe</option>
+											<option value="student">Estudante</option>
+										</select>
+									</div>
+									<div id="pai">
+									</div>
+									<input type="hidden" id="selected_user" name="selected_user" value="0">
+                  <div class="clearfix"></div>
+                  					{% if is_supervisor %}
+                  						<div class="clearfix"></div>
+										<div class="labelandform">
+										<select class="custom-select " id="select_form_school">
+											<option id="" value="" selected>Selecione a Escola</option>
+											{% for school in schools %}
+												<option value="{{ school.school_id }}">{{ school.school_name }}</option>
+											{% endfor %}
+										</select>
+									</div>
+									<input type="hidden" id="selected_school" name="selected_school" value="0">
+                  <div class="clearfix"></div>
+                  {% endif %}
+
 										<div class="form-group">
-												<label>First name: </label>
+												<label>Nome: </label>
 
 										<div class="">
 												{{ form.first_name }}
 										</div>
                     </div>
 										<div class="form-group">
-											<label>Last name: </label>
+											<label>Sobrenome: </label>
 
 										<div class="">
 												{{ form.last_name }}
@@ -47,7 +77,14 @@ $(document).ready(function() {
                     </div>
 
 										<div class="form-group">
-											<label>Username: </label>
+											{% if form.username.errors %}
+										    <ol>
+										    {% for error in form.username.errors %}
+										        <li><strong>{{ error|escape }}</strong></li>
+										    {% endfor %}
+										    </ol>
+										{% endif %}
+											<label>Nome de Usuário: </label>
 
 										<div class="">
 											{{ form.username }}
@@ -55,7 +92,14 @@ $(document).ready(function() {
                     </div>
 
 										<div class="form-group">
-											<label>Password: </label>
+											{% if form.password1.errors %}
+										    <ol>
+										    {% for error in form.password1.errors %}
+										        <li><strong>{{ error|escape }}</strong></li>
+										    {% endfor %}
+										    </ol>
+										{% endif %}
+											<label>Senha: </label>
 
 										<div class="">
 											{{ form.password1 }}
@@ -63,30 +107,20 @@ $(document).ready(function() {
                     </div>
 
 										<div class="form-group">
-											<label>Password Confirmation: </label>
+											{% if form.password1.errors %}
+										    <ol>
+										    {% for error in form.password2.errors %}
+										        <li><strong>{{ error|escape }}</strong></li>
+										    {% endfor %}
+										    </ol>
+										{% endif %}
+											<label>Confirmação de Senha: </label>
 
 									<div class="">
 											{{ form.password2 }}
 										</div>
                     </div>
-
-                    <div class="clearfix"></div>
-										<div class="labelandform">
-										<select class="custom-select " id="select_form">
-											<option id="" value="" selected>Select Type of User</option>
-											<option value="head_school">Diretor</option>
-											<option value="teacher">Professor</option>
-											<option value="admin">Admin</option>
-											<option value="supervisor">Supervisor</option>
-											<option value="parent">Pai/Mãe</option>
-											<option value="student">Estudante</option>
-										</select>
-									</div>
-									<div id="pai">
-									</div>
-									<input type="hidden" id="selected_user" name="selected_user" value="0">
-                  <div class="clearfix"></div>
-								<div>	<button class="btn btn-info btn-fill pull-left" type="submit">Register</button></div>
+								<div>	<button class="btn btn-info btn-fill pull-left" type="submit">Criar Usuário</button></div>
 								</form>
 								</div>
 							</div>
@@ -128,6 +162,18 @@ $(document).ready(function() {
 			}
 			$('#pai').children('div').hide();
 			$('#pai').children('#'+selectValor).show();
+		});
+	});
+	$(document).ready(function(){
+		$('#select_form_school').on('change',function(){
+			var selectValor = $(this).val();
+			if (selectValor == '') {
+				$('#pai').children('div').remove();
+				document.getElementById('selected_school').value = '0'
+			}
+			else{
+				document.getElementById('selected_school').value = selectValor
+			}
 		});
 	});
 </script>
