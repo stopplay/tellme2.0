@@ -62,6 +62,7 @@ class SetParentsModelForm(forms.ModelForm):
 	class Meta:
 		model = Student
 		fields = ['first_parent','second_parent']
-		# widgets = {
-		# 	'name': forms.TextInput(attrs={'maxlength':255}),
-		# }
+		widgets = {
+			'first_parent': forms.Select(attrs={'class':'chosen-select_1'}),
+			'second_parent': forms.Select(attrs={'class':'chosen-select_2'}),
+		}

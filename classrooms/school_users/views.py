@@ -260,19 +260,13 @@ def set_parents(request, student_id):
     		return redirect('/users/seeallusers')
     	return render(request, 'school_users/set_parents.html', {'form':form})
     elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
-        schools = []
-        if Head.objects.filter(profile=request.user).count()>=1:
-            schools = School.objects.filter(head=Head.objects.get(profile=request.user))
-        elif Supervisor.objects.filter(profile=request.user).count()>=1:
-            schools = School.objects.filter(adminorsupervisor=Supervisor.objects.get(profile=request.user))
         is_supervisor = True
-        parents_ids = []
-        for school in schools:
-            for student in school.students.all():
-                parents_ids += [(student.first_parent.parent_id)]
-                parents_ids += [(student.second_parent.parent_id)]
-        form.fields["first_parent"].queryset = Parent.objects.filter(parent_id__in=parents_ids)
-        form.fields["first_parent"].queryset = Parent.objects.filter(parent_id__in=parents_ids)
+        instance = get_object_or_404(Student, student_id=student_id)
+        form = SetParentsModelForm(request.POST or None, instance=instance)
+        if form.is_valid():
+            new_student = form.save(commit=False)
+            new_student.save(update_fields=['first_parent','second_parent'])
+            return redirect('/users/seeallusers')
         return render(request, 'school_users/set_parents.html', {'form':form, 'is_supervisor':is_supervisor})
 
 
