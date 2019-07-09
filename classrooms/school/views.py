@@ -200,30 +200,28 @@ def update_class(request, class_id=None):
 	if request.user.is_superuser:
 		class_to_update = Class.objects.get(class_id=class_id)
 		school_to_update_class = School.objects.get(classes__class_id__exact=class_to_update.class_id)
-		name_of_chain = "{0}-{1}-{2}-{3}".format(school_to_update_class.school_name, class_to_update.enrollment_class_year, class_to_update.class_unit, class_to_update.class_name)
-		chain_to_be_updated = Chain.objects.get(name=name_of_chain)
+		chain_to_be_updated = Chain.objects.get(id=class_id)
 		form = ClassModelForm(request.POST or None, instance=class_to_update)
 		if form.is_valid():
 			classroom = form.save(commit=False)
 			chain_to_be_updated.name = "{0}-{1}-{2}-{3}".format(school_to_update_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name)
 			chain_to_be_updated.save(update_fields=['name'])
 			classroom.save(update_fields=['class_name','class_level'])
-			messages.success(request, 'Classe atualizada com sucesso!')
+			messages.success(request, 'Classe e cadeia referente à classe atualizadas com sucesso!')
 			return redirect('/schools/seeallschools')
 		return render(request, 'school/update_class.html', {'form':form})
 	elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
 		is_supervisor = True
 		class_to_update = Class.objects.get(class_id=class_id)
 		school_to_update_class = School.objects.get(classes__class_id__exact=class_to_update.class_id)
-		name_of_chain = "{0}-{1}-{2}-{3}".format(school_to_update_class.school_name, class_to_update.enrollment_class_year, class_to_update.class_unit, class_to_update.class_name)
-		chain_to_be_updated = Chain.objects.get(name=name_of_chain)
+		chain_to_be_updated = Chain.objects.get(id=class_id)
 		form = ClassModelForm(request.POST or None, instance=class_to_update)
 		if form.is_valid():
 			classroom = form.save(commit=False)
 			chain_to_be_updated.name = "{0}-{1}-{2}-{3}".format(school_to_update_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name)
 			chain_to_be_updated.save(update_fields=['name'])
 			classroom.save(update_fields=['class_name','class_level'])
-			messages.success(request, 'Classe atualizada com sucesso!')
+			messages.success(request, 'Classe e cadeia referente à classe atualizadas com sucesso!')
 			return redirect('/schools/seeallschools')
 		return render(request, 'school/update_class.html', {'form':form, 'is_supervisor':is_supervisor})
 
@@ -231,13 +229,10 @@ def update_class(request, class_id=None):
 def delete_class(request, class_id=None):
 	if request.user.is_superuser or Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
 		class_to_delete = Class.objects.get(class_id=class_id)
-		school_to_delete_class = School.objects.get(classes__class_id__exact=class_to_delete.class_id)
-		name_of_chain = "{0}-{1}-{2}-{3}".format(school_to_delete_class.school_name, class_to_delete.enrollment_class_year, class_to_delete.class_unit, class_to_delete.class_name)
-		if (Chain.objects.filter(name=name_of_chain).count()>=1):
-			chain_to_delete = school_to_delete_class.chains.get(name=name_of_chain)
-			chain_to_delete.delete()
+		chain_to_delete = Chain.objects.get(id=class_id)
+		chain_to_delete.delete()
 		class_to_delete.delete()
-		messages.success(request, 'Esta classe foi deletada corretamente')
+		messages.success(request, 'Esta classe foi deletada corretamente e a cadeia referente a ela também!')
 		return redirect('/schools/seeallschools')
 
 

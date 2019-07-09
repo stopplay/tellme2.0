@@ -76,7 +76,7 @@ def write_pdf(request, contract=None, whosigned=None):
 	elif whosigned == 'second_auth':
 		can.drawString(45, 20, "2. Responsável Didático: {} Hash: {}, em {} às {}".format(contract.second_auth_signe.name, contract.second_auth_hash, str(contract.second_auth_signed_timestamp.date().day)+'/'+str(contract.second_auth_signed_timestamp.date().month)+'/'+str(contract.second_auth_signed_timestamp.date().year), str(contract.second_auth_signed_timestamp.time().hour)+':'+str(contract.second_auth_signed_timestamp.time().minute)+':'+str(contract.second_auth_signed_timestamp.time().second)))
 	elif whosigned == 'director':
-		can.drawString(45, 10, "3. Responsável Didático: {} Hash: {}, em {} às {}".format(contract.counter_signe.name, contract.counter_auth_hash, str(contract.counter_signed_timestamp.date().day)+'/'+str(contract.counter_signed_timestamp.date().month)+'/'+str(counter.second_auth_signed_timestamp.date().year), str(contract.counter_signed_timestamp.time().hour)+':'+str(contract.counter_signed_timestamp.time().minute)+':'+str(contract.counter_signed_timestamp.time().second)))
+		can.drawString(45, 10, "3. Responsável Diretor: {} Hash: {}, em {} às {}".format(contract.counter_signe.name, contract.counter_auth_hash, str(contract.counter_signed_timestamp.date().day)+'/'+str(contract.counter_signed_timestamp.date().month)+'/'+str(contract.counter_signed_timestamp.date().year), str(contract.counter_signed_timestamp.time().hour)+':'+str(contract.counter_signed_timestamp.time().minute)+':'+str(contract.counter_signed_timestamp.time().second)))
 	elif whosigned == 'all_signed':
 		can.drawString(45, 40, "Assinado Eletronicamente por:")
 	can.showPage()
@@ -390,6 +390,7 @@ def seemycontracts_rest(request):
 	contracts_rest = ContractSerializer(contracts, many=True)
 	return Response({'contracts':contracts_rest.data, 'is_parent':is_parent, 'is_supervisor':is_supervisor})
 
+@login_required
 def set_signed(request, contract_id = None):
 	contract = Contract.objects.get(contract_id=contract_id)
 	if Head.objects.filter(profile=request.user).count()>=1:
@@ -438,7 +439,7 @@ def set_signed(request, contract_id = None):
 			contract.counter_signed = True
 			contract.counter_signed_timestamp = datetime.datetime.now()
 			contract.counter_hash = block.hash
-			contract.save(update_fields=['counter_signed', 'counter_signed_timestamp', 'counter_hash'])
+			contract.save(update_fields=['counter_signed', 'counter_signed_timestamp', 'counter_auth_hash'])
 			write_pdf(request, contract, 'director')
 			content = contract.pdf.read()
 			attachment = (contract.pdf.name, content, 'application/pdf')
@@ -528,12 +529,12 @@ def set_signed(request, contract_id = None):
 				)
 				email.send()
 				messages.success(request, 'Assinado com sucesso!')
-			contract = Contract.objects.get(contract_id=contract_id)
-			if contract.first_auth_signed and contract.second_auth_signed and contract.counter_signed:
-				contract.all_signed = True
-				write_pdf(request, contract, 'all_signed')
-				messages.success(request, 'Todos os responsáveis desse contrato assinaram!')
-				contract.save(update_fields=['all_signed'])
+		contract = Contract.objects.get(contract_id=contract_id)
+		if contract.first_auth_signed and contract.second_auth_signed and contract.counter_signed:
+			contract.all_signed = True
+			write_pdf(request, contract, 'all_signed')
+			messages.success(request, 'Todos os responsáveis desse contrato assinaram!')
+			contract.save(update_fields=['all_signed'])
 			return redirect('/contracts/seeallcontracts')
 	else:
 		messages.warning(request, 'Você não é diretor nem pai do estudante deste contrato!')
