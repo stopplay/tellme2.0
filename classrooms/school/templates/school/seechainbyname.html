@@ -19,36 +19,41 @@
                       			<tr>
 
 
-                              <th>Blocks</th>
+                              <th>Blocos</th>
 
                       			</tr>
                       		</thead>
                       		<tbody>
-                      			<tr>
+                            {% if chain.block_set %}
+                              {% for block in chain.block_set.all %}
+                          			<tr>
 
-                              {% if chain.block_set %}
-                      				<td align="center" style="display: block;">
 
-                                {% for block in chain.block_set.all %}
-                                <div align="center" class="mb-5" style="width: 70%; height: 300px;">
+                          				<td align="center" style="display: block;">
 
-                    
-                                <div class="mb-2" style="border-style: solid; display: block; width: 70%; height: 300px;">
-                                  <h3>{{ block.contract.name }}</h3>
-                                <div style="margin-left: auto; margin-right: auto;"><label><b>Hash:</b> {{ block.hash }}</label></div>
-                                <div style="margin-left: auto; margin-right: auto;"><label><b>Previous hash:</b> {{ block.previous_hash }}</label></div>
-                                <div style="margin-left: auto; margin-right: auto;"><label><b>Time Stamp:</b> {{ block.time_stamp }}</label></div>
-                                <div style="margin-left: auto; margin-right: auto;"><label><b>Block Index:</b> {{ block.index }}</label></div>
-                                <div style="margin-left: auto; margin-right: auto;"><label><b>Block Nonce:</b> {{ block.nonce }}</label></div>
-                                <div style="margin-left: auto; margin-right: auto;"><label><b>Block Student name:</b>  {{block.contract.student_name_sponte }}</label></div>
-                                </div>
-                                <!--Arrow--> <i style="font-size:40px" align="center" class="fas fa-long-arrow-alt-down mt-1"></i>
-                                </div>
-                                {% endfor %}
+                                    
+                                    <div align="center" class="mb-5" style="width: 70%; height: 300px;">
 
-                              {% endif %}
-                              </td>
-                      			</tr>
+                        
+                                    <div class="mb-2" style="border-style: solid; display: block; width: 70%; height: 300px;">
+                                      <h3><b>Block Index:</b> {{ block.index }}</h3>
+                                      <h3>{{ block.contract.name }}</h3>
+                                    <div style="margin-left: auto; margin-right: auto;"><label><b>Hash:</b> {{ block.hash }}</label></div>
+                                    <div style="margin-left: auto; margin-right: auto;"><label><b>Previous hash:</b> {{ block.previous_hash }}</label></div>
+                                    <div style="margin-left: auto; margin-right: auto;"><label><b>Time Stamp:</b> {{ block.time_stamp }}</label></div>
+                                    <div style="margin-left: auto; margin-right: auto;"><label><b>Block Nonce:</b> {{ block.nonce }}</label></div>
+                                    <div style="margin-left: auto; margin-right: auto;"><label><b>Block Student name:</b>  {{block.contract.student_name_sponte }}</label></div>
+                                    </div>
+                                    <!--Arrow--> <i style="font-size:40px" align="center" class="fas fa-long-arrow-alt-down mt-1"></i>
+                                    </div>
+                                    
+
+                                  
+                                  </td>
+                                  
+                          			</tr>
+                              {% endfor %}
+                            {% endif %}
                       		</tbody>
                         </table>
                     </div>
@@ -63,4 +68,5 @@
   $(document).ready( function () {
     $('#schoolstable').DataTable();
 } );
+</script>
 {% endblock %}

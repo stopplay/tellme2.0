@@ -87,13 +87,13 @@ def seeclassbyid(request, class_id=None):
 
 #weverton
 @login_required
-def seechainbyname(request, chain_name=None):
+def seechainbyid(request, chain_id=None):
     if request.user.is_superuser:
-        chain = Chain.objects.get(name=chain_name)
+        chain = Chain.objects.get(id=chain_id)
         return render(request,'school/seechainbyname.html',{'chain':chain})
     elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
     	is_supervisor = True
-    	chain = Chain.objects.get(name=chain_name)
+    	chain = Chain.objects.get(id=chain_id)
     	return render(request,'school/seechainbyname.html',{'chain':chain, 'is_supervisor':is_supervisor})
     return HttpResponse('U cannot access this page cos u are not admin!')
     

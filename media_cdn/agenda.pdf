@@ -36,7 +36,7 @@ endobj
 /P5 null
 /P3 null
 >>
-/ProcSet [ /ImageB /ImageC /PDF /Text /ImageI ]
+/ProcSet [ /ImageB /Text /PDF /ImageC /ImageI ]
 >>
 /Contents 7 0 R
 /MediaBox [ 0 0 800 1120 ]
@@ -69,7 +69,7 @@ endobj
 endobj
 7 0 obj
 <<
-/Length 11917
+/Length 11975
 >>
 stream
 q
@@ -373,8 +373,8 @@ BT
 14.4 TL
 ET
 BT
-/F2 10 Tf
-12 TL
+/F2 8 Tf
+9.6 TL
 ET
 q
 1 0 0 1 5 10 cm
@@ -613,8 +613,13 @@ Q
 Q
 Q
 BT
-1 0 0 1 45 10 Tm
-(Date\072\04019\0576\0572019\040Counter\040signe\072\040Supervisor\040Counter\040hash\072\0400000c90157807c59514153e19e4db941c8e86a2a1f99f5e28d07fc24369095f0) Tj
+1 0 0 1 45 60 Tm
+(1\056\040Responsável\040Financeiro\072\040AntonioSevero) Tj
+T*
+ET
+BT
+1 0 0 1 45 50 Tm
+(Hash\072\0400000396b636211208da672a7d8f2f6f009950fb3ef1398dca063c42afd9f44a9\054\040em\0409\0577\0572019\040às\04011\07239\0721) Tj
 T*
 ET
 Q
@@ -638,5 +643,5 @@ trailer
 /Info 2 0 R
 >>
 startxref
-12685
+12743
 %%EOF

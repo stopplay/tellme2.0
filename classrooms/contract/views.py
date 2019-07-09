@@ -63,7 +63,7 @@ def write_pdf(request, contract=None, whosigned=None):
 	packet = StringIO()
 	# create a new PDF with Reportlab
 	can = canvas.Canvas(packet, pagesize=letter)
-	can.setFont("Times-Roman",10)
+	can.setFont("Times-Roman",8)
 	result = finders.find('img/certificate.svg')
 	current_site = get_current_site(request)
 	drawing = svg2rlg('http://'+current_site.domain+static('img/certificate.svg'))
@@ -72,11 +72,13 @@ def write_pdf(request, contract=None, whosigned=None):
 	drawing.scale(0.035, 0.035)
 	renderPDF.draw(drawing, can, 5, 10)
 	if whosigned == 'first_auth':
-		can.drawString(45, 30, "Date: {} First signe: {} First hash: {}".format(str(contract.first_auth_signed_timestamp.date().day)+'/'+str(contract.first_auth_signed_timestamp.date().month)+'/'+str(contract.first_auth_signed_timestamp.date().year), contract.first_auth_signe.name, contract.first_auth_hash))
+		can.drawString(45, 30, "1. Responsável Financeiro: {} Hash: {}, em {} às {}".format(contract.first_auth_signe.name, contract.first_auth_hash, str(contract.first_auth_signed_timestamp.date().day)+'/'+str(contract.first_auth_signed_timestamp.date().month)+'/'+str(contract.first_auth_signed_timestamp.date().year), str(contract.first_auth_signed_timestamp.time().hour)+':'+str(contract.first_auth_signed_timestamp.time().minute)+':'+str(contract.first_auth_signed_timestamp.time().second)))
 	elif whosigned == 'second_auth':
-		can.drawString(45, 20, "Date: {} Second signe: {} Second hash: {}".format(str(contract.second_auth_signed_timestamp.date().day)+'/'+str(contract.second_auth_signed_timestamp.date().month)+'/'+str(contract.second_auth_signed_timestamp.date().year), contract.second_auth_signe.name, contract.second_auth_hash))
+		can.drawString(45, 20, "2. Responsável Didático: {} Hash: {}, em {} às {}".format(contract.second_auth_signe.name, contract.second_auth_hash, str(contract.second_auth_signed_timestamp.date().day)+'/'+str(contract.second_auth_signed_timestamp.date().month)+'/'+str(contract.second_auth_signed_timestamp.date().year), str(contract.second_auth_signed_timestamp.time().hour)+':'+str(contract.second_auth_signed_timestamp.time().minute)+':'+str(contract.second_auth_signed_timestamp.time().second)))
 	elif whosigned == 'director':
-		can.drawString(45, 10, "Date: {} Counter signe: {} Counter hash: {}".format(str(contract.counter_signed_timestamp.date().day)+'/'+str(contract.counter_signed_timestamp.date().month)+'/'+str(contract.counter_signed_timestamp.date().year), contract.counter_signe.name, contract.counter_auth_hash))
+		can.drawString(45, 10, "3. Responsável Didático: {} Hash: {}, em {} às {}".format(contract.counter_signe.name, contract.counter_auth_hash, str(contract.counter_signed_timestamp.date().day)+'/'+str(contract.counter_signed_timestamp.date().month)+'/'+str(counter.second_auth_signed_timestamp.date().year), str(contract.counter_signed_timestamp.time().hour)+':'+str(contract.counter_signed_timestamp.time().minute)+':'+str(contract.counter_signed_timestamp.time().second)))
+	elif whosigned == 'all_signed':
+		can.drawString(45, 40, "Assinado Eletronicamente por:")
 	can.showPage()
 	can.save()
 	#move to the beginning of the StringIO buffer
@@ -435,8 +437,8 @@ def set_signed(request, contract_id = None):
 			head = Head.objects.get(profile=request.user)
 			contract.counter_signed = True
 			contract.counter_signed_timestamp = datetime.datetime.now()
-			contract.counter_auth_hash = block.hash
-			contract.save(update_fields=['counter_signed', 'counter_signed_timestamp', 'counter_auth_hash'])
+			contract.counter_hash = block.hash
+			contract.save(update_fields=['counter_signed', 'counter_signed_timestamp', 'counter_hash'])
 			write_pdf(request, contract, 'director')
 			content = contract.pdf.read()
 			attachment = (contract.pdf.name, content, 'application/pdf')
@@ -529,6 +531,7 @@ def set_signed(request, contract_id = None):
 			contract = Contract.objects.get(contract_id=contract_id)
 			if contract.first_auth_signed and contract.second_auth_signed and contract.counter_signed:
 				contract.all_signed = True
+				write_pdf(request, contract, 'all_signed')
 				messages.success(request, 'Todos os responsáveis desse contrato assinaram!')
 				contract.save(update_fields=['all_signed'])
 			return redirect('/contracts/seeallcontracts')
