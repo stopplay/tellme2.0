@@ -1,5 +1,5 @@
 from django.db import models
-from school_users.models import Student, Teacher, Head, Supervisor
+from school_users.models import Student, Teacher, Head, Supervisor, Parent
 from block.models import *
 
 # Create your models here.
@@ -19,6 +19,7 @@ class School(models.Model):
 	city = models.TextField(null=True, blank=True, verbose_name = 'Cidade')
 	students = models.ManyToManyField(Student)
 	teachers = models.ManyToManyField(Teacher)
+	parents = models.ManyToManyField(Parent)
 
 class Class(models.Model):
 	"""docstring for Class"""

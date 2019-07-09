@@ -162,39 +162,180 @@ def create_head_to_school(request, school_id=None):
         school_to_add_head = School.objects.get(school_id=school_id)
         form = UserModelForm(request.POST or None)
         form2 = HeadModelForm(request.POST or None)
-        if form.is_valid() and form2.is_valid():
-            user = form.save(commit=False)
-            user.save()
-            user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
-            user_creation = form2.save(commit=False)
-            user_creation.profile = user_profile
-            user_creation.save()
-            head_to_add = get_object_or_404(Head, profile=user_profile)
-            school_to_add_head.head = head_to_add
+        head_users = Head.objects.all()
+        selected_user = request.POST.get('selected_user', 0)
+        if selected_user == '0':
+            if form.is_valid() and form2.is_valid():
+                user = form.save(commit=False)
+                user.save()
+                user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
+                user_creation = form2.save(commit=False)
+                user_creation.profile = user_profile
+                user_creation.name = user_profile.first_name+' '+user_profile.last_name
+                user_creation.save()
+                head_to_add = get_object_or_404(Head, profile=user_profile)
+                school_to_add_head.head = head_to_add
+                school_to_add_head.save(update_fields=['head'])
+                messages.success(request, 'Diretor adicionado com sucesso à escola {}'.format(school_to_add_head.school_name))
+                return redirect('/users/create_supervisor_to_school/{}'.format(school_id))
+        else:
+            head = Head.objects.get(head_id=selected_user)
+            school_to_add_head.head = head
             school_to_add_head.save(update_fields=['head'])
             messages.success(request, 'Diretor adicionado com sucesso à escola {}'.format(school_to_add_head.school_name))
             return redirect('/users/create_supervisor_to_school/{}'.format(school_id))
-        return render(request, 'school_users/create_head_to_school.html', {'form':form, 'form2':form2, 'school':school_to_add_head})
+        return render(request, 'school_users/create_head_to_school.html', {'form':form, 'form2':form2, 'school':school_to_add_head, 'head_users':head_users})
 
 @login_required
 def create_supervisor_to_school(request, school_id=None):
     if request.user.is_superuser:
-        school_to_add_head = School.objects.get(school_id=school_id)
+        school_to_add_supervisor = School.objects.get(school_id=school_id)
         form = UserModelForm(request.POST or None)
         form2 = SupervisorModelForm(request.POST or None)
+        supervisor_users = Supervisor.objects.all()
+        selected_user = request.POST.get('selected_user', 0)
+        if selected_user == '0':
+            if form.is_valid() and form2.is_valid():
+                user = form.save(commit=False)
+                user.save()
+                user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
+                user_creation = form2.save(commit=False)
+                user_creation.profile = user_profile
+                user_creation.name = user_profile.first_name+' '+user_profile.last_name
+                user_creation.save()
+                supervisor_to_add = get_object_or_404(Supervisor, profile=user_profile)
+                school_to_add_supervisor.adminorsupervisor = supervisor_to_add
+                school_to_add_supervisor.save(update_fields=['adminorsupervisor'])
+                messages.success(request, 'Admin/Supervisor adicionado com sucesso à escola {}'.format(school_to_add_supervisor.school_name))
+                return redirect('/schools/seeallschools/'.format(school_id))
+        else:
+            supervisor = Supervisor.objects.get(supervisor_id=selected_user)
+            school_to_add_supervisor.adminorsupervisor = supervisor
+            school_to_add_supervisor.save(update_fields=['adminorsupervisor'])
+            messages.success(request, 'Admin/Supervisor adicionado com sucesso à escola {}'.format(school_to_add_supervisor.school_name))
+            return redirect('/schools/seeallschools/'.format(school_id))
+        return render(request, 'school_users/create_supervisor_to_school.html', {'form':form, 'form2':form2, 'school':school_to_add_supervisor, 'supervisor_users':supervisor_users})
+
+
+@login_required
+def add_student(request):
+    if request.user.is_superuser:
+        form = UserModelForm(request.POST or None)
+        form2 = StudentModelForm(request.POST or None)
         if form.is_valid() and form2.is_valid():
             user = form.save(commit=False)
             user.save()
             user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
             user_creation = form2.save(commit=False)
             user_creation.profile = user_profile
+            user_creation.name = user_profile.first_name+' '+user_profile.last_name
             user_creation.save()
-            supervisor_to_add = get_object_or_404(Supervisor, profile=user_profile)
-            school_to_add_head.adminorsupervisor = supervisor_to_add
-            school_to_add_head.save(update_fields=['adminorsupervisor'])
-            messages.success(request, 'Admin/Supervisor adicionado com sucesso à escola {}'.format(school_to_add_head.school_name))
-            return redirect('/schools/seeallschools/'.format(school_id))
-        return render(request, 'school_users/create_supervisor_to_school.html', {'form':form, 'form2':form2, 'school':school_to_add_head})
+            student = Student.objects.get(profile=user_profile)
+            messages.success(request, 'Estudante criado com sucesso!')
+            return redirect('/users/add_first_parent/{}'.format(student_id))
+        return render(request, 'school_users/add_student.html', {'form':form, 'form2':form2})
+    elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
+        is_supervisor = True
+        form = UserModelForm(request.POST or None)
+        form2 = StudentModelForm(request.POST or None)
+        if form.is_valid() and form2.is_valid():
+            user = form.save(commit=False)
+            user.save()
+            user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
+            user_creation = form2.save(commit=False)
+            user_creation.profile = user_profile
+            user_creation.name = user_profile.first_name+' '+user_profile.last_name
+            user_creation.save()
+            student = Student.objects.get(profile=user_profile)
+            messages.success(request, 'Estudante criado com sucesso!')
+            return redirect('/users/add_first_parent/{}'.format(student_id))
+        return render(request, 'school_users/add_student.html', {'form':form, 'form2':form2, 'is_supervisor':is_supervisor})
+
+@login_required
+def add_first_parent(request, student_id=None):
+    if request.user.is_superuser:
+        student = Student.objects.get(student_id=student_id)
+        form = UserModelForm(request.POST or None)
+        form2 = ParentModelForm(request.POST or None)
+        if form.is_valid() and form2.is_valid():
+            user = form.save(commit=False)
+            user.save()
+            user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
+            user_creation = form2.save(commit=False)
+            user_creation.profile = user_profile
+            user_creation.name = user_profile.first_name+' '+user_profile.last_name
+            user_creation.save()
+            parent = Parent.objects.get(profile=user_profile)
+            student.first_parent = parent
+            student.save(update_fields=['first_parent'])
+            messages.success(request, 'Responsável adicionado com sucesso!')
+            return redirect('/users/add_second_parent/{}'.format(student_id))
+        return render(request, 'school_users/add_parent.html', {'form':form, 'form2':form2})
+    elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
+        is_supervisor = True
+        student = Student.objects.get(student_id=student_id)
+        form = UserModelForm(request.POST or None)
+        form2 = ParentModelForm(request.POST or None)
+        if form.is_valid() and form2.is_valid():
+            user = form.save(commit=False)
+            user.save()
+            user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
+            user_creation = form2.save(commit=False)
+            user_creation.profile = user_profile
+            user_creation.name = user_profile.first_name+' '+user_profile.last_name
+            user_creation.save()
+            parent = Parent.objects.get(profile=user_profile)
+            student.first_parent = parent
+            student.save(update_fields=['first_parent'])
+            messages.success(request, 'Responsável adicionado com sucesso!')
+            return redirect('/users/add_second_parent/{}'.format(student_id))
+        return render(request, 'school_users/add_parent.html', {'form':form, 'form2':form2, 'is_supervisor':is_supervisor})
+
+@login_required
+def add_parent(request, student_id=None, type_of_user= None):
+    if request.user.is_superuser:
+        student = Student.objects.get(student_id=student_id)
+        form = UserModelForm(request.POST or None)
+        form2 = ParentModelForm(request.POST or None)
+        if form.is_valid() and form2.is_valid():
+            user = form.save(commit=False)
+            user.save()
+            user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
+            user_creation = form2.save(commit=False)
+            user_creation.profile = user_profile
+            user_creation.name = user_profile.first_name+' '+user_profile.last_name
+            user_creation.save()
+            parent = Parent.objects.get(profile=user_profile)
+            if type_of_user == 'first_parent':
+                student.first_parent = parent
+            if type_of_user == 'second_parent':
+                student.second_parent = parent
+            student.save(update_fields=['first_parent','second_parent'])
+            messages.success(request, 'Responsável adicionado com sucesso!')
+            return redirect('/users/set_parents/{}'.format(student_id))
+        return render(request, 'school_users/add_parent.html', {'form':form, 'form2':form2})
+    elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
+        is_supervisor = True
+        student = Student.objects.get(student_id=student_id)
+        form = UserModelForm(request.POST or None)
+        form2 = ParentModelForm(request.POST or None)
+        if form.is_valid() and form2.is_valid():
+            user = form.save(commit=False)
+            user.save()
+            user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
+            user_creation = form2.save(commit=False)
+            user_creation.profile = user_profile
+            user_creation.name = user_profile.first_name+' '+user_profile.last_name
+            user_creation.save()
+            parent = Parent.objects.get(profile=user_profile)
+            if type_of_user == 'first_parent':
+                student.first_parent = parent
+            if type_of_user == 'second_parent':
+                student.second_parent = parent
+            student.save(update_fields=['first_parent','second_parent'])
+            messages.success(request, 'Responsável adicionado com sucesso!')
+            return redirect('/users/set_parents/{}'.format(student_id))
+        return render(request, 'school_users/add_parent.html', {'form':form, 'form2':form2, 'is_supervisor':is_supervisor})
 
 @login_required
 def seeallusers(request):
@@ -226,9 +367,11 @@ def seeallusers(request):
             student_users += school.students.all()
             for student in school.students.all():
                 if student.first_parent:
-                    parent_users += [(student.first_parent)]
+                    if student.first_parent not in parent_users:
+                        parent_users += [(student.first_parent)]
                 if student.second_parent:
-                    parent_users += [(student.second_parent)]
+                    if student.second_parent not in parent_users:
+                        parent_users += [(student.second_parent)]
         return render(request, 'school_users/seeallusers.html', {'head_users':head_users,'teacher_users':teacher_users,'admin_users':admin_users,'supervisor_users':supervisor_users,'parent_users':parent_users,'student_users':student_users, 'is_supervisor':is_supervisor})
     return HttpResponse('U cannot access this page cos u are not admin!')
 
@@ -250,7 +393,7 @@ def delete_user(request, user_id=None, type_of_user=None):
 	return HttpResponse('This user has been deleted correctly')
 
 @login_required
-def set_parents(request, student_id):
+def set_parents(request, student_id=None):
     if request.user.is_superuser:
     	instance = get_object_or_404(Student, student_id=student_id)
     	form = SetParentsModelForm(request.POST or None, instance=instance)
@@ -258,16 +401,30 @@ def set_parents(request, student_id):
     		new_student = form.save(commit=False)
     		new_student.save(update_fields=['first_parent','second_parent'])
     		return redirect('/users/seeallusers')
-    	return render(request, 'school_users/set_parents.html', {'form':form})
+    	return render(request, 'school_users/set_parents.html', {'form':form, 'student_id':student_id})
     elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
         is_supervisor = True
         instance = get_object_or_404(Student, student_id=student_id)
         form = SetParentsModelForm(request.POST or None, instance=instance)
+        parents_ids = []
+        schools = None
+        if Head.objects.filter(profile=request.user).count()>=1:
+            schools = School.objects.filter(head=Head.objects.get(profile=request.user))
+        if Supervisor.objects.filter(profile=request.user).count()>=1:
+            schools = School.objects.filter(adminorsupervisor=Supervisor.objects.get(profile=request.user))
+        for school in schools:
+            for student in school.students.all():
+                if student.first_parent:
+                    parents_ids += [(student.first_parent.parent_id)]
+                if student.second_parent:
+                    parents_ids += [(student.second_parent.parent_id)]
+        form.fields["first_parent"].queryset = Parent.objects.filter(parent_id__in=parents_ids)
+        form.fields["second_parent"].queryset = Parent.objects.filter(parent_id__in=parents_ids)
         if form.is_valid():
             new_student = form.save(commit=False)
             new_student.save(update_fields=['first_parent','second_parent'])
             return redirect('/users/seeallusers')
-        return render(request, 'school_users/set_parents.html', {'form':form, 'is_supervisor':is_supervisor})
+        return render(request, 'school_users/set_parents.html', {'form':form, 'student_id':student_id, 'is_supervisor':is_supervisor})
 
 
 

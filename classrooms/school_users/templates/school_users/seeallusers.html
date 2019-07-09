@@ -8,49 +8,55 @@
   <div class="container-fluid">
     <div class="row">
       {% if head_users %}
-      <div class="col-md-12">
-        <div class="card strpied-tabled-with-hover">
-          <div class="card-header ">
-            <h4 class="card-title">Diretor(es)</h4>
+        <p><a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+          Diretor(es)
+        </a></p>
+          <div class="collapse col-md-12" id="collapseExample">
+            <div class="card strpied-tabled-with-hover">
+              <div class="card-header ">
+                <h4 class="card-title">Diretor(es)</h4>
 
-          </div>
+              </div>
 
-          <div class="card-body table-full-width table-responsive">
-            <table class="table table-hover table-striped display mb-4" id="headstable">
-              <thead>
-                <tr>
-                  <th >Nome</th>
-                  <th >Nome de Usuário</th>
-                  {% if request.user.is_superuser %}
-                    <th >Ações</th>
-                  {% endif %}
-                </tr>
-              </thead>
-              <tbody>
-                {% for head in head_users %}
-                <tr>
-                  <th>{{ head.name }}</th>
-                  <td>{{ head.profile.username }}</td>
-                  {% if request.user.is_superuser %}
-                  <td>
-                    <div class="btn-tollbar">
-                      <div class="btn-group mr-2" role="group" aria-label="Second group"><br>
-                        <button type="button" class="btn btn-primary btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' head.head_id 'head' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Diretor</a></button>
-                      </div>
-                    </div>
-                  </td>
-                  {% endif %}
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
+              <div class="card-body table-full-width table-responsive">
+                <table class="table table-hover table-striped display mb-4" id="headstable">
+                  <thead>
+                    <tr>
+                      <th >Nome</th>
+                      <th >Nome de Usuário</th>
+                      {% if request.user.is_superuser %}
+                        <th >Ações</th>
+                      {% endif %}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for head in head_users %}
+                    <tr>
+                      <th>{{ head.name }}</th>
+                      <td>{{ head.profile.username }}</td>
+                      {% if request.user.is_superuser %}
+                      <td>
+                        <div class="btn-tollbar">
+                          <div class="btn-group mr-2" role="group" aria-label="Second group"><br>
+                            <button type="button" class="btn btn-primary btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' head.head_id 'head' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Diretor</a></button>
+                          </div>
+                        </div>
+                      </td>
+                      {% endif %}
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
       {% endif %}
 
       {% if teacher_users %}
-      <div class="col-md-12">
+      <p><a class="btn btn-primary" data-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample2">
+          Professor(es)
+        </a></p>
+      <div class="collapse col-md-12" id="collapseExample2">
         <div class="card strpied-tabled-with-hover">
           <div class="card-header ">
             <h4 class="card-title">Professor(es)</h4>
@@ -92,7 +98,10 @@
       {% endif %}
 
       {% if admin_users %}
-      <div class="col-md-12">
+      <p><a class="btn btn-primary" data-toggle="collapse" href="#collapseExample3" role="button" aria-expanded="false" aria-controls="collapseExample3">
+          Administrador(es)
+        </a></p>
+      <div class="collapse col-md-12" id="collapseExample3">
         <div class="card strpied-tabled-with-hover">
           <div class="card-header ">
             <h4 class="card-title">Administrador(es)</h4>
@@ -135,7 +144,10 @@
 
 
       {% if supervisor_users %}
-      <div class="col-md-12">
+      <p><a class="btn btn-primary" data-toggle="collapse" href="#collapseExample4" role="button" aria-expanded="false" aria-controls="collapseExample4">
+          Supervisor(es)
+        </a></p>
+      <div class="collapse col-md-12" id="collapseExample4">
         <div class="card strpied-tabled-with-hover">
           <div class="card-header ">
             <h4 class="card-title">Supervisor(es)</h4>
@@ -177,7 +189,10 @@
       {% endif %}
 
       {% if parent_users %}
-      <div class="col-md-12">
+      <p><a class="btn btn-primary" data-toggle="collapse" href="#collapseExample5" role="button" aria-expanded="false" aria-controls="collapseExample5">
+          Pai(s)/Mãe(s)
+        </a></p>
+      <div class="collapse col-md-12" id="collapseExample5">
         <div class="card strpied-tabled-with-hover">
           <div class="card-header ">
             <h4 class="card-title">Pai(s)/Mãe(s)</h4>
@@ -220,7 +235,10 @@
 
 
       {% if student_users %}
-      <div class="col-md-12">
+      <p><a class="btn btn-primary" data-toggle="collapse" href="#collapseExample6" role="button" aria-expanded="false" aria-controls="collapseExample6">
+          Estudante(s)
+        </a></p>
+      <div class="collapse col-md-12" id="collapseExample6">
         <div class="card strpied-tabled-with-hover">
           <div class="card-header ">
             <h4 class="card-title">Estudante(s)</h4>

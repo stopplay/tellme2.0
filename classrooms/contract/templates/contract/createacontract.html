@@ -25,13 +25,22 @@ $(document).ready(function() {
 								<div class="form-group">
 									<form method="POST" class="" enctype="multipart/form-data"> {% csrf_token %}
 										<select id="select_form" style="max-width: 250%;" class="chosen-select">
-											<option id="" value="" selected>Selecione um estudante</option>
+											<option id="" value="" {% if student_id %}{% else %}selected{% endif %}>Selecione um estudante</option>
 											{% for student in students %}
-												<option value="{{ student.student_id }}">{{ student.name }}</option>
+												{% if student_id %}
+													{% if student.student_id == student_id %}
+														<option value="{{ student.student_id }} " selected>{{ student.name }}</option>
+													{% else %}
+														<object value="{{ student.student_id }} ">{{ student.name }}</option>
+													{% endif %}
+												{% else %}
+													<object value="{{ student.student_id }} ">{{ student.name }}</option>
+												{% endif %}
+
 											{% endfor %}
-										</select><br>
+										</select><a href="{% url 'users:add_student' %}"><i class="fas fa-plus"></i></a><br>
 										{{ form.as_p }}
-										<input type="hidden" id="selected_user" name="selected_user" value="0">
+										<input type="hidden" id="selected_user" name="selected_user" value="{% if student_id %}{{ student_id }}{% else %}0{% endif %}">
 
                     <div><button type="submit" class="btn btn-info btn-fill btn-sm pull-left mt-2">Criar Novo Contrato</button></div>
 

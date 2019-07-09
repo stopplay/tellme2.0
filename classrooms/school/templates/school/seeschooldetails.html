@@ -19,8 +19,12 @@
 														<tr>
 															<th >Id da Escola</th>
 															<th >Nome da Escola</th>
-															<th>Classes</th>
-															<th>Chains</th>
+															{% if school.classes.all %}
+																<th>Classes</th>
+															{% endif %}
+															{% if school.chains.all %}
+																<th>Chains</th>
+															{% endif %}
 															{% if school.head %}
 																<th>Diretor</th>
 															{% endif %}
@@ -32,6 +36,7 @@
 															{% endif %}
 															{% if school.sponte_token %}
 																<th>SPONTE TOKEN</th>
+															{% else %}
 															{% endif %}
 															{% if school.tell_me_school_id %}
 																<th>TellMe ID</th>
@@ -45,8 +50,12 @@
 															{% if school.city %}
 																<th>Cidade</th>
 															{% endif %}
-											        <th >Estudantes</th>
-											        <th >Professores</th>
+															{% if school.students.all %}
+											        			<th >Estudantes</th>
+											        		{% endif %}
+													        {% if school.teachers.all %}
+													        	<th >Professores</th>
+													        {% endif %}
 
 														</tr>
 													</thead>
@@ -55,7 +64,7 @@
 
 															<th >{{ school.school_id }}</th>
 															<th>{{ school.school_name }}</th>
-															{% if school.classes %}
+															{% if school.classes.all %}
 																<th>
 																	{% for class in school.classes.all %}
 													                    <label>Nome da Classe: {{ class.class_name }}</label><br>
@@ -63,7 +72,7 @@
 													                {% endfor %}
 												                </th>
 												            {% endif %}
-												            {% if school.chains %}
+												            {% if school.chains.all %}
 												            	<th>
 												            		{% for chain in school.chains.all %}
 												            			<label>Chain name: {{ chain.name }}</label><br>
@@ -73,8 +82,8 @@
 												            {% if school.head %}
 												            	<th>{{ school.head.name }}</th>
 												            {% endif %}
-												            {% if school.adminorsuperuser %}
-												            	<th>school.adminorsuperuser.name</th>
+												            {% if school.adminorsupervisor %}
+												            	<th>{{ school.adminorsupervisor.name }}</th>
 												            {% endif %}
 												            {% if school.sponte_client_number %}
 																<th>{{ school.sponte_client_number }}</th>
@@ -95,14 +104,14 @@
 																<th>{{ school.city }}</th>
 															{% endif %}
 
-											        {% if school.students %}
+											        {% if school.students.all %}
 											        <th align="center">{% for student in school.students.all %}
 											            <label> {{ student.name }} </label><br>
 											            {% endfor %}
 											        </th>
 											        {% endif %}
 
-											        {% if school.teachers %}
+											        {% if school.teachers.all %}
 											        <th align="center">
 											          {% for teacher in school.teachers.all %}
 						                                  <Label>{{ teacher.name }}</label><br>

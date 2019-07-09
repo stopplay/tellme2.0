@@ -18,6 +18,7 @@ urlpatterns = [
     url('seeallusers_rest/', views.seeallusers_rest),
     path('delete_user/<int:user_id>/<type_of_user>', views.delete_user, name='delete_user'),
     path('set_parents/<int:student_id>/', views.set_parents, name='set_parents'),
+    path('add_parent/<int:student_id>/<type_of_user>', views.add_parent, name='add_parent'),
     url('login/', views.do_login, name='login'),
     url('logout', views.do_logout, name='logout'),
     url('api/login', obtain_jwt_token, name='login_rest'),

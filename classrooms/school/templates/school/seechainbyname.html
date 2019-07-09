@@ -14,21 +14,17 @@
                         <p class="card-category">{{ chain.time_stamp }}</p>
                     </div>
                     <div class="card-body table-full-width table-responsive">
-                        <table class="table table-hover table-striped">
+                        <table class="table table-hover table-striped" id="schoolstable">
                           <thead>
                       			<tr>
 
 
-
+                              <th>Blocks</th>
 
                       			</tr>
                       		</thead>
                       		<tbody>
                       			<tr>
-
-
-
-                      				<td>{{ block.index }}</td>
 
                               {% if chain.block_set %}
                       				<td align="center" style="display: block;">
@@ -36,7 +32,7 @@
                                 {% for block in chain.block_set.all %}
                                 <div align="center" class="mb-5" style="width: 70%; height: 300px;">
 
-                    <!--Arrow--> <i style="font-size:48px" align="center" class="fas fa-long-arrow-alt-up mt-1"></i>
+                    
                                 <div class="mb-2" style="border-style: solid; display: block; width: 70%; height: 300px;">
                                   <h3>{{ block.contract.name }}</h3>
                                 <div style="margin-left: auto; margin-right: auto;"><label><b>Hash:</b> {{ block.hash }}</label></div>
@@ -46,6 +42,7 @@
                                 <div style="margin-left: auto; margin-right: auto;"><label><b>Block Nonce:</b> {{ block.nonce }}</label></div>
                                 <div style="margin-left: auto; margin-right: auto;"><label><b>Block Student name:</b>  {{block.contract.student_name_sponte }}</label></div>
                                 </div>
+                                <!--Arrow--> <i style="font-size:40px" align="center" class="fas fa-long-arrow-alt-down mt-1"></i>
                                 </div>
                                 {% endfor %}
 
@@ -61,4 +58,9 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+  $(document).ready( function () {
+    $('#schoolstable').DataTable();
+} );
 {% endblock %}
