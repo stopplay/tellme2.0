@@ -1,3 +1,4 @@
+import csv, io
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from .serializers import *
 from .models import *
@@ -20,6 +21,7 @@ from django.views.decorators.csrf import csrf_exempt
 import pdb
 from school.models import *
 from django.contrib import messages
+import requests
 
 # Create your views here.
 @login_required
@@ -33,53 +35,157 @@ def create_user(request):
         form6 = ParentModelForm(request.POST or None)
         form7 = StudentModelForm(request.POST or None)
         selected_user = request.POST.get('selected_user', 0)
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.save()
-            user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
-            if selected_user == '1':
-                if form2.is_valid():
-                    user_creation = form2.save(commit=False)
-                    user_creation.profile = user_profile
-                    user_creation.name = user_profile.first_name+' '+user_profile.last_name
-                    user_creation.save()
-                    messages.success(request, 'Usuário Criado com sucesso')
-            elif selected_user == '2':
-                if form3.is_valid():
-                    user_creation = form3.save(commit=False)
-                    user_creation.profile = user_profile
-                    user_creation.name = user_profile.first_name+' '+user_profile.last_name
-                    user_creation.save()
-                    messages.success(request, 'Usuário Criado com sucesso')
-            elif selected_user == '3':
-                if form4.is_valid():
-                    user_creation = form4.save(commit=False)
-                    user_creation.profile = user_profile
-                    user_creation.name = user_profile.first_name+' '+user_profile.last_name
-                    user_creation.save()
-                    messages.success(request, 'Usuário Criado com sucesso')
-            elif selected_user == '4':
-                if form5.is_valid():
-                    user_creation = form5.save(commit=False)
-                    user_creation.profile = user_profile
-                    user_creation.name = user_profile.first_name+' '+user_profile.last_name
-                    user_creation.save()
-                    messages.success(request, 'Usuário Criado com sucesso')
-            elif selected_user == '5':
-                if form6.is_valid():
-                    user_creation = form6.save(commit=False)
-                    user_creation.profile = user_profile
-                    user_creation.name = user_profile.first_name+' '+user_profile.last_name
-                    user_creation.save()
-                    messages.success(request, 'Usuário Criado com sucesso')
-            elif selected_user == '6':
-                if form7.is_valid():
-                    user_creation = form7.save(commit=False)
-                    user_creation.profile = user_profile
-                    user_creation.name = user_profile.first_name+' '+user_profile.last_name
-                    user_creation.save()
-                    messages.success(request, 'Usuário Criado com sucesso')
-            return redirect('/users/create_user')
+        if request.method == 'POST':
+            yesorno = request.POST.get('sim/não' or None)
+            # archive_type = request.POST.get('archive_type' or None)
+            csv_file = request.FILES.get('file' or None)
+            if yesorno == 'sim':
+                # if archive_type == 'url':
+                #     url = request.POST.get('url')
+                #     csv_file = r = requests.get(url)
+                #     if not url.endswith('.csv'):
+                #         messages.warning(request, 'O arquivo enviado não é CSV')
+                #         return redirect('/users/create_user')
+                #     data_set = csv_file.content.decode('UTF-8')
+                # elif archive_type == 'file':
+                #     csv_file = request.FILES.get('file' or None)
+                #     if not csv_file.name.endswith('.csv'):
+                #         messages.warning(request, 'O arquivo enviado não é CSV')
+                #         return redirect('/users/create_user')
+                #     data_set = csv_file.read().decode('UTF-8')
+                if csv_file:
+                    if not csv_file.name.endswith('.csv'):
+                        messages.warning(request, 'O arquivo enviado não é CSV')
+                        return redirect('/users/create_user')
+                    data_set = csv_file.read().decode('UTF-8')
+                    io_string = io.StringIO(data_set)
+                    next(io_string)
+                    if selected_user == '1':
+                        if ',' in data_set:
+                            for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+                                if column[0]:
+                                    if column[4]==column[5]:
+                                        _, created = Head.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+                        elif ';' in data_set:
+                            for column in csv.reader(io_string, delimiter=';', quotechar='|'):
+                                if column[0]:
+                                    if column[4]==column[5]:
+                                        _, created = Head.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+                    elif selected_user == '2':
+                        if ',' in data_set:
+                            for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+                                if column[0]:
+                                    if column[4]==column[5]:
+                                        _, created = Teacher.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+                        elif ';' in data_set:
+                            for column in csv.reader(io_string, delimiter=';', quotechar='|'):
+                                if column[0]:
+                                    if column[4]==column[5]:
+                                        _, created = Teacher.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+                    elif selected_user == '3':
+                        if ',' in data_set:
+                            for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+                                if column[0]:
+                                    if column[4]==column[5]:
+                                        _, created = Admin.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+                        elif ';' in data_set:
+                            for column in csv.reader(io_string, delimiter=';', quotechar='|'):
+                                if column[0]:
+                                    if column[4]==column[5]:
+                                        _, created = Admin.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+                    elif selected_user == '4':
+                        if ',' in data_set:
+                            for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+                                if column[0]:
+                                    if column[4]==column[5]:
+                                        _, created = Supervisor.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+                        elif ';' in data_set:
+                            for column in csv.reader(io_string, delimiter=';', quotechar='|'):
+                                if column[0]:
+                                    if column[4]==column[5]:
+                                        _, created = Supervisor.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+                    elif selected_user == '5':
+                        if ',' in data_set:
+                            for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+                                if column[0]:
+                                    if column[4]==column[5]:
+                                        _, created = Parent.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+                        elif ';' in data_set:
+                            for column in csv.reader(io_string, delimiter=';', quotechar='|'):
+                                if column[0]:
+                                    if column[4]==column[5]:
+                                        _, created = Parent.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+                            pass
+                    elif selected_user == '6':
+                        if ',' in data_set:
+                            for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+                                if column[0]:
+                                    if column[4]==column[5]:
+                                        if column[7] and column[8]:
+                                            _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[7]), second_parent=Parent.objects.get(tell_me_user_id=column[8]), tell_me_user_id=column[6])
+                                        else:
+                                            _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+                        elif ';' in data_set:
+                            for column in csv.reader(io_string, delimiter=';', quotechar='|'):
+                                if column[0]:
+                                    if column[4]==column[5]:
+                                        if column[7] and column[8]:
+                                            _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[7]), second_parent=Parent.objects.get(tell_me_user_id=column[8]), tell_me_user_id=column[6])
+                                        else:
+                                            _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+                    messages.success(request, 'Usuários criados com sucesso!')
+                    return redirect('/users/create_user')
+                else:
+                    messages.error(request, 'Nenhum arquivo enviado!')
+                    return redirect('/users/create_user')
+            else:
+                if form.is_valid():
+                    user = form.save(commit=False)
+                    user.save()
+                    user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
+                    if selected_user == '1':
+                        if form2.is_valid():
+                            user_creation = form2.save(commit=False)
+                            user_creation.profile = user_profile
+                            user_creation.name = user_profile.first_name+' '+user_profile.last_name
+                            user_creation.save()
+                            messages.success(request, 'Usuário Criado com sucesso!')
+                    elif selected_user == '2':
+                        if form3.is_valid():
+                            user_creation = form3.save(commit=False)
+                            user_creation.profile = user_profile
+                            user_creation.name = user_profile.first_name+' '+user_profile.last_name
+                            user_creation.save()
+                            messages.success(request, 'Usuário Criado com sucesso!')
+                    elif selected_user == '3':
+                        if form4.is_valid():
+                            user_creation = form4.save(commit=False)
+                            user_creation.profile = user_profile
+                            user_creation.name = user_profile.first_name+' '+user_profile.last_name
+                            user_creation.save()
+                            messages.success(request, 'Usuário Criado com sucesso!')
+                    elif selected_user == '4':
+                        if form5.is_valid():
+                            user_creation = form5.save(commit=False)
+                            user_creation.profile = user_profile
+                            user_creation.name = user_profile.first_name+' '+user_profile.last_name
+                            user_creation.save()
+                            messages.success(request, 'Usuário Criado com sucesso!')
+                    elif selected_user == '5':
+                        if form6.is_valid():
+                            user_creation = form6.save(commit=False)
+                            user_creation.profile = user_profile
+                            user_creation.name = user_profile.first_name+' '+user_profile.last_name
+                            user_creation.save()
+                            messages.success(request, 'Usuário Criado com sucesso!')
+                    elif selected_user == '6':
+                        if form7.is_valid():
+                            user_creation = form7.save(commit=False)
+                            user_creation.profile = user_profile
+                            user_creation.name = user_profile.first_name+' '+user_profile.last_name
+                            user_creation.save()
+                            messages.success(request, 'Usuário criado com sucesso!')
+                    return redirect('/users/create_user')
         return render(request, 'school_users/createuser.html', {'form':form,'form2':form2,'form3':form3,'form4':form4,'form5':form5,'form6':form6,'form7':form7})
     elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
         schools = None
@@ -100,59 +206,166 @@ def create_user(request):
         school_to_add = None
         if School.objects.filter(school_id=selected_school).count()>=1:
             school_to_add = School.objects.get(school_id=selected_school)
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.save()
-            user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
-            if selected_user == '1':
-                if form2.is_valid():
-                    user_creation = form2.save(commit=False)
-                    user_creation.profile = user_profile
-                    user_creation.name = user_profile.first_name+' '+user_profile.last_name
-                    user_creation.save()
-                    messages.success(request, 'Usuário Criado com sucesso')
-            elif selected_user == '2':
-                if form3.is_valid():
-                    user_creation = form3.save(commit=False)
-                    user_creation.profile = user_profile
-                    user_creation.name = user_profile.first_name+' '+user_profile.last_name
-                    user_creation.save()
-                    messages.success(request, 'Usuário Criado com sucesso')
-            elif selected_user == '3':
-                if form4.is_valid():
-                    user_creation = form4.save(commit=False)
-                    user_creation.profile = user_profile
-                    user_creation.name = user_profile.first_name+' '+user_profile.last_name
-                    user_creation.save()
-                    new_teacher = Teacher.objects.get(profile=user_profile)
-                    if school_to_add:
-                        school_to_add.teachers.add(new_teacher)
-                    messages.success(request, 'Usuário Criado com sucesso')
-            elif selected_user == '4':
-                if form5.is_valid():
-                    user_creation = form5.save(commit=False)
-                    user_creation.profile = user_profile
-                    user_creation.name = user_profile.first_name+' '+user_profile.last_name
-                    user_creation.save()
-                    messages.success(request, 'Usuário Criado com sucesso')
-            elif selected_user == '5':
-                if form6.is_valid():
-                    user_creation = form6.save(commit=False)
-                    user_creation.profile = user_profile
-                    user_creation.name = user_profile.first_name+' '+user_profile.last_name
-                    user_creation.save()
-                    messages.success(request, 'Usuário Criado com sucesso')
-            elif selected_user == '6':
-                if form7.is_valid():
-                    user_creation = form7.save(commit=False)
-                    user_creation.profile = user_profile
-                    user_creation.name = user_profile.first_name+' '+user_profile.last_name
-                    user_creation.save()
-                    new_student = Student.objects.get(profile=user_profile)
-                    if school_to_add:
-                        school_to_add.students.add(new_student)
-                    messages.success(request, 'Usuário Criado com sucesso')
-            return redirect('/users/create_user')
+        csv_file = request.FILES.get('file' or None)
+        if request.method == 'POST':
+
+            yesorno = request.POST.get('sim/não' or None)
+            # archive_type = request.POST.get('archive_type' or None)
+            if yesorno == 'sim':
+                # if archive_type == 'url':
+                #     url = request.POST.get('url')
+                #     csv_file = r = requests.get(url)
+                #     if not url.endswith('.csv'):
+                #         messages.warning(request, 'O arquivo enviado não é CSV')
+                #         return redirect('/users/create_user')
+                #     data_set = csv_file.content.decode('UTF-8')
+                # elif archive_type == 'file':
+                #     csv_file = request.FILES.get('file' or None)
+                #     if not csv_file.name.endswith('.csv'):
+                #         messages.warning(request, 'O arquivo enviado não é CSV')
+                #         return redirect('/users/create_user')
+                #     data_set = csv_file.read().decode('UTF-8')
+                if csv_file:
+                    if not csv_file.name.endswith('.csv'):
+                        messages.warning(request, 'O arquivo enviado não é CSV')
+                        return redirect('/users/create_user')
+                    data_set = csv_file.read().decode('UTF-8')
+                    io_string = io.StringIO(data_set)
+                    next(io_string)
+                    if selected_user == '1':
+                        if ',' in data_set:
+                            for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+                                if column[0]:
+                                    if column[4]==column[5]:
+                                        _, created = Head.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+                        elif ';' in data_set:
+                            for column in csv.reader(io_string, delimiter=';', quotechar='|'):
+                                if column[0]:
+                                    if column[4]==column[5]:
+                                        _, created = Head.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+                    elif selected_user == '2':
+                        if ',' in data_set:
+                            for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+                                if column[0]:
+                                    if column[4]==column[5]:
+                                        _, created = Teacher.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+                                        school_to_add.teachers.add(_)
+                        elif ';' in data_set:
+                            for column in csv.reader(io_string, delimiter=';', quotechar='|'):
+                                if column[0]:
+                                    if column[4]==column[5]:
+                                        _, created = Teacher.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+                                        school_to_add.teachers.add(_)
+                            pass
+                    elif selected_user == '3':
+                        if ',' in data_set:
+                            for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+                                if column[0]:
+                                    if column[4]==column[5]:
+                                        _, created = Admin.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+                        elif ';' in data_set:
+                            for column in csv.reader(io_string, delimiter=';', quotechar='|'):
+                                if column[0]:
+                                    if column[4]==column[5]:
+                                        _, created = Admin.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+                    elif selected_user == '4':
+                        if ',' in data_set:
+                            for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+                                if column[0]:
+                                    if column[4]==column[5]:
+                                        _, created = Supervisor.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+                        elif ';' in data_set:
+                            for column in csv.reader(io_string, delimiter=';', quotechar='|'):
+                                if column[0]:
+                                    if column[4]==column[5]:
+                                        _, created = Supervisor.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+                    elif selected_user == '5':
+                        if ',' in data_set:
+                            for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+                                if column[0]:
+                                    if column[4]==column[5]:
+                                        _, created = Parent.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+                        elif ';' in data_set:
+                            for column in csv.reader(io_string, delimiter=';', quotechar='|'):
+                                if column[0]:
+                                    if column[4]==column[5]:
+                                        _, created = Parent.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+                    elif selected_user == '6':
+                        if ',' in data_set:
+                            for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+                                if column[0]:
+                                    if column[4]==column[5]:
+                                        if column[7] and column[8]:
+                                            _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[7]), second_parent=Parent.objects.get(tell_me_user_id=column[8]), tell_me_user_id=column[6])
+                                        else:
+                                            _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+                                        school_to_add.students.add(_)
+                        elif ';' in data_set:
+                            for column in csv.reader(io_string, delimiter=';', quotechar='|'):
+                                if column[0]:
+                                    if column[4]==column[5]:
+                                        if column[7] and column[8]:
+                                            _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[7]), second_parent=Parent.objects.get(tell_me_user_id=column[8]), tell_me_user_id=column[6])
+                                        else:
+                                            _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+                                        school_to_add.students.add(_)
+                    messages.success(request, 'Usuários criados com sucesso!')
+                    return redirect('/users/create_user')
+                else:
+                    messages.error(request, 'Nenhum arquivo enviado!')
+                    return redirect('/users/create_user')
+            elif yesorno == 'não':
+                if form.is_valid():
+                    user = form.save(commit=False)
+                    user.save()
+                    user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
+                    if selected_user == '1':
+                        if form2.is_valid():
+                            user_creation = form2.save(commit=False)
+                            user_creation.profile = user_profile
+                            user_creation.name = user_profile.first_name+' '+user_profile.last_name
+                            user_creation.save()
+                            messages.success(request, 'Usuário Criado com sucesso!')
+                    elif selected_user == '2':
+                        if form3.is_valid():
+                            user_creation = form3.save(commit=False)
+                            user_creation.profile = user_profile
+                            user_creation.name = user_profile.first_name+' '+user_profile.last_name
+                            user_creation.save()
+                            teacher_to_add = Teacher.objects.get(profile=user_profile)
+                            school_to_add.teachers.add(teacher_to_add)
+                            messages.success(request, 'Usuário Criado com sucesso!')
+                    elif selected_user == '3':
+                        if form4.is_valid():
+                            user_creation = form4.save(commit=False)
+                            user_creation.profile = user_profile
+                            user_creation.name = user_profile.first_name+' '+user_profile.last_name
+                            user_creation.save()
+                            messages.success(request, 'Usuário Criado com sucesso!')
+                    elif selected_user == '4':
+                        if form5.is_valid():
+                            user_creation = form5.save(commit=False)
+                            user_creation.profile = user_profile
+                            user_creation.name = user_profile.first_name+' '+user_profile.last_name
+                            user_creation.save()
+                            messages.success(request, 'Usuário Criado com sucesso!')
+                    elif selected_user == '5':
+                        if form6.is_valid():
+                            user_creation = form6.save(commit=False)
+                            user_creation.profile = user_profile
+                            user_creation.name = user_profile.first_name+' '+user_profile.last_name
+                            user_creation.save()
+                            messages.success(request, 'Usuário Criado com sucesso!')
+                    elif selected_user == '6':
+                        if form7.is_valid():
+                            user_creation = form7.save(commit=False)
+                            user_creation.profile = user_profile
+                            user_creation.name = user_profile.first_name+' '+user_profile.last_name
+                            user_creation.save()
+                            student_to_add = Student.objects.get(profile=user_profile)
+                            school_to_add.students.add(student_to_add)
+                            messages.success(request, 'Usuário criado com sucesso!')
+                    return redirect('/users/create_user')
         return render(request, 'school_users/createuser.html', {'form':form,'form2':form2,'form3':form3,'form4':form4,'form5':form5,'form6':form6,'form7':form7,'is_supervisor':is_supervisor, 'schools':schools})
     return HttpResponse('U cannot access this page cos u are not admin!')
 
@@ -164,7 +377,7 @@ def create_head_to_school(request, school_id=None):
         form2 = HeadModelForm(request.POST or None)
         head_users = Head.objects.all()
         selected_user = request.POST.get('selected_user', 0)
-        if selected_user == '0':
+        if selected_user == '0' or selected_user == 0:
             if form.is_valid() and form2.is_valid():
                 user = form.save(commit=False)
                 user.save()
@@ -194,7 +407,7 @@ def create_supervisor_to_school(request, school_id=None):
         form2 = SupervisorModelForm(request.POST or None)
         supervisor_users = Supervisor.objects.all()
         selected_user = request.POST.get('selected_user', 0)
-        if selected_user == '0':
+        if selected_user == '0' or selected_user == 0:
             if form.is_valid() and form2.is_valid():
                 user = form.save(commit=False)
                 user.save()
@@ -361,8 +574,10 @@ def seeallusers(request):
         parent_users = []
         supervisor_users = []
         for school in schools:
-            head_users += [(school.head)]
-            supervisor_users += [(school.adminorsupervisor)]
+            if school.head not in head_users:
+                head_users += [(school.head)]
+            if school.adminorsupervisor not in supervisor_users:
+                supervisor_users += [(school.adminorsupervisor)]
             teacher_users += school.teachers.all()
             student_users += school.students.all()
             for student in school.students.all():
@@ -430,7 +645,8 @@ def set_parents(request, student_id=None):
 
 def do_login(request):
     if request.method == 'POST':
-        user = authenticate(username=request.POST['username'], password=request.POST['password'])
+        username = request.POST['username'].lower()
+        user = authenticate(username=username, password=request.POST['password'])
         if user is not None:
             login(request, user)
             nextpage = request.GET.get('next','/contracts/seeallcontracts')
@@ -497,3 +713,8 @@ def seeallusers_rest(request):
 def do_logout(request):
     logout(request)
     return redirect('/users/login')
+
+@csrf_exempt
+@api_view(['GET','POST'])
+def get_data(request, mydataserialized, message, type_of_message):
+    return Response({'message':message, 'type_of_message':type_of_message,'data_serialised':mydataserialized.data})

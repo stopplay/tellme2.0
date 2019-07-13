@@ -20,6 +20,7 @@ class School(models.Model):
 	students = models.ManyToManyField(Student)
 	teachers = models.ManyToManyField(Teacher)
 	parents = models.ManyToManyField(Parent)
+	app_name = models.TextField(null=True, blank=True, verbose_name = 'Nome do App')
 
 class Class(models.Model):
 	"""docstring for Class"""

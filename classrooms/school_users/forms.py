@@ -12,9 +12,10 @@ class UserModelForm(UserCreationForm, forms.ModelForm):
 		fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2')
 		def save(self, commit=True):
 			user = super(UserModelForm, self).save(commit=False)
+			user.username = self.cleaned_data['username'].lower()
 			user.first_name = self.cleaned_data['first_name']
 			user.last_name = self.cleaned_data['last_name']
-			user.email = self.cleaned_data['email']
+			user.email = self.cleaned_data['email'].lower()
 
 			if commit:
 				user.save()

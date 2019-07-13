@@ -15,7 +15,7 @@
                     <div class="card-body">
                         <form>
                             <div class="row">
-                                <div class="col-md-4 pr-1">
+                                <div class="col-md-5 pr-1">
                                     <div class="form-group">
                                         <label>ID DO CONTRATO</label>
                                         {% if contract.contract_id_sponte %}
@@ -26,7 +26,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-4 px-1">
+                                <div class="col-md-5 px-1">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">ID DO CONTRATO DE AULA LIVRE SPONTE</label>
                                         {% if contract.contract_free_class_id_sponte %}
@@ -295,7 +295,7 @@
                             </div>
 
 
-                            {% if request.user.is_superuser %}
+                            {% if request.user.is_superuser or is_supervisor %}
                             <div class="row">
                               <div class="col-md-4 pr-1">
                                 <div class="form-group">
@@ -413,7 +413,11 @@
                               <div class="col-md-12">
                                 <div class="form-group">
                                     <label>NOME DO ALUNO</label>
-                                    <input type="text" class="form-control" disabled="" placeholder="" value="{{student.name}}">
+                                    {% if contract.student_name %}
+                                    <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.student_name}}">
+                                    {% else %}
+                                    <input type="text" class="form-control" disabled="" placeholder="">
+                                    {% endif %}
                                 </div>
                               </div>
 

@@ -27,10 +27,17 @@
                         <table class="table table-hover table-striped display row-border mb-4" id="contractstable">
                           <thead>
                       			<tr>
+                              {% if is_supervisor %}
+                              <th><input id="check" type="checkbox" name="select_all"></th>
+                              {% endif %}
                               <th>Id do Contrato</th>
                       				<th>Nome do Contrato</th>
                       				<th>Data do Contrato</th>
+                              <th>Escola</th>
+                              <th>Classe</th>
+                              <th>Nome do Estudante</th>
                       				<th >Contrato</th>
+                              <th>Email Enviado</th>
                               <th>Assinaturas</th>
                       				<th >Ações</th>
                       			</tr>
@@ -38,14 +45,44 @@
                       		<tbody class="">
                       			{% for contract in contracts %}
                       			<tr class="pb-5">
+                              {% if is_supervisor %}
+                                <td>
+                                  {% if contract.counter_signed %}
+                                    <label><input type="checkbox" name="checks" value="{{ contract.contract_id }}" checked></label>
+                                  {% else %}
+                                    <input type="checkbox" name="checks" value="{{ contract.contract_id }}">
+                                  {% endif %}
+                                </td>
+                              {% endif %}
                               <th>{{contract.contract_id}}</th>
                       				<th scope="row">{{ contract.name }}</th>
                       				<td>{{ contract.date }}</td>
+                              {% if contract.chain %}
+                              {% for school in schools %}
+                                {% if contract.chain in school.chains.all %}
+                                  <td>{{ school.school_name }}</td>
+                                {% endif %}
+                                {% for classe in school.classes.all %}
+                                  {% if contract.chain.id == classe.class_id %}
+                                    <td>{{ classe.class_name }}</td>
+                                  {% endif %}
+                                {% endfor %}
+                              {% endfor %}
+                              {% else %}
+                              <td></td>
+                              <td></td>
+                              {% endif %}
+                              {% if contract.student_name %}
+                              <td>{{ contract.student_name }}</td>
+                              {% else %}
+                              <td></td>
+                              {% endif %}
                               <td>
                               {% if contract.pdf %}
-                      				  <a href="{{ contract.pdf.url }}">{{ contract.pdf }}</a>
+                      				  <a href="{% url 'contracts:serve_protected' contract.pdf.name contract.contract_id %}" data-baloon="Remove this item from the cart">{{ contract.pdf }}</a>
                               {% endif %}
                               </td>
+                              <td><label>{% if contract.email_sent %} Enviado {% else %} {% if contract.sent_date %} Email Agendado Para {{ contract.sent_date.day }}/{{ contract.sent_date.month }}/{{ contract.sent_date.year }} às {{ contract.sent_date.hour }}:{% if contract.sent_date.minute < 10 %}0{{ contract.sent_date.minute }}{% else %}{{ contract.sent_date.minute }}{% endif %}{% else %}-{% endif %}{% endif %}</label></td>
 
                               <td><!--sign-->
 
@@ -113,8 +150,7 @@
                                     {% endif %}
                                   </div>
                                 </div>
-                                {% if contract.first_auth_signed or contract.second_auth_signed or contract.counter_signed %}
-                                {% else %}
+                               
                                 <div class="btn-tollbar">
 
                       						<div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
@@ -123,7 +159,6 @@
 
 
                       					</div>
-                                {% endif %}
                                 {% else %}
                                 {% if is_supervisor %}
                                   {% if contract.counter_signed %}
@@ -179,14 +214,26 @@
                                     {% endif %}
                                   {% endif %}
                                 {% endif %}
+                                  {% if is_supervisor %}
+                                    {% if contract.first_auth_signed or contract.second_auth_signed or contract.counter_signed %}
+                                    <p><div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
+                                  <a class="btn btn-secondary btn-sm" href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart">Detalhes do Contrato</a>
+                                </div></p>
+                                  {% else %}
+                                  <div class="dropdown show">
+                                    <p><a class="btn btn-secondary dropdown-toggle btn-sm" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                      Ações
+                                    </a></p>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                      <a class="dropdown-item" href="{% url 'contracts:updatecontract' contract.contract_id %}" data-baloon="Remove this item from the cart">Deletar Contrato</a>
+                                      <a class="dropdown-item" href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart">Detalhes do Contrato</a>
+
+                                    </div>
+                                    {% endif %}
+                                    {% else %}
                                     <div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
-                                        <button type="button" class="btn btn-dark btn-sm btn-block"><a href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-light">Detalhes do Contrato</a></button>
-                                      </div>
-                                    {% if is_supervisor %}
-                                      {% if contract.counter_signed %}
-                                      {% else %}
-                                        <input type="checkbox" name="checks" value="{{ contract.contract_id }}">
-                                      {% endif %}
+                                      <a class="btn btn-secondary btn-sm" href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart">Detalhes do Contrato</a>
+                                    </div>
                                     {% endif %}
 
                       				</td>
@@ -198,6 +245,7 @@
                       			</tr>
                       		</tbody>
                         </table>
+                        <input type="hidden" name="variable" id="variable" value=false>
                     </div>
                     {% if is_supervisor %}
                       <button type="submit" class="btn btn-dark btn-sm btn-block">Assinar Contratos Selecionados</button>
@@ -213,5 +261,29 @@
   $(document).ready( function () {
     $('#contractstable').DataTable();
 } );
+</script>
+<script type="text/javascript">
+  $(document).ready(function () {
+    $('#check').on('change',function () {
+        var table = $('#contractstable');
+        var check = document.getElementsByName('select_all');
+        var checkboxes = table.children('tbody').children('tr').children('th').children('input');
+        if (check[0].checked == true) {
+            document.getElementById('variable').value = true;
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i].type == 'checkbox') {
+                    checkboxes[i].checked = true;
+                }
+            }
+        } else {
+            document.getElementById('variable').value = false;
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i].type == 'checkbox') {
+                    checkboxes[i].checked = false;
+                }
+            }
+        }
+    });
+ });
 </script>
 {% endblock %}

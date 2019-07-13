@@ -32,7 +32,7 @@ class ChainSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Chain
-        fields = ('name', 'block_set')
+        fields = '__all__'
 
 
 class PeerSerializer(serializers.ModelSerializer):

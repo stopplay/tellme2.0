@@ -47,4 +47,7 @@ class Contract(models.Model):
 	counter_auth_hash = models.CharField(max_length=255, null=True, blank=True)
 	slm = models.TextField(null=True, blank=True)
 	chain = models.ForeignKey('block.Chain', on_delete=models.SET_NULL, null=True, blank=True, verbose_name = 'Cadeia da Classe')
+	email_sent = models.BooleanField(default=False)
+	sent_date = models.DateTimeField(blank=True, null=True)
+	student_name = models.TextField(null=True, blank=True)
 	# end of Basic data of the contract #

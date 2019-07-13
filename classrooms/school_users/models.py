@@ -7,6 +7,7 @@ class Head(models.Model):
 	head_id = models.AutoField(primary_key = True)
 	name = models.CharField(max_length = 750, null=True, blank=True)
 	profile = models.OneToOneField(User, on_delete = models.SET_NULL, null=True, blank=True)
+	tell_me_user_id = models.IntegerField(null=True, blank=True)
 
 	def __str__(self):
 		return '{}'.format(self.name)
@@ -39,6 +40,7 @@ class Teacher(models.Model):
 	maritial_status_sponte = models.TextField(null=True, blank=True)
 	add_on_address_sponte = models.TextField(null=True, blank=True)
 	profile = models.OneToOneField(User, on_delete = models.SET_NULL, null=True, blank=True)
+	tell_me_user_id = models.IntegerField(null=True, blank=True)
 
 	def __str__(self):
 		return '{}'.format(self.name)
@@ -48,6 +50,7 @@ class Admin(models.Model):
 	admin_id = models.AutoField(primary_key = True)
 	name = models.CharField(max_length = 750, null=True, blank=True)
 	profile = models.OneToOneField(User, on_delete = models.SET_NULL, null=True, blank=True)
+	tell_me_user_id = models.IntegerField(null=True, blank=True)
 
 	def __str__(self):
 		return '{}'.format(self.name)
@@ -57,6 +60,7 @@ class Supervisor(models.Model):
 	supervisor_id = models.AutoField(primary_key = True)
 	name = models.CharField(max_length = 750, null=True, blank=True)
 	profile = models.OneToOneField(User, on_delete = models.SET_NULL, null=True, blank=True)
+	tell_me_user_id = models.IntegerField(null=True, blank=True)
 
 	def __str__(self):
 		return '{}'.format(self.name)
@@ -82,6 +86,7 @@ class Parent(models.Model):
 	profile = models.OneToOneField(User, on_delete = models.SET_NULL, null=True, blank=True)
 	authorised = models.BooleanField(default=False)
 	relationship = models.TextField(null=True, blank=True)
+	tell_me_user_id = models.IntegerField(null=True, blank=True)
 
 	def __str__(self):
 		return '{}'.format(self.name)
@@ -119,6 +124,7 @@ class Student(models.Model):
 	profile = models.OneToOneField(User, on_delete = models.SET_NULL, null=True, blank=True)
 	first_parent = models.ForeignKey('Parent', on_delete = models.SET_NULL, null=True, blank=True, related_name='first_parent', verbose_name='Responsável Financeiro')
 	second_parent = models.ForeignKey('Parent', on_delete = models.SET_NULL, null=True, blank=True, related_name='second_parent', verbose_name='Responsável Didático')
+	tell_me_user_id = models.IntegerField(null=True, blank=True)
 
 	def __str__(self):
 		return '{}'.format(self.name)

@@ -113,7 +113,7 @@ def update_school(request, school_id=None):
 		form = SchoolModelForm(request.POST or None, instance=instance)
 		if form.is_valid():
 			school = form.save(commit=False)
-			school.save(update_fields=['school_name', 'head', 'sponte_client_number', 'country', 'state', 'city'])
+			school.save(update_fields=['school_name', 'head', 'sponte_client_number', 'country', 'state', 'city','app_name'])
 			messages.success(request, 'A escola foi atualizada com sucesso!')
 			return redirect('/schools/seeallschools')
 		return render(request, 'school/update_school.html', {'form':form})
@@ -123,7 +123,7 @@ def update_school(request, school_id=None):
 		form = SchoolModelForm(request.POST or None, instance=instance)
 		if form.is_valid():
 			school = form.save(commit=False)
-			school.save(update_fields=['school_name', 'head', 'sponte_client_number', 'country', 'state', 'city'])
+			school.save(update_fields=['school_name', 'head', 'sponte_client_number', 'country', 'state', 'city','app_name'])
 			messages.success(request, 'A escola foi atualizada com sucesso!')
 			return redirect('/schools/seeallschools')
 		return render(request, 'school/update_school.html', {'form':form, 'is_supervisor':is_supervisor})
