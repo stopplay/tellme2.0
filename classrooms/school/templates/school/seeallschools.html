@@ -18,6 +18,8 @@
               <thead >
                 <tr>
                   <th>Nome</th>
+                  <th>Contratos Assinados</th>
+                  <th>Contratos Não Assinados</th>
                   <th >Classes</th>
                   <th >Cadeias</th>
 
@@ -46,6 +48,9 @@
                       </div>
                     </div>
                   </th>
+
+                  <th>{{ school.quantity_of_contracts_signed }}/{{ school.quantity_of_contracts_total }}</th>
+                  <th>{{ school.quantity_of_contracts_not_signed }}/{{ school.quantity_of_contracts_total }}</th>
 
                   {% if school.classes %}
                   <td>

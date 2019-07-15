@@ -1,6 +1,7 @@
 from django.db import models
 from school_users.models import Student, Teacher, Head, Supervisor, Parent
 from block.models import *
+from contract.models import *
 
 # Create your models here.
 class School(models.Model):
@@ -21,6 +22,42 @@ class School(models.Model):
 	teachers = models.ManyToManyField(Teacher)
 	parents = models.ManyToManyField(Parent)
 	app_name = models.TextField(null=True, blank=True, verbose_name = 'Nome do App')
+
+	@property
+	def quantity_of_contracts_signed(self):
+		count = 0
+		for chain in self.chains.all():
+			contracts = Contract.objects.filter(chain=chain)
+			if contracts:
+				for contract in contracts:
+					if contract.first_auth_signed and contract.second_auth_signed and contract.counter_signed and contract.all_signed:
+						count+=1
+		return count
+
+	@property
+	def quantity_of_contracts_total(self):
+		count = 0
+		for chain in self.chains.all():
+			contracts = Contract.objects.filter(chain=chain)
+			count+=contracts.count()
+		return count
+
+	@property
+	def quantity_of_contracts_not_signed(self):
+		count = 0
+		for chain in self.chains.all():
+			contracts = Contract.objects.filter(chain=chain)
+			if contracts:
+				for contract in contracts:
+					if not (contract.first_auth_signed and contract.second_auth_signed and contract.counter_signed and contract.all_signed):
+						count+=1
+		return count
+	
+	
+	
+
+	def __str__(self):
+		return self.class_name
 
 class Class(models.Model):
 	"""docstring for Class"""
