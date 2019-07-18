@@ -370,6 +370,7 @@ def seemycontracts(request):
 				if School.objects.get(chains__id__exact=contract.chain.id) not in schools:
 					schools+=[(School.objects.get(chains__id__exact=contract.chain.id))]
 	elif Head.objects.filter(profile=request.user).count()>=1:
+		pdb.set_trace()
 		is_supervisor = True
 		contracts = Contract.objects.filter(counter_signe=Head.objects.get(profile=request.user))
 		for contract in contracts:
