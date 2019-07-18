@@ -6,15 +6,13 @@ class ContractModelFormWithSponte(forms.ModelForm):
 	"""docstring for ManagerModelForm"""
 	class Meta:
 		model = Contract
-		fields = ['name', 'date', 'pdf', 'terms_of_contract', 'terms_of_contract_2', 'chain', 'slm', 'contract_free_class_id_sponte', 'situation_id_sponte', 'situation_sponte', 'student_name_sponte', 'student_id_sponte', 'course_id_sponte', 'class_id_sponte', 'class_name_sponte', 'course_name_sponte', 'contract_type_id', 'initial_date_sponte', 'end_date_sponte', 'date_of_registration_sponte', 'type_of_registration_sponte', 'contractor_sponte', 'name_of_curricular_matrix_sponte', 'financial_launched_sponte', 'contract_number_sponte', 'closing_date_sponte']
+		fields = ['chain', 'date', 'pdf', 'terms_of_contract', 'terms_of_contract_2', 'contract_free_class_id_sponte', 'situation_id_sponte', 'situation_sponte', 'student_name_sponte', 'student_id_sponte', 'course_id_sponte', 'class_id_sponte', 'class_name_sponte', 'course_name_sponte', 'contract_type_id', 'initial_date_sponte', 'end_date_sponte', 'date_of_registration_sponte', 'type_of_registration_sponte', 'contractor_sponte', 'name_of_curricular_matrix_sponte', 'financial_launched_sponte', 'contract_number_sponte', 'closing_date_sponte']
 		widgets = {
-			'name': forms.TextInput(attrs={'maxlength':255, 'class':'labelandform', 'required':True}),
 			'date': forms.DateInput(attrs={'type':'date', 'class':'labelandform', 'required':True, 'style':"width:120%"}),
 			'chain': forms.Select(attrs={'class':'chosen-select', 'required':True}),
 			'pdf': forms.FileInput(attrs={'required':True}),
 			'terms_of_contract': forms.FileInput(attrs={'required':False}),
 			'terms_of_contract_2': forms.FileInput(attrs={'required':False}),
-			'slm': forms.TextInput(attrs={'required':False}),
 			'contract_free_class_id_sponte': forms.NumberInput(attrs={'required':True}),
 			'situation_id_sponte': forms.NumberInput(attrs={'required':True}),
 			'situation_sponte': forms.TextInput(attrs={'required':True}),
@@ -40,13 +38,11 @@ class ContractModelFormWithoutSponte(forms.ModelForm):
 	"""docstring for ManagerModelForm"""
 	class Meta:
 		model = Contract
-		fields = ['name', 'date', 'pdf', 'terms_of_contract', 'terms_of_contract_2', 'chain', 'slm']
+		fields = ['chain', 'date', 'pdf', 'terms_of_contract', 'terms_of_contract_2']
 		widgets = {
-			'name': forms.TextInput(attrs={'maxlength':255, 'class':'labelandform', 'required':True}),
 			'date': forms.DateInput(attrs={'type':'date', 'class':'labelandform', 'required':True, 'style':"width:120%"}),
 			'chain': forms.Select(attrs={'class':'chosen-select', 'required':True}),
 			'pdf': forms.FileInput(attrs={'required':True}),
 			'terms_of_contract': forms.FileInput(attrs={'required':False}),
 			'terms_of_contract_2': forms.FileInput(attrs={'required':False}),
-			'slm': forms.TextInput(attrs={'required':False}),
 		}

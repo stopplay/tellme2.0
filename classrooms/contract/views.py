@@ -127,6 +127,9 @@ def createacontract(request):
 				wish_today = request.POST.get('wish_today' or None)
 				contract = form.save(commit=False)
 				school = School.objects.get(chains__name__exact=contract.chain.name)
+				classe = Class.objects.get(class_id=contract.chain.id)
+				contract.slm = classe.slm
+				contract.name = student.name+' - '+contract.chain.name
 				if student.first_parent and student.second_parent:
 					contract.counter_signe = school.head
 					contract.first_auth_signe = student.first_parent
@@ -184,6 +187,9 @@ def createacontract(request):
 				wish_today = request.POST.get('wish_today' or None)
 				contract = form.save(commit=False)
 				school = School.objects.get(chains__name__exact=contract.chain.name)
+				classe = Class.objects.get(class_id=contract.chain.id)
+				contract.slm = classe.slm
+				contract.name = student.name+' - '+contract.chain.name
 				if student.first_parent and student.second_parent:
 					contract.counter_signe = school.head
 					contract.first_auth_signe = student.first_parent
