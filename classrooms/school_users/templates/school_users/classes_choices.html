@@ -1,0 +1,4 @@
+<option value="">Selecione a Classe</option>
+{% for class in classes %}
+	<option value="{{ class.class_id }}">{{ class.class_name }}</option>
+{% endfor %}

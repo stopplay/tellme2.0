@@ -1,6 +1,6 @@
 {% extends 'base.html'%}
 
-{% block title %} Criar um novo Admin/Supervisor para a escola {{ school.school_name }} {% endblock %}
+{% block title %} Adicionar/Selecionar um novo Usuário(Administrador/Supervisor) para a escola {{ school.school_name }} {% endblock %}
 
 {% block content %}
 <script>
@@ -16,7 +16,7 @@ $(document).ready(function() {
 			<div class="col-md-8">
 				<div class="card">
 					<div class="card-header">
-						<h4 class="card-title">Adicionar/Selecionar um novo Admin/Supervisor para a escola {{ school.school_name }}</h4>
+						<h4 class="card-title">Adicionar/Selecionar um novo Usuário(Administrador/Supervisor) para a escola {{ school.school_name }}</h4>
 					</div>
 					<div class="card-body">
 						<div class="row">
@@ -26,14 +26,16 @@ $(document).ready(function() {
 										<div class="clearfix"></div>
 										<div class="labelandform">
 										<select class="custom-select chosen-select" id="select_form">
-											<option id="" value="" selected>Você deseja selecionar um administrador/supervisor existente?</option>
+											<option id="" value="" selected>Você deseja selecionar um usuário(administrador/supervisor) existente?</option>
 											<option value="sim">Sim</option>
 											<option value="não">Não</option>
+											<option value="não_aplicável">Não Aplicável</option>
 										</select>
 									</div>
 									<div id="pai">
 									</div>
 									<input type="hidden" id="selected_user" name="selected_user" value="0">
+									<input type="hidden" id="aplicável" name="aplicável" value="true">
                   <div class="clearfix"></div>
 								</form>
 								</div>
@@ -59,12 +61,22 @@ $(document).ready(function() {
 			}
 			else if(selectValor == 'sim'){
 				$('#pai').children('#não').remove();
-				$('#pai').append('<div id="sim"><select class="custom-select chosen-select" id="select_supervisor" onchange="selectUser(this)"><option id="" value="" selected>Selecione o supervisor que você deseja</option>{% for supervisor in supervisor_users %}<option value="{{ supervisor.supervisor_id }}">{{ supervisor.name }}</option>{% endfor %}</select><br><button class="btn btn-info btn-fill pull-left" type="submit">Selecionar Admin/Supervisor</button></div>');
+				$('#pai').children('#não_aplicável').remove();
+				$('#pai').append('<div id="sim"><select class="custom-select chosen-select" id="select_supervisor" onchange="selectUser(this)"><option id="" value="" selected>Selecione o supervisor que você deseja</option>{% for supervisor in supervisor_users %}<option value="{{ supervisor.supervisor_id }}">{{ supervisor.name }}</option>{% endfor %}</select><br><button class="btn btn-info btn-fill pull-left" type="submit" style="background-color: #213f99; border-color: #213f99">Selecionar Admin/Supervisor</button></div>');
+				document.getElementById('aplicável').value = true
 			}
 			else if(selectValor == 'não'){
 				$('#pai').children('#sim').remove();
-				$('#pai').append('<div id="não"><p><div class="form-group"><label>Nome: </label><div class="">{{ form.first_name }}</div></div><div class="form-group"><label>Sobrenome: </label><div class="">{{ form.last_name }}</div></div><div class="form-group"><label>Email: </label><div class="">{{ form.email }}</div></div><div class="form-group"><label>Nome de Usuário: </label><div class="">{{ form.username }}</div></div><div class="form-group"><label>Senha: </label><div class="">{{ form.password1 }}</div></div><div class="form-group"><label>Confirmação de Senha: </label><div class="">{{ form.password2 }}</div></div><div><button class="btn btn-info btn-fill pull-left" type="submit">Criar Usuário</button></div></p>')
+				$('#pai').children('#não_aplicável').remove();
+				$('#pai').append('<div id="não"><p><div class="form-group"><label>Nome: </label><div class="">{{ form.first_name }}</div></div><div class="form-group"><label>Sobrenome: </label><div class="">{{ form.last_name }}</div></div><div class="form-group"><label>Email: </label><div class="">{{ form.email }}</div></div><div class="form-group"><label>Nome de Usuário: </label><div class="">{{ form.username }}</div></div><div class="form-group"><label>Senha: </label><div class="">{{ form.password1 }}</div></div><div class="form-group"><label>Confirmação de Senha: </label><div class="">{{ form.password2 }}</div></div><div><button class="btn btn-info btn-fill pull-left" type="submit" style="background-color: #213f99; border-color: #213f99">Criar Usuário</button></div></p></div>')
 				document.getElementById('selected_user').value = '0'
+				document.getElementById('aplicável').value = true
+			}
+			else if(selectValor == 'não_aplicável'){
+				$('#pai').append('<div id="não_aplicável"><p><div><button class="btn btn-info btn-fill pull-left" type="submit" style="background-color: #213f99; border-color: #213f99">Setar valor do usuário</button></div></p></div>')
+				$('#pai').children('#sim').remove();
+				$('#pai').children('#não').remove();
+				document.getElementById('aplicável').value = false
 			}
 			$('#pai').children('div').hide();
 			$('#pai').children('#'+selectValor).show();

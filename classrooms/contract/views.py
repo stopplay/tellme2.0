@@ -109,16 +109,18 @@ def createacontract(request):
 	if request.user.is_superuser:
 		form = ContractModelFormWithoutSponte(request.POST or None, request.FILES)
 		students = Student.objects.all().order_by('name')
+		chains = []
+		selected_user = request.session['selected_user']
+		student = Student.objects.get(student_id = selected_user)
+		for school in School.objects.all():
+			for classe in school.classes.all():
+				if student in classe.students.all():
+					chains += [(classe.class_id)]
+		form.fields["chain"].queryset = Chain.objects.filter(id__in=chains)
 		if request.method == 'POST':
 			if form.is_valid():
 				wish = request.POST.get('wish' or None)
 				wish_today = request.POST.get('wish_today' or None)
-				selected_user = request.POST.get('selected_user', 0)
-				if Student.objects.filter(student_id = selected_user).count()>=1:
-					student = Student.objects.get(student_id = selected_user)
-				else:
-					messages.error(request, 'O estudante não foi selecionado corretamente, por favor, tente novamente!')
-					return redirect('/contracts/createacontract')
 				contract = form.save(commit=False)
 				school = School.objects.get(chains__name__exact=contract.chain.name)
 				if student.first_parent and student.second_parent:
@@ -161,23 +163,17 @@ def createacontract(request):
 		form = ContractModelFormWithoutSponte(request.POST or None, request.FILES)
 		chains = []
 		students_ids = []
+		selected_user = request.session['selected_user']
+		student = Student.objects.get(student_id = selected_user)
 		for school in School.objects.filter(head=Head.objects.get(profile=request.user)):
-			for student in school.students.all():
-				students_ids += [(student.student_id)]
-			for chain in Chain.objects.filter(school=school):
-				chains += [(chain.id)]
+			for classe in school.classes.all():
+				if student in classe.students.all():
+					chains += [(classe.class_id)]
 		form.fields["chain"].queryset = Chain.objects.filter(id__in=chains)
-		students = Student.objects.filter(student_id__in=students_ids)
 		if request.method == 'POST':
 			if form.is_valid():
 				wish = request.POST.get('wish' or None)
 				wish_today = request.POST.get('wish_today' or None)
-				selected_user = request.POST.get('selected_user', 0)
-				if Student.objects.filter(student_id = selected_user).count()>=1:
-					student = Student.objects.get(student_id = selected_user)
-				else:
-					messages.error(request, 'O estudante não foi selecionado corretamente, por favor, tente novamente!')
-					return redirect('/contracts/createacontract')
 				contract = form.save(commit=False)
 				school = School.objects.get(chains__name__exact=contract.chain.name)
 				if student.first_parent and student.second_parent:
@@ -214,7 +210,7 @@ def createacontract(request):
 					messages.success(request, 'Contrato criado com sucesso!')
 					return redirect('/contracts/seeallcontracts')
 				messages.warning(request, 'O estudante não tem pelo menos um dos pais associados a ele!')
-		return render(request, 'contract/createacontract.html', {'form':form, 'students':students, 'is_supervisor':is_supervisor})
+		return render(request, 'contract/createacontract.html', {'form':form, 'is_supervisor':is_supervisor})
 	return HttpResponse('U cannot access this page cos u are not admin!')
 
 @login_required
@@ -362,14 +358,16 @@ def seemycontracts(request):
 		contracts += Contract.objects.filter(first_auth_signe=Parent.objects.get(profile=request.user))
 		contracts += Contract.objects.filter(second_auth_signe=Parent.objects.get(profile=request.user))
 		for contract in contracts:
-			if School.objects.get(chains__id__exact=contract.chain.id) not in schools:
-				schools+=[(School.objects.get(chains__id__exact=contract.chain.id))]
+			if School.objects.filter(chains__id__exact=contract.chain.id).count()>=1:
+				if School.objects.get(chains__id__exact=contract.chain.id) not in schools:
+					schools+=[(School.objects.get(chains__id__exact=contract.chain.id))]
 	elif Head.objects.filter(profile=request.user).count()>=1:
 		is_supervisor = True
 		contracts = Contract.objects.filter(counter_signe=Head.objects.get(profile=request.user))
 		for contract in contracts:
-			if School.objects.get(chains__id__exact=contract.chain.id) not in schools:
-				schools+=[(School.objects.get(chains__id__exact=contract.chain.id))]
+			if School.objects.filter(chains__id__exact=contract.chain.id).count()>=1:
+				if School.objects.get(chains__id__exact=contract.chain.id) not in schools:
+					schools+=[(School.objects.get(chains__id__exact=contract.chain.id))]
 	elif request.user.is_superuser:
 		contracts = Contract.objects.all()
 		schools = School.objects.all()
@@ -384,6 +382,27 @@ def seemycontracts(request):
 			for var in some_var:
 				set_signed(request, var)
 	return render(request, 'contract/seemycontracts.html', {'contracts':contracts, 'is_parent':is_parent, 'is_supervisor':is_supervisor, 'schools':schools})
+
+@login_required
+def select_student_to_contract(request):
+	if request.user.is_superuser:
+		students = Student.objects.all()
+		if request.method == 'POST':
+			selected_user = request.POST.get('selected_user' or None)
+			request.session['selected_user'] = selected_user
+			return redirect('/contracts/createacontract')
+		return render(request, 'contract/select_student_to_contract.html', {'students':students})
+	elif Head.objects.filter(profile=request.user).count()>=1:
+		students_ids = []
+		for school in School.objects.filter(head=Head.objects.get(profile=request.user)):
+			for student in school.students.all():
+				students_ids += [(student.student_id)]
+		students = Student.objects.filter(student_id__in=students_ids)
+		if request.method == 'POST':
+			selected_user = request.POST.get('selected_user' or None)
+			request.session['selected_user'] = selected_user
+			return redirect('/contracts/createacontract')
+		return render(request, 'contract/select_student_to_contract.html', {'students':students, 'is_supervisor':True})
 
 #weverton
 @login_required
@@ -721,7 +740,7 @@ def set_signed_rest(request, contract_id = None):
 def delete_contract(request, contract_id = None):
 	contract_to_delete = Contract.objects.get(contract_id=contract_id)
 	contract_to_delete.delete()
-	return redirect('/contracts/seemycontracts')
+	return redirect('/contracts/seeallcontracts')
 
 def seefinancialdetails(request, contract_id = None):
 	contract = Contract.objects.get(contract_id=contract_id)

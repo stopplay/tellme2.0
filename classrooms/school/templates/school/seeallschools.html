@@ -20,13 +20,14 @@
                   <th>Nome</th>
                   <th>Contratos Assinados</th>
                   <th>Contratos Não Assinados</th>
-                  <th >Classes</th>
+                  <th>Número de Alunos Associados</th>
+                  <th>Número de Pais/Mães Associados</th>
+                  <th >Turmas</th>
                   <th >Cadeias</th>
-
                 </tr>
               </thead>
-              {% for school in schools %}
               <tbody>
+                {% for school in schools %}
                 <tr>
                   <th>{{ school.school_name }}
 
@@ -37,39 +38,41 @@
                         Action
                       </a>
                       <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item"href="{% url 'school:add_class' school.school_id %}" data-baloon="Remove this item from the cart" class="text-danger">Adicionar Turma à Escola</a>
+                        <a class="dropdown-item"href="{% url 'school:add_students_to_school' school.school_id %}" data-baloon="Remove this item from the cart" class="text-danger">Selecionar Estudantes Para Escola</a>
+                        <!-- <a class="dropdown-item"href="{% url 'school:add_teachers_to_school' school.school_id %}" data-baloon="Remove this item from the cart" class="text-danger">Selecionar Professores Para Escola</a> -->
+                        <a class="dropdown-item" href="{% url 'school:update_school' school.school_id %}" data-baloon="Remove this item from the cart" class="text-danger">Atualizar Escola</a>
+                        <a class="dropdown-item" href="{% url 'school:delete_school' school.school_id %}" data-baloon="Remove this item from the cart" class="text-danger">Deletar Escola</a>
                         {% if request.user.is_superuser or is_supervisor %}
                           <a class="dropdown-item"href="{% url 'school:seeschooldetails' school.school_id %}" data-baloon="Remove this item from the cart" class="text-danger">Ver Detalhes da Escola</a>
                         {% endif %}
-                        <a class="dropdown-item"href="{% url 'school:add_class' school.school_id %}" data-baloon="Remove this item from the cart" class="text-danger">Adicionar Classe à Escola</a>
-                        <a class="dropdown-item"href="{% url 'school:add_students_to_school' school.school_id %}" data-baloon="Remove this item from the cart" class="text-danger">Selecionar Estudantes Para Escola</a>
-                        <a class="dropdown-item"href="{% url 'school:add_teachers_to_school' school.school_id %}" data-baloon="Remove this item from the cart" class="text-danger">Selecionar Professores Para Escola</a>
-                        <a class="dropdown-item" href="{% url 'school:update_school' school.school_id %}" data-baloon="Remove this item from the cart" class="text-danger">Atualizar Escola</a>
-                        <a class="dropdown-item" href="{% url 'school:delete_school' school.school_id %}" data-baloon="Remove this item from the cart" class="text-danger">Deletar Escola</a>
                       </div>
                     </div>
                   </th>
 
                   <th>{{ school.quantity_of_contracts_signed }}/{{ school.quantity_of_contracts_total }}</th>
                   <th>{{ school.quantity_of_contracts_not_signed }}/{{ school.quantity_of_contracts_total }}</th>
+                  <th>{{ school.quantity_of_students_associated }}</th>
+                  <th>{{ school.quantity_of_parents_associated }}</th>
 
                   {% if school.classes %}
                   <td>
                     {% for class in school.classes.all %}
 
-                    <label>Nome da Classe: {{ class.class_name }}</label><br>
-                    <label>Ano da Classe: {{ class.enrollment_class_year }}</label><br>
+                    <label>Nome da Turma: {{ class.class_name }}</label><br>
+                    <label>Ano da Turma: {{ class.enrollment_class_year }}</label><br>
                     <div class="dropdown show">
                       <a class="btn btn-danger dropdown-toggle btn-sm" href="" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Action
                       </a>
 
                       <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <a class="dropdown-item" href="{% url 'school:seeclassbyid' class.class_id %}" data-baloon="Remove this item from the cart" class="text-danger">Ver Detalhes da Classe</a>
-                        <a class="dropdown-item" href="{% url 'school:verifyvalidchain' class.class_id %}" data-baloon="Remove this item from the cart" class="text-danger">Verificar Validade da Cadeia Para a Classe</a>
-                        <a class="dropdown-item" href="{% url 'school:add_student_to_class' class.class_id %}" data-baloon="Remove this item from the cart" class="text-danger">Selecionar Estudantes Para Classe</a>
-                        <a class="dropdown-item" href="{% url 'school:add_teacher_to_class' class.class_id %}" data-baloon="Remove this item from the cart" class="text-danger">Selecionar Professores Para Classe</a>
-                        <a class="dropdown-item" href="{% url 'school:update_class' class.class_id %}" data-baloon="Remove this item from the cart" class="text-danger">Atualizar Classe</a>
-                        <a class="dropdown-item" href="{% url 'school:delete_class' class.class_id %}" data-baloon="Remove this item from the cart" class="text-danger">Deletar Classe</a>
+                        <a class="dropdown-item" href="{% url 'school:verifyvalidchain' class.class_id %}" data-baloon="Remove this item from the cart" class="text-danger">Verificar Validade da Cadeia Para a Turma</a>
+                        <a class="dropdown-item" href="{% url 'school:add_student_to_class' class.class_id %}" data-baloon="Remove this item from the cart" class="text-danger">Selecionar Estudantes Para Turma</a>
+                        <!-- <a class="dropdown-item" href="{% url 'school:add_teacher_to_class' class.class_id %}" data-baloon="Remove this item from the cart" class="text-danger">Selecionar Professores Para Turma</a> -->
+                        <a class="dropdown-item" href="{% url 'school:update_class' class.class_id %}" data-baloon="Remove this item from the cart" class="text-danger">Atualizar Turma</a>
+                        <a class="dropdown-item" href="{% url 'school:delete_class' class.class_id %}" data-baloon="Remove this item from the cart" class="text-danger">Deletar Turma</a>
+                        <a class="dropdown-item" href="{% url 'school:seeclassbyid' class.class_id %}" data-baloon="Remove this item from the cart" class="text-danger">Ver Detalhes da Turma</a>
                       </div>
                     </div>
                     <br>
@@ -104,7 +107,7 @@
   </div>
 </div>
 
-<script type="text/javascript">
+<script>
   $(document).ready( function () {
     $('#schoolstable').DataTable();
 } );

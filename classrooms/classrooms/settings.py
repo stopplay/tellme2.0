@@ -139,8 +139,8 @@ USE_TZ = False
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'jhean@arbid.com.br'
-EMAIL_HOST_PASSWORD = 'marlin951753'
+EMAIL_HOST_USER = 'matricula@agendatellme.com.br'
+EMAIL_HOST_PASSWORD = 'tellmematricula'
 EMAIL_PORT = 587
 
 

@@ -1,5 +1,5 @@
 {% load static %}
-    <div class="sidebar" data-image="" background-color="#14348e">
+    <div class="sidebar" data-image="">
         <!--
     Tip 1: You can change the color of the sidebar using: data-color="purple | blue | green | orange | red"
 
@@ -24,7 +24,7 @@
               {% if request.user.is_superuser or is_supervisor %}
                 <li>
                   <div>
-                <a class="nav-link" href="{% url 'contracts:createacontract' %}">Criar Novo Contrato</a>
+                <a class="nav-link" href="{% url 'contracts:select_student_to_contract' %}">Criar Novo Contrato</a>
                 </div></li>
 
 

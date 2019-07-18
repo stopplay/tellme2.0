@@ -54,6 +54,19 @@ class School(models.Model):
 		return count
 	
 	
+	@property
+	def quantity_of_students_associated(self):
+		return self.students.all().count()
+
+	@property
+	def quantity_of_parents_associated(self):
+		count = 0
+		for student in self.students.all():
+			if student.first_parent:
+				count+=1
+			if student.second_parent:
+				count+=1
+		return count
 	
 
 	def __str__(self):
@@ -62,11 +75,11 @@ class School(models.Model):
 class Class(models.Model):
 	"""docstring for Class"""
 	class_id = models.AutoField(primary_key=True)
-	class_name = models.TextField(verbose_name = 'Nome da classe')
+	class_name = models.TextField(verbose_name = 'Nome da turma')
 	CLASS_UNIT_CHOICES = [('Manhã','Manhã'), ('Tarde','Tarde'), ('Noite','Noite')]
 	class_unit = models.CharField(max_length = 500, choices = CLASS_UNIT_CHOICES, default = '1', blank = True, null = True, verbose_name = 'Horário')
-	class_level = models.IntegerField(verbose_name = 'Nível da classe')
-	enrollment_class_year = models.IntegerField(default=2019, verbose_name= 'Ano da classe')
+	enrollment_class_year = models.IntegerField(default=2019, verbose_name= 'Ano da turma')
+	slm = models.TextField(null=True, blank=True)
 	students = models.ManyToManyField(Student)
 	teachers = models.ManyToManyField(Teacher)
 	def __str__(self):
