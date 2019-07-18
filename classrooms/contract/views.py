@@ -750,6 +750,7 @@ def set_signed_rest(request, contract_id = None):
 def delete_contract(request, contract_id = None):
 	contract_to_delete = Contract.objects.get(contract_id=contract_id)
 	contract_to_delete.delete()
+	messages.success(request, 'Este contrato foi deletado com sucesso!')
 	return redirect('/contracts/seeallcontracts')
 
 def seefinancialdetails(request, contract_id = None):
