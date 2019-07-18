@@ -94,7 +94,7 @@ $(document).ready(function() {
 	});
 	function select(){
 		if (!$('#second_checkbox').prop("checked")){
-			$('#child').append('<div id="não"><p><div class="form-group"><label>Que dia você deseja que seja enviado o seu contrato?</label><label>Data do Agendamento: </label><input class="labelandform" type="date" name="date" style="width:120%"></div></p></div>')
+			$('#child').append('<div id="não"><p><div class="form-group"><label>Que dia você deseja que seja enviado o seu contrato?</label><label>Data do Agendamento: </label><input class="labelandform" type="date" name="date" style="width:120%" min="{{ tomorrow }}"></div></p></div>')
 			document.getElementById('wish_today').value = 'não'
 			
 		}

@@ -106,6 +106,8 @@ def write_pdf(request, contract=None, whosigned=None):
 
 @login_required
 def createacontract(request):
+	tomorrow = datetime.date.today()+datetime.timedelta(days=1)
+	tomorrow = tomorrow.strftime('%Y-%m-%d')
 	if request.user.is_superuser:
 		form = ContractModelFormWithoutSponte(request.POST or None, request.FILES)
 		students = Student.objects.all().order_by('name')
@@ -164,7 +166,7 @@ def createacontract(request):
 					messages.success(request, 'Contrato criado com sucesso!')
 					return redirect('/contracts/seeallcontracts')
 				messages.warning(request, 'O estudante não tem pelo menos um dos pais associados a ele!')
-		return render(request, 'contract/createacontract.html', {'form':form, 'student':student})
+		return render(request, 'contract/createacontract.html', {'form':form, 'student':student, 'tomorrow':tomorrow})
 	elif Head.objects.filter(profile=request.user).count()>=1:
 		is_supervisor = True
 		form = ContractModelFormWithoutSponte(request.POST or None, request.FILES)
@@ -224,7 +226,7 @@ def createacontract(request):
 					messages.success(request, 'Contrato criado com sucesso!')
 					return redirect('/contracts/seeallcontracts')
 				messages.warning(request, 'O estudante não tem pelo menos um dos pais associados a ele!')
-		return render(request, 'contract/createacontract.html', {'form':form, 'is_supervisor':is_supervisor, 'student':student})
+		return render(request, 'contract/createacontract.html', {'form':form, 'is_supervisor':is_supervisor, 'student':student, 'tomorrow':tomorrow})
 	return HttpResponse('U cannot access this page cos u are not admin!')
 
 @login_required
