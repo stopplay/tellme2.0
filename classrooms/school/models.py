@@ -70,7 +70,7 @@ class School(models.Model):
 	
 
 	def __str__(self):
-		return self.class_name
+		return self.school_name
 
 class Class(models.Model):
 	"""docstring for Class"""

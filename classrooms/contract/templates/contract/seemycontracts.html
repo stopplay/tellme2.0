@@ -55,7 +55,7 @@
                             <th>{{contract.contract_id}}</th>
                       			<th scope="row">{{ contract.name }}</th>
                       			<td>{{ contract.date }}</td>
-                            {% if contract.chain %}
+                            {% if contract.chain.name %}
                               {% for school in schools %}
                                 {% if contract.chain in school.chains.all %}
                                   <td>{{ school.school_name }}</td>
