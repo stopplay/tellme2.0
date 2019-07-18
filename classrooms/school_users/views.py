@@ -500,6 +500,7 @@ def create_head_to_school(request, school_id=None):
                 if form.is_valid() and form2.is_valid():
                     user = form.save(commit=False)
                     user.save()
+                    user.username = user.first_name.lower()+user.last_name.lower()
                     user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
                     user_creation = form2.save(commit=False)
                     user_creation.profile = user_profile
@@ -539,6 +540,7 @@ def create_supervisor_to_school(request, school_id=None):
                     if form.is_valid() and form2.is_valid():
                         user = form.save(commit=False)
                         user.save()
+                        user.username = user.first_name.lower()+user.last_name.lower()
                         user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
                         user_creation = form2.save(commit=False)
                         user_creation.profile = user_profile
@@ -604,6 +606,7 @@ def add_first_parent(request, student_id=None):
         if form.is_valid() and form2.is_valid():
             user = form.save(commit=False)
             user.save()
+            user.username = user.first_name.lower()+user.last_name.lower()
             user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
             user_creation = form2.save(commit=False)
             user_creation.profile = user_profile
@@ -623,6 +626,7 @@ def add_first_parent(request, student_id=None):
         if form.is_valid() and form2.is_valid():
             user = form.save(commit=False)
             user.save()
+            user.username = user.first_name.lower()+user.last_name.lower()
             user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
             user_creation = form2.save(commit=False)
             user_creation.profile = user_profile
@@ -644,6 +648,7 @@ def add_parent(request, student_id=None, type_of_user= None):
         if form.is_valid() and form2.is_valid():
             user = form.save(commit=False)
             user.save()
+            user.username = user.first_name.lower()+user.last_name.lower()
             user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
             user_creation = form2.save(commit=False)
             user_creation.profile = user_profile
@@ -666,6 +671,7 @@ def add_parent(request, student_id=None, type_of_user= None):
         if form.is_valid() and form2.is_valid():
             user = form.save(commit=False)
             user.save()
+            user.username = user.first_name.lower()+user.last_name.lower()
             user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
             user_creation = form2.save(commit=False)
             user_creation.profile = user_profile

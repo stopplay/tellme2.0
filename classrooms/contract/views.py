@@ -111,7 +111,11 @@ def createacontract(request):
 		students = Student.objects.all().order_by('name')
 		chains = []
 		selected_user = request.session['selected_user']
-		student = Student.objects.get(student_id = selected_user)
+		if Student.objects.filter(student_id = selected_user).count()>=1:
+			student = Student.objects.get(student_id = selected_user)
+		else:
+			messages.warning(request, 'Por favor selecione um estudante')
+			return redirect('/contracts/select_student_to_contract')
 		for school in School.objects.all():
 			for classe in school.classes.all():
 				if student in classe.students.all():
@@ -157,14 +161,18 @@ def createacontract(request):
 					messages.success(request, 'Contrato criado com sucesso!')
 					return redirect('/contracts/seeallcontracts')
 				messages.warning(request, 'O estudante não tem pelo menos um dos pais associados a ele!')
-		return render(request, 'contract/createacontract.html', {'form':form, 'students':students})
+		return render(request, 'contract/createacontract.html', {'form':form, 'student':student})
 	elif Head.objects.filter(profile=request.user).count()>=1:
 		is_supervisor = True
 		form = ContractModelFormWithoutSponte(request.POST or None, request.FILES)
 		chains = []
 		students_ids = []
 		selected_user = request.session['selected_user']
-		student = Student.objects.get(student_id = selected_user)
+		if Student.objects.filter(student_id = selected_user).count()>=1:
+			student = Student.objects.get(student_id = selected_user)
+		else:
+			messages.warning(request, 'Por favor selecione um estudante')
+			return redirect('/contracts/select_student_to_contract')
 		for school in School.objects.filter(head=Head.objects.get(profile=request.user)):
 			for classe in school.classes.all():
 				if student in classe.students.all():
@@ -210,7 +218,7 @@ def createacontract(request):
 					messages.success(request, 'Contrato criado com sucesso!')
 					return redirect('/contracts/seeallcontracts')
 				messages.warning(request, 'O estudante não tem pelo menos um dos pais associados a ele!')
-		return render(request, 'contract/createacontract.html', {'form':form, 'is_supervisor':is_supervisor})
+		return render(request, 'contract/createacontract.html', {'form':form, 'is_supervisor':is_supervisor, 'student':student})
 	return HttpResponse('U cannot access this page cos u are not admin!')
 
 @login_required

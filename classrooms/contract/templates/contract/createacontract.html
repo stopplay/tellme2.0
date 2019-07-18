@@ -1,6 +1,6 @@
 {% extends 'base.html'%}
 
-{% block title %} Criar Novo Contrato {% endblock %}
+{% block title %} Criar um Novo Contrato Para o Aluno {{ student.name }} {% endblock %}
 
 {% block content %}
 
@@ -17,7 +17,7 @@ $(document).ready(function() {
 			<div class="col-md-9">
 				<div class="card w-50">
 					<div class="card-header">
-						<h4 class="card-title" align="left">Criar um Novo Contrato</h4>
+						<h4 class="card-title" align="left">Criar um Novo Contrato Para o Aluno {{ student.name }}</h4>
 					</div>
 					<div class="card-body">
 						<div class="row">

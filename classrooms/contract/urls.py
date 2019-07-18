@@ -22,6 +22,6 @@ urlpatterns = [
     path('updatecontract/<int:contract_id>', views.updatecontract, name='updatecontract'),
     path('delete_contract/<int:contract_id>', views.delete_contract, name='delete_contract'),
     path('seefinancialdetails/', views.seefinancialdetails, name='seefinancialdetails'),
-    url('select_student_to_contract', views.select_student_to_contract, name='select_student_to_contract'),
+    url('select_student_to_contract/', views.select_student_to_contract, name='select_student_to_contract'),
     path(r'serve_protected/{}<path>/<int:contract_id>'.format(settings.MEDIA_URL[1:]), views.protected_serve, {'document_root': settings.MEDIA_ROOT}, name='serve_protected'),
 ]
