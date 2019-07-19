@@ -1,2 +1,2 @@
 *.pyc
-classrooms/school_users/migrations/__pycache__/**
+**/__pycache__/
