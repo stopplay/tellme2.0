@@ -1,5 +1,22 @@
 version: "3"
+
+networks:
+  cluster:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.0.0/24
+
 services:
+  db-contract:
+    container_name: django-db-contract
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD:'example'
+    networks:
+      cluster:
+        ipv4_address: 10.0.0.11
+
   web-contract:
     container_name: django-web-contract
     build:
@@ -11,3 +28,12 @@ services:
     command: python3 manage.py runserver --insecure 0.0.0.0:8000
     ports:
       - 8000:8000
+    depends_on:
+      - db-contract
+    networks:
+      cluster:
+        ipv4_address: 10.0.0.10
+
+volumes:
+  db-data:
+    driver: local

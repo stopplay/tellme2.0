@@ -12,3 +12,5 @@ ADD classrooms/requirements.txt /usr/src/app/classrooms
 RUN pip3 install Cython
 RUN pip3 install -r classrooms/requirements.txt
 ADD ./classrooms /usr/src/app
+RUN python3 manage.py makemigrations
+RUN python3 manage.py migrate

@@ -64,3 +64,4 @@ data_wizard
 PyPDF2
 reportlab
 svglib
+psycopg2-binary
