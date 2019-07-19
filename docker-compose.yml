@@ -23,9 +23,9 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - ./classrooms:/usr/src/app
-      - ./media_cdn:/usr/src
-    command: python3 manage.py runserver --insecure 0.0.0.0:8000
+      - ./classrooms:/usr/src/app/classrooms
+      - ./media_cdn:/usr/src/app/media_cdn
+    command: sh run_migrations.sh
     ports:
       - 8000:8000
     depends_on:
