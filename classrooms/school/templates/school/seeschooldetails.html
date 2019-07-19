@@ -5,133 +5,128 @@
 {% block content %}
 
 <div class="content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card strpied-tabled-with-hover">
-                    <div class="card-header ">
-                        <h4 class="card-title">Detalhes da Escola {{ school.school_name }}</h4>
-                        <p class="card-category">Here is a subtitle for this table</p>
-                    </div>
-                    <div class="card-body table-full-width table-responsive">
-                        <table class="table table-hover table-striped" id="schoolstable">
-													<thead class="">
-														<tr>
-															<th >Id da Escola</th>
-															<th >Nome da Escola</th>
-															{% if school.classes.all %}
-																<th>Turmas</th>
-															{% endif %}
-															{% if school.chains.all %}
-																<th>Cadeias</th>
-															{% endif %}
-															{% if school.head %}
-																<th>Diretor</th>
-															{% endif %}
-															{% if school.adminorsupervisor %}
-																<th>Supervisor</th>
-															{% endif %}
-															{% if school.sponte_client_number %}
-																<th>SPONTE ID</th>
-															{% endif %}
-															{% if school.sponte_token %}
-																<th>SPONTE TOKEN</th>
-															{% else %}
-															{% endif %}
-															{% if school.tell_me_school_id %}
-																<th>TellMe ID</th>
-															{% endif %}
-															{% if school.country %}
-																<th>País</th>
-															{% endif %}
-															{% if school.state %}
-																<th>Estado</th>
-															{% endif %}
-															{% if school.city %}
-																<th>Cidade</th>
-															{% endif %}
-															{% if school.students.all %}
-											        			<th >Estudantes</th>
-											        		{% endif %}
-													        {% if school.teachers.all %}
-													        	<th >Professores</th>
-													        {% endif %}
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card strpied-tabled-with-hover">
+					<div class="card-header ">
+						<h4 class="card-title">Detalhes da Escola {{ school.school_name }}</h4>
+						<p class="card-category">Here is a subtitle for this table</p>
+					</div>
+					<div class="card-body table-full-width table-responsive">
+						<table class="table table-hover table-striped" id="schoolstable">
+							<thead class="">
+								<tr>
+									<th >Id da Escola</th>
+									<th >Nome da Escola</th>
+									{% if school.classes.all %}
+										<th>Turmas</th>
+									{% endif %}
+									{% if school.chains.all %}
+										<th>Cadeias</th>
+									{% endif %}
+									{% if school.head %}
+										<th>Diretor</th>
+									{% endif %}
+									{% if school.adminorsupervisor %}
+										<th>Supervisor</th>
+									{% endif %}
+									{% if school.sponte_client_number %}
+										<th>SPONTE ID</th>
+									{% endif %}
+									{% if school.sponte_token %}
+										<th>SPONTE TOKEN</th>
+									{% endif %}
+									{% if school.tell_me_school_id %}
+										<th>TellMe ID</th>
+									{% endif %}
+									{% if school.country %}
+										<th>País</th>
+									{% endif %}
+									{% if school.state %}
+										<th>Estado</th>
+									{% endif %}
+									{% if school.city %}
+										<th>Cidade</th>
+									{% endif %}
+									{% if school.students.all %}
+										<th >Estudantes</th>
+									{% endif %}
+									{% if school.teachers.all %}
+										<th >Professores</th>
+									{% endif %}
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th >{{ school.school_id }}</th>
+									<th>{{ school.school_name }}</th>
+									{% if school.classes.all %}
+										<th>
+											{% for class in school.classes.all %}
+												<label>Nome da Classe: {{ class.class_name }}</label><br>
+												<label>Ano da Classe: {{ class.enrollment_class_year }}</label><br>
+											{% endfor %}
+										</th>
+									{% endif %}
+									{% if school.chains.all %}
+									<th>
+										{% for chain in school.chains.all %}
+											<label>Chain name: {{ chain.name }}</label><br>
+										{% endfor %}
+									</th>
+									{% endif %}
+									{% if school.head %}
+										<th>{{ school.head.name }}</th>
+									{% endif %}
+									{% if school.adminorsupervisor %}
+										<th>{{ school.adminorsupervisor.name }}</th>
+									{% endif %}
+									{% if school.sponte_client_number %}
+										<th>{{ school.sponte_client_number }}</th>
+									{% endif %}
+									{% if school.sponte_token %}
+										<th>{{ school.sponte_token }}</th>
+									{% endif %}
+									{% if school.tell_me_school_id %}
+										<th>{{ school.tell_me_school_id }}</th>
+									{% endif %}
+									{% if school.country %}
+										<th>{{ school.country }}</th>
+									{% endif %}
+									{% if school.state %}
+										<th>{{ school.state }}</th>
+									{% endif %}
+									{% if school.city %}
+										<th>{{ school.city }}</th>
+									{% endif %}
+									{% if school.students.all %}
+										<th align="center">
+											{% for student in school.students.all %}
+												<label> {{ student.name }} </label><br>            
+											{% endfor %}
+										</th>
+									{% endif %}
+									{% if school.teachers.all %}
+										<th align="center">
+											{% for teacher in school.teachers.all %}
+												<Label>{{ teacher.name }}</label><br>
+											{% endfor %}
+										</th>
+									{% endif %}
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-														</tr>
-													</thead>
-													<tbody>
-														<tr>
-
-															<th >{{ school.school_id }}</th>
-															<th>{{ school.school_name }}</th>
-															{% if school.classes.all %}
-																<th>
-																	{% for class in school.classes.all %}
-													                    <label>Nome da Classe: {{ class.class_name }}</label><br>
-													                    <label>Ano da Classe: {{ class.enrollment_class_year }}</label><br>
-													                {% endfor %}
-												                </th>
-												            {% endif %}
-												            {% if school.chains.all %}
-												            	<th>
-												            		{% for chain in school.chains.all %}
-												            			<label>Chain name: {{ chain.name }}</label><br>
-												            		{% endfor %}
-												            	</th>
-												            {% endif %}
-												            {% if school.head %}
-												            	<th>{{ school.head.name }}</th>
-												            {% endif %}
-												            {% if school.adminorsupervisor %}
-												            	<th>{{ school.adminorsupervisor.name }}</th>
-												            {% endif %}
-												            {% if school.sponte_client_number %}
-																<th>{{ school.sponte_client_number }}</th>
-															{% endif %}
-															{% if school.sponte_token %}
-																<th>{{ school.sponte_token }}</th>
-															{% endif %}
-															{% if school.tell_me_school_id %}
-																<th>{{ school.tell_me_school_id }}</th>
-															{% endif %}
-															{% if school.country %}
-																<th>{{ school.country }}</th>
-															{% endif %}
-															{% if school.state %}
-																<th>{{ school.state }}</th>
-															{% endif %}
-															{% if school.city %}
-																<th>{{ school.city }}</th>
-															{% endif %}
-
-											        {% if school.students.all %}
-											        <th align="center">{% for student in school.students.all %}
-											            <label> {{ student.name }} </label><br>
-											            {% endfor %}
-											        </th>
-											        {% endif %}
-
-											        {% if school.teachers.all %}
-											        <th align="center">
-											          {% for teacher in school.teachers.all %}
-						                                  <Label>{{ teacher.name }}</label><br>
-											          {% endfor %}
-											        </th>
-											        {% endif %}
-														</tr>
-													</tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-<script type="text/javascript">
-  $(document).ready( function () {
-    $('#schoolstable').DataTable();
-} );
-</script>
+	<script type="text/javascript">
+		$(document).ready( function () {
+			$('#schoolstable').DataTable();
+		} );
+	</script>
 {% endblock %}
