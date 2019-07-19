@@ -698,18 +698,19 @@ def seeallusers(request):
         student_users = Student.objects.all()
         return render(request, 'school_users/seeallusers.html', {'head_users':head_users,'teacher_users':teacher_users,'admin_users':admin_users,'supervisor_users':supervisor_users,'parent_users':parent_users,'student_users':student_users})
     elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
-        schools = []
-        if Head.objects.filter(profile=request.user).count()>=1:
-            schools = School.objects.filter(head=Head.objects.get(profile=request.user))
-        elif Supervisor.objects.filter(profile=request.user).count()>=1:
-            schools = School.objects.filter(adminorsupervisor=Supervisor.objects.get(profile=request.user))
-        is_supervisor = True
         head_users = []
         teacher_users = []
         student_users = []
         admin_users = []
         parent_users = []
         supervisor_users = []
+        school = None
+        schools = []
+        if Head.objects.filter(profile=request.user).count()>=1:
+            schools = School.objects.filter(head=Head.objects.get(profile=request.user))
+        elif Supervisor.objects.filter(profile=request.user).count()>=1:
+            schools = School.objects.filter(adminorsupervisor=Supervisor.objects.get(profile=request.user))
+        is_supervisor = True
         for school in schools:
             if school.head not in head_users:
                 head_users += [(school.head)]
@@ -726,6 +727,88 @@ def seeallusers(request):
                         parent_users += [(student.second_parent)]
         return render(request, 'school_users/seeallusers.html', {'head_users':head_users,'teacher_users':teacher_users,'admin_users':admin_users,'supervisor_users':supervisor_users,'parent_users':parent_users,'student_users':student_users, 'is_supervisor':is_supervisor})
     return HttpResponse('U cannot access this page cos u are not admin!')
+
+def seeallusers_by_school(request, school_id=None):
+    if request.user.is_superuser:
+        head_users = []
+        teacher_users = []
+        student_users = []
+        admin_users = []
+        parent_users = []
+        supervisor_users = []
+        school = None
+        if school_id:
+            school = School.objects.get(school_id=school_id)
+        if school:
+            if school.head:
+                head_users += [(school.head)]
+            if school.adminorsupervisor:
+                supervisor_users += [(school.adminorsupervisor)]
+            teacher_users = school.teachers.all()
+            student_users = school.students.all()
+            for student in school.students.all():
+                if student.first_parent:
+                    if student.first_parent not in parent_users:
+                        parent_users += [(student.first_parent)]
+                if student.second_parent:
+                    if student.second_parent not in parent_users:
+                        parent_users += [(student.second_parent)]
+        else:
+            head_users = Head.objects.all()
+            teacher_users = Teacher.objects.all()
+            admin_users = Admin.objects.all()
+            supervisor_users = Supervisor.objects.all()
+            parent_users = Parent.objects.all()
+            student_users = Student.objects.all()
+        return render(request, 'school_users/seeallusers.html', {'head_users':head_users,'teacher_users':teacher_users,'admin_users':admin_users,'supervisor_users':supervisor_users,'parent_users':parent_users,'student_users':student_users})
+    elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
+        head_users = []
+        teacher_users = []
+        student_users = []
+        admin_users = []
+        parent_users = []
+        supervisor_users = []
+        school = None
+        if school_id:
+            school = School.objects.get(school_id=school_id)
+        if school:
+            if school.head:
+                head_users += [(school.head)]
+            if school.adminorsupervisor:
+                supervisor_users += [(school.adminorsupervisor)]
+            teacher_users = school.teachers.all()
+            student_users = school.students.all()
+            for student in school.students.all():
+                if student.first_parent:
+                    if student.first_parent not in parent_users:
+                        parent_users += [(student.first_parent)]
+                if student.second_parent:
+                    if student.second_parent not in parent_users:
+                        parent_users += [(student.second_parent)]
+        else:
+            schools = []
+            if Head.objects.filter(profile=request.user).count()>=1:
+                schools = School.objects.filter(head=Head.objects.get(profile=request.user))
+            elif Supervisor.objects.filter(profile=request.user).count()>=1:
+                schools = School.objects.filter(adminorsupervisor=Supervisor.objects.get(profile=request.user))
+            for school in schools:
+                if school.head not in head_users:
+                    head_users += [(school.head)]
+                if school.adminorsupervisor not in supervisor_users:
+                    supervisor_users += [(school.adminorsupervisor)]
+                teacher_users += school.teachers.all()
+                student_users += school.students.all()
+                for student in school.students.all():
+                    if student.first_parent:
+                        if student.first_parent not in parent_users:
+                            parent_users += [(student.first_parent)]
+                    if student.second_parent:
+                        if student.second_parent not in parent_users:
+                            parent_users += [(student.second_parent)]
+        is_supervisor = True
+        return render(request, 'school_users/seeallusers.html', {'head_users':head_users,'teacher_users':teacher_users,'admin_users':admin_users,'supervisor_users':supervisor_users,'parent_users':parent_users,'student_users':student_users, 'is_supervisor':is_supervisor})
+    return HttpResponse('U cannot access this page cos u are not admin!')
+    pass
 
 def delete_user(request, user_id=None, type_of_user=None):
 	if(type_of_user=='head'):
