@@ -15,6 +15,7 @@ urlpatterns = [
     # url('', include(router.urls)),
     url('create_user/', views.create_user, name="create_user"),
     url('seeallusers/', views.seeallusers, name="seeallusers"),
+    path('seeallusers_by_school/<int:school_id>', views.seeallusers_by_school, name='seeallusers_by_school'),
     url('seeallusers_rest/', views.seeallusers_rest),
     path('delete_user/<int:user_id>/<type_of_user>', views.delete_user, name='delete_user'),
     path('set_parents/<int:student_id>/', views.set_parents, name='set_parents'),

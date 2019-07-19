@@ -49,12 +49,7 @@
 									{% if school.city %}
 										<th>Cidade</th>
 									{% endif %}
-									{% if school.students.all %}
-										<th >Estudantes</th>
-									{% endif %}
-									{% if school.teachers.all %}
-										<th >Professores</th>
-									{% endif %}
+									<th>Ver usuários dessa escola</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -100,20 +95,7 @@
 									{% if school.city %}
 										<th>{{ school.city }}</th>
 									{% endif %}
-									{% if school.students.all %}
-										<th align="center">
-											{% for student in school.students.all %}
-												<label> {{ student.name }} </label><br>            
-											{% endfor %}
-										</th>
-									{% endif %}
-									{% if school.teachers.all %}
-										<th align="center">
-											{% for teacher in school.teachers.all %}
-												<Label>{{ teacher.name }}</label><br>
-											{% endfor %}
-										</th>
-									{% endif %}
+									<th><button type="button" class="btn btn-primary btn-sm btn-info btn-block"><a href="{% url 'users:seeallusers_by_school' school.school_id %}" data-baloon="Remove this item from the cart" class="text-light">Ver todos os usuários dessa escola</a></button></th>
 									</tr>
 								</tbody>
 							</table>
