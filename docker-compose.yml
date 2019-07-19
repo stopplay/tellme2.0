@@ -1,0 +1,13 @@
+version: "3"
+services:
+  web-contract:
+    container_name: django-web-contract
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./classrooms:/usr/src/app
+      - ./media_cdn:/usr/src
+    command: python3 manage.py runserver --insecure 0.0.0.0:8000
+    ports:
+      - 8000:8000
