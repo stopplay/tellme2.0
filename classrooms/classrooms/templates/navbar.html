@@ -8,57 +8,73 @@
         <div class="sidebar-wrapper">
             <div class="logo">
 
-                <a href="" class="simple-text">
-                    <img src="{% static 'img/logotell.png'%}" alt="">
-                </a>
-            </div>
-            <ul class="nav">
+              <a href="" class="simple-text">
+                  <img src="{% static 'img/logotell.png'%}" alt="">
+              </a>
 
+            </div>
+
+            <ul class="nav top-nav">
 
               <li class="nav-item">
-                  <div class="nav-link">
-                    <a style="color:#FFFFFF;" href="{% url 'contracts:seemycontracts'%}"><i class="fas fa-file-contract"></i>
-                      <p>Contrato(s)</p></a>
+                <div class="nav-link">
+
+                  <div class="distribute-elements">
+                    <a style="color:#FFFFFF;" href="{% url 'contracts:seemycontracts'%}">
+                      <i class="fas fa-file-contract"></i>
+                      <p>Contrato(s) </p>
+                    </a>
+  
+                    {% if request.user.is_superuser or is_supervisor %}
+                      <p class="box-rounded plus-float-right">
+                        <a class="fas fa-plus centralize-margin font-size-plus" href="{% url 'contracts:select_student_to_contract' %}"></a>
+                      </p>
+                    {% endif %}
                   </div>
+
+                </div>
               </li>
-              {% if request.user.is_superuser or is_supervisor %}
-                <li>
-                  <div>
-                <a class="nav-link" href="{% url 'contracts:select_student_to_contract' %}">Criar Novo Contrato</a>
-                </div></li>
-
-
-
-                <li class="nav-item">
-                  <div class="nav-link">
-                    <a style="color:#FFFFFF;" href="/">  <i class="fas fa-graduation-cap"></i>
-                      <p>Escola(s)</p></a>
-                  </div>
-                </li>
-              {% endif %}
-
-              {% if request.user.is_superuser %}
-                <li>
-                  <div>
-                <a class="nav-link" href="{% url 'school:add_school' %}">Adicionar Nova escola</a>
-                </div>
-                </li>
-              {% endif %}
 
               {% if request.user.is_superuser or is_supervisor %}
 
                 <li class="nav-item">
                   <div class="nav-link">
-                    <a style="color:#FFFFFF;" href="{% url 'users:seeallusers' %}">   <i class="fas fa-user"></i>
-                      <p>Usuário(s)</p></a>
+
+                    <div class="distribute-elements">
+                      <a style="color:#FFFFFF;" href="/">  
+                        <i class="fas fa-graduation-cap"></i>
+                        <p>Escola(s) </p>
+                      </a>
+  
+                      {% if request.user.is_superuser %}
+                        <p class="box-rounded plus-float-right">
+                          <a class="fas fa-plus centralize-margin font-size-plus" href="{% url 'school:add_school' %}"></a>
+                        </p>
+                      {% endif %}
+                    </div>
+
                   </div>
-
                 </li>
+              {% endif %}
 
-                <li>
-                  <div>
-                <a class="nav-link" href="{% url 'users:create_user' %}">Criar um usuário</a>
-                </div>
+
+              {% if request.user.is_superuser or is_supervisor %}
+
+                <li class="nav-item">
+                  <div class="nav-link">
+
+                    <div class="distribute-elements">
+                      <a style="color:#FFFFFF;" href="{% url 'users:seeallusers' %}">
+                        <i class="fas fa-user"></i>
+                        <p>Usuário(s) </p>
+                      </a>
+  
+                      <p class="box-rounded plus-float-right">
+                        <a class="fas fa-plus centralize-margin font-size-plus" href="{% url 'users:create_user' %}"></a>
+                      </p>
+                    </div>
+
+                  </div>
                 </li>
               {% endif %}
 

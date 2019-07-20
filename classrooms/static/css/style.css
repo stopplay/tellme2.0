@@ -60,3 +60,38 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+.box-rounded {
+  width: 3em;
+  height: 3em;
+  background-color: #fff;
+  border-radius: 5px;
+}
+
+.font-size-plus {
+  font-size: 15px;
+}
+
+.centralize-margin {
+  margin: auto;
+}
+
+.distribute-elements {
+  display: inline;
+}
+
+.plus-float-right {
+  float: right;
+}
+
+.top-nav {
+  list-style: none;
+}
+
+.top-nav li {
+  display: inline;
+}
+
+.top-nav li > * {
+  max-width: 256px;
+}
