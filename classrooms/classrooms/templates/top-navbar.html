@@ -1,0 +1,71 @@
+{% load static %}
+<div class="topbar" data-image="">
+    
+    <div class="topbar-wrapper">
+        <div class="logo">
+
+            <a href="" class="simple-text">
+                <img src="{% static 'img/logotell.png'%}" alt="">
+            </a>
+
+        </div>
+
+        <ul class="nav top-nav top-bar-icons">
+
+            <li class="nav-item item-centering list-item-size list-item-hover-background">
+                <p class="text-top-bar-nav">
+                    <i class="fas fa-file-contract"></i>
+                    <a style="color:#FFFFFF;" href="{% url 'contracts:seemycontracts'%}">
+                        Contrato(s) 
+                    </a>                            
+                </p>
+
+                {% if request.user.is_superuser or is_supervisor %}
+                <p class="box-rounded flex-div">
+                    <a class="fas fa-plus centralize-margin font-size-plus coloring-link"
+                        href="{% url 'contracts:select_student_to_contract' %}"></a>
+                </p>
+                {% endif %}
+            </li>
+
+            {% if request.user.is_superuser or is_supervisor %}
+
+            <li class="nav-item item-centering list-item-size list-item-hover-background">
+                <p class="text-top-bar-nav">
+                    <i class="fas fa-graduation-cap"></i>
+                    <a style="color:#FFFFFF;" href="/">
+                        Escola(s) 
+                    </a>
+                </p>
+
+                {% if request.user.is_superuser %}
+                <p class="box-rounded flex-div">
+                    <a class="fas fa-plus centralize-margin font-size-plus coloring-link"
+                        href="{% url 'school:add_school' %}"></a>
+                </p>
+                {% endif %}
+            </li>
+            {% endif %}
+
+
+            {% if request.user.is_superuser or is_supervisor %}
+
+            <li class="nav-item item-centering list-item-size list-item-hover-background">
+                <p class="text-top-bar-nav">
+                    <i class="fas fa-user"></i>
+                    <a style="color:#FFFFFF;" href="{% url 'users:seeallusers' %}">
+                        Usuário(s) 
+                    </a>
+                </p>
+
+
+                <p class="box-rounded flex-div">
+                    <a class="fas fa-plus centralize-margin font-size-plus coloring-link"
+                        href="{% url 'users:create_user' %}"></a>
+                </p>
+            </li>
+            {% endif %}
+
+        </ul>
+    </div>
+</div>
