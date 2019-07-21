@@ -9,21 +9,22 @@
     <div class="row">
       <div class="col-md-12">
         <div class="card strpied-tabled-with-hover">
+          
           <div class="card-header ">
             <h4 class="card-title">Escola(s)</h4>
-            
           </div>
+
           <div class="card-body table-full-width table-responsive">
             <table class="table table-hover table-striped" id="schoolstable">
-              <thead >
+              <thead>
                 <tr>
                   <th>Nome</th>
                   <th>Contratos Assinados</th>
                   <th>Contratos Não Assinados</th>
                   <th>Número de Alunos Associados</th>
                   <th>Número de Pais/Mães Associados</th>
-                  <th >Turmas</th>
-                  <th >Cadeias</th>
+                  <th>Turmas</th>
+                  <th>Cadeias</th>
                 </tr>
               </thead>
               <tbody>
@@ -100,6 +101,7 @@
               </tbody>
             </table>
           </div>
+
         </div>
       </div>
 
@@ -108,8 +110,13 @@
 </div>
 
 <script>
-  $(document).ready( function () {
-    $('#schoolstable').DataTable();
-} );
+  $(document).ready(function() {
+    var dt = $('#schoolstable').DataTable();
+    console.log(dt);
+    $(window).on('resize', function() {
+      //$('#schoolstable').DataTable();
+      dt.draw();
+    })
+  });
 </script>
 {% endblock %}
