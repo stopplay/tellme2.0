@@ -32,8 +32,6 @@
                 <tr>
                   <th>{{ school.school_name }}
 
-
-
                     <div class="dropdown show">
                       <a class="btn btn-danger dropdown-toggle btn-sm" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Action
@@ -112,10 +110,8 @@
 <script>
   $(document).ready(function() {
     var dt = $('#schoolstable').DataTable();
-    console.log(dt);
     $(window).on('resize', function() {
-      //$('#schoolstable').DataTable();
-      dt.draw();
+      $('#schoolstable').DataTable();
     })
   });
 </script>
