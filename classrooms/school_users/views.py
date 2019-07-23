@@ -137,6 +137,31 @@ def create_user(request):
                                             _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[7]), second_parent=Parent.objects.get(tell_me_user_id=column[8]), tell_me_user_id=column[6])
                                         else:
                                             _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+
+                    elif selected_user == '7':
+                        if ',' in data_set:
+                            for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+                                if column[0]:
+                                    if column[4]==column[5]:
+                                        if column[6]:
+                                            if column[8] and column[9]:
+                                                _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[8]), second_parent=Parent.objects.get(tell_me_user_id=column[9]), tell_me_user_id=column[6])
+                                            else:
+                                                _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+                                        elif column[7]:
+                                             _, created = Parent.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[7])
+
+                        elif ';' in data_set:
+                            for column in csv.reader(io_string, delimiter=';', quotechar='|'):
+                                if column[0]:
+                                    if column[4]==column[5]:
+                                        if column[6]:
+                                            if column[8] and column[9]:
+                                                _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[8]), second_parent=Parent.objects.get(tell_me_user_id=column[9]), tell_me_user_id=column[6])
+                                            else:
+                                                _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+                                        elif column[7]:
+                                             _, created = Parent.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[7])
                     messages.success(request, 'Usuários criados com sucesso!')
                     return redirect('/users/create_user')
                 else:
@@ -144,108 +169,110 @@ def create_user(request):
                     return redirect('/users/create_user')
             else:
                 if form.is_valid():
-                    user = form.save(commit=False)
-                    user.username = user.first_name.lower()+user.last_name.lower()
-                    user.save()
-                    user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
-                    if selected_user == '1':
-                        if form2.is_valid():
-                            user_creation = form2.save(commit=False)
-                            user_creation.profile = user_profile
-                            user_creation.name = user_profile.first_name+' '+user_profile.last_name
-                            user_creation.save()
-                            messages.success(request, 'Usuário Criado com sucesso!')
-                            mail_subject = 'Login para acesso ao app escolar.'
-                            message = render_to_string('school_users/user_login.html', {
-                                'user': user_creation,
-                            })
-                            to_email = form.cleaned_data.get('email')
-                            email = EmailMessage(
-                                        mail_subject, message, to=[to_email]
-                            )
-                            email.send()
-                    elif selected_user == '2':
-                        if form3.is_valid():
-                            user_creation = form3.save(commit=False)
-                            user_creation.profile = user_profile
-                            user_creation.name = user_profile.first_name+' '+user_profile.last_name
-                            user_creation.save()
-                            messages.success(request, 'Usuário Criado com sucesso!')
-                            mail_subject = 'Login para acesso ao app escolar.'
-                            message = render_to_string('school_users/user_login.html', {
-                                'user': user_creation,
-                            })
-                            to_email = form.cleaned_data.get('email')
-                            email = EmailMessage(
-                                        mail_subject, message, to=[to_email]
-                            )
-                            email.send()
-                    elif selected_user == '3':
-                        if form4.is_valid():
-                            user_creation = form4.save(commit=False)
-                            user_creation.profile = user_profile
-                            user_creation.name = user_profile.first_name+' '+user_profile.last_name
-                            user_creation.save()
-                            messages.success(request, 'Usuário Criado com sucesso!')
-                            mail_subject = 'Login para acesso ao app escolar.'
-                            message = render_to_string('school_users/user_login.html', {
-                                'user': user_creation,
-                            })
-                            to_email = form.cleaned_data.get('email')
-                            email = EmailMessage(
-                                        mail_subject, message, to=[to_email]
-                            )
-                            email.send()
-                    elif selected_user == '4':
-                        if form5.is_valid():
-                            user_creation = form5.save(commit=False)
-                            user_creation.profile = user_profile
-                            user_creation.name = user_profile.first_name+' '+user_profile.last_name
-                            user_creation.save()
-                            messages.success(request, 'Usuário Criado com sucesso!')
-                            mail_subject = 'Login para acesso ao app escolar.'
-                            message = render_to_string('school_users/user_login.html', {
-                                'user': user_creation,
-                            })
-                            to_email = form.cleaned_data.get('email')
-                            email = EmailMessage(
-                                        mail_subject, message, to=[to_email]
-                            )
-                            email.send()
-                    elif selected_user == '5':
-                        if form6.is_valid():
-                            user_creation = form6.save(commit=False)
-                            user_creation.profile = user_profile
-                            user_creation.name = user_profile.first_name+' '+user_profile.last_name
-                            user_creation.save()
-                            messages.success(request, 'Usuário Criado com sucesso!')
-                            mail_subject = 'Login para acesso ao app escolar.'
-                            message = render_to_string('school_users/user_login.html', {
-                                'user': user_creation,
-                            })
-                            to_email = form.cleaned_data.get('email')
-                            email = EmailMessage(
-                                        mail_subject, message, to=[to_email]
-                            )
-                            email.send()
-                    elif selected_user == '6':
-                        if form7.is_valid():
-                            user_creation = form7.save(commit=False)
-                            user_creation.profile = user_profile
-                            user_creation.name = user_profile.first_name+' '+user_profile.last_name
-                            user_creation.save()
-                            messages.success(request, 'Usuário criado com sucesso!')
-                            mail_subject = 'Login para acesso ao app escolar.'
-                            message = render_to_string('school_users/user_login.html', {
-                                'user': user_creation,
-                            })
-                            to_email = form.cleaned_data.get('email')
-                            email = EmailMessage(
-                                        mail_subject, message, to=[to_email]
-                            )
-                            email.send()
-                    elif selected_user == '7':
+                    if selected_user == '7':
                         messages.error(request, 'Você não pode adicionar pais e estudantes ao mesmo tempo desta forma, por favor selecione o formato adicionar por CSV!')
+                        return redirect('/users/create_user')
+                    else:
+                        user = form.save(commit=False)
+                        user.username = user.first_name.lower()+user.last_name.lower()
+                        user.save()
+                        user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
+                        if selected_user == '1':
+                            if form2.is_valid():
+                                user_creation = form2.save(commit=False)
+                                user_creation.profile = user_profile
+                                user_creation.name = user_profile.first_name+' '+user_profile.last_name
+                                user_creation.save()
+                                messages.success(request, 'Usuário Criado com sucesso!')
+                                mail_subject = 'Login para acesso ao app escolar.'
+                                message = render_to_string('school_users/user_login.html', {
+                                    'user': user_creation,
+                                })
+                                to_email = form.cleaned_data.get('email')
+                                email = EmailMessage(
+                                            mail_subject, message, to=[to_email]
+                                )
+                                email.send()
+                        elif selected_user == '2':
+                            if form3.is_valid():
+                                user_creation = form3.save(commit=False)
+                                user_creation.profile = user_profile
+                                user_creation.name = user_profile.first_name+' '+user_profile.last_name
+                                user_creation.save()
+                                messages.success(request, 'Usuário Criado com sucesso!')
+                                mail_subject = 'Login para acesso ao app escolar.'
+                                message = render_to_string('school_users/user_login.html', {
+                                    'user': user_creation,
+                                })
+                                to_email = form.cleaned_data.get('email')
+                                email = EmailMessage(
+                                            mail_subject, message, to=[to_email]
+                                )
+                                email.send()
+                        elif selected_user == '3':
+                            if form4.is_valid():
+                                user_creation = form4.save(commit=False)
+                                user_creation.profile = user_profile
+                                user_creation.name = user_profile.first_name+' '+user_profile.last_name
+                                user_creation.save()
+                                messages.success(request, 'Usuário Criado com sucesso!')
+                                mail_subject = 'Login para acesso ao app escolar.'
+                                message = render_to_string('school_users/user_login.html', {
+                                    'user': user_creation,
+                                })
+                                to_email = form.cleaned_data.get('email')
+                                email = EmailMessage(
+                                            mail_subject, message, to=[to_email]
+                                )
+                                email.send()
+                        elif selected_user == '4':
+                            if form5.is_valid():
+                                user_creation = form5.save(commit=False)
+                                user_creation.profile = user_profile
+                                user_creation.name = user_profile.first_name+' '+user_profile.last_name
+                                user_creation.save()
+                                messages.success(request, 'Usuário Criado com sucesso!')
+                                mail_subject = 'Login para acesso ao app escolar.'
+                                message = render_to_string('school_users/user_login.html', {
+                                    'user': user_creation,
+                                })
+                                to_email = form.cleaned_data.get('email')
+                                email = EmailMessage(
+                                            mail_subject, message, to=[to_email]
+                                )
+                                email.send()
+                        elif selected_user == '5':
+                            if form6.is_valid():
+                                user_creation = form6.save(commit=False)
+                                user_creation.profile = user_profile
+                                user_creation.name = user_profile.first_name+' '+user_profile.last_name
+                                user_creation.save()
+                                messages.success(request, 'Usuário Criado com sucesso!')
+                                mail_subject = 'Login para acesso ao app escolar.'
+                                message = render_to_string('school_users/user_login.html', {
+                                    'user': user_creation,
+                                })
+                                to_email = form.cleaned_data.get('email')
+                                email = EmailMessage(
+                                            mail_subject, message, to=[to_email]
+                                )
+                                email.send()
+                        elif selected_user == '6':
+                            if form7.is_valid():
+                                user_creation = form7.save(commit=False)
+                                user_creation.profile = user_profile
+                                user_creation.name = user_profile.first_name+' '+user_profile.last_name
+                                user_creation.save()
+                                messages.success(request, 'Usuário criado com sucesso!')
+                                mail_subject = 'Login para acesso ao app escolar.'
+                                message = render_to_string('school_users/user_login.html', {
+                                    'user': user_creation,
+                                })
+                                to_email = form.cleaned_data.get('email')
+                                email = EmailMessage(
+                                            mail_subject, message, to=[to_email]
+                                )
+                                email.send()
                     return redirect('/users/create_user')
         return render(request, 'school_users/createuser.html', {'form':form,'form2':form2,'form3':form3,'form4':form4,'form5':form5,'form6':form6,'form7':form7})
     elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
@@ -364,6 +391,7 @@ def create_user(request):
                                         else:
                                             _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
                                         school_to_add.students.add(_)
+                                        class_to_add.students.add(_)
                         elif ';' in data_set:
                             for column in csv.reader(io_string, delimiter=';', quotechar='|'):
                                 if column[0]:
@@ -373,6 +401,35 @@ def create_user(request):
                                         else:
                                             _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
                                         school_to_add.students.add(_)
+                                        class_to_add.students.add(_)
+                    elif selected_user == '7':
+                        if ',' in data_set:
+                            for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+                                if column[0]:
+                                    if column[4]==column[5]:
+                                        if column[6]:
+                                            if column[8] and column[9]:
+                                                _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[8]), second_parent=Parent.objects.get(tell_me_user_id=column[9]), tell_me_user_id=column[6])
+                                            else:
+                                                _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+                                            school_to_add.students.add(_)
+                                            class_to_add.students.add(_)
+                                        elif column[7]:
+                                             _, created = Parent.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[7])
+
+                        elif ';' in data_set:
+                            for column in csv.reader(io_string, delimiter=';', quotechar='|'):
+                                if column[0]:
+                                    if column[4]==column[5]:
+                                        if column[6]:
+                                            if column[8] and column[9]:
+                                                _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[8]), second_parent=Parent.objects.get(tell_me_user_id=column[9]), tell_me_user_id=column[6])
+                                            else:
+                                                _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+                                            school_to_add.students.add(_)
+                                            class_to_add.students.add(_)
+                                        elif column[7]:
+                                             _, created = Parent.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[7])
                     messages.success(request, 'Usuários criados com sucesso!')
                     return redirect('/users/create_user')
                 else:
@@ -380,113 +437,115 @@ def create_user(request):
                     return redirect('/users/create_user')
             elif yesorno == 'não':
                 if form.is_valid():
-                    user = form.save(commit=False)
-                    user.username = user.first_name.lower()+user.last_name.lower()
-                    user.save()
-                    user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
-                    if selected_user == '1':
-                        if form2.is_valid():
-                            user_creation = form2.save(commit=False)
-                            user_creation.profile = user_profile
-                            user_creation.name = user_profile.first_name+' '+user_profile.last_name
-                            user_creation.save()
-                            messages.success(request, 'Usuário Criado com sucesso!')
-                            mail_subject = 'Login para acesso ao app escolar.'
-                            message = render_to_string('school_users/user_login.html', {
-                                'user': user_creation,
-                            })
-                            to_email = form.cleaned_data.get('email')
-                            email = EmailMessage(
-                                        mail_subject, message, to=[to_email]
-                            )
-                            email.send()
-                    elif selected_user == '2':
-                        if form3.is_valid():
-                            user_creation = form3.save(commit=False)
-                            user_creation.profile = user_profile
-                            user_creation.name = user_profile.first_name+' '+user_profile.last_name
-                            user_creation.save()
-                            teacher_to_add = Teacher.objects.get(profile=user_profile)
-                            school_to_add.teachers.add(teacher_to_add)
-                            messages.success(request, 'Usuário Criado com sucesso!')
-                            mail_subject = 'Login para acesso ao app escolar.'
-                            message = render_to_string('school_users/user_login.html', {
-                                'user': user_creation,
-                            })
-                            to_email = form.cleaned_data.get('email')
-                            email = EmailMessage(
-                                        mail_subject, message, to=[to_email]
-                            )
-                            email.send()
-                    elif selected_user == '3':
-                        if form4.is_valid():
-                            user_creation = form4.save(commit=False)
-                            user_creation.profile = user_profile
-                            user_creation.name = user_profile.first_name+' '+user_profile.last_name
-                            user_creation.save()
-                            messages.success(request, 'Usuário Criado com sucesso!')
-                            mail_subject = 'Login para acesso ao app escolar.'
-                            message = render_to_string('school_users/user_login.html', {
-                                'user': user_creation,
-                            })
-                            to_email = form.cleaned_data.get('email')
-                            email = EmailMessage(
-                                        mail_subject, message, to=[to_email]
-                            )
-                            email.send()
-                    elif selected_user == '4':
-                        if form5.is_valid():
-                            user_creation = form5.save(commit=False)
-                            user_creation.profile = user_profile
-                            user_creation.name = user_profile.first_name+' '+user_profile.last_name
-                            user_creation.save()
-                            messages.success(request, 'Usuário Criado com sucesso!')
-                            mail_subject = 'Login para acesso ao app escolar.'
-                            message = render_to_string('school_users/user_login.html', {
-                                'user': user_creation,
-                            })
-                            to_email = form.cleaned_data.get('email')
-                            email = EmailMessage(
-                                        mail_subject, message, to=[to_email]
-                            )
-                            email.send()
-                    elif selected_user == '5':
-                        if form6.is_valid():
-                            user_creation = form6.save(commit=False)
-                            user_creation.profile = user_profile
-                            user_creation.name = user_profile.first_name+' '+user_profile.last_name
-                            user_creation.save()
-                            messages.success(request, 'Usuário Criado com sucesso!')
-                            mail_subject = 'Login para acesso ao app escolar.'
-                            message = render_to_string('school_users/user_login.html', {
-                                'user': user_creation,
-                            })
-                            to_email = form.cleaned_data.get('email')
-                            email = EmailMessage(
-                                        mail_subject, message, to=[to_email]
-                            )
-                            email.send()
-                    elif selected_user == '6':
-                        if form7.is_valid():
-                            user_creation = form7.save(commit=False)
-                            user_creation.profile = user_profile
-                            user_creation.name = user_profile.first_name+' '+user_profile.last_name
-                            user_creation.save()
-                            student_to_add = Student.objects.get(profile=user_profile)
-                            school_to_add.students.add(student_to_add)
-                            class_to_add.students.add(student_to_add)
-                            messages.success(request, 'Usuário criado com sucesso!')
-                            mail_subject = 'Login para acesso ao app escolar.'
-                            message = render_to_string('school_users/user_login.html', {
-                                'user': user_creation,
-                            })
-                            to_email = form.cleaned_data.get('email')
-                            email = EmailMessage(
-                                        mail_subject, message, to=[to_email]
-                            )
-                            email.send()
-                    elif selected_user == '7':
+                    if selected_user == '7':
                         messages.error(request, 'Você não pode adicionar pais e estudantes ao mesmo tempo desta forma, por favor selecione o formato adicionar por CSV!')
+                        return redirect('/users/create_user')
+                    else:
+                        user = form.save(commit=False)
+                        user.username = user.first_name.lower()+user.last_name.lower()
+                        user.save()
+                        user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
+                        if selected_user == '1':
+                            if form2.is_valid():
+                                user_creation = form2.save(commit=False)
+                                user_creation.profile = user_profile
+                                user_creation.name = user_profile.first_name+' '+user_profile.last_name
+                                user_creation.save()
+                                messages.success(request, 'Usuário Criado com sucesso!')
+                                mail_subject = 'Login para acesso ao app escolar.'
+                                message = render_to_string('school_users/user_login.html', {
+                                    'user': user_creation,
+                                })
+                                to_email = form.cleaned_data.get('email')
+                                email = EmailMessage(
+                                            mail_subject, message, to=[to_email]
+                                )
+                                email.send()
+                        elif selected_user == '2':
+                            if form3.is_valid():
+                                user_creation = form3.save(commit=False)
+                                user_creation.profile = user_profile
+                                user_creation.name = user_profile.first_name+' '+user_profile.last_name
+                                user_creation.save()
+                                teacher_to_add = Teacher.objects.get(profile=user_profile)
+                                school_to_add.teachers.add(teacher_to_add)
+                                messages.success(request, 'Usuário Criado com sucesso!')
+                                mail_subject = 'Login para acesso ao app escolar.'
+                                message = render_to_string('school_users/user_login.html', {
+                                    'user': user_creation,
+                                })
+                                to_email = form.cleaned_data.get('email')
+                                email = EmailMessage(
+                                            mail_subject, message, to=[to_email]
+                                )
+                                email.send()
+                        elif selected_user == '3':
+                            if form4.is_valid():
+                                user_creation = form4.save(commit=False)
+                                user_creation.profile = user_profile
+                                user_creation.name = user_profile.first_name+' '+user_profile.last_name
+                                user_creation.save()
+                                messages.success(request, 'Usuário Criado com sucesso!')
+                                mail_subject = 'Login para acesso ao app escolar.'
+                                message = render_to_string('school_users/user_login.html', {
+                                    'user': user_creation,
+                                })
+                                to_email = form.cleaned_data.get('email')
+                                email = EmailMessage(
+                                            mail_subject, message, to=[to_email]
+                                )
+                                email.send()
+                        elif selected_user == '4':
+                            if form5.is_valid():
+                                user_creation = form5.save(commit=False)
+                                user_creation.profile = user_profile
+                                user_creation.name = user_profile.first_name+' '+user_profile.last_name
+                                user_creation.save()
+                                messages.success(request, 'Usuário Criado com sucesso!')
+                                mail_subject = 'Login para acesso ao app escolar.'
+                                message = render_to_string('school_users/user_login.html', {
+                                    'user': user_creation,
+                                })
+                                to_email = form.cleaned_data.get('email')
+                                email = EmailMessage(
+                                            mail_subject, message, to=[to_email]
+                                )
+                                email.send()
+                        elif selected_user == '5':
+                            if form6.is_valid():
+                                user_creation = form6.save(commit=False)
+                                user_creation.profile = user_profile
+                                user_creation.name = user_profile.first_name+' '+user_profile.last_name
+                                user_creation.save()
+                                messages.success(request, 'Usuário Criado com sucesso!')
+                                mail_subject = 'Login para acesso ao app escolar.'
+                                message = render_to_string('school_users/user_login.html', {
+                                    'user': user_creation,
+                                })
+                                to_email = form.cleaned_data.get('email')
+                                email = EmailMessage(
+                                            mail_subject, message, to=[to_email]
+                                )
+                                email.send()
+                        elif selected_user == '6':
+                            if form7.is_valid():
+                                user_creation = form7.save(commit=False)
+                                user_creation.profile = user_profile
+                                user_creation.name = user_profile.first_name+' '+user_profile.last_name
+                                user_creation.save()
+                                student_to_add = Student.objects.get(profile=user_profile)
+                                school_to_add.students.add(student_to_add)
+                                class_to_add.students.add(student_to_add)
+                                messages.success(request, 'Usuário criado com sucesso!')
+                                mail_subject = 'Login para acesso ao app escolar.'
+                                message = render_to_string('school_users/user_login.html', {
+                                    'user': user_creation,
+                                })
+                                to_email = form.cleaned_data.get('email')
+                                email = EmailMessage(
+                                            mail_subject, message, to=[to_email]
+                                )
+                                email.send()
                     return redirect('/users/create_user')
         return render(request, 'school_users/createuser.html', {'form':form,'form2':form2,'form3':form3,'form4':form4,'form5':form5,'form6':form6,'form7':form7,'is_supervisor':is_supervisor, 'schools':schools})
     return HttpResponse('U cannot access this page cos u are not admin!')
