@@ -10,6 +10,10 @@
 
         </div>
 
+        <li style="float: right;" class="nav-item item-centering list-item-size">
+          <button class="btn btn-info btn-sm pull-left btn-fill" type="button" onclick="goBack()" style="background-color: #213f99; border-color: #213f99;  margin: 0 auto;">Página anterior</button>
+        </li>
+
         <ul class="nav top-nav top-bar-icons">
 
             <li class="nav-item item-centering list-item-size list-item-hover-background">
@@ -66,6 +70,25 @@
             </li>
             {% endif %}
 
+
+
         </ul>
+
+        <li style="float: right" class="nav-item item-centering list-item-size dropdown">
+            <a href="#" style="color: white" class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-user" style="margin-right: 10px"></i>
+                {{request.user.username}}
+            </a>
+            <div class="dropdown-menu dropdown-menu-right dropdown-info" aria-labelledby="navbarDropdownMenuLink-4">
+                <a class="dropdown-item" href="{% url 'users:logout' %}">Sair</a>
+            </div>
+        </li>
+
     </div>
 </div>
+
+<script>
+function goBack() {
+  window.history.back();
+}
+</script>

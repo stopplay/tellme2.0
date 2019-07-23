@@ -46,7 +46,7 @@
   <div class="wrapper">
     {% include 'top-navbar.html' %}
     <div class="main-panel">
-      {% include 'panel.html' %}
+      {% comment %} {% include 'panel.html' %} {% endcomment %}
       {% if messages %}
       {% for message in messages %}
       <div {% if message.tags %}
@@ -68,8 +68,8 @@
       {% endif %}
       {% block content %}
       {% endblock %}
-      {% include 'footer.html' %}
     </div>
+    {% include 'footer.html' %}
   </div>
 
 </body>
