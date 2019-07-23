@@ -244,6 +244,8 @@ def create_user(request):
                                         mail_subject, message, to=[to_email]
                             )
                             email.send()
+                    elif selected_user == '7':
+                        messages.error(request, 'Você não pode adicionar pais e estudantes ao mesmo tempo desta forma, por favor selecione o formato adicionar por CSV!')
                     return redirect('/users/create_user')
         return render(request, 'school_users/createuser.html', {'form':form,'form2':form2,'form3':form3,'form4':form4,'form5':form5,'form6':form6,'form7':form7})
     elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
@@ -483,6 +485,8 @@ def create_user(request):
                                         mail_subject, message, to=[to_email]
                             )
                             email.send()
+                    elif selected_user == '7':
+                        messages.error(request, 'Você não pode adicionar pais e estudantes ao mesmo tempo desta forma, por favor selecione o formato adicionar por CSV!')
                     return redirect('/users/create_user')
         return render(request, 'school_users/createuser.html', {'form':form,'form2':form2,'form3':form3,'form4':form4,'form5':form5,'form6':form6,'form7':form7,'is_supervisor':is_supervisor, 'schools':schools})
     return HttpResponse('U cannot access this page cos u are not admin!')
