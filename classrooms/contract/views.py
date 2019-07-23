@@ -396,9 +396,10 @@ def seemycontracts(request):
 				if not (contract.counter_signed):
 					set_signed(request, contract.contract_id)
 		else:
-			some_var = request.POST.getlist('checks')
-			for var in some_var:
-				set_signed(request, var)
+			checked_contract_ids_on_form = request.POST.getlist('checks')
+			print('checked_contract_ids_on_form', checked_contract_ids_on_form)
+			for contract_id in checked_contract_ids_on_form:
+				set_signed(request, contract_id)
 	return render(request, 'contract/seemycontracts.html', {'contracts':contracts, 'is_parent':is_parent, 'is_supervisor':is_supervisor, 'schools':schools})
 
 @login_required
