@@ -23,6 +23,7 @@ urlpatterns = [
     path('classes/ajax', views.classes_choices_ajax, name='classes_choices_ajax'),
     url('add_student/', views.add_student, name='add_student'),
     url('login/', views.do_login, name='login'),
+    path('login_from_other_system/<username>', views.login_from_other_system, name='login_from_other_system'),
     url('logout', views.do_logout, name='logout'),
     url('api/login', obtain_jwt_token, name='login_rest'),
     url('api/refresh_token', refresh_jwt_token, name='refresh_token'),

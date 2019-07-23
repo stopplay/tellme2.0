@@ -938,3 +938,13 @@ def do_logout(request):
 @api_view(['GET','POST'])
 def get_data(request, mydataserialized, message, type_of_message):
     return Response({'message':message, 'type_of_message':type_of_message,'data_serialised':mydataserialized.data})
+
+def login_from_other_system(request, username=None):
+    if request.method == 'POST':
+        username = username.lower()
+        user = authenticate(username=username, password=request.POST['password'])
+        if user is not None:
+            login(request, user)
+            nextpage = request.GET.get('next','/contracts/seeallcontracts')
+            return redirect(nextpage)
+    return render(request, 'school_users/login_from_other_system.html')
