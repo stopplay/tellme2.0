@@ -204,3 +204,22 @@ input[type=search] {
   border-radius: 4px;
   box-sizing: border-box;
 }
+
+.even-distributed {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+}
+
+.width-100-cent {
+  width: 100%;
+}
+
+.float-right {
+  float: right;
+}
+
+.margin-5 {
+  margin: 5px;
+}

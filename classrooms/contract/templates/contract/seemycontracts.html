@@ -19,7 +19,7 @@
                   </div>
                   <form method="POST" enctype="multipart/form-data"> {% csrf_token %}
                     {% if is_supervisor %}
-                      <button type="submit" class="btn btn-dark btn-sm btn-block" style="background-color: #ff3d24">Clique Aqui Para Assinar Contratos Selecionados</button>
+                      <button type="submit" class="btn btn-dark btn-sm btn-block" style="background-color: #ff3d24" data-toggle="modal" data-target="#multi-sign-contract-modal">Clique Aqui Para Assinar Contratos Selecionados</button>
                     {% endif %}
                     <div class="card-body table-full-width table-responsive">
                     <table class="table table-hover table-striped display row-border mb-4" id="contractstable">
@@ -77,52 +77,67 @@
                             {% endif %}
                             <td>
                               {% if contract.pdf %}
-                      				  <a href="{% url 'contracts:serve_protected' contract.pdf.name contract.contract_id %}" data-baloon="Remove this item from the cart">{{ contract.pdf }}</a>
+                      				  <a href="{% url 'contracts:serve_protected' contract.pdf.name contract.contract_id %}" data-baloon="Remove this item from the cart">
+                                  <!-- {{ contract.pdf }} -->
+                                  Link
+                                </a>
                               {% endif %}
                             </td>
                             <td><label>{% if contract.email_sent %} Enviado {% else %} {% if contract.sent_date %} Email Agendado Para {{ contract.sent_date.day }}/{{ contract.sent_date.month }}/{{ contract.sent_date.year }} às {{ contract.sent_date.hour }}:{% if contract.sent_date.minute < 10 %}0{{ contract.sent_date.minute }}{% else %}{{ contract.sent_date.minute }}{% endif %}{% else %}-{% endif %}{% endif %}</label></td>
 
                             <td><!--sign-->
-                              <label>PRIMEIRO RESPONSÁVEL ASSINADO</label>
-                              {% if contract.first_auth_signed %}
-                                <div>
-                                  <span class="badge badge-pill badge-success text-success" >.</span>
-                                </div>
-                              {% else %}
-                                <div>
-                                  <span class="badge badge-pill badge-danger text-danger" >.</span>
-                                </div>
-                              {% endif %}
-                              <label>SEGUNDO RESPONSÁVEL ASSINADO</label>
-                              {% if contract.second_auth_signed %}
-                                <div>
-                                  <span class="badge badge-pill badge-success text-success" >.</span>
-                                </div>
-                              {% else %}
-                              <div>
-                                <span class="badge badge-pill badge-danger text-danger" >.</span>
+                              
+                              <div class="even-distributed">
+                                <label>PRIMEIRO RESPONSÁVEL ASSINADO</label>
+                                {% if contract.first_auth_signed %}
+                                  <div class="margin-5 width-100-cent">
+                                    <span class="badge badge-pill badge-success text-success float-right" >.</span>
+                                  </div>
+                                {% else %}
+                                  <div class="margin-5 width-100-cent">
+                                    <span class="badge badge-pill badge-danger text-danger float-right" >.</span>
+                                  </div>
+                                {% endif %}
                               </div>
-                              {% endif %}
-                              <label>DIRETOR RESPONSÁVEL ASSINADO</label>
-                              {% if contract.counter_signed %}
-                                <div>
-                                  <span class="badge badge-pill badge-success text-success" >.</span>
-                                </div>
-                              {% else %}
-                                <div>
-                                  <span class="badge badge-pill badge-danger text-danger" >.</span>
-                                </div>
-                              {% endif %}
-                              <label>ALL SIGNED</label>
-                              {% if contract.all_signed %}
-                                <div>
-                                  <span class="badge badge-pill badge-success text-success" >.</span>
-                                </div>
-                              {% else %}
-                                <div>
-                                  <span class="badge badge-pill badge-danger text-danger" >.</span>
-                                </div>
-                              {% endif %}
+
+                              <div class="even-distributed">
+                                <label>SEGUNDO RESPONSÁVEL ASSINADO</label>
+                                {% if contract.second_auth_signed %}
+                                  <div class="margin-5 width-100-cent">
+                                    <span class="badge badge-pill badge-success text-success float-right" >.</span>
+                                  </div>
+                                {% else %}
+                                  <div class="margin-5 width-100-cent">
+                                    <span class="badge badge-pill badge-danger text-danger float-right" >.</span>
+                                  </div>
+                                {% endif %}
+                              </div>
+
+                              <div class="even-distributed">
+                                  <label>DIRETOR RESPONSÁVEL ASSINADO</label>
+                                  {% if contract.counter_signed %}
+                                    <div class="margin-5 width-100-cent">
+                                      <span class="badge badge-pill badge-success text-success float-right" >.</span>
+                                    </div>
+                                  {% else %}
+                                    <div class="margin-5 width-100-cent">
+                                      <span class="badge badge-pill badge-danger text-danger  float-right" >.</span>
+                                    </div>
+                                  {% endif %}
+                              </div>
+
+                              <div class="even-distributed">
+                                <label>ALL SIGNED</label>
+                                {% if contract.all_signed %}
+                                  <div class="margin-5 width-100-cent">
+                                    <span class="badge badge-pill badge-success text-success float-right" >.</span>
+                                  </div>
+                                {% else %}
+                                  <div class="margin-5 width-100-cent">
+                                    <span class="badge badge-pill badge-danger text-danger float-right" >.</span>
+                                  </div>
+                                {% endif %}
+                              </div>
 
                             </td>
 
@@ -163,7 +178,7 @@
                                   <!--Vermelho-->
                                     <div class="btn-tollbar">
                                     <div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
-                                      <a class="btn btn-primary btn-sm btn-danger btn-block" href="{% url 'contracts:set_signed' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-light">Assinar Contrato</a>
+                                      <a class="btn btn-primary btn-sm btn-danger btn-block" onclick="signContract('{% url 'contracts:set_signed' contract.contract_id %}');" href="#" data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal" data-target="#sign-contract-modal">Assinar Contrato</a>
                                     </div>
                                     </div>
                                   {% endif %}
@@ -181,7 +196,7 @@
                                   <!--Vermelho-->
                                     <div class="btn-tollbar">
                                     <div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
-                                      <a class="btn btn-primary btn-sm btn-danger btn-block" href="{% url 'contracts:set_signed' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-light">Assinar Contrato</a>
+                                      <a class="btn btn-primary btn-sm btn-danger btn-block" onclick="signContract('{% url 'contracts:set_signed' contract.contract_id %}');" href="#" data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal" data-target="#sign-contract-modal">Assinar Contrato</a>
                                     </div>
                                     </div>
                                     {% endif %}
@@ -198,7 +213,7 @@
                                   <!--Vermelho-->
                                     <div class="btn-tollbar">
                                     <div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
-                                      <a class="btn btn-primary btn-sm btn-danger btn-block" href="{% url 'contracts:set_signed' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-light">Assinar Contrato</a>
+                                      <a class="btn btn-primary btn-sm btn-danger btn-block" onclick="signContract('{% url 'contracts:set_signed' contract.contract_id %}');" href="#" data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal" data-target="#sign-contract-modal">Assinar Contrato</a>
                                     </div>
                                     </div>
                                     {% endif %}
@@ -239,7 +254,7 @@
                         <input type="hidden" name="variable" id="variable" value=false>
                     </div>
                     {% if is_supervisor %}
-                      <button type="submit" class="btn btn-dark btn-sm btn-block" style="background-color: #ff3d24">Clique Aqui Para Assinar Contratos Selecionados</button>
+                      <button type="submit" class="btn btn-dark btn-sm btn-block" style="background-color: #ff3d24" data-toggle="modal" data-target="#multi-sign-contract-modal">Clique Aqui Para Assinar Contratos Selecionados</button>
                     {% endif %}
                     </form>
                 </div>
@@ -276,4 +291,41 @@
     });
  });
 </script>
+
+
+<script type="text/javascript">
+  function signContract(url) {
+
+    setTimeout(function() {
+      window.location.assign(url);
+    }, 100);
+  }
+</script>
+
+<!-- Contract Modal -->
+<div id="sign-contract-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+      <div class="modal-body">
+        <p>O contrato está sendo assinado</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Multiples Contracts Modal -->
+<div id="multi-sign-contract-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+  
+      <div class="modal-content">
+        <div class="modal-body">
+          <p>Os contratos selecionados estão sendo assinados</p>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
 {% endblock %}
