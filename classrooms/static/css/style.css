@@ -228,3 +228,9 @@ input[type=search] {
 .margin-5 {
   margin: 5px;
 }
+
+.btn-primary {
+  background-color: #213f99 !important;
+  border-color: #213f99 !important;
+  opacity: 1 !important;
+}
