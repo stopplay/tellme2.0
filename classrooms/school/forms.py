@@ -10,9 +10,9 @@ class SchoolModelForm(forms.ModelForm):
 		widgets = {
 			'school_name': forms.TextInput(attrs={'maxlength':255}),
 			'enrollment_year': forms.NumberInput(),
-			'sponte_client_number': forms.NumberInput(attrs={'required':False}),
-			'sponte_token': forms.TextInput(attrs={'required':False}),
-			'tell_me_school_id': forms.TextInput(attrs={'required':False}),
+			'sponte_client_number': forms.NumberInput(attrs={'required':False ,'min':0}),
+			'sponte_token': forms.TextInput(attrs={'required':False, 'min':0}),
+			'tell_me_school_id': forms.TextInput(attrs={'required':False, 'min':0}),
 			'country': forms.TextInput(attrs={'required':False}),
 			'state': forms.TextInput(attrs={'required':False}),
 			'city': forms.TextInput(attrs={'required':False}),
