@@ -441,7 +441,6 @@
                                     <label>SEGUNDO RESPONSÁVEL ASSINATURA DATA E HORA</label>
                                     {% if contract.second_auth_signed_timestamp %}
                                     <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.second_auth_signed_timestamp.day}}/{{contract.second_auth_signed_timestamp.month}}/{{contract.second_auth_signed_timestamp.year}} às {{contract.second_auth_signed_timestamp.hour}}:{{contract.second_auth_signed_timestamp.minute}}:{{contract.second_auth_signed_timestamp.second}}">
-                                    <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.second_auth_signed_timestamp}}">
                                     {% else %}
                                         <input type="text" class="form-control" disabled="" placeholder="">
                                         {% endif %}
@@ -454,7 +453,6 @@
                                     {% if contract.counter_signed_timestamp %}
 
                                     <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.counter_signed_timestamp.day}}/{{contract.counter_signed_timestamp.month}}/{{contract.counter_signed_timestamp.year}} às {{contract.counter_signed_timestamp.hour}}:{{contract.counter_signed_timestamp.minute}}:{{contract.counter_signed_timestamp.second}}">
-                                    <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.counter_signed_timestamp}}">
                                     {% else %}
                                         <input type="text" class="form-control" disabled="" placeholder="">
                                         {% endif %}
