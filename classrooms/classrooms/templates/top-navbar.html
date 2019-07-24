@@ -25,10 +25,9 @@
                 </p>
 
                 {% if request.user.is_superuser or is_supervisor %}
-                <p class="box-rounded flex-div">
-                    <a class="fas fa-plus centralize-margin font-size-plus coloring-link"
-                        href="{% url 'contracts:select_student_to_contract' %}"></a>
-                </p>
+                <a href="{% url 'contracts:select_student_to_contract' %}" class="box-rounded flex-div coloring-link">
+                    <p class="fas fa-plus centralize-margin font-size-plus"></p>
+                </a>
                 {% endif %}
             </li>
 
@@ -43,10 +42,9 @@
                 </p>
 
                 {% if request.user.is_superuser %}
-                <p class="box-rounded flex-div">
-                    <a class="fas fa-plus centralize-margin font-size-plus coloring-link"
-                        href="{% url 'school:add_school' %}"></a>
-                </p>
+                <a class="box-rounded flex-div coloring-link" href="{% url 'school:add_school' %}">
+                    <p class="fas fa-plus centralize-margin font-size-plus"></p>
+                </a>
                 {% endif %}
             </li>
             {% endif %}
@@ -63,10 +61,9 @@
                 </p>
 
 
-                <p class="box-rounded flex-div">
-                    <a class="fas fa-plus centralize-margin font-size-plus coloring-link"
-                        href="{% url 'users:create_user' %}"></a>
-                </p>
+                <a class="box-rounded flex-div coloring-link" href="{% url 'users:create_user' %}">
+                    <p class="fas fa-plus centralize-margin font-size-plus"></p>
+                </a>
             </li>
             {% endif %}
 
