@@ -32,22 +32,27 @@
                   <td align="center" style="display: block;">
 
 
-                    <div align="center" class="mb-5" style="width: 70%; height: 300px;">
+                    <div class="chain-colors" align="center" class="mb-5" style="width: 70%">
 
 
-                      <div class="mb-2" style="border-style: solid; display: block; width: 70%; height: 300px;">
+                      <div style="border-style: solid; display: block; width: 70%;">
                         <h4><b>Block Index:</b> {{ block.index }}</h4>
                         <h4>{{ block.contract.name }}</h4>
-                        <div style="margin-left: auto; margin-right: auto;"><label><b>Hash:</b> {{ block.hash }}</label>
+                        <div style="margin-left: auto; margin-right: auto;">
+                          <b>Hash:</b> {{ block.hash }}
                         </div>
-                        <div style="margin-left: auto; margin-right: auto;"><label><b>Hash Anterior:</b>
-                            {{ block.previous_hash }}</label></div>
-                        <div style="margin-left: auto; margin-right: auto;"><label><b>Data e Hora:</b>
-                            {{ block.time_stamp }}</label></div>
-                        <div style="margin-left: auto; margin-right: auto;"><label><b>Nó do Bloco:</b>
-                            {{ block.nonce }}</label></div>
-                        <div style="margin-left: auto; margin-right: auto;"><label><b>Estudante associado ao bloco:</b>
-                            {{block.contract.student_name_sponte }}</label></div>
+                        <div style="margin-left: auto; margin-right: auto;">
+                          <b>Hash Anterior:</b> {{ block.previous_hash }}
+                        </div>
+                        <div style="margin-left: auto; margin-right: auto;">
+                          <b>Data e Hora:</b> {{ block.time_stamp }}
+                        </div>
+                        <div style="margin-left: auto; margin-right: auto;">
+                          <b>Nó do Bloco:</b> {{ block.nonce }}
+                        </div>
+                        <div style="margin-left: auto; margin-right: auto;">
+                          <b>Estudante associado ao bloco:</b> {{block.contract.student_name_sponte }}
+                        </div>
                       </div>
                       <!--Arrow--> <i style="font-size:40px" align="center" class="fas fa-long-arrow-alt-down mt-1"></i>
                     </div>

@@ -332,3 +332,17 @@ input[type=file] {
   border-color: #213f99 !important;
   opacity: 1 !important;
 }
+
+
+.chain-colors {
+    
+}
+
+.chain-colors > * {
+  color: #213f99;
+  border-color: #213f99;
+}
+
+.chain-colors > b {
+  color: #213f99;
+}
