@@ -120,7 +120,7 @@ def update_school(request, school_id=None):
 				chain.save(update_fields=['name'])
 			school.save(update_fields=['school_name', 'head', 'sponte_client_number', 'country', 'state', 'city','app_name'])
 			messages.success(request, 'A escola foi atualizada com sucesso!')
-			return redirect('/schools/seeallschools')
+			return redirect('/')
 		return render(request, 'school/update_school.html', {'form':form})
 	elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
 		is_supervisor = True
@@ -134,7 +134,7 @@ def update_school(request, school_id=None):
 				chain.save(update_fields=['name'])
 			school.save(update_fields=['school_name', 'head', 'sponte_client_number', 'country', 'state', 'city','app_name'])
 			messages.success(request, 'A escola foi atualizada com sucesso!')
-			return redirect('/schools/seeallschools')
+			return redirect('/')
 		return render(request, 'school/update_school.html', {'form':form, 'is_supervisor':is_supervisor})
 
 @csrf_exempt
@@ -163,7 +163,7 @@ def delete_school(request, school_id=None):
 			student.delete()
 		school_to_delete.delete()
 		messages.success(request, 'Escola excluída com sucessso!')
-		return redirect('/schools/seeallschools')
+		return redirect('/')
 
 @csrf_exempt
 @api_view(['GET'])
@@ -185,7 +185,7 @@ def add_class(request, school_id=None):
 			newclassroom = Class.objects.get(class_id=classroom.class_id)
 			school_to_add_class.classes.add(newclassroom)
 			messages.success(request, 'Classe adicionada com sucesso!')
-			return redirect('/schools/seeallschools')
+			return redirect('/')
 		return render(request, 'school/add_class.html', {'form':form})
 	elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
 		is_supervisor = True
@@ -199,7 +199,7 @@ def add_class(request, school_id=None):
 			newclassroom = Class.objects.get(class_id=classroom.class_id)
 			school_to_add_class.classes.add(newclassroom)
 			messages.success(request, 'Classe adicionada com sucesso!')
-			return redirect('/schools/seeallschools')
+			return redirect('/')
 		return render(request, 'school/add_class.html', {'form':form, 'is_supervisor':is_supervisor})
 
 
@@ -228,7 +228,7 @@ def update_class(request, class_id=None):
 			chain_to_be_updated.save(update_fields=['name'])
 			classroom.save(update_fields=['class_name', 'class_unit', 'enrollment_class_year','slm'])
 			messages.success(request, 'Classe e cadeia referente à classe atualizadas com sucesso!')
-			return redirect('/schools/seeallschools')
+			return redirect('/')
 		return render(request, 'school/update_class.html', {'form':form})
 	elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
 		is_supervisor = True
@@ -242,7 +242,7 @@ def update_class(request, class_id=None):
 			chain_to_be_updated.save(update_fields=['name'])
 			classroom.save(update_fields=['class_name', 'class_unit', 'enrollment_class_year','slm'])
 			messages.success(request, 'Classe e cadeia referente à classe atualizadas com sucesso!')
-			return redirect('/schools/seeallschools')
+			return redirect('/')
 		return render(request, 'school/update_class.html', {'form':form, 'is_supervisor':is_supervisor})
 
 @login_required
@@ -253,7 +253,7 @@ def delete_class(request, class_id=None):
 		chain_to_delete.delete()
 		class_to_delete.delete()
 		messages.success(request, 'Esta classe foi deletada corretamente e a cadeia referente a ela também!')
-		return redirect('/schools/seeallschools')
+		return redirect('/')
 
 
 def create_block(request):
@@ -280,7 +280,7 @@ def create_block(request):
 			if block.is_valid_block(block.chain.last_block):
 				print(block.is_valid_block(block.chain.last_block))
 				block.save()
-		return redirect('/schools/seeallschools')
+		return redirect('/')
 	return render(request, 'school/create_block.html', {'form':form})
 
 def verifyvalidchain(request, class_id=None):
@@ -291,9 +291,9 @@ def verifyvalidchain(request, class_id=None):
 	verify = chain_to_be_verified.is_valid_chain()
 	if verify or chain_to_be_verified.block_set.count()==0:
 		messages.success(request, 'O chain para esta turma é válido!')
-		return redirect('/schools/seeallschools')
+		return redirect('/')
 	messages.error(request, 'O chain para esta turma não é válido')
-	return redirect('/schools/seeallschools')
+	return redirect('/')
 
 def add_head_to_school(request, school_id=None):
 	pass
@@ -314,7 +314,7 @@ def add_teachers_to_school(request, school_id=None):
 					teacher = Teacher.objects.get(teacher_id=var)
 					school.teachers.add(teacher)
 			messages.success(request, 'Professores alterados na escola com sucesso')
-			return redirect('/schools/seeallschools')
+			return redirect('/')
 		return render(request, 'school/add_teachers_to_school.html', {'teacher_users':teacher_users, 'school':school})
 	elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
 		is_supervisor = True
@@ -331,7 +331,7 @@ def add_teachers_to_school(request, school_id=None):
 					teacher = Teacher.objects.get(teacher_id=var)
 					school.teachers.add(teacher)
 			messages.success(request, 'Professores alterados na escola com sucesso')
-			return redirect('/schools/seeallschools')
+			return redirect('/')
 		return render(request, 'school/add_teachers_to_school.html', {'is_supervisor':is_supervisor, 'student_users':student_users, 'school':school})
 
 @login_required
@@ -351,7 +351,7 @@ def add_teachers_to_class(request, class_id=None):
 					teacher = Teacher.objects.get(teacher_id=var)
 					class_to_add_teacher.teachers.add(teacher)
 			messages.success(request, 'Professores alterados na classe com sucesso!')
-			return redirect('/schools/seeallschools')
+			return redirect('/')
 		return render(request, 'school/add_teacher_to_class.html', {'teacher_users':teacher_users, 'class':class_to_add_teacher})
 	elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
 		is_supervisor = True
@@ -369,7 +369,7 @@ def add_teachers_to_class(request, class_id=None):
 					teacher = Teacher.objects.get(teacher_id=var)
 					class_to_add_teacher.teachers.add(teacher)
 			messages.success(request, 'Professores alterados na classe com sucesso!')
-			return redirect('/schools/seeallschools')
+			return redirect('/')
 		return render(request, 'school/add_teacher_to_class.html', {'is_supervisor':is_supervisor, 'teacher_users':teacher_users, 'class':class_to_add_teacher})
 
 @login_required
@@ -394,7 +394,7 @@ def add_students_to_school(request, school_id=None):
 					student = Student.objects.get(student_id=var)
 					school.students.add(student)
 			messages.success(request, 'Estudantes alterados na escola com sucesso!')
-			return redirect('/schools/seeallschools')
+			return redirect('/')
 		return render(request, 'school/add_students_to_school.html', {'student_users':student_users, 'school':school})
 	elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
 		is_supervisor = True
@@ -411,7 +411,7 @@ def add_students_to_school(request, school_id=None):
 					student = Student.objects.get(student_id=var)
 					school.students.add(student)
 			messages.success(request, 'Estudantes alterados na escola com sucesso!')
-			return redirect('/schools/seeallschools')
+			return redirect('/')
 		return render(request, 'school/add_students_to_school.html', {'is_supervisor':is_supervisor, 'student_users':student_users, 'school':school})
 
 def add_students_to_class(request, class_id=None):
@@ -430,7 +430,7 @@ def add_students_to_class(request, class_id=None):
 					student = Student.objects.get(student_id=var)
 					class_to_add_student.students.add(student)
 			messages.success(request, 'Estudantes alterados na classe com sucesso')
-			return redirect('/schools/seeallschools')
+			return redirect('/')
 		return render(request, 'school/add_students_to_class.html', {'student_users':student_users, 'class':class_to_add_student})
 	elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
 		is_supervisor = True
@@ -448,5 +448,5 @@ def add_students_to_class(request, class_id=None):
 					student = Student.objects.get(student_id=var)
 					class_to_add_student.students.add(student)
 			messages.success(request, 'Estudantes alterados na classe com sucesso')
-			return redirect('/schools/seeallschools')
+			return redirect('/')
 		return render(request, 'school/add_students_to_class.html', {'is_supervisor':is_supervisor, 'student_users':student_users, 'class':class_to_add_student})
