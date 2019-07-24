@@ -348,7 +348,7 @@ input[type=file] {
 }
 
 .sign-multiples-buttons {
-  margin: 10px;
+  margin: auto;
 }
 
 thead > tr > th {

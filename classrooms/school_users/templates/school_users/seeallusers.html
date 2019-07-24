@@ -168,7 +168,7 @@
               <tbody>
                 {% for supervisor in supervisor_users %}
                 <tr>
-                  <th scope="row">{{ supervisor.name }}</th>
+                  <th>{{ supervisor.name }}</th>
                   <td>{{ supervisor.profile.username }}</td>
                   {% if request.user.is_superuser %}
                   <td>

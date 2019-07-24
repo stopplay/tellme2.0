@@ -17,9 +17,17 @@
                         <h4 class="card-title">Contrato(s) do {{ request.user.username }}</h4>
                       {% endif %}
                   </div>
-                  <form method="POST" enctype="multipart/form-data" style="width: 99%;"> {% csrf_token %}
+                  <form method="POST" enctype="multipart/form-data" > {% csrf_token %}
                     {% if is_supervisor %}
-                      <button id="sign-multiple-id1" type="submit" class="btn btn-dark btn-sm btn-block sign-multiples-buttons" style="background-color: #ff3d24" data-toggle="modal" data-target="#multi-sign-contract-modal">Clique Aqui Para Assinar Contratos Selecionados</button>
+                    <div class="row" style="margin: auto">
+
+                      <div class="col-md-12">
+                        <button id="sign-multiple-id1" type="submit" class="btn btn-dark btn-sm btn-block sign-multiples-buttons" style="background-color: #ff3d24" data-toggle="modal" data-target="#multi-sign-contract-modal">
+                          Clique Aqui Para Assinar Contratos Selecionados
+                        </button>
+                      </div>
+
+                    </div>
                     {% endif %}
                     <div class="card-body table-full-width table-responsive">
                     <table class="table table-hover table-striped display row-border mb-4" id="contractstable">
@@ -254,7 +262,11 @@
                         <input type="hidden" name="variable" id="variable" value=false>
                     </div>
                     {% if is_supervisor %}
-                      <button id="sign-multiple-id2" type="submit" class="btn btn-dark btn-sm btn-block sign-multiples-buttons" style="background-color: #ff3d24" data-toggle="modal" data-target="#multi-sign-contract-modal">Clique Aqui Para Assinar Contratos Selecionados</button>
+                      <div class="row" style="margin: auto">
+                        <div class="col-md-12">
+                          <button id="sign-multiple-id2" type="submit" class="btn btn-dark btn-sm btn-block sign-multiples-buttons" style="background-color: #ff3d24" data-toggle="modal" data-target="#multi-sign-contract-modal">Clique Aqui Para Assinar Contratos Selecionados</button>
+                        </div>
+                      </div>
                     {% endif %}
                     </form>
                 </div>

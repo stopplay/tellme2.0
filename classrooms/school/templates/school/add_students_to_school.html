@@ -14,40 +14,46 @@
 
           </div>
           <form method="POST" enctype="multipart/form-data"> {% csrf_token %}
-          <div class="card-body table-full-width table-responsive">
-            <table class="table table-hover table-striped display mb-4" id="studentstable">
-              <thead class="">
-          			<tr>
-                  <th><input id="check" type="checkbox" name="select_all"></th>
-          				<th>Nome</th>
-                        <th>Nome de Usuário</th>
-                  <th>Responsável Financeiro</th>
-                  <th>Responsável Pedagógico</th>
+            <div class="card-body table-full-width table-responsive">
+              <table class="table table-hover table-striped display mb-4" id="studentstable">
+                <thead class="">
+                  <tr>
+                    <th><input id="check" type="checkbox" name="select_all"></th>
+                    <th>Nome</th>
+                    <th>Nome de Usuário</th>
+                    <th>Responsável Financeiro</th>
+                    <th>Responsável Pedagógico</th>
 
-          			</tr>
-          		</thead>
-          		<tbody>
-          			{% for student in student_users %}
-          			<tr>
-                  <th>
-                    {% if student in school.students.all %}
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for student in student_users %}
+                  <tr>
+                    <th>
+                      {% if student in school.students.all %}
                       <input type="checkbox" name="checks" value="{{ student.student_id }}" checked="true">
-                    {% else %}
+                      {% else %}
                       <input type="checkbox" name="checks" value="{{ student.student_id }}">
-                    {% endif %}
-                  </th>
-          				<th scope="row">{{ student.name }}</th>
-          				<td>{{ student.profile.username }}</td>
-                  <td>{{ student.first_parent.name }} </td>
-                  <td>{{ student.second_parent.name }}</td>
-          			</tr>
-          			{% endfor %}
-          		</tbody>
-            </table>
-          </div>
-          <input type="hidden"id="variable" name="variable" name="variable">
-          <button type="submit" class="btn btn-dark btn-sm btn-block" style="background-color: #ff3d24">Clique Aqui Para Associar os Estudantes Selecionados à Escola</button>
-        </form>
+                      {% endif %}
+                    </th>
+                    <th scope="row">{{ student.name }}</th>
+                    <td>{{ student.profile.username }}</td>
+                    <td>{{ student.first_parent.name }} </td>
+                    <td>{{ student.second_parent.name }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <input type="hidden" id="variable" name="variable" name="variable">
+            <div class="row" style="margin: auto">
+
+              <div class="col-md-12">
+                <button type="submit" class="btn btn-dark btn-sm btn-block" style="background-color: #ff3d24">Clique
+                  Aqui Para Associar os Estudantes Selecionados à Escola</button>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>
@@ -58,32 +64,32 @@
 
 
 <script type="text/javascript">
-  $(document).ready( function () {
+  $(document).ready(function () {
     $('#studentstable').DataTable();
-} );
+  });
 </script>
 <script type="text/javascript">
   $(document).ready(function () {
-    $('#check').on('change',function () {
-        var table = $('#studentstable');
-        var check = document.getElementsByName('select_all');
-        var checkboxes = table.children('tbody').children('tr').children('th').children('input');
-        if (check[0].checked == true) {
-            document.getElementById('variable').value = true;
-            for (var i = 0; i < checkboxes.length; i++) {
-                if (checkboxes[i].type == 'checkbox') {
-                    checkboxes[i].checked = true;
-                }
-            }
-        } else {
-            document.getElementById('variable').value = false;
-            for (var i = 0; i < checkboxes.length; i++) {
-                if (checkboxes[i].type == 'checkbox') {
-                    checkboxes[i].checked = false;
-                }
-            }
+    $('#check').on('change', function () {
+      var table = $('#studentstable');
+      var check = document.getElementsByName('select_all');
+      var checkboxes = table.children('tbody').children('tr').children('th').children('input');
+      if (check[0].checked == true) {
+        document.getElementById('variable').value = true;
+        for (var i = 0; i < checkboxes.length; i++) {
+          if (checkboxes[i].type == 'checkbox') {
+            checkboxes[i].checked = true;
+          }
         }
+      } else {
+        document.getElementById('variable').value = false;
+        for (var i = 0; i < checkboxes.length; i++) {
+          if (checkboxes[i].type == 'checkbox') {
+            checkboxes[i].checked = false;
+          }
+        }
+      }
     });
- });
+  });
 </script>
 {% endblock %}
