@@ -232,6 +232,12 @@ def createacontract(request):
 @login_required
 def updatecontract(request, contract_id=None):
 	if request.user.is_superuser:
+		selected_user = request.session['selected_user']
+		if Student.objects.filter(student_id = selected_user).count()>=1:
+			student = Student.objects.get(student_id = selected_user)
+		else:
+			messages.warning(request, 'Por favor selecione um estudante')
+			return redirect('/contracts/select_student_to_contract_update/{}'.format(contract_id))
 		instance = Contract.objects.get(contract_id=contract_id)
 		if instance.chain:
 			school = School.objects.get(chains__id__exact=instance.chain.id)
@@ -244,8 +250,6 @@ def updatecontract(request, contract_id=None):
 		students = Student.objects.all().order_by('name')
 		if request.method=='POST':
 			if form.is_valid():
-				selected_user = request.POST.get('selected_user', 0)
-				student = Student.objects.get(student_id = selected_user)
 				contract = form.save(commit=False)
 				school = School.objects.get(chains__name__exact=contract.chain.name)
 				if student.first_parent and student.second_parent:
@@ -422,6 +426,16 @@ def select_student_to_contract(request):
 			request.session['selected_user'] = selected_user
 			return redirect('/contracts/createacontract')
 		return render(request, 'contract/select_student_to_contract.html', {'students':students, 'is_supervisor':True})
+
+@login_required
+def select_student_to_contract_update(request, contract_id=None):
+	if request.user.is_superuser:
+		students = Student.objects.all()
+		if request.method == 'POST':
+			selected_user = request.POST.get('selected_user' or None)
+			request.session['selected_user'] = selected_user
+			return redirect('/contracts/updatecontract/{}'.format(contract_id))
+		return render(request, 'contract/select_student_to_contract.html', {'students':students})
 
 #weverton
 @login_required

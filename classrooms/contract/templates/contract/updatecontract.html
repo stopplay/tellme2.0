@@ -13,18 +13,12 @@
 					</div>
 					<div class="card-body">
 						<div class="row">
-							<div class="col-md-11 pr-1">
+							<div class="col-md-5 pr-1">
 								<div class="form-group">
 									<form method="POST" enctype="multipart/form-data">{% csrf_token %}
-										<select id="select_form" style="max-width: 250%;" class="chosen-select">
-											<option id="" value="" selected>Selecione um estudante</option>
-											{% for student in students %}
-												<option value="{{ student.student_id }}">{{ student.name }}</option>
-											{% endfor %}
-										</select><br>
 										{{ form.as_p }}
 										<input type="hidden" id="selected_user" name="selected_user" value="0">
-										<div><button type="submit" class="btn btn-info btn-fill btn-sm pull-left mt-2">Atualizar Contrato</button></div>
+										<div><button type="submit" class="btn btn-info btn-fill btn-sm pull-left mt-2" style="background-color: #213f99; border-color: #213f99">Atualizar Contrato</button></div>
 									</form>
 								</div>
 							</div>
