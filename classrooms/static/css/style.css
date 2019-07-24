@@ -69,8 +69,29 @@ input:checked + .slider:before {
   margin: 0 auto;
 }
 
+.box-rounded-blue {
+  background-color: #213f99c7 !important;
+}
+
 .box-rounded:hover {
+  color: white;
+  text-decoration: none;
   background-color: rgb(255, 255, 255);
+}
+
+.color-link-white {
+  color: white;
+  text-decoration: none;
+}
+
+.vertical-align-with-transform {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.box-rounded-blue:hover {
+  background-color: #213f99 !important;
 }
 
 .font-size-plus {
