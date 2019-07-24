@@ -21,10 +21,10 @@ $(document).ready(function() {
 					</div>
 					<div class="card-body">
 						<div class="row">
-							<div class="col-md-5 pr-1">
+							<div class="col-md-11 pr-1">
 								<div class="form-group">
 									<form method="POST" class="" enctype="multipart/form-data"> {% csrf_token %}
-										<select id="select_form" style="max-width: 250%;width:250px;" class="custom-select">
+										<select id="select_form" class="custom-select">
 											<option id="" value="" selected>Selecione um estudante</option>
 											{% for student in students %}
 												<option value="{{ student.student_id }}">{{ student.name }}</option>

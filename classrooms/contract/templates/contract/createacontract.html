@@ -21,18 +21,18 @@
 					</div>
 					<div class="card-body">
 						<div class="row">
-							<div class="col-md-5 pr-1">
+							<div class="col-md-11 pr-1">
 								<div class="form-group">
-									<form method="POST" class="" enctype="multipart/form-data" style="width: 250px"> {% csrf_token %}
+									<form method="POST" class="" enctype="multipart/form-data" > {% csrf_token %}
 										<div style="margin-top: 10px">
-											<p><label>Você deseja enviar este contrato por email?</label><label
+											<p><label>Você deseja enviar este contrato por email?</label><br><label
 													style="margin-right: 10px">Não</label><label class="switch">
 													<input type="checkbox" id="first_checkbox">
 													<a id="first_slider" class="slider round"></a>
 												</label><label style="margin-left: 10px">Sim</label></p>
 										</div>
 										<div id="sim">
-											<p><label>Você deseja agendar o envio deste email?</label><label
+											<p><label>Você deseja agendar o envio deste email?</label><br><label
 													style="margin-right: 10px">Não</label><label class="switch"><input
 														type="checkbox" id="second_checkbox"><a id="second_slider"
 														class="slider round" onclick="select()"></a></label><label
