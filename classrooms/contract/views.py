@@ -476,7 +476,7 @@ def set_signed(request, contract_id = None):
 			block.chain = contract.chain
 			if block.chain.__len__()<1:
 				block.index = 0
-				block.previous_hash = 'Basic hash for the chain'
+				block.previous_hash = 'NULO'
 				block.time_stamp=datetime.datetime.now(tz=pytz.utc)
 				block.nonce = SymmetricEncryption.generate_salt(26)
 				while not block.valid_hash():
