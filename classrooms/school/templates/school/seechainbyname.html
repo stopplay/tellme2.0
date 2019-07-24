@@ -36,7 +36,7 @@
 
 
                       <div class="mb-2" style="border-style: solid; display: block; width: 70%; height: 300px;">
-                        <h4><b>Block Index:</b> {{ block.index }}</h4>
+                        <h4><b>Índice do Bloco:</b> {{ block.index }}</h4>
                         <h4>{{ block.contract.name }}</h4>
                         <div style="margin-left: auto; margin-right: auto;"><label><b>Hash:</b> {{ block.hash }}</label>
                         </div>
@@ -47,7 +47,9 @@
                         <div style="margin-left: auto; margin-right: auto;"><label><b>Nó do Bloco:</b>
                             {{ block.nonce }}</label></div>
                         <div style="margin-left: auto; margin-right: auto;"><label><b>Estudante associado ao bloco:</b>
-                            {{block.contract.student_name_sponte }}</label></div>
+                            {{ block.contract.student_name }}</label></div>
+                        <div style="margin-left: auto; margin-right: auto;"><label><b>Quem assinou o contrato:</b>
+                            {% if block.hash == block.contract.first_auth_hash %}{{ block.contract.first_auth_signe.name }}{% elif block.hash == block.contract.second_auth_hash %}{{ block.contract.second_auth_signe.name }} {% elif block.hash == block.contract.counter_auth_hash %} {{ block.contract.counter_signe.name }}{% endif %}</label></div>    
                       </div>
                       <!--Arrow--> <i style="font-size:40px" align="center" class="fas fa-long-arrow-alt-down mt-1"></i>
                     </div>
