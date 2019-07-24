@@ -23,7 +23,7 @@
 						<div class="row">
 							<div class="col-md-5 pr-1">
 								<div class="form-group">
-									<form method="POST" class="" enctype="multipart/form-data"> {% csrf_token %}
+									<form method="POST" class="" enctype="multipart/form-data" style="width: 250px"> {% csrf_token %}
 										<div style="margin-top: 10px">
 											<p><label>Você deseja enviar este contrato por email?</label><label
 													style="margin-right: 10px">Não</label><label class="switch">
@@ -43,6 +43,7 @@
 										</div>
 										<div id="child">
 										</div>
+
 										{{ form.as_p }}
 										<input type="hidden" id="wish" name="wish" value="não">
 
@@ -106,7 +107,7 @@
 	});
 	function select() {
 		if (!$('#second_checkbox').prop("checked")) {
-			$('#child').append('<div id="não"><p><div class="form-group"><label>Que dia você deseja que seja enviado o seu contrato?</label><label>Data do Agendamento: </label><input class="labelandform" type="date" name="date" style="width:120%" min="{{ tomorrow }}"></div></p></div>')
+			$('#child').append('<div id="não"><p><div class="form-group"><label>Que dia você deseja que seja enviado o seu contrato?</label><label>Data do Agendamento: </label><input class="labelandform" type="date" name="date" min="{{ tomorrow }}"></div></p></div>')
 			document.getElementById('wish_today').value = 'não'
 
 		}
@@ -118,5 +119,6 @@
 		}
 	}
 </script>
+		<script>(function(e,t,n){var r=e.querySelectorAll("html")[0];r.className=r.className.replace(/(^|\s)no-js(\s|$)/,"$1js$2")})(document,window,0);</script>
 
 {% endblock %}

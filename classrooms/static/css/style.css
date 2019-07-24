@@ -253,6 +253,26 @@ input[type=password] {
   padding: .375rem 1.75rem .375rem .75rem;
 }
 
+input[type=date] {
+  margin: 4px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  height: calc(1.5em + .75rem + 2px);
+  padding: .375rem 1.75rem .375rem .75rem;
+}
+
+input[type=file] {
+  margin: 4px 4px;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  height: calc(1.5em + .75rem + 2px);
+  padding: .375rem 1.75rem 2.375rem .75rem;
+}
+
 .even-distributed {
   display: inline-flex;
   flex-direction: row;
