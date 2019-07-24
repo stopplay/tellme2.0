@@ -19,7 +19,7 @@
                 <tr>
 
 
-                  <th>Blocos</th>
+                  
 
                 </tr>
               </thead>
@@ -27,7 +27,6 @@
                 {% if chain.block_set %}
                 {% for block in chain.block_set.all %}
                 <tr>
-
 
                   <td align="center" style="display: block;">
 
@@ -54,7 +53,13 @@
                           <b>Estudante associado ao bloco:</b> {{block.contract.student_name_sponte }}
                         </div>
                       </div>
-                      <!--Arrow--> <i style="font-size:40px" align="center" class="fas fa-long-arrow-alt-down mt-1"></i>
+
+                      {% if forloop.last %}
+
+                      {% else %}
+                        <!--Arrow--> 
+                        <i style="font-size:40px" align="center" class="fas fa-long-arrow-alt-down mt-1"></i>
+                      {% endif %}
                     </div>
 
 
