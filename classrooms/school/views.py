@@ -7,6 +7,7 @@ from rest_framework import viewsets, generics, status
 from .forms import *
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from block.models import *
+from contract.models import *
 import pdb
 from block.utils import SymmetricEncryption, JsonApi, EncryptionApi
 import datetime
@@ -59,7 +60,7 @@ def seeallschools(request):
 		is_supervisor = True
 		schools = School.objects.filter(adminorsupervisor=Supervisor.objects.get(profile=request.user))
 		return render(request, 'school/seeallschools.html', {'schools':schools, 'is_supervisor':is_supervisor})
-	return HttpResponse('U cannot access this page cos u are not admin!')
+	return redirect('/contracts/seeallcontracts')
 
 @login_required
 def seeschooldetails(request, school_id = None):
@@ -139,11 +140,22 @@ def update_school_rest(request, school_id=None):
 	schools_rest = SchoolSerializer(instance)
 	return Response({'schools':schools_rest.data})
 
+@login_required
 def delete_school(request, school_id=None):
-	school_to_delete = School.objects.get(school_id=school_id)
-	school_to_delete.delete()
-	messages.success(request, 'Escola excluída com sucessso!')
-	return redirect('/schools/seeallschools')
+	if request.user.is_superuser:
+		school_to_delete = School.objects.get(school_id=school_id)
+		for chain in school_to_delete.chains.all():
+			Contract.objects.filter(chain=chain).delete()
+		for student in school_to_delete.students.all():
+			student.first_parent.profile.delete()
+			student.second_parent.profile.delete()
+			student.profile.delete()
+			student.first_parent.delete()
+			student.second_parent.delete()
+			student.delete()
+		school_to_delete.delete()
+		messages.success(request, 'Escola excluída com sucessso!')
+		return redirect('/schools/seeallschools')
 
 @csrf_exempt
 @api_view(['GET'])

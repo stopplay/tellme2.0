@@ -710,13 +710,25 @@ def add_parent(request, student_id=None, type_of_user= None):
         form2 = ParentModelForm(request.POST or None)
         if form.is_valid() and form2.is_valid():
             user = form.save(commit=False)
-            user.save()
             user.username = user.first_name.lower()+user.last_name.lower()
+            while User.objects.filter(username=user.username).count()>=1:
+                user.username = user.username + str(i)
+                i+=1
+            user.save()
             user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
             user_creation = form2.save(commit=False)
             user_creation.profile = user_profile
             user_creation.name = user_profile.first_name+' '+user_profile.last_name
             user_creation.save()
+            mail_subject = 'Login para acesso ao app escolar.'
+            message = render_to_string('school_users/user_login.html', {
+                'user': user_creation,
+            })
+            to_email = form.cleaned_data.get('email')
+            email = EmailMessage(
+                mail_subject, message, to=[to_email]
+            )
+            email.send()
             parent = Parent.objects.get(profile=user_profile)
             if type_of_user == 'first_parent':
                 student.first_parent = parent
@@ -733,13 +745,26 @@ def add_parent(request, student_id=None, type_of_user= None):
         form2 = ParentModelForm(request.POST or None)
         if form.is_valid() and form2.is_valid():
             user = form.save(commit=False)
-            user.save()
             user.username = user.first_name.lower()+user.last_name.lower()
+            i = 1
+            while User.objects.filter(username=user.username).count()>=1:
+                user.username = user.username + str(i)
+                i+=1
+            user.save()
             user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
             user_creation = form2.save(commit=False)
             user_creation.profile = user_profile
             user_creation.name = user_profile.first_name+' '+user_profile.last_name
             user_creation.save()
+            mail_subject = 'Login para acesso ao app escolar.'
+            message = render_to_string('school_users/user_login.html', {
+                'user': user_creation,
+            })
+            to_email = form.cleaned_data.get('email')
+            email = EmailMessage(
+                mail_subject, message, to=[to_email]
+            )
+            email.send()
             parent = Parent.objects.get(profile=user_profile)
             if type_of_user == 'first_parent':
                 student.first_parent = parent
@@ -932,7 +957,7 @@ def do_login(request):
         user = authenticate(username=username, password=request.POST['password'])
         if user is not None:
             login(request, user)
-            nextpage = request.GET.get('next','/contracts/seeallcontracts')
+            nextpage = request.GET.get('next','/')
             return redirect(nextpage)
     return render(request, 'school_users/login.html')
 
@@ -1008,6 +1033,6 @@ def login_from_other_system(request, username=None):
         user = authenticate(username=username, password=request.POST['password'])
         if user is not None:
             login(request, user)
-            nextpage = request.GET.get('next','/contracts/seeallcontracts')
+            nextpage = request.GET.get('next','/')
             return redirect(nextpage)
     return render(request, 'school_users/login_from_other_system.html')

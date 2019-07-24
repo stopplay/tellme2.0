@@ -1,6 +1,7 @@
 from django.forms import ModelForm
 from django import forms
 from .models import *
+import datetime
 
 class SchoolModelForm(forms.ModelForm):
 	"""docstring for UserModelForm"""
@@ -27,7 +28,7 @@ class ClassModelForm(forms.ModelForm):
 		widgets = {
 			'class_name': forms.TextInput(attrs={'maxlength':255, 'required':True}),
 			'class_unit': forms.Select(attrs={'required':True, "class":"custom-select"}),
-			'enrollment_year': forms.NumberInput(attrs={'required':True}),
+			'enrollment_class_year': forms.NumberInput(attrs={'required':True, 'min':datetime.date.today().year}),
 			'slm': forms.TextInput(attrs={'required':False}),
 		}
 
