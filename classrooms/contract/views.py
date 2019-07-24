@@ -498,7 +498,7 @@ def set_signed(request, contract_id = None):
 			head = Head.objects.get(profile=request.user)
 			contract.counter_signed = True
 			contract.counter_signed_timestamp = timezone.now()
-			contract.counter_hash = block.hash
+			contract.counter_auth_hash = block.hash
 			contract.save(update_fields=['counter_signed', 'counter_signed_timestamp', 'counter_auth_hash'])
 			write_pdf(request, contract, 'director')
 			content = contract.pdf.read()

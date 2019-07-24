@@ -82,7 +82,7 @@
                   <td style="display: block;">
                     {% for chain in school.chains.all %}
                     <div style="display: block;">
-                      <label>Nome da Cadeia: {{ chain.name }}</label>
+                      <label>{{ chain.name }}</label>
                       <br>
                       <div>
                         <a class="btn btn-secondary btn-sm" href="{% url 'school:seechainbyid' chain.id %}" role="button" data-baloon="Remove this item from the cart" class="text-danger">Detalhes da Cadeia</a>
