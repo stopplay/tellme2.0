@@ -83,7 +83,7 @@ def write_pdf(request, contract=None, whosigned=None):
 	elif whosigned == 'second_auth':
 		can.drawString(45, 20, "2. Responsável Didático: {} Hash: {}, em {} às {}".format(contract.second_auth_signe.name, contract.second_auth_hash, str(contract.second_auth_signed_timestamp.date().day)+'/'+str(contract.second_auth_signed_timestamp.date().month)+'/'+str(contract.second_auth_signed_timestamp.date().year), str(contract.second_auth_signed_timestamp.time().hour)+':'+str(contract.second_auth_signed_timestamp.time().minute)+':'+str(contract.second_auth_signed_timestamp.time().second)))
 	elif whosigned == 'director':
-		can.drawString(45, 10, "3. Responsável Diretor: {} Hash: {}, em {} às {}".format(contract.counter_signe.name, contract.counter_hash, str(contract.counter_signed_timestamp.date().day)+'/'+str(contract.counter_signed_timestamp.date().month)+'/'+str(contract.counter_signed_timestamp.date().year), str(contract.counter_signed_timestamp.time().hour)+':'+str(contract.counter_signed_timestamp.time().minute)+':'+str(contract.counter_signed_timestamp.time().second)))
+		can.drawString(45, 10, "3. Responsável Diretor: {} Hash: {}, em {} às {}".format(contract.counter_signe.name, contract.counter_auth_hash, str(contract.counter_signed_timestamp.date().day)+'/'+str(contract.counter_signed_timestamp.date().month)+'/'+str(contract.counter_signed_timestamp.date().year), str(contract.counter_signed_timestamp.time().hour)+':'+str(contract.counter_signed_timestamp.time().minute)+':'+str(contract.counter_signed_timestamp.time().second)))
 	elif whosigned == 'all_signed':
 		can.drawString(45, 40, "Assinado Eletronicamente por:")
 	can.showPage()
