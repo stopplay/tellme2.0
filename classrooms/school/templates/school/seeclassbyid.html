@@ -33,7 +33,7 @@
 
 															<th >{{ classe.class_id }}</th>
 															<th>{{ classe.class_name }}</th>
-											        {% if classe.students %}
+											        {% if classe.students.all %}
 											        <th align="center">{% for student in classe.students.all %}
 											            <label> {{ student.name }} </label><br>
 											            {% endfor %}
