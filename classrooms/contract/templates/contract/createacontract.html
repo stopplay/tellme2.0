@@ -6,9 +6,9 @@
 
 {% load static %}
 <script>
-$(document).ready(function() {
-  $('.container').removeClass('container');
-});
+	$(document).ready(function () {
+		$('.container').removeClass('container');
+	});
 </script>
 
 <div class="content">
@@ -24,20 +24,32 @@ $(document).ready(function() {
 							<div class="col-md-5 pr-1">
 								<div class="form-group">
 									<form method="POST" class="" enctype="multipart/form-data"> {% csrf_token %}
-										<div style="margin-top: 10px"><p><label>Você deseja enviar este contrato por email?</label><label style="margin-right: 10px">Não</label><label class="switch">
-													  <input type="checkbox" id="first_checkbox">
-													  <a id="first_slider" class="slider round"></a>
-													</label><label style="margin-left: 10px">Sim</label></p></div>
-										<div id="sim"><p><label>Você deseja agendar o envio deste email?</label><label style="margin-right: 10px">Não</label><label class="switch"><input type="checkbox" id="second_checkbox"><a id="second_slider" class="slider round" onclick="select()"></a></label><label style="margin-left: 10px">Sim</label></p><input type="hidden" id="wish_today" name="wish_today" value="sim"></div>
+										<div style="margin-top: 10px">
+											<p><label>Você deseja enviar este contrato por email?</label><label
+													style="margin-right: 10px">Não</label><label class="switch">
+													<input type="checkbox" id="first_checkbox">
+													<a id="first_slider" class="slider round"></a>
+												</label><label style="margin-left: 10px">Sim</label></p>
+										</div>
+										<div id="sim">
+											<p><label>Você deseja agendar o envio deste email?</label><label
+													style="margin-right: 10px">Não</label><label class="switch"><input
+														type="checkbox" id="second_checkbox"><a id="second_slider"
+														class="slider round" onclick="select()"></a></label><label
+													style="margin-left: 10px">Sim</label></p><input type="hidden"
+												id="wish_today" name="wish_today" value="sim">
+										</div>
 										<div id="pai">
 										</div>
 										<div id="child">
 										</div>
 										{{ form.as_p }}
 										<input type="hidden" id="wish" name="wish" value="não">
-										
 
-                    <div><button type="submit" class="btn btn-info btn-fill btn-sm pull-left mt-2" style="background-color: #213f99; border-color: #213f99">Criar Novo Contrato</button></div>
+
+										<div><button type="submit" class="btn btn-info btn-fill btn-sm pull-left mt-2"
+												style="background-color: #213f99; border-color: #213f99">Criar Novo
+												Contrato</button></div>
 
 									</form>
 								</div>
@@ -51,28 +63,28 @@ $(document).ready(function() {
 	</div>
 </div>
 <script type="text/javascript">
-	$(document).ready(function(){
-		$('#select_form').on('change',function(){
+	$(document).ready(function () {
+		$('#select_form').on('change', function () {
 			var selectValor = $(this).val();
 			if (selectValor == '') {
 				document.getElementById('selected_user').value = '0'
 			}
-			else{
+			else {
 				document.getElementById('selected_user').value = selectValor
 			}
 		});
 	});
-	$(document).ready(function(){
-		$('#first_input').on('change',function(){
+	$(document).ready(function () {
+		$('#first_input').on('change', function () {
 			var selectValor = $(this).val($(this).is(':checked'));
 			if (selectValor == '') {
 				$('#pai').children('div').remove();
 				$('#child').children('div').remove();
 			}
-			else if (selectValor == true){
-				
+			else if (selectValor == true) {
+
 			}
-			else if(selectValor == false){
+			else if (selectValor == false) {
 				$('#pai').children('div').remove();
 				$('#child').children('div').remove();
 				document.getElementById('wish').value = 'não'
@@ -80,30 +92,30 @@ $(document).ready(function() {
 			}
 		});
 	});
-	$(document).on("click","#first_slider",function(){
-		if (!$('#first_checkbox').prop("checked")){
+	$(document).on("click", "#first_slider", function () {
+		if (!$('#first_checkbox').prop("checked")) {
 			document.getElementById('wish').value = 'sim'
 			$('#first_checkbox').attr('checked')
 		}
-		else{
+		else {
 			$('#pai').children('div').remove();
 			$('#child').children('div').remove();
 			document.getElementById('wish').value = 'não'
 			$('#first_checkbox').removeAttr('checked')
 		}
 	});
-	function select(){
-		if (!$('#second_checkbox').prop("checked")){
+	function select() {
+		if (!$('#second_checkbox').prop("checked")) {
 			$('#child').append('<div id="não"><p><div class="form-group"><label>Que dia você deseja que seja enviado o seu contrato?</label><label>Data do Agendamento: </label><input class="labelandform" type="date" name="date" style="width:120%" min="{{ tomorrow }}"></div></p></div>')
 			document.getElementById('wish_today').value = 'não'
-			
+
 		}
-		else{
+		else {
 			$('#second_checkbox').removeAttr('checked')
 			$('#child').children('#não').remove();
 			document.getElementById('wish_today').value = 'sim'
 			$('#second_checkbox').attr('checked')
-		}	
+		}
 	}
 </script>
 

@@ -210,6 +210,49 @@ input[type=search] {
   box-sizing: border-box;
 }
 
+.form-field-selector {
+  
+}
+
+input[type=text] {
+  /* width: 200px; */
+  /* padding: 4px 4px; */
+  margin: 4px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  width: 100%;
+  height: calc(1.5em + .75rem + 2px);
+  padding: .375rem 1.75rem .375rem .75rem;
+}
+
+input[type=email] {
+  /* width: 200px; */
+  /* padding: 4px 4px; */
+  margin: 4px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  width: 100%;
+  height: calc(1.5em + .75rem + 2px);
+  padding: .375rem 1.75rem .375rem .75rem;
+}
+
+input[type=password] {
+  /* width: 200px; */
+  /* padding: 4px 4px; */
+  margin: 4px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  width: 100%;
+  height: calc(1.5em + .75rem + 2px);
+  padding: .375rem 1.75rem .375rem .75rem;
+}
+
 .even-distributed {
   display: inline-flex;
   flex-direction: row;
