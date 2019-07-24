@@ -54,10 +54,10 @@
                           data-baloon="Remove this item from the cart" class="text-danger">Selecionar Estudantes Para
                           Escola</a>
                         <!-- <a class="dropdown-item"href="{% url 'school:add_teachers_to_school' school.school_id %}" data-baloon="Remove this item from the cart" class="text-danger">Selecionar Professores Para Escola</a> -->
-                        <a class="dropdown-item" href="{% url 'school:update_school' school.school_id %}"
-                          data-baloon="Remove this item from the cart" class="text-danger">Atualizar Escola</a>
-                        <a class="dropdown-item" href="{% url 'school:delete_school' school.school_id %}"
-                          data-baloon="Remove this item from the cart" class="text-danger">Deletar Escola</a>
+                        <a class="dropdown-item" href="{% url 'school:update_school' school.school_id %}" data-baloon="Remove this item from the cart" class="text-danger">Atualizar Escola</a>
+                        {% if request.user.is_superuser %}
+                          <a class="dropdown-item" href="{% url 'school:delete_school' school.school_id %}" data-baloon="Remove this item from the cart" class="text-danger">Deletar Escola</a>
+                        {% endif %}
                         {% if request.user.is_superuser or is_supervisor %}
                         <a class="dropdown-item" href="{% url 'school:seeschooldetails' school.school_id %}"
                           data-baloon="Remove this item from the cart" class="text-danger">Ver Detalhes da Escola</a>
@@ -117,7 +117,7 @@
                     <div class="row">
 
                       <div class="col-md-6">
-                        <label>Nome da Cadeia: {{ chain.name }}</label>
+                        <label>{{ chain.name }}</label>
                       </div>
                       <div class="col-md-6">
                         <a class="btn btn-secondary btn-sm" href="{% url 'school:seechainbyid' chain.id %}"
