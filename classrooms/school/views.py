@@ -290,9 +290,9 @@ def verifyvalidchain(request, class_id=None):
 	chain_to_be_verified = Chain.objects.get(id=class_id)
 	verify = chain_to_be_verified.is_valid_chain()
 	if verify or chain_to_be_verified.block_set.count()==0:
-		messages.success(request, 'O chain para esta classe é válido!')
+		messages.success(request, 'O chain para esta turma é válido!')
 		return redirect('/schools/seeallschools')
-	messages.error(request, 'O chain para esta classe não é válido')
+	messages.error(request, 'O chain para esta turma não é válido')
 	return redirect('/schools/seeallschools')
 
 def add_head_to_school(request, school_id=None):
