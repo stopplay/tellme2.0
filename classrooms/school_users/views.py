@@ -921,10 +921,10 @@ def set_parents(request, student_id=None):
     	instance = get_object_or_404(Student, student_id=student_id)
     	form = SetParentsModelForm(request.POST or None, instance=instance)
     	if form.is_valid():
-    		new_student = form.save(commit=False)
-    		new_student.save(update_fields=['first_parent','second_parent'])
+            new_student = form.save(commit=False)
+            new_student.save(update_fields=['first_parent','second_parent'])
             messages.success(request, 'Responsáveis Selecionados com Sucesso')
-    		return redirect('/users/seeallusers')
+            return redirect('/users/seeallusers')
     	return render(request, 'school_users/set_parents.html', {'form':form, 'student_id':student_id})
     elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
         is_supervisor = True
@@ -947,8 +947,8 @@ def set_parents(request, student_id=None):
         if form.is_valid():
             new_student = form.save(commit=False)
             new_student.save(update_fields=['first_parent','second_parent'])
-            return redirect('/users/seeallusers')
             messages.success(request, 'Responsáveis Selecionados com Sucesso')
+            return redirect('/users/seeallusers')
         return render(request, 'school_users/set_parents.html', {'form':form, 'student_id':student_id, 'is_supervisor':is_supervisor})
 
 
