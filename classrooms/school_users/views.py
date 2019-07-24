@@ -613,16 +613,16 @@ def create_supervisor_to_school(request, school_id=None):
                         school_to_add_supervisor.adminorsupervisor = supervisor_to_add
                         school_to_add_supervisor.save(update_fields=['adminorsupervisor'])
                         messages.success(request, 'Admin/Supervisor adicionado com sucesso à escola {}'.format(school_to_add_supervisor.school_name))
-                        return redirect('/schools/seeallschools/'.format(school_id))
+                        return redirect('/'.format(school_id))
                 else:
                     supervisor = Supervisor.objects.get(supervisor_id=selected_user)
                     school_to_add_supervisor.adminorsupervisor = supervisor
                     school_to_add_supervisor.save(update_fields=['adminorsupervisor'])
                     messages.success(request, 'Admin/Supervisor adicionado com sucesso à escola {}'.format(school_to_add_supervisor.school_name))
-                    return redirect('/schools/seeallschools/'.format(school_id))
+                    return redirect('/'.format(school_id))
             elif aplicável == 'false':
                 messages.warning(request, 'Você escolheu supervisor não aplicável para a escola {}'.format(school_to_add_supervisor.school_name))
-                return redirect('/schools/seeallschools/'.format(school_id))
+                return redirect('/'.format(school_id))
         return render(request, 'school_users/create_supervisor_to_school.html', {'form':form, 'form2':form2, 'school':school_to_add_supervisor, 'supervisor_users':supervisor_users})
 
 
