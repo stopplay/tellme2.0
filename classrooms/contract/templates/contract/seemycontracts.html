@@ -19,7 +19,7 @@
                   </div>
                   <form method="POST" enctype="multipart/form-data" style="width: 99%;"> {% csrf_token %}
                     {% if is_supervisor %}
-                      <button type="submit" class="btn btn-dark btn-sm btn-block sign-multiples-buttons" style="background-color: #ff3d24" data-toggle="modal" data-target="#multi-sign-contract-modal">Clique Aqui Para Assinar Contratos Selecionados</button>
+                      <button id="sign-multiple-id1" type="submit" class="btn btn-dark btn-sm btn-block sign-multiples-buttons" style="background-color: #ff3d24" data-toggle="modal" data-target="#multi-sign-contract-modal">Clique Aqui Para Assinar Contratos Selecionados</button>
                     {% endif %}
                     <div class="card-body table-full-width table-responsive">
                     <table class="table table-hover table-striped display row-border mb-4" id="contractstable">
@@ -254,7 +254,7 @@
                         <input type="hidden" name="variable" id="variable" value=false>
                     </div>
                     {% if is_supervisor %}
-                      <button type="submit" class="btn btn-dark btn-sm btn-block sign-multiples-buttons" style="background-color: #ff3d24" data-toggle="modal" data-target="#multi-sign-contract-modal">Clique Aqui Para Assinar Contratos Selecionados</button>
+                      <button id="sign-multiple-id2" type="submit" class="btn btn-dark btn-sm btn-block sign-multiples-buttons" style="background-color: #ff3d24" data-toggle="modal" data-target="#multi-sign-contract-modal">Clique Aqui Para Assinar Contratos Selecionados</button>
                     {% endif %}
                     </form>
                 </div>
@@ -291,6 +291,42 @@
       window.location.assign(url);
     }, 100);
   }
+
+  window.addEventListener('load', function() {
+
+    var element1 = document.getElementById("sign-multiple-id1");
+    var element2 = document.getElementById("sign-multiple-id2");
+
+    element1.addEventListener('click', trySignMultiples);
+    element2.addEventListener('click', trySignMultiples);
+
+    function trySignMultiples(/** @type Event */event) {
+      
+      // event.stopImmediatePropagation();
+      
+      /** @type NodeList*/
+      var allCheckboxes = document.getElementsByName('checks');
+      
+      var hasAtLeastOneChecked = false;
+      allCheckboxes.forEach(function(checkbox) {
+        hasAtLeastOneChecked = hasAtLeastOneChecked || checkbox.checked;
+      });
+          
+      if (!hasAtLeastOneChecked) {
+        event.preventDefault();
+        $('#multi-sign-contract-modal').modal();
+        $('#multi-sign-contract-modal-message').text('Por favor, selecione um contrato!');
+
+        setTimeout(function() {
+          $('#multi-sign-contract-modal').modal("hide");
+          setTimeout(function() {
+            $('#multi-sign-contract-modal-message').text('Por favor, espere um pouco. Estamos criptografando seus contratos!');
+          }, 100);
+        }, 2000);
+      }
+    }
+  })
+
 </script>
 
 <!-- Contract Modal -->
@@ -312,7 +348,7 @@
   
       <div class="modal-content">
         <div class="modal-body">
-          <p>Por favor, espere um pouco. Estamos criptografando seus contratos!</p>
+          <p id="multi-sign-contract-modal-message">Por favor, espere um pouco. Estamos criptografando seus contratos!</p>
         </div>
       </div>
       
