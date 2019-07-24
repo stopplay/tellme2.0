@@ -350,3 +350,26 @@ input[type=file] {
 .sign-multiples-buttons {
   margin: 10px;
 }
+
+thead > tr > th {
+  vertical-align: top !important;
+}
+
+thead > tr > th > * {
+  vertical-align: top !important;
+}
+
+table.dataTable thead .sorting {
+  background-position-y: 10px;
+  background-position-x: right;
+}
+
+table.dataTable thead .sorting_asc {
+  background-position-y: 10px;
+  background-position-x: right;
+}
+
+table.dataTable thead .sorting_desc {
+  background-position-y: 10px;
+  background-position-x: right;
+}
