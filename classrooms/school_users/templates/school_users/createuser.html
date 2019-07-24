@@ -38,6 +38,7 @@ $(document).ready(function() {
 											{% endif %}
 											<option value="parent">Pai/Mãe</option>
 											<option value="student">Estudante</option>
+											<option value="parentsandstudents">Pai/Mãe e Estudantes</option>
 										</select>
 									</div>
 									<input type="hidden" id="selected_user" name="selected_user" value="0">
@@ -144,6 +145,9 @@ $(document).ready(function() {
 			else if(selectValor == 'student'){
 				document.getElementById('selected_user').value = '6'
 			}
+			else if (selectValor == 'parentsandstudents'){
+				document.getElementById('selected_user').value = '7'
+			}
 		});
 	});
 	// $('#select_form_school').change(function(){
@@ -170,7 +174,7 @@ $(document).ready(function() {
 			if (!$('#first_checkbox').prop("checked")){
 				$('#pai').children('#não').remove();
 				// $('#pai').append('<div id="sim"><select class="custom-select chosen-select" onchange="select(this)" style="width:115%"><option id="" value="" selected>Você deseja selecionar um arquivo da web?</option><option id="sim" value="sim">Sim</option><option id="não" value="não">Não</option></select> <input type="hidden" id="archive_type" name="archive_type">');
-				$('#pai').append('<div id="sim"><p><div class="form-group"><input type="file" name="file"><a href="https://drive.google.com/uc?export=download&id=15yZWfIR-N3eM2pvGXABml5UZIwMQPhXe">Baixe o exemplo</a></div><div><button class="btn btn-info btn-fill pull-left" type="submit" style="background-color: #213f99; border-color: #213f99">Salvar Usuários</button></div></p></div>');
+				$('#pai').append('<div id="sim"><p><div class="form-group"><input type="file" name="file"><br><a href="https://drive.google.com/uc?export=download&id=1Il0GTYo-vutzilAKSVsjAbhzazZHnlNZ">Baixe o exemplo</a></div><div><button class="btn btn-info btn-fill pull-left" type="submit" style="background-color: #213f99; border-color: #213f99">Salvar Usuários</button></div></p></div>');
 				document.getElementById('sim/não').value = 'sim'
 				$('#first_checkbox').attr('checked')
 			}
