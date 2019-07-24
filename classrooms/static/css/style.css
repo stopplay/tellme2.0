@@ -346,3 +346,7 @@ input[type=file] {
 .chain-colors > b {
   color: #213f99;
 }
+
+.sign-multiples-buttons {
+  margin: 10px;
+}
