@@ -73,9 +73,11 @@
 
                   {% if school.classes %}
                   <td>
+
+                    <div class="flex-column-alignment"  style="width: 100%">
                     {% for class in school.classes.all %}
 
-                    <div class="row">
+                    <div class="row width-full margin-bottom-5">
                       <div class="col-md-6">
                         <label>{{ class.class_name }}, {{ class.enrollment_class_year }}</label>
                       </div>
@@ -106,26 +108,29 @@
                       </div>
 
                     </div>
-                    <br>
+
                     {% endfor %}
+                    </div>
                   </td>
                   {% endif %}
                   {% if school.chains %}
-                  <td style="display: block;">
-                    {% for chain in school.chains.all %}
-                    <div class="row">
-
-                      <div class="col-md-6">
-                        <label>{{ chain.name }}</label>
+                  <td  style="width: 100%;">
+                    <div class="flex-column-alignment">
+                      {% for chain in school.chains.all %}
+                      <div class="row width-full margin-bottom-5">
+  
+                        <div class="col-md-6">
+                          <label>{{ chain.name }}</label>
+                        </div>
+                        <div class="col-md-6">
+                          <a class="btn btn-secondary btn-sm" href="{% url 'school:seechainbyid' chain.id %}"
+                            role="button" data-baloon="Remove this item from the cart" class="text-danger">Ver Blockchain</a>
+                        </div>
+  
                       </div>
-                      <div class="col-md-6">
-                        <a class="btn btn-secondary btn-sm" href="{% url 'school:seechainbyid' chain.id %}"
-                          role="button" data-baloon="Remove this item from the cart" class="text-danger">Ver Blockchain</a>
-                      </div>
-
+                      
+                      {% endfor %}
                     </div>
-                    <br><br>
-                    {% endfor %}
 
                   </td>
                   {% endif %}

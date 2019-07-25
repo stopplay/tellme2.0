@@ -373,3 +373,21 @@ table.dataTable thead .sorting_desc {
   background-position-y: 10px;
   background-position-x: right;
 }
+
+.flex-column-alignment {
+  display: inline-flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.margin-bottom-5 {
+  margin-bottom: 5px;
+}
+
+.width-full {
+  width: 100%;
+}
+
+.table-responsive {
+  overflow-x: hidden !important;
+}
