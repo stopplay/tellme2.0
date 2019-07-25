@@ -909,20 +909,20 @@ def seeallusers_by_school(request, school_id=None):
     pass
 
 def delete_user(request, user_id=None, type_of_user=None):
-	if(type_of_user=='head'):
-		user_to_delete = get_object_or_404(Head, head_id=user_id)
-	if(type_of_user=='teacher'):
-		user_to_delete = get_object_or_404(Teacher, teacher_id=user_id)
-	if(type_of_user=='admin'):
-		user_to_delete = get_object_or_404(Admin, admin_id=user_id)
-	if(type_of_user=='supervisor'):
-		user_to_delete = get_object_or_404(Supervisor, supervisor_id=user_id)
-	if(type_of_user=='parent'):
-		user_to_delete = get_object_or_404(Parent, parent_id=user_id)
-	if(type_of_user=='student'):
-		user_to_delete = get_object_or_404(Student, student_id=user_id)
-	user_to_delete.profile.delete()
-	user_to_delete.delete()
+    if(type_of_user=='head'):
+        user_to_delete = get_object_or_404(Head, head_id=user_id)
+    if(type_of_user=='teacher'):
+        user_to_delete = get_object_or_404(Teacher, teacher_id=user_id)
+    if(type_of_user=='admin'):
+        user_to_delete = get_object_or_404(Admin, admin_id=user_id)
+    if(type_of_user=='supervisor'):
+        user_to_delete = get_object_or_404(Supervisor, supervisor_id=user_id)
+    if(type_of_user=='parent'):
+        user_to_delete = get_object_or_404(Parent, parent_id=user_id)
+    if(type_of_user=='student'):
+        user_to_delete = get_object_or_404(Student, student_id=user_id)
+    user_to_delete.profile.delete()
+    user_to_delete.delete()
     messages.success(request, 'Esse usuário foi deletado com sucesso')
     return redirect('/users/seeallusers')
 
