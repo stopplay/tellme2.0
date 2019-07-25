@@ -175,6 +175,10 @@ def create_user(request):
                     else:
                         user = form.save(commit=False)
                         user.username = user.first_name.lower()+user.last_name.lower()
+                        while User.objects.filter(username=user.username).count()>=1:
+                            user.username = user.first_name.lower()+user.last_name.lower()
+                            user.username = user.username + str(i)
+                            i+=1
                         user.save()
                         user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
                         if selected_user == '1':
@@ -443,6 +447,10 @@ def create_user(request):
                     else:
                         user = form.save(commit=False)
                         user.username = user.first_name.lower()+user.last_name.lower()
+                        while User.objects.filter(username=user.username).count()>=1:
+                            user.username = user.first_name.lower()+user.last_name.lower()
+                            user.username = user.username + str(i)
+                            i+=1
                         user.save()
                         user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
                         if selected_user == '1':
@@ -712,6 +720,7 @@ def add_parent(request, student_id=None, type_of_user= None):
             user = form.save(commit=False)
             user.username = user.first_name.lower()+user.last_name.lower()
             while User.objects.filter(username=user.username).count()>=1:
+                user.username = user.first_name.lower()+user.last_name.lower()
                 user.username = user.username + str(i)
                 i+=1
             user.save()
@@ -748,6 +757,7 @@ def add_parent(request, student_id=None, type_of_user= None):
             user.username = user.first_name.lower()+user.last_name.lower()
             i = 1
             while User.objects.filter(username=user.username).count()>=1:
+                user.username = user.first_name.lower()+user.last_name.lower()
                 user.username = user.username + str(i)
                 i+=1
             user.save()
