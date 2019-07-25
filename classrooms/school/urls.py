@@ -14,7 +14,7 @@ app_name = 'school'
 urlpatterns = [
     url('', include(router.urls)),
     path('seeclassbyid/<int:class_id>', views.seeclassbyid, name="seeclassbyid"),
-    path('seechainbyid/<int:chain_id>', views.seechainbyid, name="seechainbyid"),
+    path('blockchain/<int:chain_id>', views.seechainbyid, name="seechainbyid"),
     url('add_school/', views.create_school, name="add_school"),
     url('seeallschools/', views.seeallschools, name="seeallschools"),
     path('seeschooldetails/<int:school_id>', views.seeschooldetails, name="seeschooldetails"),

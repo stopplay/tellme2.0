@@ -175,6 +175,10 @@ def create_user(request):
                     else:
                         user = form.save(commit=False)
                         user.username = user.first_name.lower()+user.last_name.lower()
+                        while User.objects.filter(username=user.username).count()>=1:
+                            user.username = user.first_name.lower()+user.last_name.lower()
+                            user.username = user.username + str(i)
+                            i+=1
                         user.save()
                         user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
                         if selected_user == '1':
@@ -443,6 +447,10 @@ def create_user(request):
                     else:
                         user = form.save(commit=False)
                         user.username = user.first_name.lower()+user.last_name.lower()
+                        while User.objects.filter(username=user.username).count()>=1:
+                            user.username = user.first_name.lower()+user.last_name.lower()
+                            user.username = user.username + str(i)
+                            i+=1
                         user.save()
                         user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
                         if selected_user == '1':
@@ -712,6 +720,7 @@ def add_parent(request, student_id=None, type_of_user= None):
             user = form.save(commit=False)
             user.username = user.first_name.lower()+user.last_name.lower()
             while User.objects.filter(username=user.username).count()>=1:
+                user.username = user.first_name.lower()+user.last_name.lower()
                 user.username = user.username + str(i)
                 i+=1
             user.save()
@@ -748,6 +757,7 @@ def add_parent(request, student_id=None, type_of_user= None):
             user.username = user.first_name.lower()+user.last_name.lower()
             i = 1
             while User.objects.filter(username=user.username).count()>=1:
+                user.username = user.first_name.lower()+user.last_name.lower()
                 user.username = user.username + str(i)
                 i+=1
             user.save()
@@ -899,21 +909,22 @@ def seeallusers_by_school(request, school_id=None):
     pass
 
 def delete_user(request, user_id=None, type_of_user=None):
-	if(type_of_user=='head'):
-		user_to_delete = get_object_or_404(Head, head_id=user_id)
-	if(type_of_user=='teacher'):
-		user_to_delete = get_object_or_404(Teacher, teacher_id=user_id)
-	if(type_of_user=='admin'):
-		user_to_delete = get_object_or_404(Admin, admin_id=user_id)
-	if(type_of_user=='supervisor'):
-		user_to_delete = get_object_or_404(Supervisor, supervisor_id=user_id)
-	if(type_of_user=='parent'):
-		user_to_delete = get_object_or_404(Parent, parent_id=user_id)
-	if(type_of_user=='student'):
-		user_to_delete = get_object_or_404(Student, student_id=user_id)
-	user_to_delete.profile.delete()
-	user_to_delete.delete()
-	return HttpResponse('This user has been deleted correctly')
+    if(type_of_user=='head'):
+        user_to_delete = get_object_or_404(Head, head_id=user_id)
+    if(type_of_user=='teacher'):
+        user_to_delete = get_object_or_404(Teacher, teacher_id=user_id)
+    if(type_of_user=='admin'):
+        user_to_delete = get_object_or_404(Admin, admin_id=user_id)
+    if(type_of_user=='supervisor'):
+        user_to_delete = get_object_or_404(Supervisor, supervisor_id=user_id)
+    if(type_of_user=='parent'):
+        user_to_delete = get_object_or_404(Parent, parent_id=user_id)
+    if(type_of_user=='student'):
+        user_to_delete = get_object_or_404(Student, student_id=user_id)
+    user_to_delete.profile.delete()
+    user_to_delete.delete()
+    messages.success(request, 'Esse usuário foi deletado com sucesso')
+    return redirect('/users/seeallusers')
 
 @login_required
 def set_parents(request, student_id=None):
