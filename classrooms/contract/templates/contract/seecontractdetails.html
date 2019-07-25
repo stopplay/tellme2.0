@@ -7,15 +7,15 @@
 <div class="content">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-8">
-                <div class="card">
+            <div class="col-md-9">
+                <div class="card w-50">
                     <div class="card-header">
                         <h4 class="card-title">Detalhes do Contrato</h4>
                     </div>
                     <div class="card-body">
                         <form>
                             <div class="row">
-                                <div class="col-md-11 pr-1">
+                                <div class="col-md-12">
                                     <div class="form-group">
                                         <label>ID DO CONTRATO SPONTE</label>
                                         {% if contract.contract_id_sponte %}
@@ -26,7 +26,9 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-11 px-1">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">ID DO CONTRATO DE AULA LIVRE SPONTE</label>
                                         {% if contract.contract_free_class_id_sponte %}
