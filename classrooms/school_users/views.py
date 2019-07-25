@@ -923,7 +923,8 @@ def delete_user(request, user_id=None, type_of_user=None):
 		user_to_delete = get_object_or_404(Student, student_id=user_id)
 	user_to_delete.profile.delete()
 	user_to_delete.delete()
-	return HttpResponse('This user has been deleted correctly')
+    messages.success(request, 'Esse usuário foi deletado com sucesso')
+    return redirect('/users/seeallusers')
 
 @login_required
 def set_parents(request, student_id=None):
