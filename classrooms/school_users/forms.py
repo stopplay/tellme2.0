@@ -3,6 +3,7 @@ from django import forms
 from django.contrib.auth.models import User
 from .models import *
 from django.contrib.auth.forms import UserCreationForm
+import datetime
 
 class UserModelForm(UserCreationForm, forms.ModelForm):
 	"""docstring for UserModelForm"""
@@ -56,7 +57,10 @@ class StudentModelForm(forms.ModelForm):
 	"""docstring for ManagerModelForm"""
 	class Meta:
 		model = Student
-		fields = []
+		fields = ['birthday']
+		widgets = {
+			'birthday': forms.DateInput(attrs={'type':'date', 'class':'labelandform', 'required':True, 'style':"width:100%", 'max':datetime.date.today()-datetime.timedelta(days=1)}),
+		}
 
 class SetParentsModelForm(forms.ModelForm):
 	"""docstring for ManagerModelForm"""
