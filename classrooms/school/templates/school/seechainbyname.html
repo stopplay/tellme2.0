@@ -71,11 +71,13 @@
                         </div>    
                       </div>
 
-                      {% if forloop.last %}
+                      {% if forloop.counter0 == chain.block_set.count %}
 
                       {% else %}
+                        {% if not forloop.first %}
                         <!--Arrow--> 
                         <i style="font-size:40px" align="center" class="fas fa-long-arrow-alt-down mt-1"></i>
+                        {% endif %}
                       {% endif %}
                     </div>
 
