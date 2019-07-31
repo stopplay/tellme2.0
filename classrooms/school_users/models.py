@@ -125,6 +125,7 @@ class Student(models.Model):
 	first_parent = models.ForeignKey('Parent', on_delete = models.SET_NULL, null=True, blank=True, related_name='first_parent', verbose_name='Responsável Financeiro')
 	second_parent = models.ForeignKey('Parent', on_delete = models.SET_NULL, null=True, blank=True, related_name='second_parent', verbose_name='Responsável Pedagógico')
 	tell_me_user_id = models.IntegerField(null=True, blank=True)
+	bithday = models.DateField(null=True, blank=True, verbose_name = 'Data de Nascimento')
 
 	def __str__(self):
 		return '{}'.format(self.name)
