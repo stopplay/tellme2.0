@@ -30,6 +30,7 @@ import requests
 import datetime
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.forms import SetPasswordForm
 
 # Create your views here.
 @login_required
@@ -682,8 +683,22 @@ def classes_choices_ajax(request):
     context = {'classes':school.classes.all()}
     return render(request, 'school_users/classes_choices.html', context)
 
-def restPassword():
-    pass
+def reset_password(request, token=None, uidb64=None):
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+        if request.method == 'POST':
+            password = request.POST.get('password')
+            password2 = request.POST.get('password2')
+            if password == password2:
+                user.set_password(password)
+                user.save()
+            return redirect('/')
+        return render(request, 'school_users/reset_password.html')
+    return HttpResponse('O token não é válido para este usuário')
 
 @login_required
 def create_supervisor_to_school(request, school_id=None):

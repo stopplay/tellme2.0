@@ -31,6 +31,6 @@ urlpatterns = [
     url('current_user/', views.current_user, name='current_user'),
     path('create_head_to_school/<int:school_id>', views.create_head_to_school, name='create_head_to_school'),
     path('create_supervisor_to_school/<int:school_id>', views.create_supervisor_to_school, name='create_supervisor_to_school'),
-    url(r'^reset_password/confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$', PasswordResetView.as_view(), name='reset_password'),
+    url(r'^reset_password/confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$', views.reset_password, name='reset_password'),
     url('generate_password', views.generate_password, name='generate_password'),
 ]
