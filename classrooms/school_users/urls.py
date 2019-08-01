@@ -3,6 +3,7 @@ from rest_framework import routers
 from django.urls import include, path, re_path
 from . import views
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
+from django.contrib.auth.views import PasswordResetView
 
 # router = routers.DefaultRouter()
 # router.register(r'schools', views.SchoolsViewSet)
@@ -14,9 +15,9 @@ app_name = 'users'
 urlpatterns = [
     # url('', include(router.urls)),
     url('create_user/', views.create_user, name="create_user"),
-    url('seeallusers/', views.seeallusers, name="seeallusers"),
-    path('seeallusers_by_school/<int:school_id>', views.seeallusers_by_school, name='seeallusers_by_school'),
-    url('seeallusers_rest/', views.seeallusers_rest),
+    url('all/', views.seeallusers, name="seeallusers"),
+    path('all_by_school/<int:school_id>', views.seeallusers_by_school, name='seeallusers_by_school'),
+    url('all_rest/', views.seeallusers_rest),
     path('delete_user/<int:user_id>/<type_of_user>', views.delete_user, name='delete_user'),
     path('set_parents/<int:student_id>/', views.set_parents, name='set_parents'),
     path('add_parent/<int:student_id>/<type_of_user>', views.add_parent, name='add_parent'),
@@ -30,4 +31,5 @@ urlpatterns = [
     url('current_user/', views.current_user, name='current_user'),
     path('create_head_to_school/<int:school_id>', views.create_head_to_school, name='create_head_to_school'),
     path('create_supervisor_to_school/<int:school_id>', views.create_supervisor_to_school, name='create_supervisor_to_school'),
+    url(r'^reset_password/confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$', PasswordResetView.as_view(), name='reset_password')
 ]
