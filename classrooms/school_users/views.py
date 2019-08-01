@@ -618,8 +618,7 @@ def create_user(request):
     return HttpResponse('U cannot access this page cos u are not admin!')
 
 def generate_password(request):
-    pdb.set_trace()
-    password = User.objects.make_randon_password()
+    password = make_password('wordpass234')
     return render(request, 'school_users/password.html', {'password':password})
 
 
