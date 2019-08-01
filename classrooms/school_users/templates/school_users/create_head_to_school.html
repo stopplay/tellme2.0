@@ -60,7 +60,7 @@ $(document).ready(function() {
 			}
 			else if(selectValor == 'sim'){
 				$('#pai').children('#não').remove();
-				$('#pai').append('<div id="sim"><p><select class="custom-select chosen-select" id="select_head" onchange="selectUser(this)" style= "margin-bottom: 10px"><option id="" value="" selected>Selecione o diretor que você deseja</option>{% for head in head_users %}<option value="{{ head.head_id }}">{{ head.name }}</option>{% endfor %}</select><button class="btn btn-info btn-fill pull-left" type="submit" style="background-color: #213f99; border-color: #213f99">Próxima</button></p></div>');
+				$('#pai').append('<div id="sim"><p><select class="custom-select chosen-select" id="select_head" onchange="selectUser(this)"><option id="" value="" selected>Selecione o diretor que você deseja</option>{% for head in head_users %}<option value="{{ head.head_id }}">{{ head.name }}</option>{% endfor %}</select><button class="btn btn-info btn-fill pull-left" type="submit" style="background-color: #213f99; border-color: #213f99; margin-top: 10px;">Próxima</button></p></div>');
 				$(".chosen-select").chosen({ no_results_text: "Oops, nothing found!" });
 			}
 			else if(selectValor == 'não'){
