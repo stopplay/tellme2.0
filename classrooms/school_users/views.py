@@ -650,6 +650,7 @@ def create_head_to_school(request, school_id=None):
                     user_creation.profile = user_profile
                     user_creation.name = user_profile.first_name+' '+user_profile.last_name
                     user_creation.save()
+                    current_site = get_current_site(request)
                     mail_subject = 'Login para acesso ao app escolar.'
                     message = render_to_string('school_users/user_login.html', {
                         'user': user_creation,
@@ -707,6 +708,7 @@ def create_supervisor_to_school(request, school_id=None):
                         user_creation.profile = user_profile
                         user_creation.name = user_profile.first_name+' '+user_profile.last_name
                         user_creation.save()
+                        current_site = get_current_site(request)
                         mail_subject = 'Login para acesso ao app escolar.'
                         message = render_to_string('school_users/user_login.html', {
                             'user': user_creation,
