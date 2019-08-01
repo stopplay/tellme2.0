@@ -1023,29 +1023,33 @@ def seeallusers_by_school(request, school_id=None):
     return HttpResponse('U cannot access this page cos u are not admin!')
     pass
 
+@login_required
 def delete_user(request, user_id=None, type_of_user=None):
-    if(type_of_user=='head'):
-        user_to_delete = get_object_or_404(Head, head_id=user_id)
-    if(type_of_user=='teacher'):
-        user_to_delete = get_object_or_404(Teacher, teacher_id=user_id)
-    if(type_of_user=='admin'):
-        user_to_delete = get_object_or_404(Admin, admin_id=user_id)
-    if(type_of_user=='supervisor'):
-        user_to_delete = get_object_or_404(Supervisor, supervisor_id=user_id)
-    if(type_of_user=='parent'):
-        user_to_delete = get_object_or_404(Parent, parent_id=user_id)
-    if(type_of_user=='student'):
-        user_to_delete = get_object_or_404(Student, student_id=user_id)
-        if user_to_delete.first_parent:
-            user_to_delete.first_parent.profile.delete()
-            user_to_delete.first_parent.delete()
-        if user_to_delete.second_parent:
-            user_to_delete.second_parent.profile.delete()
-            user_to_delete.second_parent.delete()
-    user_to_delete.profile.delete()
-    user_to_delete.delete()
-    messages.success(request, 'Esse usuário foi deletado com sucesso')
-    return redirect('/users/all')
+    if request.user.is_superuser:
+        if(type_of_user=='head'):
+            user_to_delete = get_object_or_404(Head, head_id=user_id)
+        if(type_of_user=='teacher'):
+            user_to_delete = get_object_or_404(Teacher, teacher_id=user_id)
+        if(type_of_user=='admin'):
+            user_to_delete = get_object_or_404(Admin, admin_id=user_id)
+        if(type_of_user=='supervisor'):
+            user_to_delete = get_object_or_404(Supervisor, supervisor_id=user_id)
+        if(type_of_user=='parent'):
+            user_to_delete = get_object_or_404(Parent, parent_id=user_id)
+        if(type_of_user=='student'):
+            user_to_delete = get_object_or_404(Student, student_id=user_id)
+            if user_to_delete.first_parent:
+                user_to_delete.first_parent.profile.delete()
+                user_to_delete.first_parent.delete()
+            if user_to_delete.second_parent:
+                user_to_delete.second_parent.profile.delete()
+                user_to_delete.second_parent.delete()
+        user_to_delete.profile.delete()
+        user_to_delete.delete()
+        messages.success(request, 'Esse usuário foi deletado com sucesso')
+        return redirect('/users/all')
+    messages.error(request, 'Você não é administrador portanto não pode deletar usuários')
+    return redired('/users/all')
 
 @login_required
 def set_parents(request, student_id=None):
