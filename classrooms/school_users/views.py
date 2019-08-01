@@ -833,9 +833,13 @@ def add_parent(request, student_id=None, type_of_user= None):
             user_creation.profile = user_profile
             user_creation.name = user_profile.first_name+' '+user_profile.last_name
             user_creation.save()
+            current_site = get_current_site(request)
             mail_subject = 'Login para acesso ao app escolar.'
             message = render_to_string('school_users/user_login.html', {
                 'user': user_creation,
+                'domain': current_site.domain,
+                'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                'token':account_activation_token.make_token(user),
             })
             to_email = form.cleaned_data.get('email')
             email = EmailMessage(
@@ -870,9 +874,13 @@ def add_parent(request, student_id=None, type_of_user= None):
             user_creation.profile = user_profile
             user_creation.name = user_profile.first_name+' '+user_profile.last_name
             user_creation.save()
+            current_site = get_current_site(request)
             mail_subject = 'Login para acesso ao app escolar.'
             message = render_to_string('school_users/user_login.html', {
                 'user': user_creation,
+                'domain': current_site.domain,
+                'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                'token':account_activation_token.make_token(user),
             })
             to_email = form.cleaned_data.get('email')
             email = EmailMessage(
