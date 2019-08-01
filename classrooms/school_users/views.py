@@ -682,6 +682,9 @@ def classes_choices_ajax(request):
     context = {'classes':school.classes.all()}
     return render(request, 'school_users/classes_choices.html', context)
 
+def restPassword():
+    pass
+
 @login_required
 def create_supervisor_to_school(request, school_id=None):
     if request.user.is_superuser:
@@ -1033,6 +1036,12 @@ def delete_user(request, user_id=None, type_of_user=None):
         user_to_delete = get_object_or_404(Parent, parent_id=user_id)
     if(type_of_user=='student'):
         user_to_delete = get_object_or_404(Student, student_id=user_id)
+        if user_to_delete.first_parent:
+            user_to_delete.first_parent.profile.delete()
+            user_to_delete.first_parent.delete()
+        if user_to_delete.second_parent:
+            user_to_delete.second_parent.profile.delete()
+            user_to_delete.second_parent.delete()
     user_to_delete.profile.delete()
     user_to_delete.delete()
     messages.success(request, 'Esse usuário foi deletado com sucesso')
