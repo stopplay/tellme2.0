@@ -25,7 +25,11 @@ from django.core.mail import EmailMessage
 from django.utils.encoding import force_bytes, force_text
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from .tokens import account_activation_token
 import requests
+import datetime
+from django.contrib.sites.shortcuts import get_current_site
+from django.contrib.auth.hashers import make_password
 
 # Create your views here.
 @login_required
@@ -189,9 +193,13 @@ def create_user(request):
                                 user_creation.name = user_profile.first_name+' '+user_profile.last_name
                                 user_creation.save()
                                 messages.success(request, 'Usuário Criado com sucesso!')
+                                current_site = get_current_site(request)
                                 mail_subject = 'Login para acesso ao app escolar.'
                                 message = render_to_string('school_users/user_login.html', {
                                     'user': user_creation,
+                                    'domain': current_site.domain,
+                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                                    'token':account_activation_token.make_token(user),
                                 })
                                 to_email = form.cleaned_data.get('email')
                                 email = EmailMessage(
@@ -205,9 +213,13 @@ def create_user(request):
                                 user_creation.name = user_profile.first_name+' '+user_profile.last_name
                                 user_creation.save()
                                 messages.success(request, 'Usuário Criado com sucesso!')
+                                current_site = get_current_site(request)
                                 mail_subject = 'Login para acesso ao app escolar.'
                                 message = render_to_string('school_users/user_login.html', {
                                     'user': user_creation,
+                                    'domain': current_site.domain,
+                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                                    'token':account_activation_token.make_token(user),
                                 })
                                 to_email = form.cleaned_data.get('email')
                                 email = EmailMessage(
@@ -221,9 +233,13 @@ def create_user(request):
                                 user_creation.name = user_profile.first_name+' '+user_profile.last_name
                                 user_creation.save()
                                 messages.success(request, 'Usuário Criado com sucesso!')
+                                current_site = get_current_site(request)
                                 mail_subject = 'Login para acesso ao app escolar.'
                                 message = render_to_string('school_users/user_login.html', {
                                     'user': user_creation,
+                                    'domain': current_site.domain,
+                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                                    'token':account_activation_token.make_token(user),
                                 })
                                 to_email = form.cleaned_data.get('email')
                                 email = EmailMessage(
@@ -237,9 +253,13 @@ def create_user(request):
                                 user_creation.name = user_profile.first_name+' '+user_profile.last_name
                                 user_creation.save()
                                 messages.success(request, 'Usuário Criado com sucesso!')
+                                current_site = get_current_site(request)
                                 mail_subject = 'Login para acesso ao app escolar.'
                                 message = render_to_string('school_users/user_login.html', {
                                     'user': user_creation,
+                                    'domain': current_site.domain,
+                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                                    'token':account_activation_token.make_token(user),
                                 })
                                 to_email = form.cleaned_data.get('email')
                                 email = EmailMessage(
@@ -253,9 +273,13 @@ def create_user(request):
                                 user_creation.name = user_profile.first_name+' '+user_profile.last_name
                                 user_creation.save()
                                 messages.success(request, 'Usuário Criado com sucesso!')
+                                current_site = get_current_site(request)
                                 mail_subject = 'Login para acesso ao app escolar.'
                                 message = render_to_string('school_users/user_login.html', {
                                     'user': user_creation,
+                                    'domain': current_site.domain,
+                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                                    'token':account_activation_token.make_token(user),
                                 })
                                 to_email = form.cleaned_data.get('email')
                                 email = EmailMessage(
@@ -267,11 +291,19 @@ def create_user(request):
                                 user_creation = form7.save(commit=False)
                                 user_creation.profile = user_profile
                                 user_creation.name = user_profile.first_name+' '+user_profile.last_name
+                                # diff = datetime.date.today() - user_creation.birthday
+                                # age = diff.days//365
+                                # if age >= 18:
+                                #     do_u_need_parents(request, user_creation)
                                 user_creation.save()
                                 messages.success(request, 'Usuário criado com sucesso!')
+                                current_site = get_current_site(request)
                                 mail_subject = 'Login para acesso ao app escolar.'
                                 message = render_to_string('school_users/user_login.html', {
                                     'user': user_creation,
+                                    'domain': current_site.domain,
+                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                                    'token':account_activation_token.make_token(user),
                                 })
                                 to_email = form.cleaned_data.get('email')
                                 email = EmailMessage(
@@ -448,6 +480,7 @@ def create_user(request):
                     else:
                         user = form.save(commit=False)
                         user.username = user.first_name.lower()+user.last_name.lower()
+                        user.password = make_password('wordpass234')
                         i=0
                         while User.objects.filter(username=user.username).count()>=1:
                             user.username = user.first_name.lower()+user.last_name.lower()
@@ -462,9 +495,13 @@ def create_user(request):
                                 user_creation.name = user_profile.first_name+' '+user_profile.last_name
                                 user_creation.save()
                                 messages.success(request, 'Usuário Criado com sucesso!')
+                                current_site = get_current_site(request)
                                 mail_subject = 'Login para acesso ao app escolar.'
                                 message = render_to_string('school_users/user_login.html', {
                                     'user': user_creation,
+                                    'domain': current_site.domain,
+                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                                    'token':account_activation_token.make_token(user),
                                 })
                                 to_email = form.cleaned_data.get('email')
                                 email = EmailMessage(
@@ -480,9 +517,13 @@ def create_user(request):
                                 teacher_to_add = Teacher.objects.get(profile=user_profile)
                                 school_to_add.teachers.add(teacher_to_add)
                                 messages.success(request, 'Usuário Criado com sucesso!')
+                                current_site = get_current_site(request)
                                 mail_subject = 'Login para acesso ao app escolar.'
                                 message = render_to_string('school_users/user_login.html', {
                                     'user': user_creation,
+                                    'domain': current_site.domain,
+                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                                    'token':account_activation_token.make_token(user),
                                 })
                                 to_email = form.cleaned_data.get('email')
                                 email = EmailMessage(
@@ -496,9 +537,13 @@ def create_user(request):
                                 user_creation.name = user_profile.first_name+' '+user_profile.last_name
                                 user_creation.save()
                                 messages.success(request, 'Usuário Criado com sucesso!')
+                                current_site = get_current_site(request)
                                 mail_subject = 'Login para acesso ao app escolar.'
                                 message = render_to_string('school_users/user_login.html', {
                                     'user': user_creation,
+                                    'domain': current_site.domain,
+                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                                    'token':account_activation_token.make_token(user),
                                 })
                                 to_email = form.cleaned_data.get('email')
                                 email = EmailMessage(
@@ -512,9 +557,13 @@ def create_user(request):
                                 user_creation.name = user_profile.first_name+' '+user_profile.last_name
                                 user_creation.save()
                                 messages.success(request, 'Usuário Criado com sucesso!')
+                                current_site = get_current_site(request)
                                 mail_subject = 'Login para acesso ao app escolar.'
                                 message = render_to_string('school_users/user_login.html', {
                                     'user': user_creation,
+                                    'domain': current_site.domain,
+                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                                    'token':account_activation_token.make_token(user),
                                 })
                                 to_email = form.cleaned_data.get('email')
                                 email = EmailMessage(
@@ -528,9 +577,13 @@ def create_user(request):
                                 user_creation.name = user_profile.first_name+' '+user_profile.last_name
                                 user_creation.save()
                                 messages.success(request, 'Usuário Criado com sucesso!')
+                                current_site = get_current_site(request)
                                 mail_subject = 'Login para acesso ao app escolar.'
                                 message = render_to_string('school_users/user_login.html', {
                                     'user': user_creation,
+                                    'domain': current_site.domain,
+                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                                    'token':account_activation_token.make_token(user),
                                 })
                                 to_email = form.cleaned_data.get('email')
                                 email = EmailMessage(
@@ -547,9 +600,13 @@ def create_user(request):
                                 school_to_add.students.add(student_to_add)
                                 class_to_add.students.add(student_to_add)
                                 messages.success(request, 'Usuário criado com sucesso!')
+                                current_site = get_current_site(request)
                                 mail_subject = 'Login para acesso ao app escolar.'
                                 message = render_to_string('school_users/user_login.html', {
                                     'user': user_creation,
+                                    'domain': current_site.domain,
+                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                                    'token':account_activation_token.make_token(user),
                                 })
                                 to_email = form.cleaned_data.get('email')
                                 email = EmailMessage(
@@ -559,6 +616,16 @@ def create_user(request):
                     return redirect('/users/create_user')
         return render(request, 'school_users/createuser.html', {'form':form,'form2':form2,'form3':form3,'form4':form4,'form5':form5,'form6':form6,'form7':form7,'is_supervisor':is_supervisor, 'schools':schools})
     return HttpResponse('U cannot access this page cos u are not admin!')
+
+def generate_password(request):
+    pdb.set_trace()
+    password = User.objects.make_randon_password()
+    return render(request, 'school_users/password.html', {'password':password})
+
+
+def do_u_need_parents(request, user_creation=None, school_to_add=None, class_to_add=None):
+
+    pass
 
 @login_required
 def create_head_to_school(request, school_id=None):
@@ -954,7 +1021,7 @@ def delete_user(request, user_id=None, type_of_user=None):
     user_to_delete.profile.delete()
     user_to_delete.delete()
     messages.success(request, 'Esse usuário foi deletado com sucesso')
-    return redirect('/users/seeallusers')
+    return redirect('/users/all')
 
 @login_required
 def set_parents(request, student_id=None):
@@ -965,7 +1032,7 @@ def set_parents(request, student_id=None):
             new_student = form.save(commit=False)
             new_student.save(update_fields=['first_parent','second_parent'])
             messages.success(request, 'Responsáveis Selecionados com Sucesso')
-            return redirect('/users/seeallusers')
+            return redirect('/users/all')
     	return render(request, 'school_users/set_parents.html', {'form':form, 'student_id':student_id})
     elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
         is_supervisor = True
@@ -989,7 +1056,7 @@ def set_parents(request, student_id=None):
             new_student = form.save(commit=False)
             new_student.save(update_fields=['first_parent','second_parent'])
             messages.success(request, 'Responsáveis Selecionados com Sucesso')
-            return redirect('/users/seeallusers')
+            return redirect('/users/all')
         return render(request, 'school_users/set_parents.html', {'form':form, 'student_id':student_id, 'is_supervisor':is_supervisor})
 
 

@@ -164,7 +164,7 @@ def createacontract(request):
 								messages.error(request, 'Você não informou a data em que o contrato será enviado!')
 								return redirect('/contracts/createacontract')
 					messages.success(request, 'Contrato criado com sucesso!')
-					return redirect('/contracts/seeallcontracts')
+					return redirect('/contracts/all')
 				messages.warning(request, 'O estudante não tem pelo menos um dos pais associados a ele!')
 		return render(request, 'contract/createacontract.html', {'form':form, 'student':student, 'tomorrow':tomorrow})
 	elif Head.objects.filter(profile=request.user).count()>=1:
@@ -224,7 +224,7 @@ def createacontract(request):
 								messages.error(request, 'Você não informou a data em que o contrato será enviado!')
 								return redirect('/contracts/createacontract')
 					messages.success(request, 'Contrato criado com sucesso!')
-					return redirect('/contracts/seeallcontracts')
+					return redirect('/contracts/all')
 				messages.warning(request, 'O estudante não tem pelo menos um dos pais associados a ele!')
 		return render(request, 'contract/createacontract.html', {'form':form, 'is_supervisor':is_supervisor, 'student':student, 'tomorrow':tomorrow})
 	return HttpResponse('U cannot access this page cos u are not admin!')
@@ -293,7 +293,7 @@ def updatecontract(request, contract_id=None):
 					contract.all_signed = False
 					contract.save(update_fields=['name', 'date', 'pdf', 'terms_of_contract', 'first_auth_signe', 'first_auth_signed', 'second_auth_signe', 'second_auth_signed', 'counter_signe', 'counter_signed', 'all_signed', 'chain'])
 					messages.success(request, 'Contrato atualizado com sucesso!')
-					return redirect('/contracts/seeallcontracts')
+					return redirect('/contracts/all')
 				messages.warning(request, 'O estudante não tem pelo menos um dos pais associados a ele!')
 		return render(request, 'contract/updatecontract.html', {'form':form, 'students':students})
 	return HttpResponse('U cannot access this page cos u are not admin!')
@@ -470,17 +470,17 @@ def set_signed(request, contract_id = None):
 	if Head.objects.filter(profile=request.user).count()>=1:
 		if contract.counter_signed:
 			messages.warning(request, 'O diretor já assinou este contrato!')
-			return redirect('/contracts/seeallcontracts')
+			return redirect('/contracts/all')
 	if Parent.objects.filter(profile=request.user).count()>=1:
 		parent = Parent.objects.get(profile=request.user)
 		if contract.first_auth_signe == parent:
 			if contract.first_auth_signed:
 				messages.warning(request, 'O primeiro responsável já assinou este contrato!')
-				return redirect('/contracts/seeallcontracts')
+				return redirect('/contracts/all')
 		if contract.second_auth_signe == parent:
 			if contract.second_auth_signed:
 				messages.warning(request, 'O segundo responsável já assinou este contrato!')
-				return redirect('/contracts/seeallcontracts')
+				return redirect('/contracts/all')
 	if Head.objects.filter(profile=request.user).count()>=1 or Parent.objects.filter(profile=request.user).count()>=1:
 		if Head.objects.filter(profile=request.user).count()>=1:
 			form = BlockModelFormByContract()
@@ -609,10 +609,10 @@ def set_signed(request, contract_id = None):
 			write_pdf(request, contract, 'all_signed')
 			messages.success(request, 'Todos os responsáveis desse contrato assinaram!')
 			contract.save(update_fields=['all_signed'])
-			return redirect('/contracts/seeallcontracts')
+			return redirect('/contracts/all')
 	else:
 		messages.warning(request, 'Você não é diretor nem pai do estudante deste contrato!')
-	return redirect('/contracts/seeallcontracts')
+	return redirect('/contracts/all')
 
 
 @csrf_exempt
@@ -774,7 +774,7 @@ def delete_contract(request, contract_id = None):
 	contract_to_delete = Contract.objects.get(contract_id=contract_id)
 	contract_to_delete.delete()
 	messages.success(request, 'Este contrato foi deletado com sucesso!')
-	return redirect('/contracts/seeallcontracts')
+	return redirect('/contracts/all')
 
 def seefinancialdetails(request, contract_id = None):
 	contract = Contract.objects.get(contract_id=contract_id)

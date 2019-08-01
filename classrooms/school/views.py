@@ -60,7 +60,7 @@ def seeallschools(request):
 		is_supervisor = True
 		schools = School.objects.filter(adminorsupervisor=Supervisor.objects.get(profile=request.user))
 		return render(request, 'school/seeallschools.html', {'schools':schools, 'is_supervisor':is_supervisor})
-	return redirect('/contracts/seeallcontracts')
+	return redirect('/contracts/all')
 
 @login_required
 def seeschooldetails(request, school_id = None):
