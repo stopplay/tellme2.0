@@ -530,6 +530,7 @@ def add_first_parent_to_student(request, school_id=None, class_id=None, student_
 				user_creation.save()
 				parent = Parent.objects.get(parent_id=user_creation.parent_id)
 				student_to_add_parent.first_parent = parent
+				student_to_add_parent.save(update_fields=['first_parent'])
 				messages.success(request, 'Responsável financeiro criado com sucesso!')
 				current_site = get_current_site(request)
 				mail_subject = 'Login para acesso ao app escolar.'
@@ -570,6 +571,7 @@ def add_second_parent_to_student(request, school_id=None, class_id=None, student
 				user_creation.save()
 				parent = Parent.objects.get(parent_id=user_creation.parent_id)
 				student_to_add_parent.second_parent = parent
+				student_to_add_parent.save(update_fields=['second_parent'])
 				messages.success(request, 'Responsável pedagógico criado com sucesso!')
 				current_site = get_current_site(request)
 				mail_subject = 'Login para acesso ao app escolar.'
