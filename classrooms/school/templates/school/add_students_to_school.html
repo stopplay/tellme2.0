@@ -1,6 +1,6 @@
 {% extends 'base.html'%}
 
-{% block title %} Selecionar Estudantes Para a Escola {% endblock %}
+{% block title %} Selecionar Estudantes Para a Escola {{ school.school_name }} {% if class %} {{ class.class_name }} {% endif %} {% endblock %}
 
 {% block content %}
 
