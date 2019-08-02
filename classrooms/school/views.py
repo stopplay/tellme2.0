@@ -161,6 +161,9 @@ def delete_school(request, school_id=None):
 		school_to_delete = School.objects.get(school_id=school_id)
 		for chain in school_to_delete.chains.all():
 			Contract.objects.filter(chain=chain).delete()
+			chain.delete()
+		for classe in school_to_delete.classes.all():
+			classe.delete()
 		for student in school_to_delete.students.all():
 			if School.objects.filter(students__student_id__exact=student.student_id).count()<2:
 				student.first_parent.profile.delete()
