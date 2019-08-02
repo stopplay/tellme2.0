@@ -170,11 +170,13 @@ def delete_school(request, school_id=None):
 				student.second_parent.delete()
 				student.delete()
 		if school_to_delete.head:
-			school_to_delete.head.profile.delete()
-			school_to_delete.head.delete()
+			if School.objects.filter(head=school_to_delete.head).count()<2:
+				school_to_delete.head.profile.delete()
+				school_to_delete.head.delete()
 		if school_to_delete.adminorsupervisor:
-			school_to_delete.adminorsupervisor.profile.delete()
-			school_to_delete.adminorsupervisor.delete()
+			if School.objects.filter(adminorsupervisor=school_to_delete.adminorsupervisor).count()<2:
+				school_to_delete.adminorsupervisor.profile.delete()
+				school_to_delete.adminorsupervisor.delete()
 		school_to_delete.delete()
 		messages.success(request, 'Escola excluída com sucessso!')
 		return redirect('/')
