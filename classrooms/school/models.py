@@ -80,6 +80,7 @@ class Class(models.Model):
 	class_unit = models.CharField(max_length = 500, choices = CLASS_UNIT_CHOICES, default = '1', blank = True, null = True, verbose_name = 'Horário')
 	enrollment_class_year = models.IntegerField(default=2019, verbose_name= 'Ano da turma')
 	slm = models.TextField(null=True, blank=True, verbose_name = 'Materiais URL')
+	maple_product_id = models.IntegerField(null=True, blank=True, verbose_name = 'Id do Material')
 	students = models.ManyToManyField(Student)
 	teachers = models.ManyToManyField(Teacher)
 	def __str__(self):

@@ -24,7 +24,7 @@ class ClassModelForm(forms.ModelForm):
 	"""docstring for UserModelForm"""
 	class Meta:
 		model = Class
-		fields = ['class_name', 'class_unit', 'enrollment_class_year', 'slm']
+		fields = ['class_name', 'class_unit', 'enrollment_class_year', 'slm', 'maple_product_id']
 		widgets = {
 			'class_name': forms.TextInput(attrs={'maxlength':255, 'required':True}),
 			'class_unit': forms.Select(attrs={'required':True, "class":"custom-select"}),

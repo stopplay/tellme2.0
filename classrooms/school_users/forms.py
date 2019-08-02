@@ -51,7 +51,7 @@ class ParentModelForm(forms.ModelForm):
 	"""docstring for ManagerModelForm"""
 	class Meta:
 		model = Parent
-		fields = []
+		fields = ['maple_bear_username', 'maple_bear_password', 'maple_bear_email']
 
 class StudentModelForm(forms.ModelForm):
 	"""docstring for ManagerModelForm"""
