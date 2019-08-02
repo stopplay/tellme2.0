@@ -155,12 +155,19 @@ def delete_school(request, school_id=None):
 		for chain in school_to_delete.chains.all():
 			Contract.objects.filter(chain=chain).delete()
 		for student in school_to_delete.students.all():
-			student.first_parent.profile.delete()
-			student.second_parent.profile.delete()
-			student.profile.delete()
-			student.first_parent.delete()
-			student.second_parent.delete()
-			student.delete()
+			if School.objects.filter(students__student_id__exact=student.student_id).count()<2:
+				student.first_parent.profile.delete()
+				student.second_parent.profile.delete()
+				student.profile.delete()
+				student.first_parent.delete()
+				student.second_parent.delete()
+				student.delete()
+		if school_to_delete.head:
+			school_to_delete.head.profile.delete()
+			school_to_delete.head.delete()
+		if school_to_delete.adminorsupervisor:
+			school_to_delete.adminorsupervisor.profile.delete()
+			school_to_delete.adminorsupervisor.delete()
 		school_to_delete.delete()
 		messages.success(request, 'Escola excluída com sucessso!')
 		return redirect('/')
