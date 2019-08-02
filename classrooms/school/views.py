@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, reverse, get_object_or_404
 from .serializers import *
 from .models import *
 from block.forms import *
@@ -23,7 +23,14 @@ from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from django.views.decorators.csrf import csrf_exempt
 from school_users.models import *
+from school_users.forms import *
 from django.contrib import messages
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import EmailMessage
+from django.utils.encoding import force_bytes, force_text
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from school_users.tokens import account_activation_token
 
 # Create your views here.
 class SchoolsViewSet(viewsets.ModelViewSet):
@@ -192,7 +199,7 @@ def add_class(request, school_id=None):
 			newclassroom = Class.objects.get(class_id=classroom.class_id)
 			school_to_add_class.classes.add(newclassroom)
 			messages.success(request, 'Classe adicionada com sucesso!')
-			return redirect('/')
+			return redirect('/schools/{}/add_class/{}/add_student'.format(school_id, newclassroom.class_id))
 		return render(request, 'school/add_class.html', {'form':form})
 	elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
 		is_supervisor = True
@@ -206,7 +213,7 @@ def add_class(request, school_id=None):
 			newclassroom = Class.objects.get(class_id=classroom.class_id)
 			school_to_add_class.classes.add(newclassroom)
 			messages.success(request, 'Classe adicionada com sucesso!')
-			return redirect('/')
+			return redirect('/schools/{}/add_class/{}/add_student'.format(school_id, newclassroom.class_id))
 		return render(request, 'school/add_class.html', {'form':form, 'is_supervisor':is_supervisor})
 
 
@@ -234,7 +241,7 @@ def update_class(request, class_id=None):
 			chain_to_be_updated.name = "{0}-{1}-{2}-{3}".format(school_to_update_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name)
 			chain_to_be_updated.save(update_fields=['name'])
 			classroom.save(update_fields=['class_name', 'class_unit', 'enrollment_class_year','slm'])
-			messages.success(request, 'Classe e cadeia referente à classe atualizadas com sucesso!')
+			messages.success(request, 'Classe e blockchain referente à classe atualizadas com sucesso!')
 			return redirect('/')
 		return render(request, 'school/update_class.html', {'form':form})
 	elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
@@ -248,7 +255,7 @@ def update_class(request, class_id=None):
 			chain_to_be_updated.name = "{0}-{1}-{2}-{3}".format(school_to_update_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name)
 			chain_to_be_updated.save(update_fields=['name'])
 			classroom.save(update_fields=['class_name', 'class_unit', 'enrollment_class_year','slm'])
-			messages.success(request, 'Classe e cadeia referente à classe atualizadas com sucesso!')
+			messages.success(request, 'Classe e blockchain referente à classe atualizadas com sucesso!')
 			return redirect('/')
 		return render(request, 'school/update_class.html', {'form':form, 'is_supervisor':is_supervisor})
 
@@ -259,7 +266,7 @@ def delete_class(request, class_id=None):
 		chain_to_delete = Chain.objects.get(id=class_id)
 		chain_to_delete.delete()
 		class_to_delete.delete()
-		messages.success(request, 'Esta classe foi deletada corretamente e a cadeia referente a ela também!')
+		messages.success(request, 'Esta classe foi deletada corretamente e o blockchain referente a ela também!')
 		return redirect('/')
 
 
@@ -457,3 +464,125 @@ def add_students_to_class(request, class_id=None):
 			messages.success(request, 'Estudantes alterados na classe com sucesso')
 			return redirect('/')
 		return render(request, 'school/add_students_to_class.html', {'is_supervisor':is_supervisor, 'student_users':student_users, 'class':class_to_add_student})
+
+@login_required
+def add_student_to_class_and_school(request, school_id=None, class_id=None):
+	if request.user.is_superuser:
+		school_to_add_student = School.objects.get(school_id=school_id)
+		class_to_add_student = Class.objects.get(class_id=class_id)
+		form = UserModelForm(request.POST or None)
+		form2 = StudentModelForm(request.POST or None)
+		if request.method == 'POST':
+			if form.is_valid():
+				user = form.save(commit=False)
+				user.username = user.first_name.lower()+user.last_name.lower()
+				i=0
+				while User.objects.filter(username=user.username).count()>=1:
+					user.username = user.first_name.lower()+user.last_name.lower()
+					user.username = user.username + str(i)
+					i+=1
+				user.save()
+				user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
+				user_creation = form2.save(commit=False)
+				user_creation.profile = user_profile
+				user_creation.name = user_profile.first_name+' '+user_profile.last_name
+				user_creation.save()
+				student = Student.objects.get(student_id=user_creation.student_id)
+				school_to_add_student.students.add(student)
+				class_to_add_student.students.add(student)
+				messages.success(request, 'Estudante criado com sucesso!')
+				current_site = get_current_site(request)
+				mail_subject = 'Login para acesso ao app escolar.'
+				message = render_to_string('school_users/user_login.html', {
+					'user': user_creation,
+					'domain': current_site.domain,
+					'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+					'token':account_activation_token.make_token(user),
+	            })
+				to_email = form.cleaned_data.get('email')
+				email = EmailMessage(
+	            	mail_subject, message, to=[to_email]
+	            )
+				email.send()
+				return redirect('/schools/{}/add_class/{}/add_student/{}/add_first_parent_to_student'.format(school_id, class_id, student.student_id))
+		return render(request, 'school_users/add_student.html', {'form':form, 'form2':form2})
+
+@login_required
+def add_first_parent_to_student(request, school_id=None, class_id=None, student_id=None):
+	if request.user.is_superuser:
+		student_to_add_parent = Student.objects.get(student_id=student_id)
+		form = UserModelForm(request.POST or None)
+		form2 = ParentModelForm(request.POST or None)
+		if request.method == 'POST':
+			if form.is_valid():
+				user = form.save(commit=False)
+				user.username = user.first_name.lower()+user.last_name.lower()
+				i=0
+				while User.objects.filter(username=user.username).count()>=1:
+					user.username = user.first_name.lower()+user.last_name.lower()
+					user.username = user.username + str(i)
+					i+=1
+				user.save()
+				user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
+				user_creation = form2.save(commit=False)
+				user_creation.profile = user_profile
+				user_creation.name = user_profile.first_name+' '+user_profile.last_name
+				user_creation.save()
+				parent = Parent.objects.get(parent_id=user_creation.parent_id)
+				student_to_add_parent.first_parent = parent
+				messages.success(request, 'Responsável financeiro criado com sucesso!')
+				current_site = get_current_site(request)
+				mail_subject = 'Login para acesso ao app escolar.'
+				message = render_to_string('school_users/user_login.html', {
+					'user': user_creation,
+					'domain': current_site.domain,
+					'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+					'token':account_activation_token.make_token(user),
+	            })
+				to_email = form.cleaned_data.get('email')
+				email = EmailMessage(
+	            	mail_subject, message, to=[to_email]
+	            )
+				email.send()
+				return redirect('/schools/{}/add_class/{}/add_student/{}/add_second_parent_to_student'.format(school_id, class_id, student_to_add_parent.student_id))
+		return render(request, 'school_users/add_parent.html', {'form':form, 'form2':form2})
+
+@login_required
+def add_second_parent_to_student(request, school_id=None, class_id=None, student_id=None):
+	if request.user.is_superuser:
+		student_to_add_parent = Student.objects.get(student_id=student_id)
+		form = UserModelForm(request.POST or None)
+		form2 = ParentModelForm(request.POST or None)
+		if request.method == 'POST':
+			if form.is_valid():
+				user = form.save(commit=False)
+				user.username = user.first_name.lower()+user.last_name.lower()
+				i=0
+				while User.objects.filter(username=user.username).count()>=1:
+					user.username = user.first_name.lower()+user.last_name.lower()
+					user.username = user.username + str(i)
+					i+=1
+				user.save()
+				user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
+				user_creation = form2.save(commit=False)
+				user_creation.profile = user_profile
+				user_creation.name = user_profile.first_name+' '+user_profile.last_name
+				user_creation.save()
+				parent = Parent.objects.get(parent_id=user_creation.parent_id)
+				student_to_add_parent.second_parent = parent
+				messages.success(request, 'Responsável pedagógico criado com sucesso!')
+				current_site = get_current_site(request)
+				mail_subject = 'Login para acesso ao app escolar.'
+				message = render_to_string('school_users/user_login.html', {
+					'user': user_creation,
+					'domain': current_site.domain,
+					'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+					'token':account_activation_token.make_token(user),
+	            })
+				to_email = form.cleaned_data.get('email')
+				email = EmailMessage(
+	            	mail_subject, message, to=[to_email]
+	            )
+				email.send()
+				return redirect('/')
+		return render(request, 'school_users/add_parent.html', {'form':form, 'form2':form2})

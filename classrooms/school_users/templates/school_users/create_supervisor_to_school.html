@@ -4,9 +4,9 @@
 
 {% block content %}
 <script>
-$(document).ready(function() {
-  $('.container').removeClass('container');
-});
+	$(document).ready(function() {
+		$('.container').removeClass('container');
+	});
 </script>
 
 
@@ -25,19 +25,19 @@ $(document).ready(function() {
 									<form method="POST" class=""> {% csrf_token %}
 										<div class="clearfix"></div>
 										<div class="labelandform">
-										<select class="custom-select" id="select_form">
-											<option id="" value="" selected>Você deseja selecionar um usuário(administrador/supervisor) existente?</option>
-											<option value="sim">Sim</option>
-											<option value="não">Não</option>
-											<option value="não_aplicável">Não Precisa</option>
-										</select>
-									</div>
-									<div id="pai">
-									</div>
-									<input type="hidden" id="selected_user" name="selected_user" value="0">
-									<input type="hidden" id="aplicável" name="aplicável" value="true">
-                  <div class="clearfix"></div>
-								</form>
+											<select class="custom-select" id="select_form">
+												<option id="" value="" selected>Você deseja selecionar um usuário(administrador/supervisor) existente?</option>
+												<option value="sim">Sim</option>
+												<option value="não">Não</option>
+												<option value="não_aplicável">Não Precisa</option>
+											</select>
+										</div>
+										<div id="pai">
+										</div>
+										<input type="hidden" id="selected_user" name="selected_user" value="0">
+										<input type="hidden" id="aplicável" name="aplicável" value="true">
+										<div class="clearfix"></div>
+									</form>
 								</div>
 							</div>
 						</div>
