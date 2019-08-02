@@ -87,7 +87,7 @@ class Parent(models.Model):
 	authorised = models.BooleanField(default=False)
 	relationship = models.TextField(null=True, blank=True)
 	tell_me_user_id = models.IntegerField(null=True, blank=True)
-	maple_bear_user_id = models.IntegerField(null=True, blank=True)
+	maple_bear_user_id = models.TextField(null=True, blank=True)
 	maple_bear_username = models.TextField(null=True, blank=True, verbose_name='Nome de Usuário Maple Bear')
 	maple_bear_password = models.TextField(null=True, blank=True, verbose_name='Senha Maple Bear')
 	maple_bear_email = models.TextField(null=True, blank=True, verbose_name='Email Maple Bear')
