@@ -6,9 +6,9 @@
 
 {% load static %}
 <script>
-$(document).ready(function() {
-  $('.container').removeClass('container');
-});
+	$(document).ready(function() {
+		$('.container').removeClass('container');
+	});
 </script>
 
 <div class="content">
@@ -27,13 +27,13 @@ $(document).ready(function() {
 										<select id="select_form" class="custom-select chosen-select">
 											<option id="" value="" selected>Selecione um estudante</option>
 											{% for student in students %}
-												<option value="{{ student.student_id }}">{{ student.name }}</option>
+											<option value="{{ student.student_id }}">{{ student.name }}</option>
 											{% endfor %}
 										</select><br>
 										<input type="hidden" id="selected_user" name="selected_user" value="0">
 										
 
-                    <div><button type="submit" class="btn btn-info btn-fill btn-sm pull-left mt-2" style="background-color: #213f99; border-color: #213f99">Próximo</button></div>
+										<div><button type="submit" class="btn btn-info btn-fill btn-sm pull-left mt-2" style="background-color: #213f99; border-color: #213f99">Próximo</button></div>
 
 									</form>
 								</div>

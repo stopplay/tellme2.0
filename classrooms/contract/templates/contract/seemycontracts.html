@@ -5,294 +5,294 @@
 {% block content %}
 
 <div class="content">
-    <div class="container-fluid">
-        <div class="row">
-          <div class="col-md-12">
-              <div class="card strpied-tabled-with-hover">
-                  <div class="card-header ">
-                    {% if contracts %}
-                      {% if request.user.is_superuser %}
-                        <h4 class="card-title">Contrato(s)</h4>
-                      {% else %}
-                        <h4 class="card-title">Contrato(s) do {{ request.user.username }}</h4>
-                      {% endif %}
-                  </div>
-                  <form method="POST" enctype="multipart/form-data" > {% csrf_token %}
-                    {% if is_supervisor %}
-                    <div class="row" style="margin: auto">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card strpied-tabled-with-hover">
+          <div class="card-header ">
+            {% if contracts %}
+            {% if request.user.is_superuser %}
+            <h4 class="card-title">Contrato(s)</h4>
+            {% else %}
+            <h4 class="card-title">Contrato(s) do {{ request.user.username }}</h4>
+            {% endif %}
+          </div>
+          <form method="POST" enctype="multipart/form-data" > {% csrf_token %}
+            {% if is_supervisor %}
+            <div class="row" style="margin: auto">
 
-                      <div class="col-md-12">
-                        <button id="sign-multiple-id1" type="submit" class="btn btn-dark btn-sm btn-block sign-multiples-buttons" style="background-color: #ff3d24" data-toggle="modal" data-target="#multi-sign-contract-modal">
-                          Clique Aqui Para Assinar Contratos Selecionados
-                        </button>
-                      </div>
+              <div class="col-md-12">
+                <button id="sign-multiple-id1" type="submit" class="btn btn-dark btn-sm btn-block sign-multiples-buttons" style="background-color: #ff3d24" data-toggle="modal" data-target="#multi-sign-contract-modal">
+                  Clique Aqui Para Assinar Contratos Selecionados
+                </button>
+              </div>
 
-                    </div>
-                    {% endif %}
-                    <div class="card-body table-full-width table-responsive">
-                    <table class="table table-hover table-striped display row-border mb-4" id="contractstable">
-                      <thead>
-                      	<tr>
-                          {% if is_supervisor %}
-                            <th><input id="check" type="checkbox" name="select_all"></th>
-                          {% endif %}
-                          <th>Id do Contrato</th>
-                  				<th>Nome do Contrato</th>
-                  				<th>Data do Contrato</th>
-                          <th>Escola</th>
-                          <th>Turma</th>
-                          <th>Nome do Estudante</th>
-                    			<th >Contrato</th>
-                          <th>Email Enviado</th>
-                          <th>Assinaturas</th>
-                      		<th >Ações</th>
-                  			</tr>
-                  		</thead>
-                  		<tbody class="">
-                  			{% for contract in contracts %}
-                      		<tr class="pb-5">
-                            {% if is_supervisor %}
-                              <td>
-                                {% if contract.counter_signed %}
-                                  <label><input type="checkbox" name="checks" value="{{ contract.contract_id }}" checked></label>
-                                {% else %}
-                                  <input type="checkbox" name="checks" value="{{ contract.contract_id }}">
-                                {% endif %}
-                              </td>
-                            {% endif %}
-                            <th>{{contract.contract_id}}</th>
-                      			<th scope="row">{{ contract.name }}</th>
-                      			<td>{{ contract.date }}</td>
-                            {% if contract.chain.name %}
-                              {% for school in schools %}
-                                {% if contract.chain in school.chains.all %}
-                                  <td>{{ school.school_name }}</td>
-                                {% endif %}
-                                {% for classe in school.classes.all %}
-                                  {% if contract.chain.id == classe.class_id %}
-                                    <td>{{ classe.class_name }}</td>
-                                  {% endif %}
-                                {% endfor %}
-                              {% endfor %}
-                            {% else %}
-                              <td></td>
-                              <td></td>
-                            {% endif %}
-                            {% if contract.student_name %}
-                              <td>{{ contract.student_name }}</td>
-                            {% else %}
-                              <td></td>
-                            {% endif %}
-                            <td>
-                              {% if contract.pdf %}
-                      				  <a href="{% url 'contracts:serve_protected' contract.pdf.name contract.contract_id %}" data-baloon="Remove this item from the cart">
-                                  <!-- {{ contract.pdf }} -->
-                                  Link
-                                </a>
-                              {% endif %}
-                            </td>
-                            <td><label>{% if contract.email_sent %} Enviado {% else %} {% if contract.sent_date %} Email Agendado Para {{ contract.sent_date.day }}/{{ contract.sent_date.month }}/{{ contract.sent_date.year }} às {{ contract.sent_date.hour }}:{% if contract.sent_date.minute < 10 %}0{{ contract.sent_date.minute }}{% else %}{{ contract.sent_date.minute }}{% endif %}{% else %}-{% endif %}{% endif %}</label></td>
-
-                            <td><!--sign-->
-                              
-                              <div class="even-distributed">
-                                <label>PRIMEIRO RESPONSÁVEL ASSINADO</label>
-                                {% if contract.first_auth_signed %}
-                                  <div class="margin-5 width-100-cent">
-                                    <span class="badge badge-pill badge-success text-success float-right" >.</span>
-                                  </div>
-                                {% else %}
-                                  <div class="margin-5 width-100-cent">
-                                    <span class="badge badge-pill badge-danger text-danger float-right" >.</span>
-                                  </div>
-                                {% endif %}
-                              </div>
-
-                              <div class="even-distributed">
-                                <label>SEGUNDO RESPONSÁVEL ASSINADO</label>
-                                {% if contract.second_auth_signed %}
-                                  <div class="margin-5 width-100-cent">
-                                    <span class="badge badge-pill badge-success text-success float-right" >.</span>
-                                  </div>
-                                {% else %}
-                                  <div class="margin-5 width-100-cent">
-                                    <span class="badge badge-pill badge-danger text-danger float-right" >.</span>
-                                  </div>
-                                {% endif %}
-                              </div>
-
-                              <div class="even-distributed">
-                                  <label>DIRETOR RESPONSÁVEL ASSINADO</label>
-                                  {% if contract.counter_signed %}
-                                    <div class="margin-5 width-100-cent">
-                                      <span class="badge badge-pill badge-success text-success float-right" >.</span>
-                                    </div>
-                                  {% else %}
-                                    <div class="margin-5 width-100-cent">
-                                      <span class="badge badge-pill badge-danger text-danger  float-right" >.</span>
-                                    </div>
-                                  {% endif %}
-                              </div>
-
-                              <div class="even-distributed">
-                                <label>TODOS ASSINARAM</label>
-                                {% if contract.all_signed %}
-                                  <div class="margin-5 width-100-cent">
-                                    <span class="badge badge-pill badge-success text-success float-right" >.</span>
-                                  </div>
-                                {% else %}
-                                  <div class="margin-5 width-100-cent">
-                                    <span class="badge badge-pill badge-danger text-danger float-right" >.</span>
-                                  </div>
-                                {% endif %}
-                              </div>
-
-                            </td>
-
-                      			<td>
-                              {% if request.user.is_superuser %}
-                      					<div class="btn-tollbar px-2">
-                                  {% if contract.first_auth_signed or contract.second_auth_signed or contract.counter_signed %}
-                                    <a class="btn btn-secondary btn-sm" href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart">Detalhes</a>
-                                  {% else %}
-                                    <div class="dropdown show">
-                                      <a class="btn btn-secondary dropdown-toggle btn-sm" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Ações
-                                      </a>
-                                      <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                        <a class="dropdown-item" href="{% url 'contracts:select_student_to_contract_update' contract.contract_id %}" data-baloon="Remove this item from the cart">Atualizar Contrato</a>
-                                        <a class="dropdown-item" href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart">Detalhes</a>
-                                      </div>
-                                    </div>
-                                    {% endif %}
-                                </div>
-                               
-                                <div class="btn-tollbar">
-                      						<div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
-                      							<button type="button" class="btn btn-primary btn-sm btn-danger btn-block"><a href="{% url 'contracts:delete_contract' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Contrato</a></button>
-                      						</div>
-                      					</div>
-                              {% else %}
-                                {% if is_supervisor %}
-                                  {% if contract.counter_signed %}
-                                  <!--Verde-->
-                                  <div class="btn-tollbar">
-                                  <div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
-                                    <button type="button" class="btn btn-success btn-sm btn-block" style="cursor: not-allowed;">Assinado</button>
-                                  </div>
-                                  </div>
-
-                                  {% else %}
-                                  <!--Vermelho-->
-                                    <div class="btn-tollbar">
-                                    <div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
-                                      <a class="btn btn-primary btn-sm btn-danger btn-block" onclick="signContract('{% url 'contracts:set_signed' contract.contract_id %}');" href="#" data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal" data-target="#sign-contract-modal">Assinar Contrato</a>
-                                    </div>
-                                    </div>
-                                  {% endif %}
-                                {% elif is_parent %}
-                                  {% if request.user == contract.first_auth_signe.profile %}
-                                    {% if contract.first_auth_signed %}
-                                    <!--verde-->
-                                  <div class="btn-tollbar">
-                                  <div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
-                                    <button type="button" class="btn btn-success btn-sm btn-block" style="cursor: not-allowed;">Assinado</button>
-                                  </div>
-                                  </div>
-
-                                  {% else %}
-                                  <!--Vermelho-->
-                                    <div class="btn-tollbar">
-                                    <div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
-                                      <a class="btn btn-primary btn-sm btn-danger btn-block" onclick="signContract('{% url 'contracts:set_signed' contract.contract_id %}');" href="#" data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal" data-target="#sign-contract-modal">Assinar Contrato</a>
-                                    </div>
-                                    </div>
-                                    {% endif %}
-                                  {% elif request.user == contract.second_auth_signe.profile %}
-                                    {% if contract.second_auth_signed %}
-                                    <!--verde-->
-                                  <div class="btn-tollbar">
-                                  <div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
-                                    <button type="button" class="btn btn-success btn-sm btn-block" style="cursor: not-allowed;">Assinado</button>
-                                  </div>
-                                  </div>
-
-                                  {% else %}
-                                  <!--Vermelho-->
-                                    <div class="btn-tollbar">
-                                    <div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
-                                      <a class="btn btn-primary btn-sm btn-danger btn-block" onclick="signContract('{% url 'contracts:set_signed' contract.contract_id %}');" href="#" data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal" data-target="#sign-contract-modal">Assinar Contrato</a>
-                                    </div>
-                                    </div>
-                                    {% endif %}
-                                  {% endif %}
-                                {% endif %}
-                                  {% if is_supervisor %}
-                                    {% if contract.first_auth_signed or contract.second_auth_signed or contract.counter_signed %}
-                                    <p><div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
-                                  <a class="btn btn-secondary btn-sm" href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart">Detalhes</a>
-                                </div></p>
-                                  {% else %}
-                                  <div class="dropdown show">
-                                    <a class="btn btn-secondary dropdown-toggle btn-sm" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                      Ações
-                                    </a>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                      <a class="dropdown-item" href="{% url 'contracts:delete_contract' contract.contract_id %}" data-baloon="Remove this item from the cart">Deletar Contrato</a>
-                                      <a class="dropdown-item" href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart">Detalhes</a>
-
-                                    </div>
-                                  </div>
-                                    {% endif %}
-                                    {% else %}
-                                    <div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
-                                      <a class="btn btn-secondary btn-sm" href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart">Detalhes</a>
-                                    </div>
-                                    {% endif %}
-
-                      				</td>
-
-                      				   <!-- <td><a href="{% url 'contracts:set_signed' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-danger">Sign contract</a><br></td>-->
-                      				{% endif %}
-                      				{% endfor %}
-                      				{% endif %}
-                      			</tr>
-                      		</tbody>
-                        </table>
-                        <input type="hidden" name="variable" id="variable" value=false>
-                    </div>
-                    {% if is_supervisor %}
-                      <div class="row" style="margin: auto">
-                        <div class="col-md-12">
-                          <button id="sign-multiple-id2" type="submit" class="btn btn-dark btn-sm btn-block sign-multiples-buttons" style="background-color: #ff3d24" data-toggle="modal" data-target="#multi-sign-contract-modal">Clique Aqui Para Assinar Contratos Selecionados</button>
-                        </div>
-                      </div>
-                    {% endif %}
-                    </form>
-                </div>
             </div>
+            {% endif %}
+            <div class="card-body table-full-width table-responsive">
+              <table class="table table-hover table-striped display row-border mb-4" id="contractstable">
+                <thead>
+                 <tr>
+                  {% if is_supervisor %}
+                  <th><input id="check" type="checkbox" name="select_all"></th>
+                  {% endif %}
+                  <th>Id do Contrato</th>
+                  <th>Nome do Contrato</th>
+                  <th>Data do Contrato</th>
+                  <th>Escola</th>
+                  <th>Turma</th>
+                  <th>Nome do Estudante</th>
+                  <th >Contrato</th>
+                  <th>Email Enviado</th>
+                  <th>Assinaturas</th>
+                  <th >Ações</th>
+                </tr>
+              </thead>
+              <tbody class="">
+               {% for contract in contracts %}
+               <tr class="pb-5">
+                {% if is_supervisor %}
+                <td>
+                  {% if contract.counter_signed %}
+                  <label><input type="checkbox" name="checks" value="{{ contract.contract_id }}" checked></label>
+                  {% else %}
+                  <input type="checkbox" name="checks" value="{{ contract.contract_id }}">
+                  {% endif %}
+                </td>
+                {% endif %}
+                <th>{{contract.contract_id}}</th>
+                <th scope="row">{{ contract.name }}</th>
+                <td>{{ contract.date }}</td>
+                {% if contract.chain.name %}
+                {% for school in schools %}
+                {% if contract.chain in school.chains.all %}
+                <td>{{ school.school_name }}</td>
+                {% endif %}
+                {% for classe in school.classes.all %}
+                {% if contract.chain.id == classe.class_id %}
+                <td>{{ classe.class_name }}</td>
+                {% endif %}
+                {% endfor %}
+                {% endfor %}
+                {% else %}
+                <td></td>
+                <td></td>
+                {% endif %}
+                {% if contract.student_name %}
+                <td>{{ contract.student_name }}</td>
+                {% else %}
+                <td></td>
+                {% endif %}
+                <td>
+                  {% if contract.pdf %}
+                  <a href="{% url 'contracts:serve_protected' contract.pdf.name contract.contract_id %}" data-baloon="Remove this item from the cart">
+                    <!-- {{ contract.pdf }} -->
+                    Link
+                  </a>
+                  {% endif %}
+                </td>
+                <td><label>{% if contract.email_sent %} Enviado {% else %} {% if contract.sent_date %} Email Agendado Para {{ contract.sent_date.day }}/{{ contract.sent_date.month }}/{{ contract.sent_date.year }} às {{ contract.sent_date.hour }}:{% if contract.sent_date.minute < 10 %}0{{ contract.sent_date.minute }}{% else %}{{ contract.sent_date.minute }}{% endif %}{% else %}-{% endif %}{% endif %}</label></td>
+
+                <td><!--sign-->
+                  
+                  <div class="even-distributed">
+                    <label>RESPONSÁVEL FINANCEIRO ASSINADO</label>
+                    {% if contract.first_auth_signed %}
+                    <div class="margin-5 width-100-cent">
+                      <span class="badge badge-pill badge-success text-success float-right" >.</span>
+                    </div>
+                    {% else %}
+                    <div class="margin-5 width-100-cent">
+                      <span class="badge badge-pill badge-danger text-danger float-right" >.</span>
+                    </div>
+                    {% endif %}
+                  </div>
+
+                  <div class="even-distributed">
+                    <label>RESPONSÁVEL PEDAGÓGICO ASSINADO</label>
+                    {% if contract.second_auth_signed %}
+                    <div class="margin-5 width-100-cent">
+                      <span class="badge badge-pill badge-success text-success float-right" >.</span>
+                    </div>
+                    {% else %}
+                    <div class="margin-5 width-100-cent">
+                      <span class="badge badge-pill badge-danger text-danger float-right" >.</span>
+                    </div>
+                    {% endif %}
+                  </div>
+
+                  <div class="even-distributed">
+                    <label>DIRETOR RESPONSÁVEL ASSINADO</label>
+                    {% if contract.counter_signed %}
+                    <div class="margin-5 width-100-cent">
+                      <span class="badge badge-pill badge-success text-success float-right" >.</span>
+                    </div>
+                    {% else %}
+                    <div class="margin-5 width-100-cent">
+                      <span class="badge badge-pill badge-danger text-danger  float-right" >.</span>
+                    </div>
+                    {% endif %}
+                  </div>
+
+                  <div class="even-distributed">
+                    <label>TODOS ASSINARAM</label>
+                    {% if contract.all_signed %}
+                    <div class="margin-5 width-100-cent">
+                      <span class="badge badge-pill badge-success text-success float-right" >.</span>
+                    </div>
+                    {% else %}
+                    <div class="margin-5 width-100-cent">
+                      <span class="badge badge-pill badge-danger text-danger float-right" >.</span>
+                    </div>
+                    {% endif %}
+                  </div>
+
+                </td>
+
+                <td>
+                  {% if request.user.is_superuser %}
+                  <div class="btn-tollbar px-2">
+                    {% if contract.first_auth_signed or contract.second_auth_signed or contract.counter_signed %}
+                    <a class="btn btn-secondary btn-sm" href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart">Detalhes</a>
+                    {% else %}
+                    <div class="dropdown show">
+                      <a class="btn btn-secondary dropdown-toggle btn-sm" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Ações
+                      </a>
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" href="{% url 'contracts:select_student_to_contract_update' contract.contract_id %}" data-baloon="Remove this item from the cart">Atualizar Contrato</a>
+                        <a class="dropdown-item" href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart">Detalhes</a>
+                      </div>
+                    </div>
+                    {% endif %}
+                  </div>
+                  
+                  <div class="btn-tollbar">
+                    <div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
+                     <button type="button" class="btn btn-primary btn-sm btn-danger btn-block"><a href="{% url 'contracts:delete_contract' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Contrato</a></button>
+                   </div>
+                 </div>
+                 {% else %}
+                 {% if is_supervisor %}
+                 {% if contract.counter_signed %}
+                 <!--Verde-->
+                 <div class="btn-tollbar">
+                  <div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
+                    <button type="button" class="btn btn-success btn-sm btn-block" style="cursor: not-allowed;">Assinado</button>
+                  </div>
+                </div>
+
+                {% else %}
+                <!--Vermelho-->
+                <div class="btn-tollbar">
+                  <div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
+                    <a class="btn btn-primary btn-sm btn-danger btn-block" onclick="signContract('{% url 'contracts:set_signed' contract.contract_id %}');" href="#" data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal" data-target="#sign-contract-modal">Assinar Contrato</a>
+                  </div>
+                </div>
+                {% endif %}
+                {% elif is_parent %}
+                {% if request.user == contract.first_auth_signe.profile %}
+                {% if contract.first_auth_signed %}
+                <!--verde-->
+                <div class="btn-tollbar">
+                  <div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
+                    <button type="button" class="btn btn-success btn-sm btn-block" style="cursor: not-allowed;">Assinado</button>
+                  </div>
+                </div>
+
+                {% else %}
+                <!--Vermelho-->
+                <div class="btn-tollbar">
+                  <div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
+                    <a class="btn btn-primary btn-sm btn-danger btn-block" onclick="signContract('{% url 'contracts:set_signed' contract.contract_id %}');" href="#" data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal" data-target="#sign-contract-modal">Assinar Contrato</a>
+                  </div>
+                </div>
+                {% endif %}
+                {% elif request.user == contract.second_auth_signe.profile %}
+                {% if contract.second_auth_signed %}
+                <!--verde-->
+                <div class="btn-tollbar">
+                  <div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
+                    <button type="button" class="btn btn-success btn-sm btn-block" style="cursor: not-allowed;">Assinado</button>
+                  </div>
+                </div>
+
+                {% else %}
+                <!--Vermelho-->
+                <div class="btn-tollbar">
+                  <div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
+                    <a class="btn btn-primary btn-sm btn-danger btn-block" onclick="signContract('{% url 'contracts:set_signed' contract.contract_id %}');" href="#" data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal" data-target="#sign-contract-modal">Assinar Contrato</a>
+                  </div>
+                </div>
+                {% endif %}
+                {% endif %}
+                {% endif %}
+                {% if is_supervisor %}
+                {% if contract.first_auth_signed or contract.second_auth_signed or contract.counter_signed %}
+                <p><div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
+                  <a class="btn btn-secondary btn-sm" href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart">Detalhes</a>
+                </div></p>
+                {% else %}
+                <div class="dropdown show">
+                  <a class="btn btn-secondary dropdown-toggle btn-sm" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Ações
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" href="{% url 'contracts:delete_contract' contract.contract_id %}" data-baloon="Remove this item from the cart">Deletar Contrato</a>
+                    <a class="dropdown-item" href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart">Detalhes</a>
+
+                  </div>
+                </div>
+                {% endif %}
+                {% else %}
+                <div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
+                  <a class="btn btn-secondary btn-sm" href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart">Detalhes</a>
+                </div>
+                {% endif %}
+
+              </td>
+
+              <!-- <td><a href="{% url 'contracts:set_signed' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-danger">Sign contract</a><br></td>-->
+              {% endif %}
+              {% endfor %}
+              {% endif %}
+            </tr>
+          </tbody>
+        </table>
+        <input type="hidden" name="variable" id="variable" value=false>
+      </div>
+      {% if is_supervisor %}
+      <div class="row" style="margin: auto">
+        <div class="col-md-12">
+          <button id="sign-multiple-id2" type="submit" class="btn btn-dark btn-sm btn-block sign-multiples-buttons" style="background-color: #ff3d24" data-toggle="modal" data-target="#multi-sign-contract-modal">Clique Aqui Para Assinar Contratos Selecionados</button>
         </div>
-    </div>
+      </div>
+      {% endif %}
+    </form>
+  </div>
+</div>
+</div>
+</div>
 </div>
 <script type="text/javascript">
   $(document).ready( function () {
     $('#contractstable').DataTable();
-} );
+  } );
 </script>
 <script type="text/javascript">
   $(document).ready(function () {
     $('#check').on('change',function () {
-        var table = $('#contractstable');
-        /** @type HTMLInputElement */
-        var selectAllCheckboxes = document.getElementsByName('select_all')[0];
-        document.getElementById('variable').value = selectAllCheckboxes.checked;
-        var allCheckboxes = document.getElementsByName('checks');
-        
-        allCheckboxes.forEach(function(/** @type HTMLInputElement */ checkbox) {
-          checkbox.checked = selectAllCheckboxes.checked;
-        });
+      var table = $('#contractstable');
+      /** @type HTMLInputElement */
+      var selectAllCheckboxes = document.getElementsByName('select_all')[0];
+      document.getElementById('variable').value = selectAllCheckboxes.checked;
+      var allCheckboxes = document.getElementsByName('checks');
+      
+      allCheckboxes.forEach(function(/** @type HTMLInputElement */ checkbox) {
+        checkbox.checked = selectAllCheckboxes.checked;
+      });
     });
- });
+  });
 </script>
 
 
@@ -323,7 +323,7 @@
       allCheckboxes.forEach(function(checkbox) {
         hasAtLeastOneChecked = hasAtLeastOneChecked || checkbox.checked;
       });
-          
+      
       if (!hasAtLeastOneChecked) {
         event.preventDefault();
         $('#multi-sign-contract-modal').modal();
@@ -356,15 +356,15 @@
 
 <!-- Multiples Contracts Modal -->
 <div id="multi-sign-contract-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-  
-      <div class="modal-content">
-        <div class="modal-body">
-          <p id="multi-sign-contract-modal-message">Por favor, espere um pouco. Estamos criptografando seus contratos!</p>
-        </div>
+  <div class="modal-dialog">
+    
+    <div class="modal-content">
+      <div class="modal-body">
+        <p id="multi-sign-contract-modal-message">Por favor, espere um pouco. Estamos criptografando seus contratos!</p>
       </div>
-      
     </div>
+    
   </div>
+</div>
 
 {% endblock %}
