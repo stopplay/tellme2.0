@@ -513,7 +513,7 @@ def add_student_to_class_and_school(request, school_id=None, class_id=None):
 					return redirect('/schools/{}/add_class/{}/add_student/{}/add_first_parent_to_student'.format(school_id, class_id, student.student_id))
 			elif yesorno == 'sim':
 				return redirect('/schools/{}/add_class/{}/add_multiple_students'.format(school_id, class_id))
-			return render(request, 'school_users/add_student.html', {'form':form, 'form2':form2})
+		return render(request, 'school_users/add_student.html', {'form':form, 'form2':form2})
 	elif Head.objects.filter(profile=request.user).count()>=1:
 		is_supervisor = True
 		school_to_add_student = School.objects.get(school_id=school_id)
