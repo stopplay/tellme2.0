@@ -1,0 +1,87 @@
+{% extends 'base.html'%}
+
+{% block title %} Perfil {% endblock %}
+
+{% block content %}
+
+<div class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-9">
+        <div class="card w-50">
+          <div class="card-header">
+            <h4 class="card-title">Editar Perfil</h4>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-11 pr-1">
+                <div class="form-group">
+                  <form method="POST" enctype="multipart/form-data" class=""> {% csrf_token %}
+                    {{ form.as_p }}
+                    <div>
+                      <button class="btn btn-info btn-fill pull-left" type="submit"style="background-color: #213f99; border-color: #213f99">
+                        Editar Perfil
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% if sons %}
+      <div class="row">
+        <p><a class="btn btn-primary" data-toggle="collapse" href="#collapseExample6" role="button" aria-expanded="false" aria-controls="collapseExample6" style="margin-left: 10px">
+          Filho(s)
+        </a></p>
+        <div class="collapse col-md-12" id="collapseExample6">
+          <div class="card strpied-tabled-with-hover">
+            <div class="card-header ">
+              <h4 class="card-title">Filho(s)</h4>
+            </div>
+
+            <div class="card-body table-full-width table-responsive">
+              <table class="table table-hover table-striped display mb-4" id="sonstable">
+                <thead class="">
+                  <tr>
+                    <th >Nome</th>
+                    <th >Nome de Usuário</th>
+                    <th>Responsável Financeiro</th>
+                    <th>Responsável Pedagógico</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for son in sons %}
+                   <tr>
+                    <th scope="row">{{ son.name }}</th>
+                    <td>{{ son.profile.username }}</td>
+                    <td>{{ son.first_parent.name }} </td>
+                    <td>{{ son.second_parent.name }}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+
+
+
+<script type="text/javascript">
+  $(document).ready( function () {
+    $('#sonstable').DataTable();
+    $('#teacherstable').DataTable();
+    $('#parentstable').DataTable();
+    $('#supervisorstable').DataTable();
+    $('#headstable').DataTable();
+    $('#adminstable').DataTable();
+  } );
+</script>
+{% endblock %}

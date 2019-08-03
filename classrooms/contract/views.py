@@ -370,11 +370,11 @@ def createacontract_rest(request):
 @login_required
 def seemycontracts(request):
 	contracts = []
-	is_parent = False
+	is_client = False
 	is_supervisor = False
 	schools = []
 	if Parent.objects.filter(profile=request.user).count()>=1:
-		is_parent = True
+		is_client = True
 		contracts += Contract.objects.filter(first_auth_signe=Parent.objects.get(profile=request.user))
 		contracts += Contract.objects.filter(second_auth_signe=Parent.objects.get(profile=request.user))
 		for contract in contracts:
@@ -404,7 +404,7 @@ def seemycontracts(request):
 			print('checked_contract_ids_on_form', checked_contract_ids_on_form)
 			for contract_id in checked_contract_ids_on_form:
 				set_signed(request, contract_id)
-	return render(request, 'contract/seemycontracts.html', {'contracts':contracts, 'is_parent':is_parent, 'is_supervisor':is_supervisor, 'schools':schools})
+	return render(request, 'contract/seemycontracts.html', {'contracts':contracts, 'is_client':is_client, 'is_supervisor':is_supervisor, 'schools':schools})
 
 @login_required
 def select_student_to_contract(request):
