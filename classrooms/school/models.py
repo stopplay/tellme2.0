@@ -76,8 +76,8 @@ class Class(models.Model):
 	"""docstring for Class"""
 	class_id = models.AutoField(primary_key=True)
 	class_name = models.TextField(verbose_name = 'Nome da turma')
-	CLASS_UNIT_CHOICES = [('Manhã','Manhã'), ('Tarde','Tarde'), ('Noite','Noite')]
-	class_unit = models.CharField(max_length = 500, choices = CLASS_UNIT_CHOICES, default = '1', blank = True, null = True, verbose_name = 'Horário')
+	CLASS_UNIT_CHOICES = [('Integral', 'Integral'), ('Manhã','Manhã'), ('Tarde','Tarde'), ('Noite','Noite')]
+	class_unit = models.CharField(max_length = 500, choices = CLASS_UNIT_CHOICES, default = 'Integral', blank = True, null = True, verbose_name = 'Horário')
 	enrollment_class_year = models.IntegerField(default=2019, verbose_name= 'Ano da turma')
 	slm = models.TextField(null=True, blank=True, verbose_name = 'Materiais URL')
 	sku = models.TextField(null=True, blank=True, verbose_name = 'Id do Material')
