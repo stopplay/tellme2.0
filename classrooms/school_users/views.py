@@ -1296,5 +1296,6 @@ def profile(request):
             if form.is_valid():
                 newparent = form.save(commit=False)
                 newparent.save(update_fields=['maple_bear_username', 'maple_bear_password', 'maple_bear_email'])
+                messages.success(request, 'Perfil alterado com sucesso')
                 return redirect('/users/profile')
         return render(request, 'school_users/profile.html', {'form':form, 'parent':parent, 'sons':sons})
