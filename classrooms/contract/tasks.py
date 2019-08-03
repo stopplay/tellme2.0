@@ -12,6 +12,53 @@ from classrooms import settings
 import os
 from django.template.loader import render_to_string
 from school.models import *
+from contract.models import Contract
+from school.utils import get_sku_by_slm_url
+from contract.utils import MagentoSoap
+
+wsdl = 'http://maplebearmkt2.widehomolog.biz/api/v2_soap?wsdl=1'
+username = 'tell-me'
+apiKey = 'tell-me@0619'
+soap = MagentoSoap(wsdl, username, apiKey)
+
+@app.task
+def update_material_orders_from_maple_bear():
+    
+    not_purchased_slm_contracts = Contract.objects.filter(purchased_slm=False)
+
+    soap.start_batch_operations()
+
+    for contract_not_purchased_slm in not_pushased_slm_contracts:
+        contract_chain_id = contract_not_purchased_slm.chain.id
+        school_linked_to_contract = School.objects.get(chains_id_exact=contract_chain_id)
+
+        sku = school_linked_to_contract.sku
+
+        if sku == '':
+            slm = school_linked_to_contract.slm
+            sku = school_linked_to_contract.sku = get_sku_by_slm_url(slm)
+            school_linked_to_contract.save()
+        
+        first_parent = contract_not_purchased_slm.first_auth_signe
+        second_parent = contract_not_purchased_slm.second_auth_signe
+
+        first_parent_maple_bear_email = first_parent.maple_bear_email
+        second_parent_maple_bear_email = second_parent.maple_bear_email
+
+        contract_created_entry_date = contract_not_purchased_slm.created_at
+
+        first_parent_has_purchased_slm = soap.has_customed_purchased_product_after_date(first_parent_maple_bear_email, sku, contract_created_entry_date)
+
+        if first_parent_has_purchased_slm:
+            contract_not_purchased_slm.purchased = True
+            contract_not_purchased_slm.save()
+        else:
+            second_parent_has_purchased_slm = soap.has_customed_purchased_product_after_date(second_parent_maple_bear_email, sku, contract_created_entry_date)
+            if second_parent_has_purchased_slm:
+                contract_not_purchased_slm.purchased = True
+                contract_not_purchased_slm.save()
+
+    soap.end_batch_operations()
 
 @app.task #1
 def schedule_email(contract, typeof=None):

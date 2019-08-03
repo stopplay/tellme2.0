@@ -51,4 +51,8 @@ class Contract(models.Model):
 	email_sent = models.BooleanField(default=False)
 	sent_date = models.DateTimeField(blank=True, null=True)
 	student_name = models.TextField(null=True, blank=True)
+	purchased_slm = models.models.BooleanField(default=False)
+	created_at = models.DateTimeField(auto_now_add=True)
+	updated_at = models.DateTimeField(auto_now=True)
+	
 	# end of Basic data of the contract #

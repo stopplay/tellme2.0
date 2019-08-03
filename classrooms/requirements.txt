@@ -65,3 +65,5 @@ PyPDF2
 reportlab
 svglib
 psycopg2-binary
+zeep
+bs4
