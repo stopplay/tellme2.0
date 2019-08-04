@@ -20,5 +20,5 @@ def parse_sku_from_html(html_object):
 
     if sku == '':
         div_object = html_object.find('div', {'class':'product-sku'})
-        sku = re.sub('\D', '', div_object.get_text())
+        sku = re.sub('Cod\. ', '', div_object.get_text()).strip()
     return sku

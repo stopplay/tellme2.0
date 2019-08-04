@@ -31,6 +31,7 @@ from django.utils.encoding import force_bytes, force_text
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from school_users.tokens import account_activation_token
+from school.utils import get_sku_by_slm_url
 
 # Create your views here.
 class SchoolsViewSet(viewsets.ModelViewSet):
@@ -199,7 +200,10 @@ def add_class(request, school_id=None):
 			classroom = form.save(commit=False)
 			newchain = Chain.objects.create(name="{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name))
 			school_to_add_class.chains.add(newchain)
+			
+			classroom.sku = get_sku_by_slm_url(classroom.slm)
 			classroom.save()
+			
 			newclassroom = Class.objects.get(class_id=classroom.class_id)
 			school_to_add_class.classes.add(newclassroom)
 			messages.success(request, 'Classe adicionada com sucesso!')
@@ -213,7 +217,10 @@ def add_class(request, school_id=None):
 			classroom = form.save(commit=False)
 			newchain = Chain.objects.create(name="{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name))
 			school_to_add_class.chains.add(newchain)
+
+			classroom.sku = get_sku_by_slm_url(classroom.slm)
 			classroom.save()
+
 			newclassroom = Class.objects.get(class_id=classroom.class_id)
 			school_to_add_class.classes.add(newclassroom)
 			messages.success(request, 'Classe adicionada com sucesso!')
@@ -244,7 +251,10 @@ def update_class(request, class_id=None):
 			classroom = form.save(commit=False)
 			chain_to_be_updated.name = "{0}-{1}-{2}-{3}".format(school_to_update_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name)
 			chain_to_be_updated.save(update_fields=['name'])
-			classroom.save(update_fields=['class_name', 'class_unit', 'enrollment_class_year','slm'])
+
+			classroom.sku = get_sku_by_slm_url(classroom.slm)
+			classroom.save(update_fields=['class_name', 'class_unit', 'enrollment_class_year','slm', 'sku'])
+
 			messages.success(request, 'Classe e blockchain referente à classe atualizadas com sucesso!')
 			return redirect('/')
 		return render(request, 'school/update_class.html', {'form':form})
@@ -258,7 +268,10 @@ def update_class(request, class_id=None):
 			classroom = form.save(commit=False)
 			chain_to_be_updated.name = "{0}-{1}-{2}-{3}".format(school_to_update_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name)
 			chain_to_be_updated.save(update_fields=['name'])
-			classroom.save(update_fields=['class_name', 'class_unit', 'enrollment_class_year','slm'])
+
+			classroom.sku = get_sku_by_slm_url(classroom.slm)
+			classroom.save(update_fields=['class_name', 'class_unit', 'enrollment_class_year','slm', 'sku'])
+			
 			messages.success(request, 'Classe e blockchain referente à classe atualizadas com sucesso!')
 			return redirect('/')
 		return render(request, 'school/update_class.html', {'form':form, 'is_supervisor':is_supervisor})
