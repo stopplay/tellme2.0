@@ -53,9 +53,9 @@ class ParentModelForm(forms.ModelForm):
 		model = Parent
 		fields = ['maple_bear_username', 'maple_bear_password', 'maple_bear_email']
 		widgets = {
-			'maple_bear_username': forms.TextInput(attrs={'class':'labelandform', 'required':True, 'maxlength':255}),
-			'maple_bear_password': forms.TextInput(attrs={'type':'password','class':'labelandform', 'required':True, 'maxlength':255}),
-			'maple_bear_email': forms.TextInput(attrs={'class':'labelandform', 'required':True, 'maxlength':255}),
+			'maple_bear_username': forms.TextInput(attrs={'class':'labelandform', 'required':False, 'maxlength':255}),
+			'maple_bear_password': forms.TextInput(attrs={'type':'password','class':'labelandform', 'required':False, 'maxlength':255}),
+			'maple_bear_email': forms.TextInput(attrs={'class':'labelandform', 'required':False, 'maxlength':255}),
 		}
 
 class StudentModelForm(forms.ModelForm):

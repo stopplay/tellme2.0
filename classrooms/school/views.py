@@ -1,3 +1,4 @@
+import csv, io
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from .serializers import *
 from .models import *
@@ -489,85 +490,169 @@ def add_student_to_class_and_school(request, school_id=None, class_id=None):
 		class_to_add_student = Class.objects.get(class_id=class_id)
 		form = UserModelForm(request.POST or None)
 		form2 = StudentModelForm(request.POST or None)
-		yesorno = request.POST.get('sim/não')
 		if request.method == 'POST':
+			yesorno = request.POST.get('sim/não')
+			importornoimport = request.POST.get('import/noimport')
 			if yesorno == 'não':
-				if form.is_valid():
-					user = form.save(commit=False)
-					user.username = user.first_name.lower()+user.last_name.lower()
-					i=0
-					while User.objects.filter(username=user.username).count()>=1:
+				if importornoimport == 'não':
+					if form.is_valid():
+						user = form.save(commit=False)
 						user.username = user.first_name.lower()+user.last_name.lower()
-						user.username = user.username + str(i)
-						i+=1
-					user.save()
-					user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
-					user_creation = form2.save(commit=False)
-					user_creation.profile = user_profile
-					user_creation.name = user_profile.first_name+' '+user_profile.last_name
-					user_creation.save()
-					student = Student.objects.get(student_id=user_creation.student_id)
-					school_to_add_student.students.add(student)
-					class_to_add_student.students.add(student)
-					messages.success(request, 'Estudante criado com sucesso!')
-					current_site = get_current_site(request)
-					mail_subject = 'Login para acesso ao app escolar.'
-					message = render_to_string('school_users/user_login.html', {
-						'user': user_creation,
-						'domain': current_site.domain,
-						'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
-						'token':account_activation_token.make_token(user),
-		            })
-					to_email = form.cleaned_data.get('email')
-					email = EmailMessage(
-		            	mail_subject, message, to=[to_email]
-		            )
-					email.send()
-					return redirect('/schools/{}/add_class/{}/add_student/{}/add_first_parent_to_student'.format(school_id, class_id, student.student_id))
+						i=0
+						while User.objects.filter(username=user.username).count()>=1:
+							user.username = user.first_name.lower()+user.last_name.lower()
+							user.username = user.username + str(i)
+							i+=1
+						user.save()
+						user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
+						user_creation = form2.save(commit=False)
+						user_creation.profile = user_profile
+						user_creation.name = user_profile.first_name+' '+user_profile.last_name
+						user_creation.save()
+						student = Student.objects.get(student_id=user_creation.student_id)
+						school_to_add_student.students.add(student)
+						class_to_add_student.students.add(student)
+						messages.success(request, 'Estudante criado com sucesso!')
+						current_site = get_current_site(request)
+						mail_subject = 'Login para acesso ao app escolar.'
+						message = render_to_string('school_users/user_login.html', {
+							'user': user_creation,
+							'domain': current_site.domain,
+							'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+							'token':account_activation_token.make_token(user),
+			            })
+						to_email = form.cleaned_data.get('email')
+						email = EmailMessage(
+			            	mail_subject, message, to=[to_email]
+			            )
+						email.send()
+						return redirect('/schools/{}/add_class/{}/add_student/{}/add_first_parent_to_student'.format(school_id, class_id, student.student_id))
+				elif importornoimport == 'sim':
+					csv_file = request.FILES.get('file' or None)
+					if csv_file:
+						if not csv_file.name.endswith('.csv'):
+							messages.warning(request, 'O arquivo enviado não é CSV')
+							return redirect('/schools/{}/add_class/{}/add_student'.format(school_id, class_id))
+						data_set = csv_file.read().decode('UTF-8')
+						io_string = io.StringIO(data_set)
+						next(io_string)
+						if ',' in data_set:
+							for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+								if column[0]:
+									if column[4]==column[5]:
+										if column[6]:
+											if column[8] and column[9]:
+												_, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[8]), second_parent=Parent.objects.get(tell_me_user_id=column[9]), tell_me_user_id=column[6])
+											else:
+												_, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+											school_to_add_student.students.add(_)
+											class_to_add_student.students.add(_)
+										elif column[7]:
+											_, created = Parent.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[7])
+						elif ';' in data_set:
+							for column in csv.reader(io_string, delimiter=';', quotechar='|'):
+								if column[0]:
+									if column[4]==column[5]:
+										if column[6]:
+											if column[8] and column[9]:
+												_, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[8]), second_parent=Parent.objects.get(tell_me_user_id=column[9]), tell_me_user_id=column[6])
+											else:
+												_, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+											school_to_add_student.students.add(_)
+											class_to_add_student.students.add(_)
+										elif column[7]:
+											_, created = Parent.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[7])
+						messages.success(request, 'Usuários adicionados com sucesso')
+						return redirect('/')
+					else:
+						messages.error(request, 'Nenhum arquivo enviado')
+						return redirect('/schools/{}/add_class/{}/add_student'.format(school_id, class_id))
 			elif yesorno == 'sim':
 				return redirect('/schools/{}/add_class/{}/add_multiple_students'.format(school_id, class_id))
-			return render(request, 'school_users/add_student.html', {'form':form, 'form2':form2})
+		return render(request, 'school_users/add_student.html', {'form':form, 'form2':form2})
 	elif Head.objects.filter(profile=request.user).count()>=1:
 		is_supervisor = True
 		school_to_add_student = School.objects.get(school_id=school_id)
 		class_to_add_student = Class.objects.get(class_id=class_id)
 		form = UserModelForm(request.POST or None)
 		form2 = StudentModelForm(request.POST or None)
-		yesorno = request.POST.get('sim/não')
 		if request.method == 'POST':
+			yesorno = request.POST.get('sim/não')
+			importornoimport = request.POST.get('import/noimport')
 			if yesorno == 'não':
-				if form.is_valid():
-					user = form.save(commit=False)
-					user.username = user.first_name.lower()+user.last_name.lower()
-					i=0
-					while User.objects.filter(username=user.username).count()>=1:
+				if importornoimport == 'não':
+					if form.is_valid():
+						user = form.save(commit=False)
 						user.username = user.first_name.lower()+user.last_name.lower()
-						user.username = user.username + str(i)
-						i+=1
-					user.save()
-					user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
-					user_creation = form2.save(commit=False)
-					user_creation.profile = user_profile
-					user_creation.name = user_profile.first_name+' '+user_profile.last_name
-					user_creation.save()
-					student = Student.objects.get(student_id=user_creation.student_id)
-					school_to_add_student.students.add(student)
-					class_to_add_student.students.add(student)
-					messages.success(request, 'Estudante criado com sucesso!')
-					current_site = get_current_site(request)
-					mail_subject = 'Login para acesso ao app escolar.'
-					message = render_to_string('school_users/user_login.html', {
-						'user': user_creation,
-						'domain': current_site.domain,
-						'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
-						'token':account_activation_token.make_token(user),
-		            })
-					to_email = form.cleaned_data.get('email')
-					email = EmailMessage(
-		            	mail_subject, message, to=[to_email]
-		            )
-					email.send()
-					return redirect('/schools/{}/add_class/{}/add_student/{}/add_first_parent_to_student'.format(school_id, class_id, student.student_id))
+						i=0
+						while User.objects.filter(username=user.username).count()>=1:
+							user.username = user.first_name.lower()+user.last_name.lower()
+							user.username = user.username + str(i)
+							i+=1
+						user.save()
+						user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
+						user_creation = form2.save(commit=False)
+						user_creation.profile = user_profile
+						user_creation.name = user_profile.first_name+' '+user_profile.last_name
+						user_creation.save()
+						student = Student.objects.get(student_id=user_creation.student_id)
+						school_to_add_student.students.add(student)
+						class_to_add_student.students.add(student)
+						messages.success(request, 'Estudante criado com sucesso!')
+						current_site = get_current_site(request)
+						mail_subject = 'Login para acesso ao app escolar.'
+						message = render_to_string('school_users/user_login.html', {
+							'user': user_creation,
+							'domain': current_site.domain,
+							'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+							'token':account_activation_token.make_token(user),
+			            })
+						to_email = form.cleaned_data.get('email')
+						email = EmailMessage(
+			            	mail_subject, message, to=[to_email]
+			            )
+						email.send()
+						return redirect('/schools/{}/add_class/{}/add_student/{}/add_first_parent_to_student'.format(school_id, class_id, student.student_id))
+				elif importornoimport == 'sim':
+					csv_file = request.FILES.get('file' or None)
+					if csv_file:
+						if not csv_file.name.endswith('.csv'):
+							messages.warning(request, 'O arquivo enviado não é CSV')
+							return redirect('/schools/{}/add_class/{}/add_student'.format(school_id, class_id))
+						data_set = csv_file.read().decode('UTF-8')
+						io_string = io.StringIO(data_set)
+						next(io_string)
+						if ',' in data_set:
+							for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+								if column[0]:
+									if column[4]==column[5]:
+										if column[6]:
+											if column[8] and column[9]:
+												_, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[8]), second_parent=Parent.objects.get(tell_me_user_id=column[9]), tell_me_user_id=column[6])
+											else:
+												_, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+											school_to_add_student.students.add(_)
+											class_to_add_student.students.add(_)
+										elif column[7]:
+											_, created = Parent.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[7])
+						elif ';' in data_set:
+							for column in csv.reader(io_string, delimiter=';', quotechar='|'):
+								if column[0]:
+									if column[4]==column[5]:
+										if column[6]:
+											if column[8] and column[9]:
+												_, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[8]), second_parent=Parent.objects.get(tell_me_user_id=column[9]), tell_me_user_id=column[6])
+											else:
+												_, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+											school_to_add_student.students.add(_)
+											class_to_add_student.students.add(_)
+										elif column[7]:
+											_, created = Parent.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[7])
+						messages.success(request, 'Usuários adicionados com sucesso')
+						return redirect('/')
+					else:
+						messages.error(request, 'Nenhum arquivo enviado')
+						return redirect('/schools/{}/add_class/{}/add_student'.format(school_id, class_id))
 			elif yesorno == 'sim':
 				return redirect('/schools/{}/add_class/{}/add_multiple_students'.format(school_id, class_id))
 		return render(request, 'school_users/add_student.html', {'form':form, 'form2':form2, 'is_supervisor':is_supervisor})

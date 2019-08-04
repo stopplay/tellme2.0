@@ -35,4 +35,5 @@ urlpatterns = [
     path('create_supervisor_to_school/<int:school_id>', views.create_supervisor_to_school, name='create_supervisor_to_school'),
     url(r'^reset_password/confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$', views.reset_password, name='reset_password'),
     url('generate_password', views.generate_password, name='generate_password'),
+    url('profile', views.profile, name='profile'),
 ]

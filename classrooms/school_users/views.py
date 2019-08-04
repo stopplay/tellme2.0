@@ -1279,3 +1279,23 @@ def login_from_other_system(request, username=None):
             nextpage = request.GET.get('next','/')
             return redirect(nextpage)
     return render(request, 'school_users/login_from_other_system.html')
+
+@login_required
+def profile(request):
+    if Parent.objects.filter(profile=request.user).count()>=1:
+        parent = Parent.objects.get(profile=request.user)
+        sons = []
+        form = ParentModelForm(request.POST or None, instance=parent)
+        for student in Student.objects.filter(first_parent=parent):
+            if student not in sons:
+                sons += [(student)]
+        for student in Student.objects.filter(second_parent=parent):
+            if student not in sons:
+                sons += [(student)]
+        if request.method == 'POST':
+            if form.is_valid():
+                newparent = form.save(commit=False)
+                newparent.save(update_fields=['maple_bear_username', 'maple_bear_password', 'maple_bear_email'])
+                messages.success(request, 'Perfil alterado com sucesso')
+                return redirect('/users/profile')
+        return render(request, 'school_users/profile.html', {'form':form, 'parent':parent, 'sons':sons})

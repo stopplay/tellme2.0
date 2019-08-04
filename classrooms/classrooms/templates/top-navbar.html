@@ -4,7 +4,7 @@
     <div class="topbar-wrapper">
         <div class="logo">
 
-            <a href="" class="simple-text">
+            <a href="/" class="simple-text">
                 <img src="{% static 'img/logotell.png'%}" alt="">
             </a>
 
@@ -77,6 +77,9 @@
                 {{request.user.username}}
             </a>
             <div class="dropdown-menu dropdown-menu-right dropdown-info" aria-labelledby="navbarDropdownMenuLink-4">
+                {% if is_client %}
+                    <a class="dropdown-item" href="{% url 'users:profile' %}">Perfil</a>
+                {% endif %}
                 <a class="dropdown-item" href="{% url 'users:logout' %}">Sair</a>
             </div>
         </li>
