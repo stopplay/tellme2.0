@@ -53,7 +53,7 @@ class Contract(models.Model):
 	sent_date = models.DateTimeField(blank=True, null=True)
 	student_name = models.TextField(null=True, blank=True)
 	purchased_slm = models.BooleanField(default=False)
-	created_at = models.DateTimeField(default=datetime.now())
-	updated_at = models.DateTimeField(default=datetime.now)
+	created_at = models.DateTimeField(auto_now_add=True)
+	updated_at = models.DateTimeField(auto_now=True)
 	
 	# end of Basic data of the contract #
