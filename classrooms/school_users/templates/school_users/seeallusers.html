@@ -38,7 +38,7 @@
                   <td>
                     <div class="btn-tollbar">
                       <div class="btn-group mr-2" role="group" aria-label="Second group"><br>
-                        <button type="button" class="btn btn-primary btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' head.head_id 'head' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Diretor</a></button>
+                        <button type="button" class="delete-button btn btn-danger btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' head.head_id 'head' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Diretor</a></button>
                       </div>
                     </div>
                   </td>
@@ -83,7 +83,7 @@
                   <td>
                     <div class="btn-tollbar">
                       <div class="btn-group mr-2" role="group" aria-label="Second group">
-                        <button type="button" class="btn btn-primary btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' teacher.teacher_id 'teacher' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Professor</a></button>
+                        <button type="button" class="delete-button btn btn-danger btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' teacher.teacher_id 'teacher' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Professor</a></button>
                       </div>
                     </div>
                   </td>
@@ -128,7 +128,7 @@
                   <td>
                     <div class="btn-tollbar">
                       <div class="btn-group mr-2" role="group" aria-label="Second group">
-                        <button type="button" class="btn btn-primary btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' admin.admin_id 'admin' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Administrador</a><br></button>
+                        <button type="button" class="delete-button btn btn-danger btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' admin.admin_id 'admin' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Administrador</a><br></button>
                       </div>
                     </div>
                   </td>
@@ -173,8 +173,8 @@
                   {% if request.user.is_superuser %}
                   <td>
                     <div class="btn-tollbar">
-                      <div class="btn-group mr-2" role="group" aria-label="Second group">
-                        <button type="button" class="btn btn-primary btn-sm btn-danger btn-block "><a href="{% url 'users:delete_user' supervisor.supervisor_id 'supervisor' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Supervisor</a></button>
+                      <div class="btn-group mr-2 w-100" role="group" aria-label="Second group">
+                        <button type="button" class="delete-button w-100 btn btn-danger btn-sm btn-danger btn-block "><a href="{% url 'users:delete_user' supervisor.supervisor_id 'supervisor' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Supervisor</a></button>
                       </div>
                     </div>
                   </td>
@@ -218,8 +218,8 @@
               {% if request.user.is_superuser %}
               <td>
                <div class="btn-tollbar">
-                <div class="btn-group mr-2" role="group" aria-label="Second group">
-                 <button type="button" class="btn btn-primary btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' parent.parent_id 'parent' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Responsável</a></button>
+                <div class="btn-group mr-2 w-100" role="group" aria-label="Second group">
+                 <button type="button" class="delete-button w-100 btn btn-danger btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' parent.parent_id 'parent' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Responsável</a></button>
                </div>
              </div>
            </td>
@@ -266,12 +266,12 @@
         <td>{{ student.second_parent.name }}</td>
         <td>
          <div class="btn-tollbar">
-          <div class="btn-group mr-2" role="group" aria-label="First group">
-           <button type="button" class="btn btn-primary btn-sm btn-info btn-block"><a href="{% url 'users:set_parents' student.student_id %}" data-baloon="Remove this item from the cart" class="text-light">Selecionar Responsáveis</a></button>
+          <div class="btn-group mr-2 w-100" role="group" aria-label="First group">
+           <button type="button" class="w-100 btn btn-primary btn-sm btn-info btn-block"><a href="{% url 'users:set_parents' student.student_id %}" data-baloon="Remove this item from the cart" class="text-light">Selecionar Responsáveis</a></button>
          </div>
          {% if request.user.is_superuser %}
-         <div class="btn-group mr-2" role="group" aria-label="Second group">
-           <button type="button" class="btn btn-primary btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' student.student_id 'student' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Estudante</a></button>
+         <div class="btn-group mr-2 w-100"  role="group" aria-label="Second group">
+           <button type="button" class="delete-button w-100 btn btn-danger btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' student.student_id 'student' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Estudante</a></button>
          </div>
          {% endif %}
        </div>

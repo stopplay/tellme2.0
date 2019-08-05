@@ -391,3 +391,9 @@ table.dataTable thead .sorting_desc {
 .table-responsive {
   overflow-x: hidden !important;
 }
+
+.delete-button {
+  background-color: red !important;
+  width: 100% !important;
+  margin-top: 5px !important;
+}
