@@ -27,7 +27,7 @@ class ClassModelForm(forms.ModelForm):
 		fields = ['class_name', 'class_unit', 'enrollment_class_year', 'slm', 'sku']
 		widgets = {
 			'class_name': forms.TextInput(attrs={'class':'form-control', 'maxlength':255, 'required':True}),
-			'class_unit': forms.Select(attrs={'class':'form-control', 'required':True, "class":"custom-select"}),
+			'class_unit': forms.Select(attrs={'class':'form-control', 'required':True, "class":"form-control", 'empty_label':None}),
 			'enrollment_class_year': forms.NumberInput(attrs={'required':True, 'min':datetime.date.today().year}),
 			'slm': forms.TextInput(attrs={'class':'form-control', 'maxlength':255, 'required':True}),
 			'sku': forms.TextInput(attrs={'class':'form-control', 'maxlength':255, 'required':True}),

@@ -414,7 +414,15 @@ def select_head_to_school(request, school_id=None):
 def add_students_to_school(request, school_id=None):
 	if request.user.is_superuser:
 		school = School.objects.get(school_id=school_id)
-		student_users = Student.objects.all()
+		student_ids = []
+		if School.objects.filter(head=school.head).count()>1:
+			for school in School.objects.filter(head=school.head):
+				for student in school.students.all():
+					if student.student_id not in student_ids:
+						student_ids+=[(student.student_id)]
+			student_users = Student.objects.filter(student_id__in=student_ids)
+		else:
+			student_users = Student.objects.all()
 		if request.method == 'POST':
 			select_all = request.POST.get('variable')
 			school.students.clear()
@@ -830,7 +838,15 @@ def add_students_to_class_and_school(request, school_id=None, class_id=None):
 	if request.user.is_superuser:
 		school = School.objects.get(school_id=school_id)
 		classe = Class.objects.get(class_id=class_id)
-		student_users = Student.objects.all()
+		student_ids = []
+		if School.objects.filter(head=school.head).count()>1:
+			for school in School.objects.filter(head=school.head):
+				for student in school.students.all():
+					if student.student_id not in student_ids:
+						student_ids+=[(student.student_id)]
+			student_users = Student.objects.filter(student_id__in=student_ids)
+		else:
+			student_users = Student.objects.all()
 		if request.method == 'POST':
 			select_all = request.POST.get('variable')
 			school.students.clear()
