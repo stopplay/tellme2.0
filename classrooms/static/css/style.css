@@ -397,3 +397,9 @@ table.dataTable thead .sorting_desc {
   width: 100% !important;
   margin-top: 5px !important;
 }
+
+.multi-select-button {
+  background-color: red !important;
+  width: 500px;
+  float: left;
+}
