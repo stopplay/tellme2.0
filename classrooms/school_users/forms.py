@@ -77,3 +77,14 @@ class SetParentsModelForm(forms.ModelForm):
 			'second_parent': forms.Select(attrs={'class':'form-control chosen-select'}),
 			'third_parent': forms.Select(attrs={'class':'form-control chosen-select'}),
 		}
+
+class ProfileForStudentModelForm(forms.ModelForm):
+	"""docstring for ProfileForStudentModelForm"""
+	class Meta:
+		model = Student
+		fields = ['maple_bear_username', 'maple_bear_password', 'maple_bear_email']
+		widgets = {
+			'maple_bear_username': forms.TextInput(attrs={'class':'form-control', 'required':False, 'maxlength':255}),
+			'maple_bear_password': forms.TextInput(attrs={'type':'password','class':'form-control', 'required':False, 'maxlength':255}),
+			'maple_bear_email': forms.TextInput(attrs={'class':'form-control', 'required':False, 'maxlength':255}),
+		}

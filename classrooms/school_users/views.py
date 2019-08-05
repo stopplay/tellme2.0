@@ -1356,3 +1356,8 @@ def profile(request):
                 messages.success(request, 'Perfil alterado com sucesso')
                 return redirect('/users/profile')
         return render(request, 'school_users/profile.html', {'form':form, 'parent':parent, 'sons':sons, 'is_client':True})
+    elif Student.objects.filter(profile=request.user).count()>=1:
+        parent = Student.objects.get(profile=request.user)
+        sons = []
+        form = ProfileForStudentModelForm(request.POST or None, instance=parent)
+        return render(request, 'school_users/profile.html', {'form':form, 'parent':parent, 'sons':sons, 'is_client':True})
