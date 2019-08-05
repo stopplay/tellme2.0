@@ -1013,7 +1013,9 @@ def add_parent(request, student_id=None, type_of_user= None):
                 student.first_parent = parent
             if type_of_user == 'second_parent':
                 student.second_parent = parent
-            student.save(update_fields=['first_parent','second_parent'])
+            if type_of_user == 'third_parent':
+                student.third_parent = parent
+            student.save(update_fields=['first_parent','second_parent', 'third_parent'])
             messages.success(request, 'Responsável adicionado com sucesso!')
             return redirect('/users/set_parents/{}'.format(student_id))
         return render(request, 'school_users/add_parent.html', {'form':form, 'form2':form2})
@@ -1054,7 +1056,9 @@ def add_parent(request, student_id=None, type_of_user= None):
                 student.first_parent = parent
             if type_of_user == 'second_parent':
                 student.second_parent = parent
-            student.save(update_fields=['first_parent','second_parent'])
+            if type_of_user == 'third_parent':
+                student.third_parent = parent
+            student.save(update_fields=['first_parent','second_parent', 'third_parent'])
             messages.success(request, 'Responsável adicionado com sucesso!')
             return redirect('/users/set_parents/{}'.format(student_id))
         return render(request, 'school_users/add_parent.html', {'form':form, 'form2':form2, 'is_supervisor':is_supervisor})
