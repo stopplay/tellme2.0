@@ -513,7 +513,7 @@ def add_student_to_class_and_school(request, school_id=None, class_id=None):
 						diff = datetime.date.today() - user_creation.birthday
 						age = diff.days//365
 						if age >= 18:
-							return redirect('/users/do_u_need_parents/{}/{}/{}'.format(student_to_add.student_id, school_to_add.school_id, class_to_add.class_id))
+							return redirect('/users/do_u_need_parents/{}/{}/{}'.format(student_to_add.student_id, school_to_add_student.school_id, class_to_add_student.class_id))
 						school_to_add_student.students.add(student)
 						class_to_add_student.students.add(student)
 						messages.success(request, 'Estudante criado com sucesso!')
@@ -603,7 +603,7 @@ def add_student_to_class_and_school(request, school_id=None, class_id=None):
 						diff = datetime.date.today() - user_creation.birthday
 						age = diff.days//365
 						if age >= 18:
-							return redirect('/users/do_u_need_parents/{}/{}/{}'.format(student_to_add.student_id, school_to_add.school_id, class_to_add.class_id))
+							return redirect('/users/do_u_need_parents/{}/{}/{}'.format(student_to_add.student_id, school_to_add_student.school_id, class_to_add_student.class_id))
 						school_to_add_student.students.add(student)
 						class_to_add_student.students.add(student)
 						messages.success(request, 'Estudante criado com sucesso!')
