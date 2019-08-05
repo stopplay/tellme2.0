@@ -44,6 +44,20 @@
 												</div>
 											</div>
 										</p>
+										<p>
+											<label for="id_second_parent">{{ form.third_parent.label }}:</label>
+
+											<div class="row">
+												<div class="col-9">
+													{{ form.third_parent }}
+												</div>
+												<div class="col-2">
+													<a class="box-rounded flex-div box-rounded-blue color-link-white vertical-align-with-transform" href="{% url 'users:add_parent' student_id  'third_parent' %}">
+														<p class="fas fa-plus centralize-margin font-size-plus"></p>
+													</a>
+												</div>
+											</div>
+										</p>
 										<div>
 											<button type="submit" class="btn btn-info btn-fill pull-left" style="background-color: #213f99; border-color: #213f99">
 												Atualizar o	Estudante

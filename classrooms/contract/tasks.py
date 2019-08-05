@@ -119,32 +119,34 @@ def schedule_email(contract, typeof=None):
     content = contract.pdf.read()
     attachment = (contract.pdf.name, content, 'application/pdf')
     attachments.append(attachment)
+    if contract.first_auth_signe:
+        mail_subject = 'Contract to be signed'
+        school = School.objects.get(chains__id__exact = contract.chain.id)
+        message = render_to_string('contract/sendcontract.html', {
+            'user': contract.first_auth_signe,
+            'contract': contract,
+            'school': school
+        })
+        to_email = contract.first_auth_signe.profile.email
+        email = EmailMessage(
+            mail_subject, message, to=[to_email], attachments=attachments
+        )
+        email.send()
+    if contract.second_auth_signe:
+        mail_subject = 'Contract to be signed'
+        message = render_to_string('contract/sendcontract.html', {
+            'user': contract.first_auth_signe,
+            'contract': contract,
+            'school': school
+        })
+        to_email = contract.second_auth_signe.profile.email
+        email = EmailMessage(
+            mail_subject, message, to=[to_email], attachments=attachments
+        )
+        email.send()
     mail_subject = 'Contract to be signed'
-    school = School.objects.get(chains__id__exact = contract.chain.id)
     message = render_to_string('contract/sendcontract.html', {
-        'user': contract.first_auth_signe,
-        'contract': contract,
-        'school': school
-    })
-    to_email = contract.first_auth_signe.profile.email
-    email = EmailMessage(
-        mail_subject, message, to=[to_email], attachments=attachments
-    )
-    email.send()
-    mail_subject = 'Contract to be signed'
-    message = render_to_string('contract/sendcontract.html', {
-        'user': contract.first_auth_signe,
-        'contract': contract,
-        'school': school
-    })
-    to_email = contract.second_auth_signe.profile.email
-    email = EmailMessage(
-        mail_subject, message, to=[to_email], attachments=attachments
-    )
-    email.send()
-    mail_subject = 'Contract to be signed'
-    message = render_to_string('contract/sendcontract.html', {
-        'user': contract.first_auth_signe,
+        'user': contract.second_auth_signe,
         'contract': contract,
         'school': school
     })
@@ -174,28 +176,30 @@ def schedule_email_without_attachment(contract, typeof=None):
         contract.pdf.name = contract.pdf.name.split('/')[1]
         contract.pdf.name = os.path.join(os.path.dirname(settings.BASE_DIR),'media_cdn', contract.pdf.name)
     school = School.objects.get(chains__id__exact = contract.chain.id)
-    mail_subject = 'Contract to be signed'
-    message = render_to_string('contract/sendcontract.html', {
-        'user': contract.first_auth_signe,
-        'contract': contract,
-        'school': school
-    })
-    to_email = contract.first_auth_signe.profile.email
-    email = EmailMessage(
-        mail_subject, message, to=[to_email]
-    )
-    email.send()
-    mail_subject = 'Contract to be signed'
-    message = render_to_string('contract/sendcontract.html', {
-        'user': contract.first_auth_signe,
-        'contract': contract,
-        'school': school
-    })
-    to_email = contract.second_auth_signe.profile.email
-    email = EmailMessage(
-        mail_subject, message, to=[to_email]
-    )
-    email.send()
+    if contract.first_auth_signe:
+        mail_subject = 'Contract to be signed'
+        message = render_to_string('contract/sendcontract.html', {
+            'user': contract.first_auth_signe,
+            'contract': contract,
+            'school': school
+        })
+        to_email = contract.first_auth_signe.profile.email
+        email = EmailMessage(
+            mail_subject, message, to=[to_email]
+        )
+        email.send()
+    if contract.second_auth_signe:
+        mail_subject = 'Contract to be signed'
+        message = render_to_string('contract/sendcontract.html', {
+            'user': contract.second_auth_signe,
+            'contract': contract,
+            'school': school
+        })
+        to_email = contract.second_auth_signe.profile.email
+        email = EmailMessage(
+            mail_subject, message, to=[to_email]
+        )
+        email.send()
     mail_subject = 'Contract to be signed'
     message = render_to_string('contract/sendcontract.html', {
         'user': contract.first_auth_signe,
