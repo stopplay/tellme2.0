@@ -40,9 +40,9 @@ class ContractModelFormWithoutSponte(forms.ModelForm):
 		model = Contract
 		fields = ['chain', 'date', 'pdf', 'terms_of_contract', 'terms_of_contract_2']
 		widgets = {
-			'date': forms.DateInput(attrs={'type':'date', 'class':'labelandform', 'required':True, 'style' : "width: 100%" }),
-			'chain': forms.Select(attrs={'class':'custom-select', 'style' : "width: 100%", 'required':True}),
-			'pdf': forms.FileInput(attrs={'required':True, 'style' : "width: 100%", 'id' : 'pdf'}),
-			'terms_of_contract': forms.FileInput(attrs={'required':False, 'style' : "width: 100%", 'id' : 'terms_of_contract'}),
-			'terms_of_contract_2': forms.FileInput(attrs={'required':False, 'style' : "width: 100%", "class": "inputfile", 'id' : 'terms_of_contract_2'}),
+			'date': forms.DateInput(attrs={'type':'date', 'class':'form-control', 'required':True, 'style' : "width: 100%" }),
+			'chain': forms.Select(attrs={'class':'form-control', 'style' : "width: 100%", 'required':True}),
+			'pdf': forms.FileInput(attrs={'required':True, 'style' : "width: 100%", 'class':'form-control'}),
+			'terms_of_contract': forms.FileInput(attrs={'required':False, 'style' : "width: 100%", 'class':'form-control'}),
+			'terms_of_contract_2': forms.FileInput(attrs={'required':False, 'style' : "width: 100%", 'class':'form-control'}),
 		}

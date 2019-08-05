@@ -9,15 +9,15 @@ class SchoolModelForm(forms.ModelForm):
 		model = School
 		fields = ['school_name', 'sponte_client_number', 'sponte_token', 'tell_me_school_id', 'country', 'state', 'city', 'app_name']
 		widgets = {
-			'school_name': forms.TextInput(attrs={'maxlength':255}),
+			'school_name': forms.TextInput(attrs={'class':'form-control', 'maxlength':255, 'required':True}),
 			'enrollment_year': forms.NumberInput(),
-			'sponte_client_number': forms.NumberInput(attrs={'required':False ,'min':0}),
-			'sponte_token': forms.TextInput(attrs={'required':False, 'min':0}),
-			'tell_me_school_id': forms.TextInput(attrs={'required':False, 'min':0}),
-			'country': forms.TextInput(attrs={'required':False}),
-			'state': forms.TextInput(attrs={'required':False}),
-			'city': forms.TextInput(attrs={'required':False}),
-			'app_name': forms.TextInput(attrs={'required':False}),
+			'sponte_client_number': forms.NumberInput(attrs={'class':'form-control', 'required':False ,'min':0}),
+			'sponte_token': forms.TextInput(attrs={'class':'form-control', 'required':False, 'min':0}),
+			'tell_me_school_id': forms.TextInput(attrs={'class':'form-control', 'required':False, 'min':0}),
+			'country': forms.TextInput(attrs={'class':'form-control', 'required':False}),
+			'state': forms.TextInput(attrs={'class':'form-control', 'required':False}),
+			'city': forms.TextInput(attrs={'class':'form-control', 'required':False}),
+			'app_name': forms.TextInput(attrs={'class':'form-control', 'required':False}),
 		}
 
 class ClassModelForm(forms.ModelForm):
@@ -26,11 +26,11 @@ class ClassModelForm(forms.ModelForm):
 		model = Class
 		fields = ['class_name', 'class_unit', 'enrollment_class_year', 'slm', 'sku']
 		widgets = {
-			'class_name': forms.TextInput(attrs={'maxlength':255, 'required':True}),
-			'class_unit': forms.Select(attrs={'required':True, "class":"custom-select"}),
+			'class_name': forms.TextInput(attrs={'class':'form-control', 'maxlength':255, 'required':True}),
+			'class_unit': forms.Select(attrs={'class':'form-control', 'required':True, "class":"custom-select"}),
 			'enrollment_class_year': forms.NumberInput(attrs={'required':True, 'min':datetime.date.today().year}),
-			'slm': forms.TextInput(attrs={'maxlength':255, 'required':True}),
-			'sku': forms.TextInput(attrs={'maxlength':255, 'required':True}),
+			'slm': forms.TextInput(attrs={'class':'form-control', 'maxlength':255, 'required':True}),
+			'sku': forms.TextInput(attrs={'class':'form-control', 'maxlength':255, 'required':True}),
 		}
 
 class ClassAddTeachersModelForm(forms.ModelForm):

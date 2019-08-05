@@ -53,9 +53,9 @@ class ParentModelForm(forms.ModelForm):
 		model = Parent
 		fields = ['maple_bear_username', 'maple_bear_password', 'maple_bear_email']
 		widgets = {
-			'maple_bear_username': forms.TextInput(attrs={'class':'labelandform', 'required':False, 'maxlength':255}),
-			'maple_bear_password': forms.TextInput(attrs={'type':'password','class':'labelandform', 'required':False, 'maxlength':255}),
-			'maple_bear_email': forms.TextInput(attrs={'class':'labelandform', 'required':False, 'maxlength':255}),
+			'maple_bear_username': forms.TextInput(attrs={'class':'form-control', 'required':False, 'maxlength':255}),
+			'maple_bear_password': forms.TextInput(attrs={'type':'password','class':'form-control', 'required':False, 'maxlength':255}),
+			'maple_bear_email': forms.TextInput(attrs={'class':'form-control', 'required':False, 'maxlength':255}),
 		}
 
 class StudentModelForm(forms.ModelForm):
@@ -64,7 +64,7 @@ class StudentModelForm(forms.ModelForm):
 		model = Student
 		fields = ['birthday']
 		widgets = {
-			'birthday': forms.DateInput(attrs={'type':'date', 'class':'labelandform', 'required':True, 'style':"width:100%", 'max':datetime.date.today()-datetime.timedelta(days=1)}),
+			'birthday': forms.DateInput(attrs={'type':'date', 'class':'form-control', 'required':True, 'style':"width:100%", 'max':datetime.date.today()-datetime.timedelta(days=1)}),
 		}
 
 class SetParentsModelForm(forms.ModelForm):
@@ -73,7 +73,7 @@ class SetParentsModelForm(forms.ModelForm):
 		model = Student
 		fields = ['first_parent','second_parent', 'third_parent']
 		widgets = {
-			'first_parent': forms.Select(attrs={'class':'custom-select chosen-select'}),
-			'second_parent': forms.Select(attrs={'class':'custom-select chosen-select'}),
-			'third_parent': forms.Select(attrs={'class':'custom-select chosen-select'}),
+			'first_parent': forms.Select(attrs={'class':'form-control chosen-select'}),
+			'second_parent': forms.Select(attrs={'class':'form-control chosen-select'}),
+			'third_parent': forms.Select(attrs={'class':'form-control chosen-select'}),
 		}
