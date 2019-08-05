@@ -266,9 +266,11 @@
         <td>{{ student.second_parent.name }}</td>
         <td>
          <div class="btn-tollbar">
+          {% if student.needs_parent %}
           <div class="btn-group mr-2 w-100" role="group" aria-label="First group">
            <button type="button" class="w-100 btn btn-primary btn-sm btn-info btn-block"><a href="{% url 'users:set_parents' student.student_id %}" data-baloon="Remove this item from the cart" class="text-light">Selecionar Responsáveis</a></button>
          </div>
+         {% endif %}
          {% if request.user.is_superuser %}
          <div class="btn-group mr-2 w-100"  role="group" aria-label="Second group">
            <button type="button" class="delete-button w-100 btn btn-danger btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' student.student_id 'student' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Estudante</a></button>
