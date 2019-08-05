@@ -1,0 +1,59 @@
+{% extends 'base.html'%}
+
+{% block title %} Perfil {% endblock %}
+
+{% block content %}
+
+<div class="content">
+  <div class="container-fluid">
+    {% if sons %}
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card strpied-tabled-with-hover">
+            <div class="card-header ">
+              <h4 class="card-title">Filho(s)</h4>
+            </div>
+
+            <div class="card-body table-full-width table-responsive">
+              <table class="table table-hover table-striped display mb-4" id="sonstable">
+                <thead class="">
+                  <tr>
+                    <th >Nome</th>
+                    <th >Nome de Usuário</th>
+                    <th>Responsável Financeiro</th>
+                    <th>Responsável Pedagógico</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for son in sons %}
+                   <tr>
+                    <th scope="row">{{ son.name }}</th>
+                    <td>{{ son.profile.username }}</td>
+                    <td>{{ son.first_parent.name }} </td>
+                    <td>{{ son.second_parent.name }}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+
+
+
+<script type="text/javascript">
+  $(document).ready( function () {
+    $('#sonstable').DataTable();
+    $('#teacherstable').DataTable();
+    $('#parentstable').DataTable();
+    $('#supervisorstable').DataTable();
+    $('#headstable').DataTable();
+    $('#adminstable').DataTable();
+  } );
+</script>
+{% endblock %}
