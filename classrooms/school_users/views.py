@@ -1216,7 +1216,8 @@ def delete_user(request, user_id=None, type_of_user=None):
             if user_to_delete.second_parent:
                 user_to_delete.second_parent.profile.delete()
                 user_to_delete.second_parent.delete()
-        user_to_delete.profile.delete()
+        if user_to_delete.profile:
+            user_to_delete.profile.delete()
         user_to_delete.delete()
         messages.success(request, 'Esse usuário foi deletado com sucesso')
         return redirect('/users/all')
