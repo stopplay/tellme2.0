@@ -662,7 +662,7 @@ def do_u_need_parents(request, student_id=None, school_id=None, class_id=None):
                 'uid':urlsafe_base64_encode(force_bytes(student_to_add.profile.pk)).decode(),
                 'token':account_activation_token.make_token(student_to_add.profile),
             })
-            to_email = form.cleaned_data.get('email')
+            to_email = student_to_add.profile.email
             email = EmailMessage(
                 mail_subject, message, to=[to_email]
             )
@@ -692,7 +692,7 @@ def do_u_need_parents(request, student_id=None, school_id=None, class_id=None):
                 'uid':urlsafe_base64_encode(force_bytes(student_to_add.profile.pk)).decode(),
                 'token':account_activation_token.make_token(student_to_add.profile),
             })
-            to_email = form.cleaned_data.get('email')
+            to_email = student_to_add.profile.email
             email = EmailMessage(
                 mail_subject, message, to=[to_email]
             )
@@ -1211,12 +1211,15 @@ def delete_user(request, user_id=None, type_of_user=None):
         if(type_of_user=='student'):
             user_to_delete = get_object_or_404(Student, student_id=user_id)
             if user_to_delete.first_parent:
-                user_to_delete.first_parent.profile.delete()
+                if user_to_delete.first_parent.profile:
+                    user_to_delete.first_parent.profile.delete()
                 user_to_delete.first_parent.delete()
             if user_to_delete.second_parent:
-                user_to_delete.second_parent.profile.delete()
+                if user_to_delete.second_parent.profile:
+                    user_to_delete.second_parent.profile.delete()
                 user_to_delete.second_parent.delete()
-        user_to_delete.profile.delete()
+        if user_to_delete.profile:
+            user_to_delete.profile.delete()
         user_to_delete.delete()
         messages.success(request, 'Esse usuário foi deletado com sucesso')
         return redirect('/users/all')
@@ -1371,3 +1374,26 @@ def profile(request):
         sons = []
         form = ProfileForStudentModelForm(request.POST or None, instance=parent)
         return render(request, 'school_users/profile.html', {'form':form, 'parent':parent, 'sons':sons, 'is_client':True})
+
+@login_required
+def seesonsofparent(request, parent_id=None):
+    if request.user.is_superuser:
+        parent = Parent.objects.get(parent_id=parent_id)
+        sons = []
+        for student in Student.objects.filter(first_parent=parent):
+            if student not in sons:
+                sons += [(student)]
+        for student in Student.objects.filter(second_parent=parent):
+            if student not in sons:
+                sons += [(student)]
+        return render(request, 'school_users/sonsofparent.html', {'parent':parent, 'sons':sons})
+    if Head.objects.filter(profile=request.user).count()>=1:
+        parent = Parent.objects.get(parent_id=parent_id)
+        sons = []
+        for student in Student.objects.filter(first_parent=parent):
+            if student not in sons:
+                sons += [(student)]
+        for student in Student.objects.filter(second_parent=parent):
+            if student not in sons:
+                sons += [(student)]
+        return render(request, 'school_users/sonsofparent.html', {'parent':parent, 'sons':sons, 'is_supervisor':True})

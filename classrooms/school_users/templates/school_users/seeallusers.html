@@ -218,6 +218,9 @@
               {% if request.user.is_superuser %}
               <td>
                <div class="btn-tollbar">
+                <div class="btn-group mr-2 w-100" role="group" aria-label="First group">
+                  <button type="button" class="w-100 btn btn-primary btn-sm btn-info btn-block"><a href="{% url 'users:seesonsofparent' parent.parent_id %}" data-baloon="Remove this item from the cart" class="text-light">Ver Filho(s) Desse Responsável</a></button>
+                </div>
                 <div class="btn-group mr-2 w-100" role="group" aria-label="Second group">
                  <button type="button" class="delete-button w-100 btn btn-danger btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' parent.parent_id 'parent' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Responsável</a></button>
                </div>
