@@ -119,9 +119,9 @@ def schedule_email(contract, typeof=None):
     content = contract.pdf.read()
     attachment = (contract.pdf.name, content, 'application/pdf')
     attachments.append(attachment)
+    school = School.objects.get(chains__id__exact = contract.chain.id)
     if contract.first_auth_signe:
         mail_subject = 'Contract to be signed'
-        school = School.objects.get(chains__id__exact = contract.chain.id)
         message = render_to_string('contract/sendcontract.html', {
             'user': contract.first_auth_signe,
             'contract': contract,
