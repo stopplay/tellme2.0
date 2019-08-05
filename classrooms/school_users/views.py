@@ -662,7 +662,7 @@ def do_u_need_parents(request, student_id=None, school_id=None, class_id=None):
                 'uid':urlsafe_base64_encode(force_bytes(student_to_add.profile.pk)).decode(),
                 'token':account_activation_token.make_token(student_to_add.profile),
             })
-            to_email = form.cleaned_data.get('email')
+            to_email = student_to_add.profile.email
             email = EmailMessage(
                 mail_subject, message, to=[to_email]
             )
@@ -692,7 +692,7 @@ def do_u_need_parents(request, student_id=None, school_id=None, class_id=None):
                 'uid':urlsafe_base64_encode(force_bytes(student_to_add.profile.pk)).decode(),
                 'token':account_activation_token.make_token(student_to_add.profile),
             })
-            to_email = form.cleaned_data.get('email')
+            to_email = student_to_add.profile.email
             email = EmailMessage(
                 mail_subject, message, to=[to_email]
             )
