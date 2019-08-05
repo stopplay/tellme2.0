@@ -125,7 +125,7 @@ input:checked + .slider:before {
   position: relative;
   top: 0px;
   left: 0px;
-  background-color: orange;
+  background-color: #f16521;
 }
 
 .topbar-wrapper {
@@ -151,20 +151,20 @@ input:checked + .slider:before {
 }
 
 .coloring-link {
-  color: orange !important;
+  color: #f16521 !important;
   text-decoration: none;
 }
 
 .coloring-link a {
-  color: orange !important;
+  color: #f16521 !important;
 }
 
 .coloring-link a:active {
-  color: orange;
+  color: #f16521;
 }
 
 .coloring-link a:focus {
-  color: orange;
+  color: #f16521;
 }
 
 .coloring-link:hover {
