@@ -1374,3 +1374,26 @@ def profile(request):
         sons = []
         form = ProfileForStudentModelForm(request.POST or None, instance=parent)
         return render(request, 'school_users/profile.html', {'form':form, 'parent':parent, 'sons':sons, 'is_client':True})
+
+@login_required
+def seesonsofparent(request, parent_id=None):
+    if request.user.is_superuser:
+        parent = Parent.objects.get(parent_id=parent_id)
+        sons = []
+        for student in Student.objects.filter(first_parent=parent):
+            if student not in sons:
+                sons += [(student)]
+        for student in Student.objects.filter(second_parent=parent):
+            if student not in sons:
+                sons += [(student)]
+        return render(request, 'school_users/sonsofparent.html', {'parent':parent, 'sons':sons})
+    if Head.objects.filter(profile=request.user).count()>=1:
+        parent = Parent.objects.get(parent_id=parent_id)
+        sons = []
+        for student in Student.objects.filter(first_parent=parent):
+            if student not in sons:
+                sons += [(student)]
+        for student in Student.objects.filter(second_parent=parent):
+            if student not in sons:
+                sons += [(student)]
+        return render(request, 'school_users/sonsofparent.html', {'parent':parent, 'sons':sons, 'is_supervisor':True})

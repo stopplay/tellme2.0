@@ -37,4 +37,5 @@ urlpatterns = [
     url('generate_password', views.generate_password, name='generate_password'),
     url('profile', views.profile, name='profile'),
     path('do_u_need_parents/<int:student_id>/<int:school_id>/<int:class_id>', views.do_u_need_parents, name='do_u_need_parents'),
+    path('seesonsofparent/<int:parent_id>', views.seesonsofparent, name='seesonsofparent'),
 ]
