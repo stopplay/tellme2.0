@@ -227,7 +227,7 @@ def createacontract(request):
 					return redirect('/contracts/all')
 				messages.warning(request, 'O estudante não tem pelo menos um dos pais associados a ele!')
 		return render(request, 'contract/createacontract.html', {'form':form, 'is_supervisor':is_supervisor, 'student':student, 'tomorrow':tomorrow})
-	return HttpResponse('U cannot access this page cos u are not admin!')
+	return redirect('/')
 
 @login_required
 def updatecontract(request, contract_id=None):
@@ -296,7 +296,7 @@ def updatecontract(request, contract_id=None):
 					return redirect('/contracts/all')
 				messages.warning(request, 'O estudante não tem pelo menos um dos pais associados a ele!')
 		return render(request, 'contract/updatecontract.html', {'form':form, 'students':students})
-	return HttpResponse('U cannot access this page cos u are not admin!')
+	return redirect('/')
 
 @csrf_exempt
 def createacontract_rest(request):

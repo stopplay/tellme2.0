@@ -628,7 +628,7 @@ def create_user(request):
                                 return redirect('/users/add_first_parent/{}'.format(student_to_add.student_id))
                     return redirect('/users/create_user')
         return render(request, 'school_users/createuser.html', {'user_form':form,'head_form':form2,'teacher_form':form3,'admin_form':form4,'supervisor_form':form5,'parent_form':form6,'student_form':form7,'is_supervisor':is_supervisor, 'schools':schools})
-    return HttpResponse('U cannot access this page cos u are not admin!')
+    return redirect('/')
 
 def generate_password(request):
     password = make_password('wordpass234')
@@ -1044,7 +1044,7 @@ def seeallusers(request):
                     if student.second_parent not in parent_users:
                         parent_users += [(student.second_parent)]
         return render(request, 'school_users/seeallusers.html', {'head_users':head_users,'teacher_users':teacher_users,'admin_users':admin_users,'supervisor_users':supervisor_users,'parent_users':parent_users,'student_users':student_users, 'is_supervisor':is_supervisor})
-    return HttpResponse('U cannot access this page cos u are not admin!')
+    return redirect('/')
 
 def seeallusers_by_school(request, school_id=None):
     if request.user.is_superuser:
@@ -1125,8 +1125,7 @@ def seeallusers_by_school(request, school_id=None):
                             parent_users += [(student.second_parent)]
         is_supervisor = True
         return render(request, 'school_users/seeallusers.html', {'head_users':head_users,'teacher_users':teacher_users,'admin_users':admin_users,'supervisor_users':supervisor_users,'parent_users':parent_users,'student_users':student_users, 'is_supervisor':is_supervisor})
-    return HttpResponse('U cannot access this page cos u are not admin!')
-    pass
+    return redirect('/')
 
 @login_required
 def delete_user(request, user_id=None, type_of_user=None):

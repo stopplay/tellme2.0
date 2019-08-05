@@ -54,7 +54,7 @@ def create_school(request):
 			messages.success(request, '{} adicionada corretamente!'.format(school_to_add_head.school_name))
 			return redirect('/users/create_head_to_school/{}'.format(school_to_add_head.school_id))
 		return render(request, 'school/add_school.html', {'form':form})
-	return HttpResponse('U cannot access this page cos u are not admin!')
+	return redirect('/')
 
 @login_required
 def seeallschools(request):
@@ -93,7 +93,7 @@ def seeclassbyid(request, class_id=None):
     	classe = Class.objects.get(class_id=class_id)
     	school = School.objects.get(classes__class_id__exact=classe.class_id)
     	return render(request,'school/seeclassbyid.html',{'classe':classe,'school':school, 'is_supervisor':is_supervisor})
-    return HttpResponse('U cannot access this page cos u are not admin!')
+    return redirect('/')
 
 #weverton
 @login_required
@@ -105,7 +105,7 @@ def seechainbyid(request, chain_id=None):
     	is_supervisor = True
     	chain = Chain.objects.get(id=chain_id)
     	return render(request,'school/seechainbyname.html',{'chain':chain, 'is_supervisor':is_supervisor})
-    return HttpResponse('U cannot access this page cos u are not admin!')
+    return redirect('/')
     
 @csrf_exempt
 @api_view(['GET'])
@@ -114,7 +114,7 @@ def seeallschools_rest(request):
 		schools = School.objects.all()
 		schools_rest = SchoolSerializer(schools, many=True)
 		return Response({'schools':schools_rest.data})
-	return HttpResponse('U cannot access this page cos u are not admin!')
+	return redirect('/')
 
 @login_required
 def update_school(request, school_id=None):
