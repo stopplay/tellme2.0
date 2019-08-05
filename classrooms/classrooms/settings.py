@@ -93,24 +93,24 @@ WSGI_APPLICATION = 'classrooms.wsgi.application'
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'dbmaster',
-        'USER': 'dbmasteruser',
-        'PASSWORD': 'YZB*eGT.S>-V{KTGD]6biAPkH{z!.[{X',
-        'HOST': 'ls-7c37af3dce7557b4348c952efb76e7cc8481f746.clzycusc5rcf.eu-west-1.rds.amazonaws.com',
-        'PORT': '5432',
-    }
-
-    # local config:
     # 'default': {
     #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': 'postgres',
-    #     'USER': 'postgres',
-    #     'PASSWORD' : 'example',
-    #     'HOST': '10.0.0.11',
+    #     'NAME': 'dbmaster',
+    #     'USER': 'dbmasteruser',
+    #     'PASSWORD': 'YZB*eGT.S>-V{KTGD]6biAPkH{z!.[{X',
+    #     'HOST': 'ls-7c37af3dce7557b4348c952efb76e7cc8481f746.clzycusc5rcf.eu-west-1.rds.amazonaws.com',
     #     'PORT': '5432',
     # }
+
+    # local config:
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD' : 'example',
+        'HOST': '10.0.0.11',
+        'PORT': '5432',
+    }
 }
 
 

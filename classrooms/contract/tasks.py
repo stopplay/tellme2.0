@@ -66,7 +66,6 @@ def update_material_orders_from_maple_bear():
             print('==================================================')
             print('Processing:', counter)
             print('class_linked_to_contract:', class_linked_to_contract)
-            print('student', student)
             print('sku:', sku)
             print('contract_created_entry_date:', contract_created_entry_date)
 

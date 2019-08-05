@@ -44,11 +44,22 @@ class MagentoSoap():
             sale_order_increment_id = sale['increment_id']
             try:
                 order_info = self.client.service.salesOrderInfo(self.session_id, sale_order_increment_id)
+
+                has_paid_item = False
+
+                print('order history changes:', len(order_info['status_history']))
+
+                for order_history in order_info['status_history']:
+                    print('order status changed to:', order_history['status'])
+                    if order_history['status'] == 'registered':
+                        has_paid_item = True
+                        break
+
                 print('items count purchased:', len(order_info['items']))
                 for order_item in order_info['items']:
                     print('order_item_sku', order_item['sku'])
                     if order_item['sku'] == sku:
-                        return True
+                        return True and has_paid_item
             except:
                 pass
         return False
