@@ -662,6 +662,11 @@ def do_u_need_parents(request, student_id=None, school_id=None, class_id=None):
                 'uid':urlsafe_base64_encode(force_bytes(student_to_add.profile.pk)).decode(),
                 'token':account_activation_token.make_token(student_to_add.profile),
             })
+            to_email = form.cleaned_data.get('email')
+            email = EmailMessage(
+                mail_subject, message, to=[to_email]
+            )
+            email.send()
             if yesorno == 'não':
                 messages.success(request, 'Você criou este estudante e o colocou como próprio responsável financeiro')
                 return redirect('/users/create_user')
@@ -687,6 +692,11 @@ def do_u_need_parents(request, student_id=None, school_id=None, class_id=None):
                 'uid':urlsafe_base64_encode(force_bytes(student_to_add.profile.pk)).decode(),
                 'token':account_activation_token.make_token(student_to_add.profile),
             })
+            to_email = form.cleaned_data.get('email')
+            email = EmailMessage(
+                mail_subject, message, to=[to_email]
+            )
+            email.send()
             if yesorno == 'não':
                 messages.success(request, 'Você criou este estudante e o colocou como próprio responsável financeiro')
                 return redirect('/users/create_user')
