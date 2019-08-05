@@ -58,8 +58,8 @@ class MagentoSoap():
                 print('items count purchased:', len(order_info['items']))
                 for order_item in order_info['items']:
                     print('order_item_sku', order_item['sku'])
-                    if order_item['sku'] == sku:
-                        return True and has_paid_item
+                    if order_item['sku'] == sku and has_paid_item:
+                        return True
             except:
                 pass
         return False
