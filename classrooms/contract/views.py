@@ -938,7 +938,7 @@ def seefinancialdetails(request, contract_id = None):
 @login_required
 def protected_serve(request, path, contract_id=None, document_root=None):
 	try:
-		if Parent.objects.filter(profile=request.user):
+		if Parent.objects.filter(profile=request.user).count()>=1:
 			obj = Contract.objects.get(contract_id=contract_id)
 			if Parent.objects.get(profile=request.user) == obj.first_auth_signe or Parent.objects.get(profile=request.user) == obj.second_auth_signe:
 				obj_pdf_url = obj.pdf.url
@@ -948,6 +948,13 @@ def protected_serve(request, path, contract_id=None, document_root=None):
 		elif Head.objects.filter(profile=request.user).count()>=1:
 			obj = Contract.objects.get(contract_id=contract_id)
 			if Head.objects.get(profile=request.user) == obj.counter_signe:
+				obj_pdf_url = obj.pdf.url
+				correct_pdf_url = obj_pdf_url.replace("/media/", "")
+			else:
+				return HttpResponse('Você não tem permissão para acessar esse arquivo')
+		elif Student.objects.filter(profile=request.user).count()>=1:
+			obj = Contract.objects.get(contract_id=contract_id)
+			if Student.objects.get(profile=request.user) == obj.student_auth_signe:
 				obj_pdf_url = obj.pdf.url
 				correct_pdf_url = obj_pdf_url.replace("/media/", "")
 			else:
