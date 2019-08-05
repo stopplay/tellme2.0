@@ -27,6 +27,26 @@
   <script type="text/javascript" src="{% static 'datatables/datatables.min.js' %}"></script>
 
 
+<!-- Generate password -->
+<script src="{% static 'js/gen_password.js' %}"></script>
+<script>
+
+  function setGenPasswordToFields(fieldsIds) {
+    $(document).ready(function() {
+      var password = genPassword();
+
+      if (fieldsIds.length) {
+        for (var i = 0; i < fieldsIds.length; i++) {
+          var passwordElement = document.getElementById(fieldsIds[i]);
+          if (passwordElement) {
+            passwordElement.value = password;
+          }
+        }
+      }
+    });
+  }
+
+</script>
 
   <script src="{% static 'js/bootstrap-3.1.1.min.js' %}"></script>
 
@@ -93,6 +113,8 @@
 <script src="{% static 'js/light-bootstrap-dashboard.js' %}"></script>
 
 <script src="{% static 'js/demo.js'%}"></script>
+
+
 <script type="text/javascript">
   $(".chosen-select").chosen({ no_results_text: "Oops, nothing found!" });
 </script>

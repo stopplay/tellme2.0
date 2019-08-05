@@ -7,6 +7,9 @@
 	$(document).ready(function () {
 		$('.container').removeClass('container');
 	});
+
+
+	setGenPasswordToFields(['id_{{user_form.password1.name}}', 'id_{{user_form.password2.name}}'])
 </script>
 
 
@@ -87,10 +90,14 @@
 													<div class="">{{ user_form.email }}</div>
 												</div>
 												<div class="form-group"><label>Senha: </label>
-													<div class="">{{ user_form.password1 }}</div>
+													<div class="">
+														<input type="password" name="{{user_form.password1.name}}" required="" id="id_{{user_form.password1.name}}">
+													</div>
 												</div>
 												<div class="form-group"><label>Confirmação de Senha: </label>
-													<div class="">{{ user_form.password2 }}</div>
+													<div class="">
+														<input type="password" name="{{user_form.password2.name}}" required="" id="id_{{user_form.password2.name}}">
+													</div>
 												</div>
 												<div></div>
 												<div><button class="btn btn-info btn-fill pull-left" type="submit"
@@ -119,6 +126,7 @@
 		<script type="text/javascript">
 			$(document).ready(function () {
 				$('#select_form_school').on('change', function () {
+					setGenPasswordToFields(['id_{{user_form.password1.name}}', 'id_{{user_form.password2.name}}'])
 					let urlClasses = $('#myForm').data('urlclasses')
 					var selectValor = $(this).val();
 					$.ajax({
@@ -150,6 +158,7 @@
 			}
 			$(document).ready(function () {
 				$('#select_form_class').on('change', function () {
+					setGenPasswordToFields(['id_{{user_form.password1.name}}', 'id_{{user_form.password2.name}}'])
 					var selectValor = $(this).val();
 					if (selectValor == '') {
 						document.getElementById('selected_class').value = '0'
@@ -161,6 +170,7 @@
 			});
 			$(document).ready(function () {
 				$('#select_form').on('change', function () {
+					setGenPasswordToFields(['id_{{user_form.password1.name}}', 'id_{{user_form.password2.name}}'])
 					var selectValor = $(this).val();
 					if (selectValor == '') {
 						document.getElementById('selected_user').value = '0'
@@ -226,28 +236,12 @@
 						document.getElementById('sim/não').value = 'sim'
 					}
 				});
-});
-	// $('#select_form_school').change(function(){
-	// 	let urlClasses = $('#myForm').data('urlclasses')
-	// 	var selectValor = $(this).val();
-	// 	$.ajax({
-	// 		url:urlClasses,
-	// 		data: {
-	// 			id: selectValor
-	// 		},
-	// 		success: function(response) {
-	// 			$('#select_form_class').html(response)
-	// 		}
-	// 	})
-	// 	if (selectValor == '') {
-	// 		document.getElementById('selected_school').value = '0'
-	// 	}
-	// 	else{
-	// 		document.getElementById('selected_school').value = selectValor
-	// 	}
-	// })
+});	
+	
+
 	$(document).ready(function () {
 		$('#first_slider').on('click', function () {
+			setGenPasswordToFields(['id_{{user_form.password1.name}}', 'id_{{user_form.password2.name}}'])
 			if (!$('#first_checkbox').prop("checked")) {
 				$('#pai').children('#não').remove();
 				// $('#pai').append('<div id="sim"><select class="custom-select chosen-select" onchange="select(this)" style="width:115%"><option id="" value="" selected>Você deseja selecionar um arquivo da web?</option><option id="sim" value="sim">Sim</option><option id="não" value="não">Não</option></select> <input type="hidden" id="archive_type" name="archive_type">');
