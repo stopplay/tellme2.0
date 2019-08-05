@@ -75,14 +75,14 @@
       var check = document.getElementsByName('select_all');
       var checkboxes = table.children('tbody').children('tr').children('th').children('input');
       if (check[0].checked == true) {
-        document.getElementById('variable').value = true;
+        document.getElementById('variable').value = 'true';
         for (var i = 0; i < checkboxes.length; i++) {
           if (checkboxes[i].type == 'checkbox') {
             checkboxes[i].checked = true;
           }
         }
       } else {
-        document.getElementById('variable').value = false;
+        document.getElementById('variable').value = 'false';
         for (var i = 0; i < checkboxes.length; i++) {
           if (checkboxes[i].type == 'checkbox') {
             checkboxes[i].checked = false;

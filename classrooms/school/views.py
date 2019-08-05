@@ -418,7 +418,7 @@ def add_students_to_school(request, school_id=None):
 		if request.method == 'POST':
 			select_all = request.POST.get('variable')
 			school.students.clear()
-			if select_all:
+			if select_all == 'true':
 				school.students.add(*student_users)
 			else:
 				some_var = request.POST.getlist('checks')
@@ -435,7 +435,7 @@ def add_students_to_school(request, school_id=None):
 		if request.method == 'POST':
 			select_all = request.POST.get('variable')
 			school.students.clear()
-			if select_all:
+			if select_all == 'true':
 				school.students.add(*student_users)
 			else:
 				some_var = request.POST.getlist('checks')
@@ -454,7 +454,7 @@ def add_students_to_class(request, class_id=None):
 		if request.method == 'POST':
 			select_all = request.POST.get('variable')
 			class_to_add_student.students.clear()
-			if select_all:
+			if select_all == 'true':
 				class_to_add_student.students.add(*student_users)
 			else:
 				some_var = request.POST.getlist('checks')
@@ -472,7 +472,7 @@ def add_students_to_class(request, class_id=None):
 		if request.method == 'POST':
 			select_all = request.POST.get('variable')
 			class_to_add_student.students.clear()
-			if select_all:
+			if select_all == 'true':
 				class_to_add_student.students.add(*student_users)
 			else:
 				some_var = request.POST.getlist('checks')
@@ -834,7 +834,7 @@ def add_students_to_class_and_school(request, school_id=None, class_id=None):
 		if request.method == 'POST':
 			select_all = request.POST.get('variable')
 			school.students.clear()
-			if select_all:
+			if select_all == 'true':
 				school.students.add(*student_users)
 				classe.students.add(*student_users)
 			else:
@@ -857,7 +857,7 @@ def add_students_to_class_and_school(request, school_id=None, class_id=None):
 		if request.method == 'POST':
 			select_all = request.POST.get('variable')
 			school.students.clear()
-			if select_all:
+			if select_all == 'true':
 				school.students.add(*student_users)
 			else:
 				some_var = request.POST.getlist('checks')
