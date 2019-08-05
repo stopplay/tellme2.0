@@ -952,7 +952,7 @@ def protected_serve(request, path, contract_id=None, document_root=None):
 				correct_pdf_url = obj_pdf_url.replace("/media/", "")
 			else:
 				return HttpResponse('Você não tem permissão para acessar esse arquivo')
-		elif Student.objects.filter(profile=request.user).count>=1:
+		elif Student.objects.filter(profile=request.user).count()>=1:
 			obj = Contract.objects.get(contract_id=contract_id)
 			if Student.objects.get(profile=request.user) == obj.student_auth_signe:
 				obj_pdf_url = obj.pdf.url
