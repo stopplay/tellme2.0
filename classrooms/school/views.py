@@ -418,7 +418,7 @@ def add_students_to_school(request, school_id=None):
 		if request.method == 'POST':
 			select_all = request.POST.get('variable')
 			school.students.clear()
-			if select_all:
+			if select_all == 'true':
 				school.students.add(*student_users)
 			else:
 				some_var = request.POST.getlist('checks')
@@ -435,7 +435,7 @@ def add_students_to_school(request, school_id=None):
 		if request.method == 'POST':
 			select_all = request.POST.get('variable')
 			school.students.clear()
-			if select_all:
+			if select_all == 'true':
 				school.students.add(*student_users)
 			else:
 				some_var = request.POST.getlist('checks')
