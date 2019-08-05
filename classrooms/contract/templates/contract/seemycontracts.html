@@ -213,7 +213,7 @@
                   </div>
                 </div>
                 {% endif %}
-                {% elif is_parent %}
+                {% endif %}
                 {% if request.user == contract.first_auth_signe.profile %}
                 {% if contract.first_auth_signed %}
                 <!--verde-->
@@ -264,7 +264,6 @@
                     <a class="btn btn-primary btn-sm btn-danger btn-block" onclick="signContract('{% url 'contracts:set_signed' contract.contract_id %}');" href="#" data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal" data-target="#sign-contract-modal">Assinar Contrato</a>
                   </div>
                 </div>
-                {% endif %}
                 {% endif %}
                 {% endif %}
                 {% if is_supervisor %}
