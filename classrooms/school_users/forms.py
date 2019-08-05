@@ -71,8 +71,9 @@ class SetParentsModelForm(forms.ModelForm):
 	"""docstring for ManagerModelForm"""
 	class Meta:
 		model = Student
-		fields = ['first_parent','second_parent']
+		fields = ['first_parent','second_parent', 'third_parent']
 		widgets = {
 			'first_parent': forms.Select(attrs={'class':'custom-select chosen-select'}),
 			'second_parent': forms.Select(attrs={'class':'custom-select chosen-select'}),
+			'third_parent': forms.Select(attrs={'class':'custom-select chosen-select'}),
 		}

@@ -128,6 +128,7 @@ class Student(models.Model):
 	profile = models.OneToOneField(User, on_delete = models.SET_NULL, null=True, blank=True)
 	first_parent = models.ForeignKey('Parent', on_delete = models.SET_NULL, null=True, blank=True, related_name='first_parent', verbose_name='Responsável Financeiro')
 	second_parent = models.ForeignKey('Parent', on_delete = models.SET_NULL, null=True, blank=True, related_name='second_parent', verbose_name='Responsável Pedagógico')
+	third_parent = models.ForeignKey('Parent', on_delete = models.SET_NULL, null=True, blank=True, related_name='third_parent', verbose_name='Segundo Responsável Pedagógico (Opcional)')
 	tell_me_user_id = models.IntegerField(null=True, blank=True)
 	birthday = models.DateField(null=True, blank=True, verbose_name = 'Data de Nascimento')
 	needs_parent = models.BooleanField(default=True)

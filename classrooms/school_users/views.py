@@ -300,12 +300,12 @@ def create_user(request):
                                 user_creation = form7.save(commit=False)
                                 user_creation.profile = user_profile
                                 user_creation.name = user_profile.first_name+' '+user_profile.last_name
-                                # diff = datetime.date.today() - user_creation.birthday
-                                # age = diff.days//365
-                                # if age >= 18:
-                                #     do_u_need_parents(request, user_creation)
                                 user_creation.save()
                                 student_to_add = Student.objects.get(profile=user_profile)
+                                diff = datetime.date.today() - user_creation.birthday
+                                age = diff.days//365
+                                if age >= 18:
+                                    return redirect('/users/do_u_need_parents/{}/{}/{}'.format(student_to_add.student_id, school_to_add.school_id, class_to_add.class_id))
                                 school_to_add.students.add(student_to_add)
                                 class_to_add.students.add(student_to_add)
                                 messages.success(request, 'Usuário criado com sucesso!')
@@ -609,6 +609,10 @@ def create_user(request):
                                 user_creation.name = user_profile.first_name+' '+user_profile.last_name
                                 user_creation.save()
                                 student_to_add = Student.objects.get(profile=user_profile)
+                                diff = datetime.date.today() - user_creation.birthday
+                                age = diff.days//365
+                                if age >= 18:
+                                    return redirect('/users/do_u_need_parents/{}/{}/{}'.format(student_to_add.student_id, school_to_add.school_id, class_to_add.class_id))
                                 school_to_add.students.add(student_to_add)
                                 class_to_add.students.add(student_to_add)
                                 messages.success(request, 'Usuário criado com sucesso!')
@@ -634,10 +638,60 @@ def generate_password(request):
     password = make_password('wordpass234')
     return render(request, 'school_users/password.html', {'password':password})
 
-
-def do_u_need_parents(request, user_creation=None, school_to_add=None, class_to_add=None):
-
-    pass
+@login_required
+def do_u_need_parents(request, student_id=None, school_id=None, class_id=None):
+    student = Student.objects.get(student_id=student_id)
+    school_to_add = School.objects.get(school_id=school_id)
+    class_to_add = Class.objects.get(class_id=class_id)
+    if request.user.is_superuser:
+        if request.method == 'POST':
+            yesorno = request.POST.get('sim/não')
+            if yesorno == 'não':
+                student.needs_parent = False
+            student.save(update_fields=['needs_parent'])
+            student_to_add = Student.objects.get(student_id=student_id)
+            if school_to_add and class_to_add:
+                school_to_add.students.add(student_to_add)
+                class_to_add.students.add(student_to_add)
+            messages.success(request, 'Usuário criado com sucesso!')
+            current_site = get_current_site(request)
+            mail_subject = 'Login para acesso ao app escolar.'
+            message = render_to_string('school_users/user_login.html', {
+                'user': student_to_add,
+                'domain': current_site.domain,
+                'uid':urlsafe_base64_encode(force_bytes(student_to_add.profile.pk)).decode(),
+                'token':account_activation_token.make_token(student_to_add.profile),
+            })
+            if yesorno == 'não':
+                messages.success(request, 'Você criou este estudante e o colocou como próprio responsável financeiro')
+                return redirect('/users/create_user')
+            return redirect('/users/add_first_parent/{}'.format(student_to_add.student_id))
+        return render(request, 'school_users/do_u_need_parents.html', {'user':student})
+    elif Head.objects.filter(profile=request.user).count()>=1:
+        is_supervisor = True
+        if request.method == 'POST':
+            yesorno = request.POST.get('sim/não')
+            if yesorno == 'não':
+                student.needs_parent = False
+            student.save(update_fields=['needs_parent'])
+            student_to_add = Student.objects.get(student_id=student_id)
+            if school_to_add and class_to_add:
+                school_to_add.students.add(student_to_add)
+                class_to_add.students.add(student_to_add)
+            messages.success(request, 'Usuário criado com sucesso!')
+            current_site = get_current_site(request)
+            mail_subject = 'Login para acesso ao app escolar.'
+            message = render_to_string('school_users/user_login.html', {
+                'user': student_to_add,
+                'domain': current_site.domain,
+                'uid':urlsafe_base64_encode(force_bytes(student_to_add.profile.pk)).decode(),
+                'token':account_activation_token.make_token(student_to_add.profile),
+            })
+            if yesorno == 'não':
+                messages.success(request, 'Você criou este estudante e o colocou como próprio responsável financeiro')
+                return redirect('/users/create_user')
+            return redirect('/users/add_first_parent/{}'.format(student_to_add.student_id))
+        return render(request, 'school_users/do_u_need_parents.html', {'user':student, 'is_supervisor':is_supervisor})
 
 @login_required
 def create_head_to_school(request, school_id=None):
@@ -840,7 +894,7 @@ def add_first_parent(request, student_id=None):
             student.save(update_fields=['first_parent'])
             messages.success(request, 'Responsável financeiro adicionado com sucesso!')
             return redirect('/users/add_second_parent/{}'.format(student_id))
-        return render(request, 'school_users/add_parent.html', {'form':form, 'form2':form2})
+        return render(request, 'school_users/add_first_parent.html', {'form':form, 'form2':form2})
     elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
         is_supervisor = True
         student = Student.objects.get(student_id=student_id)
@@ -866,7 +920,7 @@ def add_first_parent(request, student_id=None):
             student.save(update_fields=['first_parent'])
             messages.success(request, 'Responsável financeiro adicionado com sucesso!')
             return redirect('/users/add_second_parent/{}'.format(student_id))
-        return render(request, 'school_users/add_parent.html', {'form':form, 'form2':form2, 'is_supervisor':is_supervisor})
+        return render(request, 'school_users/add_first_parent.html', {'form':form, 'form2':form2, 'is_supervisor':is_supervisor})
 
 @login_required
 def add_second_parent(request, student_id=None):
@@ -894,7 +948,7 @@ def add_second_parent(request, student_id=None):
             student.save(update_fields=['second_parent'])
             messages.success(request, 'Responsável pedagógico adicionado com sucesso!')
             return redirect('/users/create_user/')
-        return render(request, 'school_users/add_parent.html', {'form':form, 'form2':form2})
+        return render(request, 'school_users/add_second_parent.html', {'form':form, 'form2':form2})
     elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
         is_supervisor = True
         student = Student.objects.get(student_id=student_id)
@@ -920,7 +974,7 @@ def add_second_parent(request, student_id=None):
             student.save(update_fields=['second_parent'])
             messages.success(request, 'Responsável pedagógico adicionado com sucesso!')
             return redirect('/users/add_second_parent/{}'.format(student_id))
-        return render(request, 'school_users/add_parent.html', {'form':form, 'form2':form2, 'is_supervisor':is_supervisor})
+        return render(request, 'school_users/add_second_parent.html', {'form':form, 'form2':form2, 'is_supervisor':is_supervisor})
 
 @login_required
 def add_parent(request, student_id=None, type_of_user= None):
