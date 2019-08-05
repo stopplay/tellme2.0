@@ -102,20 +102,35 @@
                     </div>
                     {% endif %}
                   </div>
-
-                  <div class="even-distributed">
-                    <label>RESPONSÁVEL FINANCEIRO ASSINADO</label>
-                    {% if contract.first_auth_signed %}
-                    <div class="margin-5 width-100-cent">
-                      <span class="badge badge-pill badge-success text-success float-right" >.</span>
+                  {% if contract.student_auth_signe %}
+                    <div class="even-distributed">
+                      <label>RESPONSÁVEL ESTUDANTE ASSINADO</label>
+                      {% if contract.student_auth_signed %}
+                      <div class="margin-5 width-100-cent">
+                        <span class="badge badge-pill badge-success text-success float-right" >.</span>
+                      </div>
+                      {% else %}
+                      <div class="margin-5 width-100-cent">
+                        <span class="badge badge-pill badge-danger text-danger float-right" >.</span>
+                      </div>
+                      {% endif %}
                     </div>
-                    {% else %}
-                    <div class="margin-5 width-100-cent">
-                      <span class="badge badge-pill badge-danger text-danger float-right" >.</span>
+                  {% endif %}
+                  {% if contract.first_auth_signe %}
+                    <div class="even-distributed">
+                      <label>RESPONSÁVEL FINANCEIRO ASSINADO</label>
+                      {% if contract.first_auth_signed %}
+                      <div class="margin-5 width-100-cent">
+                        <span class="badge badge-pill badge-success text-success float-right" >.</span>
+                      </div>
+                      {% else %}
+                      <div class="margin-5 width-100-cent">
+                        <span class="badge badge-pill badge-danger text-danger float-right" >.</span>
+                      </div>
+                      {% endif %}
                     </div>
-                    {% endif %}
-                  </div>
-
+                  {% endif %}
+                  {% if contract.second_auth_signe %}
                   <div class="even-distributed">
                     <label>RESPONSÁVEL PEDAGÓGICO ASSINADO</label>
                     {% if contract.second_auth_signed %}
@@ -128,7 +143,7 @@
                     </div>
                     {% endif %}
                   </div>
-
+                  {% endif %}
                   <div class="even-distributed">
                     <label>DIRETOR RESPONSÁVEL ASSINADO</label>
                     {% if contract.counter_signed %}
@@ -198,7 +213,7 @@
                   </div>
                 </div>
                 {% endif %}
-                {% elif is_parent %}
+                {% endif %}
                 {% if request.user == contract.first_auth_signe.profile %}
                 {% if contract.first_auth_signed %}
                 <!--verde-->
@@ -233,6 +248,22 @@
                   </div>
                 </div>
                 {% endif %}
+                {% elif request.user == contract.student_auth_signe.profile %}
+                {% if contract.student_auth_signed %}
+                <!--verde-->
+                <div class="btn-tollbar">
+                  <div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
+                    <button type="button" class="btn btn-success btn-sm btn-block" style="cursor: not-allowed;">Assinado</button>
+                  </div>
+                </div>
+
+                {% else %}
+                <!--Vermelho-->
+                <div class="btn-tollbar">
+                  <div class="btn-group mr-2 pull-right" role="group" aria-label="Second group">
+                    <a class="btn btn-primary btn-sm btn-danger btn-block" onclick="signContract('{% url 'contracts:set_signed' contract.contract_id %}');" href="#" data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal" data-target="#sign-contract-modal">Assinar Contrato</a>
+                  </div>
+                </div>
                 {% endif %}
                 {% endif %}
                 {% if is_supervisor %}

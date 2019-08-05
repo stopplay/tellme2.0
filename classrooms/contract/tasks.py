@@ -156,11 +156,23 @@ def schedule_email(contract, typeof=None):
     if contract.second_auth_signe:
         mail_subject = 'Contract to be signed'
         message = render_to_string('contract/sendcontract.html', {
-            'user': contract.first_auth_signe,
+            'user': contract.second_auth_signe,
             'contract': contract,
             'school': school
         })
         to_email = contract.second_auth_signe.profile.email
+        email = EmailMessage(
+            mail_subject, message, to=[to_email], attachments=attachments
+        )
+        email.send()
+    if contract.student_auth_signe:
+        mail_subject = 'Contract to be signed'
+        message = render_to_string('contract/sendcontract.html', {
+            'user': contract.student_auth_signe,
+            'contract': contract,
+            'school': school
+        })
+        to_email = contract.student_auth_signe.profile.email
         email = EmailMessage(
             mail_subject, message, to=[to_email], attachments=attachments
         )
@@ -217,6 +229,18 @@ def schedule_email_without_attachment(contract, typeof=None):
             'school': school
         })
         to_email = contract.second_auth_signe.profile.email
+        email = EmailMessage(
+            mail_subject, message, to=[to_email]
+        )
+        email.send()
+    if contract.student_auth_signe:
+        mail_subject = 'Contract to be signed'
+        message = render_to_string('contract/sendcontract.html', {
+            'user': contract.student_auth_signe,
+            'contract': contract,
+            'school': school
+        })
+        to_email = contract.student_auth_signe.profile.email
         email = EmailMessage(
             mail_subject, message, to=[to_email]
         )
