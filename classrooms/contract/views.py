@@ -66,49 +66,67 @@ class ContractsViewSet(viewsets.ModelViewSet):
     # filter_backends = (DjangoFilterBackend)
     filterset_fields = ['contract_id','name','contract_id_sponte','situation_id_sponte','situation_sponte','student_name_sponte','student_id_sponte','course_id_sponte','class_id_sponte','class_name_sponte','course_name_sponte','contract_type_id','initial_date_sponte','contract_free_class_id_sponte','end_date_sponte','date_of_registration_sponte','type_of_registration_sponte','contractor_sponte','name_of_curricular_matrix_sponte','financial_launched_sponte','contract_number_sponte','closing_date_sponte', 'first_auth_signe', 'first_auth_signed', 'second_auth_signe', 'second_auth_signed', 'counter_signe', 'counter_signed']
 
+def extract_text_to_write_and_coords(contract=None, whosigned=None):
+
+	if whosigned == 'first_auth':
+		return { 'x' : 45, 'y' : 30, 'text' : "1. Responsável Financeiro: {} Hash: {}, em {} às {}".format(contract.first_auth_signe.name, contract.first_auth_hash, str(contract.first_auth_signed_timestamp.date().day)+'/'+str(contract.first_auth_signed_timestamp.date().month)+'/'+str(contract.first_auth_signed_timestamp.date().year), str(contract.first_auth_signed_timestamp.time().hour)+':'+str(contract.first_auth_signed_timestamp.time().minute)+':'+str(contract.first_auth_signed_timestamp.time().second)) }
+	elif whosigned == 'second_auth':
+		return { 'x' : 45, 'y' : 20, 'text' : "2. Responsável Didático: {} Hash: {}, em {} às {}".format(contract.second_auth_signe.name, contract.second_auth_hash, str(contract.second_auth_signed_timestamp.date().day)+'/'+str(contract.second_auth_signed_timestamp.date().month)+'/'+str(contract.second_auth_signed_timestamp.date().year), str(contract.second_auth_signed_timestamp.time().hour)+':'+str(contract.second_auth_signed_timestamp.time().minute)+':'+str(contract.second_auth_signed_timestamp.time().second)) }
+	elif whosigned == 'student_auth':
+		return { 'x' : 45, 'y' : 20, 'text' : "1. Responsável Estudante: {} Hash: {}, em {} às {}".format(contract.student_auth_signe.name, contract.student_auth_hash, str(contract.student_auth_signed_timestamp.date().day)+'/'+str(contract.student_auth_signed_timestamp.date().month)+'/'+str(contract.student_auth_signed_timestamp.date().year), str(contract.student_auth_signed_timestamp.time().hour)+':'+str(contract.student_auth_signed_timestamp.time().minute)+':'+str(contract.student_auth_signed_timestamp.time().second)) }
+	elif whosigned == 'director':
+		if contract.first_auth_signe and contract.second_auth_signe:
+			return { 'x' : 45, 'y' : 10, 'text' : "3. Responsável Diretor: {} Hash: {}, em {} às {}".format(contract.counter_signe.name, contract.counter_auth_hash, str(contract.counter_signed_timestamp.date().day)+'/'+str(contract.counter_signed_timestamp.date().month)+'/'+str(contract.counter_signed_timestamp.date().year), str(contract.counter_signed_timestamp.time().hour)+':'+str(contract.counter_signed_timestamp.time().minute)+':'+str(contract.counter_signed_timestamp.time().second)) }
+		elif contract.student_auth_signe:
+			return { 'x' : 45, 'y' : 10, 'text' : "2. Responsável Diretor: {} Hash: {}, em {} às {}".format(contract.counter_signe.name, contract.counter_auth_hash, str(contract.counter_signed_timestamp.date().day)+'/'+str(contract.counter_signed_timestamp.date().month)+'/'+str(contract.counter_signed_timestamp.date().year), str(contract.counter_signed_timestamp.time().hour)+':'+str(contract.counter_signed_timestamp.time().minute)+':'+str(contract.counter_signed_timestamp.time().second)) }
+	elif whosigned == 'all_signed':
+		if contract.first_auth_signe and contract.second_auth_signe:
+			return { 'x' : 45, 'y' : 40, 'text' : "Assinado Eletronicamente por:" }
+		elif contract.student_auth_signe:
+			return {'x' : 45, 'y' : 30, 'text' : "Assinado Eletronicamente por:" }
+	return return {'x' : 45, 'y' : 10, 'text' : "" }
+
+def get_pdf_filepath(contract=None):
+	return settings.MEDIA_ROOT+'/'+contract.pdf.name
+
+def get_pdf_signed_output_filepath(contract=None):
+	return settings.MEDIA_ROOT+'/'+contract.pdf.name
+
 def write_pdf(request, contract=None, whosigned=None):
+	
 	packet = StringIO()
 	# create a new PDF with Reportlab
 	can = canvas.Canvas(packet, pagesize=letter)
-	can.setFont("Times-Roman",8)
-	result = finders.find('img/certificate.svg')
+	can.setFont("Times-Roman", 8)
 	current_site = get_current_site(request)
-	drawing = svg2rlg('http://'+current_site.domain+static('img/certificate.svg'))
+	
+	drawing = svg2rlg('http://'+current_site.domain+static('img/certificate.svg'))	
 	drawing.width = drawing.minWidth() * 0.035
 	drawing.height = drawing.height * 0.035 
 	drawing.scale(0.035, 0.035)
-	renderPDF.draw(drawing, can, 5, 10)
-	if whosigned == 'first_auth':
-		can.drawString(45, 30, "1. Responsável Financeiro: {} Hash: {}, em {} às {}".format(contract.first_auth_signe.name, contract.first_auth_hash, str(contract.first_auth_signed_timestamp.date().day)+'/'+str(contract.first_auth_signed_timestamp.date().month)+'/'+str(contract.first_auth_signed_timestamp.date().year), str(contract.first_auth_signed_timestamp.time().hour)+':'+str(contract.first_auth_signed_timestamp.time().minute)+':'+str(contract.first_auth_signed_timestamp.time().second)))
-	elif whosigned == 'second_auth':
-		can.drawString(45, 20, "2. Responsável Didático: {} Hash: {}, em {} às {}".format(contract.second_auth_signe.name, contract.second_auth_hash, str(contract.second_auth_signed_timestamp.date().day)+'/'+str(contract.second_auth_signed_timestamp.date().month)+'/'+str(contract.second_auth_signed_timestamp.date().year), str(contract.second_auth_signed_timestamp.time().hour)+':'+str(contract.second_auth_signed_timestamp.time().minute)+':'+str(contract.second_auth_signed_timestamp.time().second)))
-	elif whosigned == 'student_auth':
-		can.drawString(45, 20, "1. Responsável Estudante: {} Hash: {}, em {} às {}".format(contract.student_auth_signe.name, contract.student_auth_hash, str(contract.student_auth_signed_timestamp.date().day)+'/'+str(contract.student_auth_signed_timestamp.date().month)+'/'+str(contract.student_auth_signed_timestamp.date().year), str(contract.student_auth_signed_timestamp.time().hour)+':'+str(contract.student_auth_signed_timestamp.time().minute)+':'+str(contract.student_auth_signed_timestamp.time().second)))
-	elif whosigned == 'director':
-		if contract.first_auth_signe and contract.second_auth_signe:
-			can.drawString(45, 10, "3. Responsável Diretor: {} Hash: {}, em {} às {}".format(contract.counter_signe.name, contract.counter_auth_hash, str(contract.counter_signed_timestamp.date().day)+'/'+str(contract.counter_signed_timestamp.date().month)+'/'+str(contract.counter_signed_timestamp.date().year), str(contract.counter_signed_timestamp.time().hour)+':'+str(contract.counter_signed_timestamp.time().minute)+':'+str(contract.counter_signed_timestamp.time().second)))
-		elif contract.student_auth_signe:
-			can.drawString(45, 10, "2. Responsável Diretor: {} Hash: {}, em {} às {}".format(contract.counter_signe.name, contract.counter_auth_hash, str(contract.counter_signed_timestamp.date().day)+'/'+str(contract.counter_signed_timestamp.date().month)+'/'+str(contract.counter_signed_timestamp.date().year), str(contract.counter_signed_timestamp.time().hour)+':'+str(contract.counter_signed_timestamp.time().minute)+':'+str(contract.counter_signed_timestamp.time().second)))
-	elif whosigned == 'all_signed':
-		if contract.first_auth_signe and contract.second_auth_signe:
-			can.drawString(45, 40, "Assinado Eletronicamente por:")
-		elif contract.student_auth_signe:
-			can.drawString(45, 30, "Assinado Eletronicamente por:")
+
+	renderPDF.draw(drawing, can, 5, 10)	
+	text_and_coords = extract_text_to_write_and_coords(contract, whosigned)
+	can.drawString(text_and_coords['x'], text_and_coords['y'], text_and_coords['text'])
 	can.showPage()
 	can.save()
+
 	#move to the beginning of the StringIO buffer
 	packet.seek(0)
 	new_pdf = PdfFileReader(packet)
 	# read your existing PDF
-	existing_pdf = PdfFileReader(open(settings.MEDIA_ROOT+'/'+contract.pdf.name, "rb"))
+	existing_pdf = PdfFileReader(open(get_pdf_filepath(contract), "rb"))
 	output = PdfFileWriter()
+	output.removeImages(False)
+	
 	# add the "watermark" (which is the new pdf) on the existing page
-	for i in range(0,existing_pdf.getNumPages()):
+	for i in range(0, existing_pdf.getNumPages()):
 		page = existing_pdf.getPage(i)
 		page.mergePage(new_pdf.getPage(0))
 		output.addPage(page)
+
 	# finally, write "output" to a real file
-	outputStream = open(settings.MEDIA_ROOT+'/'+contract.pdf.name, "wb")
+	outputStream = open(get_pdf_signed_output_filepath(contract), "wb")
 	output.write(outputStream)
 	outputStream.close()
 
