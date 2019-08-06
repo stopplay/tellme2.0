@@ -185,6 +185,7 @@ def createacontract(request):
 								tasks.schedule_email(contract, 'normal')
 							elif wish_today == 'não':
 								date = request.POST.get('date' or None)
+								time = request.POST.get('time' or None)
 								if date and time:
 									contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), int(time.split(':')[2]))
 									contract.save()
