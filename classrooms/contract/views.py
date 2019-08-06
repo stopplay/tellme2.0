@@ -84,7 +84,7 @@ def extract_text_to_write_and_coords(contract=None, whosigned=None):
 			return { 'x' : 45, 'y' : 40, 'text' : "Assinado Eletronicamente por:" }
 		elif contract.student_auth_signe:
 			return {'x' : 45, 'y' : 30, 'text' : "Assinado Eletronicamente por:" }
-	return return {'x' : 45, 'y' : 10, 'text' : "" }
+	return {'x' : 45, 'y' : 10, 'text' : "" }
 
 def get_pdf_filepath(contract=None):
 	return settings.MEDIA_ROOT+'/'+contract.pdf.name
@@ -103,7 +103,7 @@ def write_pdf(request, contract=None, whosigned=None):
 	drawing = svg2rlg('http://'+current_site.domain+static('img/certificate.svg'))	
 	drawing.width = drawing.minWidth() * 0.035
 	drawing.height = drawing.height * 0.035 
-	drawing.scale(0.035, 0.035)
+	drawing.scale(0.035, 0.04)
 
 	renderPDF.draw(drawing, can, 5, 10)	
 	text_and_coords = extract_text_to_write_and_coords(contract, whosigned)
