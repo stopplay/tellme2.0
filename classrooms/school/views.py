@@ -127,7 +127,8 @@ def update_school(request, school_id=None):
 				chain = Chain.objects.get(id=classe.class_id)
 				chain.name = "{0}-{1}-{2}-{3}".format(school.school_name, classe.enrollment_class_year, classe.class_unit, classe.class_name)
 				chain.save(update_fields=['name'])
-			school.save(update_fields=['school_name', 'head', 'sponte_client_number', 'country', 'state', 'city','app_name'])
+
+			school.save(update_fields=['school_name', 'head', 'sponte_client_number', 'country', 'state', 'city','app_name', 'sku'])
 			messages.success(request, 'A escola foi atualizada com sucesso!')
 			return redirect('/')
 		return render(request, 'school/update_school.html', {'form':form})
@@ -141,7 +142,7 @@ def update_school(request, school_id=None):
 				chain = Chain.objects.get(id=classe.class_id)
 				chain.name = "{0}-{1}-{2}-{3}".format(school.school_name, classe.enrollment_class_year, classe.class_unit, classe.class_name)
 				chain.save(update_fields=['name'])
-			school.save(update_fields=['school_name', 'head', 'sponte_client_number', 'country', 'state', 'city','app_name'])
+			school.save(update_fields=['school_name', 'head', 'sponte_client_number', 'country', 'state', 'city','app_name', 'sku'])
 			messages.success(request, 'A escola foi atualizada com sucesso!')
 			return redirect('/')
 		return render(request, 'school/update_school.html', {'form':form, 'is_supervisor':is_supervisor})
@@ -202,7 +203,10 @@ def add_class(request, school_id=None):
 			newchain = Chain.objects.create(name="{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name))
 			school_to_add_class.chains.add(newchain)
 			
-			classroom.sku = get_sku_by_slm_url(classroom.slm)
+			sku = get_sku_by_slm_url(classroom.slm)
+			if sku: classroom.sku = sku
+			print('slm', classroom.slm)
+			print('sku', classroom.sku)
 			classroom.save()
 			
 			newclassroom = Class.objects.get(class_id=classroom.class_id)
@@ -219,7 +223,10 @@ def add_class(request, school_id=None):
 			newchain = Chain.objects.create(name="{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name))
 			school_to_add_class.chains.add(newchain)
 
-			classroom.sku = get_sku_by_slm_url(classroom.slm)
+			sku = get_sku_by_slm_url(classroom.slm)
+			if sku: classroom.sku = sku
+			print('slm', classroom.slm)
+			print('sku', classroom.sku)
 			classroom.save()
 
 			newclassroom = Class.objects.get(class_id=classroom.class_id)
@@ -253,7 +260,10 @@ def update_class(request, class_id=None):
 			chain_to_be_updated.name = "{0}-{1}-{2}-{3}".format(school_to_update_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name)
 			chain_to_be_updated.save(update_fields=['name'])
 
-			classroom.sku = get_sku_by_slm_url(classroom.slm)
+			sku = get_sku_by_slm_url(classroom.slm)
+			if sku: classroom.sku = sku
+			print('slm', classroom.slm)
+			print('sku', classroom.sku)
 			classroom.save(update_fields=['class_name', 'class_unit', 'enrollment_class_year','slm', 'sku'])
 
 			messages.success(request, 'Classe e blockchain referente à classe atualizadas com sucesso!')
@@ -270,7 +280,10 @@ def update_class(request, class_id=None):
 			chain_to_be_updated.name = "{0}-{1}-{2}-{3}".format(school_to_update_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name)
 			chain_to_be_updated.save(update_fields=['name'])
 
-			classroom.sku = get_sku_by_slm_url(classroom.slm)
+			sku = get_sku_by_slm_url(classroom.slm)
+			if sku: classroom.sku = sku
+			print('slm', classroom.slm)
+			print('sku', classroom.sku)
 			classroom.save(update_fields=['class_name', 'class_unit', 'enrollment_class_year','slm', 'sku'])
 			
 			messages.success(request, 'Classe e blockchain referente à classe atualizadas com sucesso!')
