@@ -325,100 +325,104 @@
                           {% endif %}
                       </div>
                   </div>
+                  {% if contract.terms_of_contract %}
                   <div class="row">
                     <div class="form-group col-md-12 px-4">
-                          <label>PRIMEIRO TERMO DO CONTRATO</label>
-                          {% if contract.terms_of_contract %}
-                          <div><a href="contract.terms_of_contract.url">{{contract.terms_of_contract}}</a></div>
-                          {% else %}
-                          <input type="text" class="form-control" disabled="" placeholder="" value="Sem Primeiro Termo do Contrato">
-                          {% endif %}
-                      </div>
+                      <label>PRIMEIRO TERMO DO CONTRATO</label>
+                      {% if contract.terms_of_contract %}
+                      <div><a href="contract.terms_of_contract.url">{{contract.terms_of_contract}}</a></div>
+                      {% else %}
+                      <input type="text" class="form-control" disabled="" placeholder="" value="Sem Primeiro Termo do Contrato">
+                      {% endif %}
                   </div>
-                  <div class="row">
-                    <div class="form-group col-md-12 px-4">
-                        <label>SEGUNDO TERMO DO CONTRATO</label>
-                        {% if contract.terms_of_contract %}
-                        <div><a href="contract.terms_of_contract.url">{{contract.terms_of_contract}}</a></div>
-                        {% else %}
-                        <input type="text" class="form-control" disabled="" placeholder="" value="Sem Segundo Termo do Contrato">
-                        {% endif %}
-                    </div>
+              </div>
+              {% endif %}
+              {% if contract.terms_of_contract %}
+              <div class="row">
+                <div class="form-group col-md-12 px-4">
+                    <label>SEGUNDO TERMO DO CONTRATO</label>
+                    {% if contract.terms_of_contract %}
+                    <div><a href="contract.terms_of_contract.url">{{contract.terms_of_contract}}</a></div>
+                    {% else %}
+                    <input type="text" class="form-control" disabled="" placeholder="" value="Sem Segundo Termo do Contrato">
+                    {% endif %}
                 </div>
+            </div>
+            {%endif%}
 
 
-                {% if request.user.is_superuser or is_supervisor %}
-                <div class="row">
-                    {% if contract.first_auth_signe %}
-                    <div class="col-md-4 pr-1">
-                        <div class="form-group">
-                            <label>RESPONSÁVEL FINANCEIRO ASSINADO</label>
-                            {% if contract.first_auth_signed %}
-                            <div>
-                               <span class="badge badge-pill badge-success text-success" >.</span>
-                           </div>
-                           {% else %}
-                           <div>
-                            <span class="badge badge-pill badge-danger text-danger" >.</span>
-                        </div>
-                        {% endif %}
-                        <!--<input type="text" class="form-control" disabled="" placeholder="" value="{{contract.first_auth_signed}}">-->
-                    </div>
-                </div>
-                {% endif %}
+            {% if request.user.is_superuser or is_supervisor %}
+            <div class="row">
                 {% if contract.first_auth_signe %}
-                <div class="col-md-4 px-1">
+                <div class="col-md-4 pr-1">
                     <div class="form-group">
-                        <label>RESPONSÁVEL PEDAGÓGICO ASSINADO</label>
-
-                        {% if contract.second_auth_signed %}
+                        <label>RESPONSÁVEL FINANCEIRO ASSINADO</label>
+                        {% if contract.first_auth_signed %}
                         <div>
-                           <span class="badge badge-pill badge-success text-success" >.</span>
-                       </div>
-                       {% else %}
-                       <div>
+                         <span class="badge badge-pill badge-success text-success" >.</span>
+                     </div>
+                     {% else %}
+                     <div>
                         <span class="badge badge-pill badge-danger text-danger" >.</span>
                     </div>
                     {% endif %}
-                    <!--  <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.second_auth_signed}}">-->
+                    <!--<input type="text" class="form-control" disabled="" placeholder="" value="{{contract.first_auth_signed}}">-->
                 </div>
             </div>
             {% endif %}
-            {% if contract.student_auth_signe %}
-            <div class="col-md-4 pr-1">
+            {% if contract.first_auth_signe %}
+            <div class="col-md-4 px-1">
                 <div class="form-group">
-                    <label>RESPONSÁVEL ESTUDANTE ASSINADO</label>
-                    {% if contract.student_auth_signed %}
+                    <label>RESPONSÁVEL PEDAGÓGICO ASSINADO</label>
+
+                    {% if contract.second_auth_signed %}
                     <div>
-                       <span class="badge badge-pill badge-success text-success" >.</span>
-                   </div>
-                   {% else %}
-                   <div>
+                     <span class="badge badge-pill badge-success text-success" >.</span>
+                 </div>
+                 {% else %}
+                 <div>
                     <span class="badge badge-pill badge-danger text-danger" >.</span>
                 </div>
                 {% endif %}
-                <!--<input type="text" class="form-control" disabled="" placeholder="" value="{{contract.first_auth_signed}}">-->
+                <!--  <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.second_auth_signed}}">-->
             </div>
         </div>
         {% endif %}
-    </div>
-
-
-    <div class="row">
-      <div class="col-md-4 pr-1">
-        <div class="form-group">
-            <label>DIRETOR RESPONSÁVEL ASSINADO</label>
-            {% if contract.counter_signed %}
-            <div>
-               <span class="badge badge-pill badge-success text-success" >.</span>
-           </div>
-           {% else %}
-           <div>
-            <span class="badge badge-pill badge-danger text-danger" >.</span>
+        {% if contract.student_auth_signe %}
+        <div class="col-md-4 pr-1">
+            <div class="form-group">
+                <label>RESPONSÁVEL ESTUDANTE ASSINADO</label>
+                {% if contract.student_auth_signed %}
+                <div>
+                 <span class="badge badge-pill badge-success text-success" >.</span>
+             </div>
+             {% else %}
+             <div>
+                <span class="badge badge-pill badge-danger text-danger" >.</span>
+            </div>
+            {% endif %}
+            <!--<input type="text" class="form-control" disabled="" placeholder="" value="{{contract.first_auth_signed}}">-->
         </div>
-        {% endif %}
-        <!--<input type="text" class="form-control" disabled="" placeholder="" value="{{contract.counter_signed}}">-->
     </div>
+    {% endif %}
+</div>
+
+
+<div class="row">
+  <div class="col-md-4 pr-1">
+    <div class="form-group">
+        <label>DIRETOR RESPONSÁVEL ASSINADO</label>
+        {% if contract.counter_signed %}
+        <div>
+         <span class="badge badge-pill badge-success text-success" >.</span>
+     </div>
+     {% else %}
+     <div>
+        <span class="badge badge-pill badge-danger text-danger" >.</span>
+    </div>
+    {% endif %}
+    <!--<input type="text" class="form-control" disabled="" placeholder="" value="{{contract.counter_signed}}">-->
+</div>
 </div>
 
 <div class="col-md-4 px-1">
@@ -426,10 +430,10 @@
         <label>TODOS ASSINADOS</label>
         {% if contract.all_signed %}
         <div>
-           <span class="badge badge-pill badge-success text-success" >.</span>
-       </div>
-       {% else %}
-       <div>
+         <span class="badge badge-pill badge-success text-success" >.</span>
+     </div>
+     {% else %}
+     <div>
         <span class="badge badge-pill badge-danger text-danger" >.</span>
     </div>
     {% endif %}
