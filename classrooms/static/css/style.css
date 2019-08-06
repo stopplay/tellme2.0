@@ -399,7 +399,7 @@ table.dataTable thead .sorting_desc {
 }
 
 .multi-select-button {
-  background-color: red !important;
+  background-color: #213f99 !important;
   width: 500px;
   float: left;
 }
