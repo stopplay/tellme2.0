@@ -14,6 +14,7 @@
                     </div>
                     <div class="card-body">
                         <form>
+                            {% if school %}
                             {% if school.sponte_client_number and school.sponte_token %}
                             <div class="row">
                                 <div class="col-md-12">
@@ -260,6 +261,7 @@
 
                         </div>
                         {% endif %}
+                        {% endif %}
 
                         <div class="row">
                           <div class="col-md-12">
@@ -273,7 +275,7 @@
                               </div>
                           </div>
                       </div>
-
+                      {% if school %}
                       <div class="row">
                           <div class="col-md-12">
                               <div class="form-group">
@@ -286,7 +288,8 @@
                               </div>
                           </div>
                       </div>
-
+                      {% endif %}
+                      {% if class %}
                       <div class="row">
                           <div class="col-md-12">
                               <div class="form-group">
@@ -299,6 +302,7 @@
                               </div>
                           </div>
                       </div>
+                      {% endif %}
 
                       <div class="row">
                           <div class="col-md-4 pr-1">
