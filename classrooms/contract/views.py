@@ -52,6 +52,7 @@ from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.views.static import serve
 from django.core.exceptions import ObjectDoesNotExist
+import shutil
 
 try:
     from StringIO import StringIO
@@ -90,7 +91,7 @@ def get_pdf_filepath(contract=None):
 	return settings.MEDIA_ROOT+'/'+contract.pdf.name
 
 def get_pdf_signed_output_filepath(contract=None):
-	return settings.MEDIA_ROOT+'/'+contract.pdf.name
+	return settings.MEDIA_ROOT+'/'+contract.pdf.name+'signed'
 
 def write_pdf(request, contract=None, whosigned=None):
 	
@@ -129,6 +130,9 @@ def write_pdf(request, contract=None, whosigned=None):
 	outputStream = open(get_pdf_signed_output_filepath(contract), "wb")
 	output.write(outputStream)
 	outputStream.close()
+
+	shutil.copyfile(get_pdf_signed_output_filepath(contract), get_pdf_filepath(contract))
+
 
 @login_required
 def createacontract(request):
