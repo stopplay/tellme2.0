@@ -545,7 +545,9 @@ def seecontractdetails(request, contract_id=None):
 	if Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
 		is_supervisor = True
 	contract = Contract.objects.get(contract_id=contract_id)
-	return render(request,'contract/seecontractdetails.html',{'contract':contract, 'is_supervisor':is_supervisor})
+	classe = Class.objects.get(class_id=contract.chain.id)
+	school = School.objects.get(classes__class_id__exact=classe.class_id)
+	return render(request,'contract/seecontractdetails.html',{'contract':contract, 'is_supervisor':is_supervisor, 'class':classe, 'school':school})
 
 @csrf_exempt
 @api_view(['GET'])
