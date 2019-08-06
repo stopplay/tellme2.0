@@ -179,7 +179,7 @@ def createacontract(request):
 				else:
 					contract.counter_signe = school.head
 					contract.student_auth_signe = student
-					student.student_name = student.name
+					contract.student_name = student.name
 					if wish == 'sim':
 							if wish_today == 'sim':
 								tasks.schedule_email(contract, 'normal')
@@ -275,7 +275,7 @@ def createacontract(request):
 				else:
 					contract.counter_signe = school.head
 					contract.student_auth_signe = student
-					student.student_name = student.name
+					contract.student_name = student.name
 					if wish == 'sim':
 						if wish_today == 'sim':
 							tasks.schedule_email(contract, 'normal')
