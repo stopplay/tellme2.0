@@ -709,7 +709,7 @@ def set_signed(request, contract_id = None):
 			attachments = []
 			head = Head.objects.get(profile=request.user)
 			contract.counter_signed = True
-			contract.counter_signed_timestamp = timezone.now()
+			contract.counter_signed_timestamp = block.time_stamp
 			contract.counter_auth_hash = block.hash
 			school = School.objects.get(chains__id__exact=contract.chain.id)
 			contract.save(update_fields=['counter_signed', 'counter_signed_timestamp', 'counter_auth_hash'])
@@ -760,7 +760,7 @@ def set_signed(request, contract_id = None):
 			parent = Parent.objects.get(profile=request.user)
 			if contract.first_auth_signe == parent:
 				contract.first_auth_signed = True
-				contract.first_auth_signed_timestamp = timezone.now()
+				contract.first_auth_signed_timestamp = block.time_stamp
 				contract.first_auth_hash = block.hash
 				contract.save(update_fields=['first_auth_signed', 'first_auth_signed_timestamp', 'first_auth_hash'])
 				write_pdf(request, contract, 'first_auth', None)
@@ -782,7 +782,7 @@ def set_signed(request, contract_id = None):
 				messages.success(request, 'Assinado com sucesso!')
 			if contract.second_auth_signe == parent:
 				contract.second_auth_signed = True
-				contract.second_auth_signed_timestamp = timezone.now()
+				contract.second_auth_signed_timestamp = block.time_stamp
 				contract.second_auth_hash = block.hash
 				contract.save(update_fields=['second_auth_signed', 'second_auth_signed_timestamp', 'second_auth_hash'])
 				write_pdf(request, contract, 'second_auth', None)
@@ -831,7 +831,7 @@ def set_signed(request, contract_id = None):
 			attachments = []
 			student = Student.objects.get(profile=request.user)
 			contract.student_auth_signed = True
-			contract.student_auth_signed_timestamp = timezone.now()
+			contract.student_auth_signed_timestamp = block.time_stamp
 			contract.student_auth_hash = block.hash
 			contract.save(update_fields=['student_auth_signed', 'student_auth_signed_timestamp', 'student_auth_hash'])
 			write_pdf(request, contract, 'student_auth')

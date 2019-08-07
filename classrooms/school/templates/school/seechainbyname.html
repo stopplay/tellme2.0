@@ -44,7 +44,7 @@
                           <b>Hash Anterior:</b> {{ block.previous_hash }}
                         </div>
                         <div style="margin-left: auto; margin-right: auto;">
-                          <b>Data e Hora:</b> {{ block.time_stamp }}
+                          <b>Data e Hora:</b> {{ block.time_stamp.day }}/{{ block.time_stamp.month }}/{{block.time_stamp.year }} às {% if block.time_stamp.hour < 10 %}0{{ block.time_stamp.hour }}{% else %}{{block.time_stamp.hour}}{% endif %}:{% if block.time_stamp.minute < 10 %}0{{ block.time_stamp.minute }}{% else %}{{ block.time_stamp.minute }}{% endif %}:{% if block.time_stamp.second < 10 %}0{{ block.time_stamp.second }}{% else %}{{ block.time_stamp.second }}{% endif %}
                         </div>
                         <div style="margin-left: auto; margin-right: auto;">
                           <b>Nó do Bloco:</b> {{ block.nonce }}
