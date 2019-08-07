@@ -122,7 +122,7 @@ def update_material_orders_from_maple_bear():
     soap.end_batch_operations()
 
 @app.task #1
-def schedule_email(contract, typeof=None):
+def schedule_email(contract, typeof=None, whosend=None):
     if typeof == 'json':
         first_parent_id = list(contract['first_auth_signe'].values())[0]
         contract['first_auth_signe'] = Parent.objects.get(parent_id=first_parent_id)
@@ -176,17 +176,18 @@ def schedule_email(contract, typeof=None):
             mail_subject, message, to=[to_email], attachments=attachments
         )
         email.send()
-    mail_subject = 'Contract to be signed'
-    message = render_to_string('contract/sendcontract.html', {
-        'user': contract.second_auth_signe,
-        'contract': contract,
-        'school': school
-    })
-    to_email = contract.counter_signe.profile.email
-    email = EmailMessage(
-        mail_subject, message, to=[to_email], attachments=attachments
-    )
-    email.send()
+    if whosend == 'admin':
+        mail_subject = 'Contract to be signed'
+        message = render_to_string('contract/sendcontract.html', {
+            'user': contract.counter_signe,
+            'contract': contract,
+            'school': school
+        })
+        to_email = contract.counter_signe.profile.email
+        email = EmailMessage(
+            mail_subject, message, to=[to_email], attachments=attachments
+        )
+        email.send()
     contract.email_sent = True
     if typeof == 'json':
         contract.save(update_fields=['email_sent'])
@@ -194,7 +195,7 @@ def schedule_email(contract, typeof=None):
         contract.save()
 
 @app.task #1
-def schedule_email_without_attachment(contract, typeof=None):
+def schedule_email_without_attachment(contract, typeof=None, whosend=None):
     if typeof == 'json':
         first_parent_id = list(contract['first_auth_signe'].values())[0]
         contract['first_auth_signe'] = Parent.objects.get(parent_id=first_parent_id)
@@ -244,17 +245,18 @@ def schedule_email_without_attachment(contract, typeof=None):
             mail_subject, message, to=[to_email]
         )
         email.send()
-    mail_subject = 'Contract to be signed'
-    message = render_to_string('contract/sendcontract.html', {
-        'user': contract.first_auth_signe,
-        'contract': contract,
-        'school': school
-    })
-    to_email = contract.counter_signe.profile.email
-    email = EmailMessage(
-        mail_subject, message, to=[to_email]
-    )
-    email.send()
+    if whosend == 'admin':
+        mail_subject = 'Contract to be signed'
+        message = render_to_string('contract/sendcontract.html', {
+            'user': contract.counter_signe,
+            'contract': contract,
+            'school': school
+        })
+        to_email = contract.counter_signe.profile.email
+        email = EmailMessage(
+            mail_subject, message, to=[to_email]
+        )
+        email.send()
     contract.email_sent = True
     if typeof == 'json':
         contract.save(update_fields=['email_sent'])
