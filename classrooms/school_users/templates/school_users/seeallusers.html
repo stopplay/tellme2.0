@@ -37,14 +37,14 @@
                   {% if request.user.is_superuser %}
                   <td>
                     <div class="btn-tollbar">
+                      {% if head.profile %}
+                      <div class="btn-group mr-2 w-100" role="group" aria-label="Second group">
+                         <button type="button" class="w-100 btn btn-primary btn-sm btn-info btn-block"><a href="{% url 'users:reset_password_send_email' head.head_id 'head' %}" data-baloon="Remove this item from the cart" class="text-light">Resetar Senha</a></button>
+                       </div>
+                       {% endif %}
                       <div class="btn-group mr-2" role="group" aria-label="Second group"><br>
                         <button type="button" class="delete-button btn btn-danger btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' head.head_id 'head' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Diretor</a></button>
                       </div>
-                      {% if head.profile %}
-                      <div class="btn-group mr-2 w-100" role="group" aria-label="Second group">
-                         <button type="button" class="delete-button w-100 btn btn-danger btn-sm btn-danger btn-block"><a href="{% url 'users:reset_password_send_email' head.head_id 'head' %}" data-baloon="Remove this item from the cart" class="text-light">Resetar Senha</a></button>
-                       </div>
-                       {% endif %}
                     </div>
                   </td>
                   {% endif %}
@@ -87,14 +87,14 @@
                   {% if request.user.is_superuser %}
                   <td>
                     <div class="btn-tollbar">
+                      {% if teacher.profile %}
+                      <div class="btn-group mr-2 w-100" role="group" aria-label="Second group">
+                         <button type="button" class="w-100 btn btn-primary btn-sm btn-info btn-block"><a href="{% url 'users:reset_password_send_email' teacher.teacher_id 'teacher' %}" data-baloon="Remove this item from the cart" class="text-light">Resetar Senha</a></button>
+                       </div>
+                       {% endif %}
                       <div class="btn-group mr-2" role="group" aria-label="Second group">
                         <button type="button" class="delete-button btn btn-danger btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' teacher.teacher_id 'teacher' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Professor</a></button>
                       </div>
-                      {% if teacher.profile %}
-                      <div class="btn-group mr-2 w-100" role="group" aria-label="Second group">
-                         <button type="button" class="delete-button w-100 btn btn-danger btn-sm btn-danger btn-block"><a href="{% url 'users:reset_password_send_email' teacher.teacher_id 'teacher' %}" data-baloon="Remove this item from the cart" class="text-light">Resetar Senha</a></button>
-                       </div>
-                       {% endif %}
                     </div>
                   </td>
                   {% endif %}
@@ -137,13 +137,13 @@
                   {% if request.user.is_superuser %}
                   <td>
                     <div class="btn-tollbar">
-                      <div class="btn-group mr-2" role="group" aria-label="Second group">
-                        <button type="button" class="delete-button btn btn-danger btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' admin.admin_id 'admin' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Administrador</a><br></button>
-                        {% if admin.profile %}
+                      {% if admin.profile %}
                         <div class="btn-group mr-2 w-100" role="group" aria-label="Second group">
-                         <button type="button" class="delete-button w-100 btn btn-danger btn-sm btn-danger btn-block"><a href="{% url 'users:reset_password_send_email' admin.admin_id 'admin' %}" data-baloon="Remove this item from the cart" class="text-light">Resetar Senha</a></button>
+                         <button type="button" class="w-100 btn btn-primary btn-sm btn-info btn-block"><a href="{% url 'users:reset_password_send_email' admin.admin_id 'admin' %}" data-baloon="Remove this item from the cart" class="text-light">Resetar Senha</a></button>
                        </div>
                        {% endif %}
+                      <div class="btn-group mr-2" role="group" aria-label="Second group">
+                        <button type="button" class="delete-button btn btn-danger btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' admin.admin_id 'admin' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Administrador</a><br></button>
                       </div>
                     </div>
                   </td>
@@ -187,15 +187,15 @@
                   <td>{{ supervisor.profile.username }}</td>
                   {% if request.user.is_superuser %}
                   <td>
+                    {% if supervisor.profile %}
+                      <div class="btn-group mr-2 w-100" role="group" aria-label="Second group">
+                       <button type="button" class="w-100 btn btn-primary btn-sm btn-info btn-block"><a href="{% url 'users:reset_password_send_email' supervisor.supervisor_id 'supervisor' %}" data-baloon="Remove this item from the cart" class="text-light">Resetar Senha</a></button>
+                     </div>
+                     {% endif %}
                     <div class="btn-tollbar">
                       <div class="btn-group mr-2 w-100" role="group" aria-label="Second group">
                         <button type="button" class="delete-button w-100 btn btn-danger btn-sm btn-danger btn-block "><a href="{% url 'users:delete_user' supervisor.supervisor_id 'supervisor' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Supervisor</a></button>
                       </div>
-                      {% if supervisor.profile %}
-                      <div class="btn-group mr-2 w-100" role="group" aria-label="Second group">
-                       <button type="button" class="delete-button w-100 btn btn-danger btn-sm btn-danger btn-block"><a href="{% url 'users:reset_password_send_email' supervisor.supervisor_id 'supervisor' %}" data-baloon="Remove this item from the cart" class="text-light">Resetar Senha</a></button>
-                     </div>
-                     {% endif %}
                     </div>
                   </td>
                   {% endif %}
@@ -235,23 +235,25 @@
              <tr>
               <th>{{ parent.name }}</th>
               <td>{{ parent.profile.username }}</td>
-              {% if request.user.is_superuser %}
+              
               <td>
                <div class="btn-tollbar">
                 <div class="btn-group mr-2 w-100" role="group" aria-label="First group">
                   <button type="button" class="w-100 btn btn-primary btn-sm btn-info btn-block"><a href="{% url 'users:seesonsofparent' parent.parent_id %}" data-baloon="Remove this item from the cart" class="text-light">Ver Filho(s) Desse Responsável</a></button>
                 </div>
+              {% if request.user.is_superuser %}
+                {% if parent.profile %}
+               <div class="btn-group mr-2 w-100" role="group" aria-label="Second group">
+                 <button type="button" class="w-100 btn btn-primary btn-sm btn-info btn-block"><a href="{% url 'users:reset_password_send_email' parent.parent_id 'parent' %}" data-baloon="Remove this item from the cart" class="text-light">Resetar Senha</a></button>
+               </div>
+               {% endif %}
                 <div class="btn-group mr-2 w-100" role="group" aria-label="Second group">
                  <button type="button" class="delete-button w-100 btn btn-danger btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' parent.parent_id 'parent' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Responsável</a></button>
                </div>
-               {% if parent.profile %}
-               <div class="btn-group mr-2 w-100" role="group" aria-label="Second group">
-                 <button type="button" class="delete-button w-100 btn btn-danger btn-sm btn-danger btn-block"><a href="{% url 'users:reset_password_send_email' parent.parent_id 'parent' %}" data-baloon="Remove this item from the cart" class="text-light">Resetar Senha</a></button>
-               </div>
-               {% endif %}
+              {% endif %}
              </div>
            </td>
-           {% endif %}
+           
          </tr>
          {% endfor %}
        </tbody>
@@ -300,14 +302,14 @@
          </div>
          {% endif %}
          {% if request.user.is_superuser %}
+         {% if student.profile %}
+         <div class="btn-group mr-2 w-100" role="group" aria-label="Second group">
+            <button type="button" class="w-100 btn btn-primary btn-sm btn-info btn-block"><a href="{% url 'users:reset_password_send_email' student.student_id 'student' %}" data-baloon="Remove this item from the cart" class="text-light">Resetar Senha</a></button>
+          </div>
+          {% endif %}
          <div class="btn-group mr-2 w-100"  role="group" aria-label="Second group">
            <button type="button" class="delete-button w-100 btn btn-danger btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' student.student_id 'student' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Estudante</a></button>
          </div>
-         {% if student.profile %}
-         <div class="btn-group mr-2 w-100" role="group" aria-label="Second group">
-            <button type="button" class="delete-button w-100 btn btn-danger btn-sm btn-danger btn-block"><a href="{% url 'users:reset_password_send_email' student.student_id 'student' %}" data-baloon="Remove this item from the cart" class="text-light">Resetar Senha</a></button>
-          </div>
-          {% endif %}
          {% endif %}
        </div>
      </td>
