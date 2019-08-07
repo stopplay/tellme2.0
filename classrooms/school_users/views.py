@@ -1227,6 +1227,37 @@ def delete_user(request, user_id=None, type_of_user=None):
     return redired('/users/all')
 
 @login_required
+def reset_password_send_email(request, user_id=None, type_of_user=None):
+    if request.user.is_superuser:
+        if(type_of_user=='head'):
+            user_to_reset_password = get_object_or_404(Head, head_id=user_id)
+        if(type_of_user=='teacher'):
+            user_to_reset_password = get_object_or_404(Teacher, teacher_id=user_id)
+        if(type_of_user=='admin'):
+            user_to_reset_password = get_object_or_404(Admin, admin_id=user_id)
+        if(type_of_user=='supervisor'):
+            user_to_reset_password = get_object_or_404(Supervisor, supervisor_id=user_id)
+        if(type_of_user=='parent'):
+            user_to_reset_password = get_object_or_404(Parent, parent_id=user_id)
+        if(type_of_user=='student'):
+            user_to_reset_password = get_object_or_404(Student, student_id=user_id)
+        current_site = get_current_site(request)
+        mail_subject = 'Login para acesso ao app escolar.'
+        message = render_to_string('school_users/user_login.html', {
+            'user': user_to_reset_password,
+            'domain': current_site.domain,
+            'uid':urlsafe_base64_encode(force_bytes(user_to_reset_password.profile.pk)).decode(),
+            'token':account_activation_token.make_token(user_to_reset_password.profile),
+        })
+        to_email = user_to_reset_password.profile.email
+        email = EmailMessage(
+            mail_subject, message, to=[to_email]
+        )
+        email.send()
+        messages.success(request, 'O usuário {} recebeu no email cadastrado um email para resetar a senha'.format(user_to_reset_password.name))
+        return redirect('/users/all')
+
+@login_required
 def set_parents(request, student_id=None):
     if request.user.is_superuser:
     	instance = get_object_or_404(Student, student_id=student_id)
