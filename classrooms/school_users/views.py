@@ -1272,6 +1272,8 @@ def do_login(request):
             login(request, user)
             nextpage = request.GET.get('next','/')
             return redirect(nextpage)
+        else:
+            messages.error(request, 'Usuário não existente')
     return render(request, 'school_users/login.html')
 
 def my_jwt_response_handler(token, user=None, request=None):

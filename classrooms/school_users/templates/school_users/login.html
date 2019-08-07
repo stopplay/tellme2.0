@@ -18,6 +18,14 @@
 					</h3>
 				</div>
 				<div class="panel-body">
+					{% if messages %}
+				      {% for message in messages %}
+				      <div {% if message.tags %}
+				        class="{{ message.tags }} alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}"
+				        {% endif %} role="alert"><span style="align-content: center;">{{ message }}</span><button type="button"
+				          class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>
+				      {% endfor %}
+				    {% endif %}
 					<form method="POST">{% csrf_token %}
 						<div class="form-group">
 							<label for="username">Nome de Usuário ou Email</label>

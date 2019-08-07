@@ -113,7 +113,7 @@ def extract_text_to_write_and_coords(contract=None, whosigned=None, school=None)
 			time += '0'+str(contract.student_auth_signed_timestamp.time().second)
 		else:
 			time += str(contract.student_auth_signed_timestamp.time().second)
-		return { 'x' : 45, 'y' : 20, 'text' : "1. Responsável Estudante: {} Hash: {}, em {} às {}".format(contract.student_auth_signe.name, contract.student_auth_hash, date, time) }
+		return { 'x' : 45, 'y' : 20, 'text' : "1. Responsável Financeiro: {} Hash: {}, em {} às {}".format(contract.student_auth_signe.name, contract.student_auth_hash, date, time) }
 	elif whosigned == 'director':
 		date = str(contract.counter_signed_timestamp.date().day)+'/'+str(contract.counter_signed_timestamp.date().month)+'/'+str(contract.counter_signed_timestamp.date().year)
 		if contract.counter_signed_timestamp.time().hour<10:
