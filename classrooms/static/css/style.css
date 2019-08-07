@@ -403,3 +403,8 @@ table.dataTable thead .sorting_desc {
   width: 500px;
   float: left;
 }
+
+.label-to-the-middle {
+  margin-bottom: 0px !important;
+  vertical-align: middle !important;
+}
