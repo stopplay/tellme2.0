@@ -849,50 +849,58 @@ def add_second_parent_to_student(request, school_id=None, class_id=None, student
 @login_required
 def add_students_to_class_and_school(request, school_id=None, class_id=None):
 	if request.user.is_superuser:
-		school = School.objects.get(school_id=school_id)
+		first_school = School.objects.get(school_id=school_id)
 		classe = Class.objects.get(class_id=class_id)
 		student_ids = []
-		if School.objects.filter(head=school.head).count()>1:
-			for school in School.objects.filter(head=school.head):
+		if School.objects.filter(head=first_school.head).count()>1:
+			for school in School.objects.filter(head=first_school.head):
 				for student in school.students.all():
 					if student.student_id not in student_ids:
 						student_ids+=[(student.student_id)]
 			student_users = Student.objects.filter(student_id__in=student_ids)
 		else:
 			student_users = Student.objects.all()
+		first_school = School.objects.get(school_id=school_id)
 		if request.method == 'POST':
+			first_school.students.clear()
+			classe.students.clear()
 			select_all = request.POST.get('variable')
-			school.students.clear()
 			if select_all == 'true':
-				school.students.add(*student_users)
+				first_school.students.add(*student_users)
 				classe.students.add(*student_users)
 			else:
 				some_var = request.POST.getlist('checks')
 				for var in some_var:
 					student = Student.objects.get(student_id=var)
-					school.students.add(student)
+					first_school.students.add(student)
 					classe.students.add(student)
-			messages.success(request, 'Estudantes alterados na escola com sucesso!')
+			messages.success(request, 'Estudantes adicionados com sucesso!')
 			return redirect('/')
-		return render(request, 'school/add_students_to_school.html', {'student_users':student_users, 'school':school, 'class':classe})
+		return render(request, 'school/add_students_to_school.html', {'student_users':student_users, 'school':first_school, 'class':classe})
 	elif Head.objects.filter(profile=request.user).count()>=1:
 		is_supervisor = True
+		first_school = School.objects.get(school_id=school_id)
+		classe = Class.objects.get(class_id=class_id)
 		student_users = []
 		schools = School.objects.filter(head=Head.objects.get(profile=request.user))
+		first_school = School.objects.get(school_id=school_id)
 		for school in schools:
 			for student in school.students.all():
 				if student not in student_users:
 					student_users += [(student)]
 		if request.method == 'POST':
 			select_all = request.POST.get('variable')
-			school.students.clear()
+			first_school.students.clear()
+			classe.students.clear()
 			if select_all == 'true':
-				school.students.add(*student_users)
+				first_school.students.add(*student_users)
+				classe.students.add(*student_users)
 			else:
 				some_var = request.POST.getlist('checks')
 				for var in some_var:
 					student = Student.objects.get(student_id=var)
-					school.students.add(student)
-			messages.success(request, 'Estudantes alterados na escola com sucesso!')
+					first_school.students.add(student)
+					classe.students.add(student)
+			messages.success(request, 'Estudantes adicionados com sucesso!')
 			return redirect('/')
-		return render(request, 'school/add_students_to_school.html', {'is_supervisor':is_supervisor, 'student_users':student_users, 'school':school})
+		return render(request, 'school/add_students_to_school.html', {'is_supervisor':is_supervisor, 'student_users':student_users, 'school':first_school})
