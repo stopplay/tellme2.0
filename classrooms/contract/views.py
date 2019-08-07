@@ -470,6 +470,23 @@ def createacontract_rest(request):
 		return Response({'contracts':contract_rest.data,})
 
 @login_required
+def mark_slm_purchased(request, contract_id):
+	contract = None
+
+	possible_signe = [
+		Contract.objects.get(first_auth_signe=Parent.objects.get(profile=request.user), contract_id=contract_id),
+		Contract.objects.get(second_auth_signe=Parent.objects.get(profile=request.user), contract_id=contract_id),
+		Contract.objects.get(student_auth_signe=Parent.objects.get(profile=request.user), contract_id=contract_id)
+	]
+
+	for contract in possible_signe:			
+		if contract:
+			contract.purchased_slm = True
+			contract.save()
+
+	return redirect('/contracts/all')
+	
+@login_required
 def seemycontracts(request):
 	contracts = []
 	is_client = False

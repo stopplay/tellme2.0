@@ -13,6 +13,7 @@ router.register(r'contracts', views.ContractsViewSet)
 app_name = 'contracts'
 urlpatterns = [
     url('', include(router.urls)),
+    url('mark_slm_purchased/<int:contract_id>', views.mark_slm_purchased, name="mark_slm_purchased"),
     url('createacontract/', views.createacontract, name="createacontract"),
     url('createacontract_rest/', views.createacontract_rest, name="createacontract_rest"),
     path('seecontractdetails/<int:contract_id>', views.seecontractdetails, name="seecontractdetails"),
