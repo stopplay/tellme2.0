@@ -67,19 +67,71 @@ class ContractsViewSet(viewsets.ModelViewSet):
     # filter_backends = (DjangoFilterBackend)
     filterset_fields = ['contract_id','name','contract_id_sponte','situation_id_sponte','situation_sponte','student_name_sponte','student_id_sponte','course_id_sponte','class_id_sponte','class_name_sponte','course_name_sponte','contract_type_id','initial_date_sponte','contract_free_class_id_sponte','end_date_sponte','date_of_registration_sponte','type_of_registration_sponte','contractor_sponte','name_of_curricular_matrix_sponte','financial_launched_sponte','contract_number_sponte','closing_date_sponte', 'first_auth_signe', 'first_auth_signed', 'second_auth_signe', 'second_auth_signed', 'counter_signe', 'counter_signed']
 
-def extract_text_to_write_and_coords(contract=None, whosigned=None):
+def extract_text_to_write_and_coords(contract=None, whosigned=None, school=None):
 
 	if whosigned == 'first_auth':
-		return { 'x' : 45, 'y' : 30, 'text' : "1. Responsável Financeiro: {} Hash: {}, em {} às {}".format(contract.first_auth_signe.name, contract.first_auth_hash, str(contract.first_auth_signed_timestamp.date().day)+'/'+str(contract.first_auth_signed_timestamp.date().month)+'/'+str(contract.first_auth_signed_timestamp.date().year), str(contract.first_auth_signed_timestamp.time().hour)+':'+str(contract.first_auth_signed_timestamp.time().minute)+':'+str(contract.first_auth_signed_timestamp.time().second)) }
+		date = str(contract.first_auth_signed_timestamp.date().day)+'/'+str(contract.first_auth_signed_timestamp.date().month)+'/'+str(contract.first_auth_signed_timestamp.date().year)
+		if contract.first_auth_signed_timestamp.time().hour<10:
+			time = '0'+str(contract.first_auth_signed_timestamp.time().hour)+':'
+		else:
+			time = str(contract.first_auth_signed_timestamp.time().hour)+':'
+		if contract.first_auth_signed_timestamp.time().minute<10:
+			time += '0'+str(contract.first_auth_signed_timestamp.time().minute)+':'
+		else:
+			time += str(contract.first_auth_signed_timestamp.time().minute)+':'
+		if contract.first_auth_signed_timestamp.time().second<10:
+			time += '0'+str(contract.first_auth_signed_timestamp.time().second)
+		else:
+			time += str(contract.first_auth_signed_timestamp.time().second)
+		return { 'x' : 45, 'y' : 30, 'text' : "1. Responsável Financeiro: {} Hash: {}, em {} às {}".format(contract.first_auth_signe.name, contract.first_auth_hash, date, time) }
 	elif whosigned == 'second_auth':
-		return { 'x' : 45, 'y' : 20, 'text' : "2. Responsável Didático: {} Hash: {}, em {} às {}".format(contract.second_auth_signe.name, contract.second_auth_hash, str(contract.second_auth_signed_timestamp.date().day)+'/'+str(contract.second_auth_signed_timestamp.date().month)+'/'+str(contract.second_auth_signed_timestamp.date().year), str(contract.second_auth_signed_timestamp.time().hour)+':'+str(contract.second_auth_signed_timestamp.time().minute)+':'+str(contract.second_auth_signed_timestamp.time().second)) }
+		date = str(contract.second_auth_signed_timestamp.date().day)+'/'+str(contract.second_auth_signed_timestamp.date().month)+'/'+str(contract.second_auth_signed_timestamp.date().year)
+		if contract.second_auth_signed_timestamp.time().hour<10:
+			time = '0'+str(contract.second_auth_signed_timestamp.time().hour)+':'
+		else:
+			time = str(contract.second_auth_signed_timestamp.time().hour)+':'
+		if contract.second_auth_signed_timestamp.time().minute<10:
+			time += '0'+str(contract.second_auth_signed_timestamp.time().minute)+':'
+		else:
+			time += str(contract.second_auth_signed_timestamp.time().minute)+':'
+		if contract.second_auth_signed_timestamp.time().second<10:
+			time += '0'+str(contract.second_auth_signed_timestamp.time().second)
+		else:
+			time += str(contract.second_auth_signed_timestamp.time().second)
+		return { 'x' : 45, 'y' : 20, 'text' : "2. Responsável Didático: {} Hash: {}, em {} às {}".format(contract.second_auth_signe.name, contract.second_auth_hash, date, time) }
 	elif whosigned == 'student_auth':
-		return { 'x' : 45, 'y' : 20, 'text' : "1. Responsável Estudante: {} Hash: {}, em {} às {}".format(contract.student_auth_signe.name, contract.student_auth_hash, str(contract.student_auth_signed_timestamp.date().day)+'/'+str(contract.student_auth_signed_timestamp.date().month)+'/'+str(contract.student_auth_signed_timestamp.date().year), str(contract.student_auth_signed_timestamp.time().hour)+':'+str(contract.student_auth_signed_timestamp.time().minute)+':'+str(contract.student_auth_signed_timestamp.time().second)) }
+		date = str(contract.student_auth_signed_timestamp.date().day)+'/'+str(contract.student_auth_signed_timestamp.date().month)+'/'+str(contract.student_auth_signed_timestamp.date().year)
+		if contract.student_auth_signed_timestamp.time().hour<10:
+			time = '0'+str(contract.student_auth_signed_timestamp.time().hour)+':'
+		else:
+			time = str(contract.student_auth_signed_timestamp.time().hour)+':'
+		if contract.student_auth_signed_timestamp.time().minute<10:
+			time += '0'+str(contract.student_auth_signed_timestamp.time().minute)+':'
+		else:
+			time += str(contract.student_auth_signed_timestamp.time().minute)+':'
+		if contract.student_auth_signed_timestamp.time().second<10:
+			time += '0'+str(contract.student_auth_signed_timestamp.time().second)
+		else:
+			time += str(contract.student_auth_signed_timestamp.time().second)
+		return { 'x' : 45, 'y' : 20, 'text' : "1. Responsável Estudante: {} Hash: {}, em {} às {}".format(contract.student_auth_signe.name, contract.student_auth_hash, date, time) }
 	elif whosigned == 'director':
+		date = str(contract.counter_signed_timestamp.date().day)+'/'+str(contract.counter_signed_timestamp.date().month)+'/'+str(contract.counter_signed_timestamp.date().year)
+		if contract.counter_signed_timestamp.time().hour<10:
+			time = '0'+str(contract.counter_signed_timestamp.time().hour)+':'
+		else:
+			time = str(contract.counter_signed_timestamp.time().hour)+':'
+		if contract.counter_signed_timestamp.time().minute<10:
+			time += '0'+str(contract.counter_signed_timestamp.time().minute)+':'
+		else:
+			time += str(contract.counter_signed_timestamp.time().minute)+':'
+		if contract.counter_signed_timestamp.time().second<10:
+			time += '0'+str(contract.counter_signed_timestamp.time().second)
+		else:
+			time += str(contract.counter_signed_timestamp.time().second)
 		if contract.first_auth_signe and contract.second_auth_signe:
-			return { 'x' : 45, 'y' : 10, 'text' : "3. Responsável Diretor: {} Hash: {}, em {} às {}".format(contract.counter_signe.name, contract.counter_auth_hash, str(contract.counter_signed_timestamp.date().day)+'/'+str(contract.counter_signed_timestamp.date().month)+'/'+str(contract.counter_signed_timestamp.date().year), str(contract.counter_signed_timestamp.time().hour)+':'+str(contract.counter_signed_timestamp.time().minute)+':'+str(contract.counter_signed_timestamp.time().second)) }
+			return { 'x' : 45, 'y' : 10, 'text' : "3. Representante {}: {} Hash: {}, em {} às {}".format(school.school_name, contract.counter_signe.name, contract.counter_auth_hash, date, time) }
 		elif contract.student_auth_signe:
-			return { 'x' : 45, 'y' : 10, 'text' : "2. Responsável Diretor: {} Hash: {}, em {} às {}".format(contract.counter_signe.name, contract.counter_auth_hash, str(contract.counter_signed_timestamp.date().day)+'/'+str(contract.counter_signed_timestamp.date().month)+'/'+str(contract.counter_signed_timestamp.date().year), str(contract.counter_signed_timestamp.time().hour)+':'+str(contract.counter_signed_timestamp.time().minute)+':'+str(contract.counter_signed_timestamp.time().second)) }
+			return { 'x' : 45, 'y' : 10, 'text' : "2. Representante {}: {} Hash: {}, em {} às {}".format(school.school_name, contract.counter_signe.name, contract.counter_auth_hash, date, time) }
 	elif whosigned == 'all_signed':
 		if contract.first_auth_signe and contract.second_auth_signe:
 			return { 'x' : 45, 'y' : 40, 'text' : "Assinado Eletronicamente por:" }
@@ -93,7 +145,7 @@ def get_pdf_filepath(contract=None):
 def get_pdf_signed_output_filepath(contract=None):
 	return settings.MEDIA_ROOT+'/'+contract.pdf.name+'signed'
 
-def write_pdf(request, contract=None, whosigned=None):
+def write_pdf(request, contract=None, whosigned=None, school=None):
 	
 	packet = StringIO()
 	# create a new PDF with Reportlab
@@ -107,7 +159,7 @@ def write_pdf(request, contract=None, whosigned=None):
 	drawing.scale(0.035, 0.04)
 
 	renderPDF.draw(drawing, can, 5, 10)	
-	text_and_coords = extract_text_to_write_and_coords(contract, whosigned)
+	text_and_coords = extract_text_to_write_and_coords(contract, whosigned, school)
 	can.drawString(text_and_coords['x'], text_and_coords['y'], text_and_coords['text'])
 	can.showPage()
 	can.save()
@@ -645,8 +697,9 @@ def set_signed(request, contract_id = None):
 			contract.counter_signed = True
 			contract.counter_signed_timestamp = timezone.now()
 			contract.counter_auth_hash = block.hash
+			school = School.objects.get(chains__id__exact=contract.chain.id)
 			contract.save(update_fields=['counter_signed', 'counter_signed_timestamp', 'counter_auth_hash'])
-			write_pdf(request, contract, 'director')
+			write_pdf(request, contract, 'director', school)
 			content = contract.pdf.read()
 			attachment = (contract.pdf.name, content, 'application/pdf')
 			attachments.append(attachment)
@@ -696,7 +749,7 @@ def set_signed(request, contract_id = None):
 				contract.first_auth_signed_timestamp = timezone.now()
 				contract.first_auth_hash = block.hash
 				contract.save(update_fields=['first_auth_signed', 'first_auth_signed_timestamp', 'first_auth_hash'])
-				write_pdf(request, contract, 'first_auth')
+				write_pdf(request, contract, 'first_auth', None)
 				content = contract.pdf.read()
 				attachment = (contract.pdf.name, content, 'application/pdf')
 				attachments.append(attachment)
@@ -718,7 +771,7 @@ def set_signed(request, contract_id = None):
 				contract.second_auth_signed_timestamp = timezone.now()
 				contract.second_auth_hash = block.hash
 				contract.save(update_fields=['second_auth_signed', 'second_auth_signed_timestamp', 'second_auth_hash'])
-				write_pdf(request, contract, 'second_auth')
+				write_pdf(request, contract, 'second_auth', None)
 				content = contract.pdf.read()
 				attachment = (contract.pdf.name, content, 'application/pdf')
 				attachments.append(attachment)
