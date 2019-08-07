@@ -522,7 +522,7 @@
         <div class="form-group">
             <label>RESPONSÁVEL FINANCEIRO ASSINATURA DATA E HORA</label>
             {% if contract.first_auth_signed_timestamp %}
-            <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.first_auth_signed_timestamp.day}}/{{contract.first_auth_signed_timestamp.month}}/{{contract.first_auth_signed_timestamp.year}} às {{contract.first_auth_signed_timestamp.hour}}:{% if contract.first_auth_signed_timestamp.minute < 10 %}0{{contract.first_auth_signed_timestamp.minute}}{% else %}{{contract.first_auth_signed_timestamp.minute}}{% endif %}:{% if contract.first_auth_signed_timestamp.second < 10 %}0{{contract.first_auth_signed_timestamp.second}}{% else %}{{contract.first_auth_signed_timestamp.second}}{% endif %}">
+            <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.first_auth_signed_timestamp.day}}/{{contract.first_auth_signed_timestamp.month}}/{{contract.first_auth_signed_timestamp.year}} às {% if contract.first_auth_signed_timestamp.hour < 10 %}0{{contract.first_auth_signed_timestamp.hour}}{% else %}{{contract.first_auth_signed_timestamp.hour}}{% endif %}:{% if contract.first_auth_signed_timestamp.minute < 10 %}0{{contract.first_auth_signed_timestamp.minute}}{% else %}{{contract.first_auth_signed_timestamp.minute}}{% endif %}:{% if contract.first_auth_signed_timestamp.second < 10 %}0{{contract.first_auth_signed_timestamp.second}}{% else %}{{contract.first_auth_signed_timestamp.second}}{% endif %}">
             {% else %}
             <input type="text" class="form-control" disabled="" placeholder="">
             {% endif %}
@@ -536,7 +536,7 @@
         <div class="form-group">
             <label>RESPONSÁVEL PEDAGÓGICO ASSINATURA DATA E HORA</label>
             {% if contract.second_auth_signed_timestamp %}
-            <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.second_auth_signed_timestamp.day}}/{{contract.second_auth_signed_timestamp.month}}/{{contract.second_auth_signed_timestamp.year}} às {{contract.second_auth_signed_timestamp.hour}}:{% if contract.second_auth_signed_timestamp.minute < 10 %}0{{contract.second_auth_signed_timestamp.minute}}{% else %}{{contract.second_auth_signed_timestamp.minute}}{% endif %}:{% if contract.second_auth_signed_timestamp.second < 10 %}0{{contract.second_auth_signed_timestamp.second}}{% else %}{{contract.second_auth_signed_timestamp.second}}{% endif %}">
+            <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.second_auth_signed_timestamp.day}}/{{contract.second_auth_signed_timestamp.month}}/{{contract.second_auth_signed_timestamp.year}} às {% if contract.second_auth_signed_timestamp.hour < 10 %}0{{contract.second_auth_signed_timestamp.hour}}{% else %}{{contract.second_auth_signed_timestamp.hour}}{% endif %}:{% if contract.second_auth_signed_timestamp.minute < 10 %}0{{contract.second_auth_signed_timestamp.minute}}{% else %}{{contract.second_auth_signed_timestamp.minute}}{% endif %}:{% if contract.second_auth_signed_timestamp.second < 10 %}0{{contract.second_auth_signed_timestamp.second}}{% else %}{{contract.second_auth_signed_timestamp.second}}{% endif %}">
             {% else %}
             <input type="text" class="form-control" disabled="" placeholder="">
             {% endif %}
@@ -550,7 +550,7 @@
         <div class="form-group">
             <label>RESPONSÁVEL ESTUDANTE ASSINATURA DATA E HORA</label>
             {% if contract.student_auth_signed_timestamp %}
-            <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.student_auth_signed_timestamp.day}}/{{contract.student_auth_signed_timestamp.month}}/{{contract.student_auth_signed_timestamp.year}} às {{contract.student_auth_signed_timestamp.hour}}:{% if contract.student_auth_signed_timestamp.minute < 10 %}0{{contract.student_timestamp.minute}}{% else %}{{contract.student_auth_signed_timestamp.minute}}{% endif %}:{% if contract.student_auth_signed_timestamp.second < 10 %}0{{contract.student_auth_signed_timestamp.second}}{% else %}{{contract.student_auth_signed_timestamp.second}}{% endif %}">
+            <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.student_auth_signed_timestamp.day}}/{{contract.student_auth_signed_timestamp.month}}/{{contract.student_auth_signed_timestamp.year}} às {% if contract.student_auth_signed_timestamp.hour < 10 %}0{{contract.student_auth_signed_timestamp.hour}}{% else %}{{contract.student_auth_signed_timestamp.hour}}{% endif %}:{% if contract.student_auth_signed_timestamp.minute < 10 %}0{{contract.student_timestamp.minute}}{% else %}{{contract.student_auth_signed_timestamp.minute}}{% endif %}:{% if contract.student_auth_signed_timestamp.second < 10 %}0{{contract.student_auth_signed_timestamp.second}}{% else %}{{contract.student_auth_signed_timestamp.second}}{% endif %}">
             {% else %}
             <input type="text" class="form-control" disabled="" placeholder="">
             {% endif %}
@@ -564,7 +564,7 @@
         <label>DIRETOR RESPONSÁVEL ASSINARUTA DATA E HORA</label>
         {% if contract.counter_signed_timestamp %}
 
-        <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.counter_signed_timestamp.day}}/{{contract.counter_signed_timestamp.month}}/{{contract.counter_signed_timestamp.year}} às {{contract.counter_signed_timestamp.hour}}:{% if contract.counter_signed_timestamp.minute < 10 %}0{{contract.counter_signed_timestamp.minute}}{% else %}{{contract.counter_signed_timestamp.minute}}{% endif %}:{% if contract.counter_signed_timestamp.second < 10 %}0{{contract.counter_signed_timestamp.second}}{% else %}{{contract.counter_signed_timestamp.second}}{% endif %}">
+        <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.counter_signed_timestamp.day}}/{{contract.counter_signed_timestamp.month}}/{{contract.counter_signed_timestamp.year}} às {% if contract.counter_signed_timestamp.hour < 10 %}0{{contract.counter_signed_timestamp.hour}}{% else %}{{contract.counter_signed_timestamp.hour}}{% endif %}:{% if contract.counter_signed_timestamp.minute < 10 %}0{{contract.counter_signed_timestamp.minute}}{% else %}{{contract.counter_signed_timestamp.minute}}{% endif %}:{% if contract.counter_signed_timestamp.second < 10 %}0{{contract.counter_signed_timestamp.second}}{% else %}{{contract.counter_signed_timestamp.second}}{% endif %}">
         {% else %}
         <input type="text" class="form-control" disabled="" placeholder="">
         {% endif %}
