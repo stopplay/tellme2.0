@@ -340,15 +340,24 @@
                                   </div>
                                 </div>
                               {% endif %}
-
-                              {% if not contract.purchased_slm %}
-                                <div class="row">                      
-                                  <div class="col-md-12">
-                                    <a class="btn btn-primary w-100" href="{% url 'contracts:mark_slm_purchased' contract.contract_id %}">
-                                      Sinalizar Compra do Material
-                                    </a>
+                              {% if contract.slm %}
+                                {% if not contract.purchased_slm %}
+                                  <div class="row">                      
+                                    <div class="col-md-12">
+                                      <a class="btn btn-primary w-100" href="{{ contract.slm }}">
+                                        Ir para o site de compras de material
+                                      </a>
+                                    </div>
                                   </div>
-                                </div>
+                                {% else %}
+                                  <div class="row">                      
+                                    <div class="col-md-12">
+                                      <a class="btn btn-primary w-100" href="">
+                                        Material já comprado
+                                      </a>
+                                    </div>
+                                  </div>
+                                {% endif %}
                               {% endif %}
                           </div>
                         </td>

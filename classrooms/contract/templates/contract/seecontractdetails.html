@@ -498,8 +498,10 @@
 </div>
 
 </div>
+{% endif %}
 
 {% if contract.first_auth_signe %}
+{% if request.user == contract.first_auth_signe.profile or request.user.is_superuser or is_supervisor %}
 <div class="row">
     <div class="col-md-6 pr-1">
         <div class="form-group">
@@ -513,7 +515,9 @@
     </div>
 </div>
 {% endif %}
+{% endif %}
 {% if contract.second_auth_signe %}
+{% if request.user == contract.second_auth_signe.profile or request.user.is_superuser or is_supervisor %}
 <div class="row">
     <div class="col-md-6 pr-1">
         <div class="form-group">
@@ -527,7 +531,9 @@
     </div>
 </div>
 {% endif %}
+{% endif %}
 {% if contract.student_auth_signe %}
+{% if request.user == contract.student_auth_signe.profile or request.user.is_superuser or is_supervisor %}
 <div class="row">
     <div class="col-md-6 pr-1">
         <div class="form-group">
@@ -541,20 +547,21 @@
     </div>
 </div>
 {% endif %}
+{% endif %}
+{% if request.user.is_superuser or is_supervisor %}
 <div class="row">
-  <div class="col-md-6 pr-1">
-    <div class="form-group">
-        <label>DIRETOR RESPONSÁVEL ASSINARUTA DATA E HORA</label>
-        {% if contract.counter_signed_timestamp %}
+    <div class="col-md-6 pr-1">
+        <div class="form-group">
+            <label>DIRETOR RESPONSÁVEL ASSINARUTA DATA E HORA</label>
+            {% if contract.counter_signed_timestamp %}
 
-        <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.counter_signed_timestamp.day}}/{{contract.counter_signed_timestamp.month}}/{{contract.counter_signed_timestamp.year}} às {% if contract.counter_signed_timestamp.hour < 10 %}0{{contract.counter_signed_timestamp.hour}}{% else %}{{contract.counter_signed_timestamp.hour}}{% endif %}:{% if contract.counter_signed_timestamp.minute < 10 %}0{{contract.counter_signed_timestamp.minute}}{% else %}{{contract.counter_signed_timestamp.minute}}{% endif %}:{% if contract.counter_signed_timestamp.second < 10 %}0{{contract.counter_signed_timestamp.second}}{% else %}{{contract.counter_signed_timestamp.second}}{% endif %}">
-        {% else %}
-        <input type="text" class="form-control" disabled="" placeholder="">
-        {% endif %}
+            <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.counter_signed_timestamp.day}}/{{contract.counter_signed_timestamp.month}}/{{contract.counter_signed_timestamp.year}} às {% if contract.counter_signed_timestamp.hour < 10 %}0{{contract.counter_signed_timestamp.hour}}{% else %}{{contract.counter_signed_timestamp.hour}}{% endif %}:{% if contract.counter_signed_timestamp.minute < 10 %}0{{contract.counter_signed_timestamp.minute}}{% else %}{{contract.counter_signed_timestamp.minute}}{% endif %}:{% if contract.counter_signed_timestamp.second < 10 %}0{{contract.counter_signed_timestamp.second}}{% else %}{{contract.counter_signed_timestamp.second}}{% endif %}">
+            {% else %}
+            <input type="text" class="form-control" disabled="" placeholder="">
+            {% endif %}
 
+        </div>
     </div>
-</div>
-
 </div>
 {% endif %}
 
