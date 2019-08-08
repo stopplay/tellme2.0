@@ -35,7 +35,7 @@
                   <td class="w-100">
                     <div class="container" style="white-space: nowrap; text-align: center">
                       {% if head.profile %}
-                        <div class="row">                      
+                        <div class="row" style="margin-bottom: 10px">                      
                           <div class="col-md-12">
                             <a href="{% url 'users:reset_password_send_email' head.head_id 'head' %}" data-baloon="Remove this item from the cart" class="btn btn-primary w-100">Resetar Senha</a>
                           </div>
@@ -87,7 +87,7 @@
                   <td class="w-100">
                     <div class="container" style="white-space: nowrap; text-align: center">
                       {% if teacher.profile %}
-                        <div class="row" style="margin-bottom:5px">                      
+                        <div class="row" style="margin-bottom: 10px">                      
                           <div class="col-md-12">
                             <a href="{% url 'users:reset_password_send_email' teacher.teacher_id 'teacher' %}" data-baloon="Remove this item from the cart" class="btn btn-primary w-100">Resetar Senha</a>
                           </div>
@@ -134,7 +134,7 @@
               <tbody>
                 {% for admin in admin_users %}
                 <tr>
-                  <th scope="row" style="margin-bottom:5px">{{ admin.name }}</th>
+                  <th scope="row" style="margin-bottom: 10px">{{ admin.name }}</th>
                   <td>{{ admin.profile.username }}</td>
                   <td class="w-100">
                     <div class="container" style="white-space: nowrap; text-align: center">
@@ -192,7 +192,7 @@
                   <td class="w-100">
                     <div class="container" style="white-space: nowrap; text-align: center">
                       {% if supervisor.profile %}
-                        <div class="row" style="margin-bottom:5px">                      
+                        <div class="row" style="margin-bottom: 10px">                      
                           <div class="col-md-12">
                             <a href="{% url 'users:reset_password_send_email' supervisor.supervisor_id 'supervisor' %}" data-baloon="Remove this item from the cart" class="btn btn-primary w-100">Resetar Senha</a>
                           </div>
@@ -244,13 +244,13 @@
               
               <td class="w-100">
                 <div class="container" style="white-space: nowrap; text-align: center">
-                  <div class="row" style="margin-bottom:5px">                      
+                  <div class="row" style="margin-bottom: 10px">                      
                     <div class="col-md-12">
                       <a href="{% url 'users:seesonsofparent' parent.parent_id %}" data-baloon="Remove this item from the cart" class="btn btn-primary w-100">Ver Filho(s) Desse Responsável</a>
                     </div>
                   </div>
                   {% if parent.profile %}
-                    <div class="row" style="margin-bottom:5px">                      
+                    <div class="row" style="margin-bottom: 10px">                      
                       <div class="col-md-12">
                         <a href="{% url 'users:reset_password_send_email' parent.parent_id 'parent' %}" data-baloon="Remove this item from the cart" class="btn btn-primary w-100">Resetar Senha</a>
                       </div>
@@ -308,14 +308,14 @@
         <td class="w-100">
           <div class="container" style="white-space: nowrap; text-align: center">
           {% if student.needs_parent %}
-          <div class="row" style="margin-bottom:5px">                      
+          <div class="row" style="margin-bottom: 10px">                      
             <div class="col-md-12">
               <a href="{% url 'users:set_parents' student.student_id %}" data-baloon="Remove this item from the cart" class="btn btn-primary w-100">Selecionar Responsáveis</a>
             </div>
           </div>
           {% endif %}
           {% if student.profile %}
-            <div class="row" style="margin-bottom:5px">                      
+            <div class="row" style="margin-bottom: 10px">                      
               <div class="col-md-12">
                 <a href="{% url 'users:reset_password_send_email' student.student_id 'student' %}" data-baloon="Remove this item from the cart" class="btn btn-primary w-100">Resetar Senha</a>
               </div>
