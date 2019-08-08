@@ -33,6 +33,7 @@
                   <th>{{ head.name }}</th>
                   <td>{{ head.profile.username }}</td>
                   <td>
+                    <div class="container" style="white-space: nowrap; text-align: center">
                     {% if request.user.is_superuser %}
                       <div class="row">                      
                         <div class="col-md-12">
@@ -43,10 +44,11 @@
                     {% if head.profile %}
                       <div class="row">                      
                         <div class="col-md-12">
-                          <button type="button" class="delete-button btn btn-info btn-sm btn-danger btn-block"><a href="{% url 'users:reset_password_send_email' head.head_id 'head' %}" data-baloon="Remove this item from the cart" class="text-light">Resetar Senha</a></button>
+                          <button type="button" class="btn btn-primary btn-sm btn-info btn-block"><a href="{% url 'users:reset_password_send_email' head.head_id 'head' %}" data-baloon="Remove this item from the cart" class="text-light">Resetar Senha</a></button>
                         </div>
                       </div>
                     {% endif %}
+                  </div>
                   </td>
                 </tr>
                 {% endfor %}
@@ -83,6 +85,7 @@
                   <th scope="row">{{ teacher.name }}</th>
                   <td>{{ teacher.profile.username }}</td>
                   <td>
+                    <div class="container" style="white-space: nowrap; text-align: center">
                     {% if request.user.is_superuser %}
                       <div class="row">                      
                         <div class="col-md-12">
@@ -93,10 +96,11 @@
                     {% if teacher.profile %}
                       <div class="row">                      
                         <div class="col-md-12">
-                          <button type="button" class="delete-button btn btn-info btn-sm btn-danger btn-block"><a href="{% url 'users:reset_password_send_email' teacher.teacher_id 'teacher' %}" data-baloon="Remove this item from the cart" class="text-light">Resetar Senha</a></button>
+                          <button type="button" class="btn btn-primary btn-sm btn-info btn-block"><a href="{% url 'users:reset_password_send_email' teacher.teacher_id 'teacher' %}" data-baloon="Remove this item from the cart" class="text-light">Resetar Senha</a></button>
                         </div>
                       </div>
                     {% endif %}
+                  </div>
                   </td>
                 </tr>
                 {% endfor %}
@@ -132,7 +136,8 @@
                 <tr>
                   <th scope="row">{{ admin.name }}</th>
                   <td>{{ admin.profile.username }}</td>
-                  <td>
+                  <td class="w-100">
+                    <div class="container" style="white-space: nowrap; text-align: center">
                     {% if request.user.is_superuser %}
                     <div class="row">                      
                       <div class="col-md-12">
@@ -143,10 +148,11 @@
                     {% if admin.profile %}
                     <div class="row">                      
                       <div class="col-md-12">
-                        <button type="button" class="delete-button w-100 btn btn-info btn-sm btn-danger btn-block"><a href="{% url 'users:reset_password_send_email' admin.admin_id 'admin' %}" data-baloon="Remove this item from the cart" class="text-light">Resetar Senha</a></button>
+                        <button type="button" class="delete-button btn btn-primary btn-sm btn-info btn-block"><a href="{% url 'users:reset_password_send_email' admin.admin_id 'admin' %}" data-baloon="Remove this item from the cart" class="text-light">Resetar Senha</a></button>
                       </div>
                     </div>
                     {% endif %}
+                  </div>
                   </td>
                 </tr>
                 {% endfor %}
@@ -183,7 +189,8 @@
                 <tr>
                   <th>{{ supervisor.name }}</th>
                   <td>{{ supervisor.profile.username }}</td>
-                  <td class="w100">
+                  <td class="w-100">
+                    <div class="container" style="white-space: nowrap; text-align: center">
                     {% if request.user.is_superuser %}
                       <div class="row">                      
                         <div class="col-md-12">
@@ -194,10 +201,11 @@
                     {% if supervisor.profile %}
                       <div class="row">                      
                         <div class="col-md-12">
-                          <button type="button" class="delete-button btn btn-info btn-sm btn-danger btn-block"><a href="{% url 'users:reset_password_send_email' supervisor.supervisor_id 'supervisor' %}" data-baloon="Remove this item from the cart" class="text-light">Resetar Senha</a></button>
+                          <button type="button" class="btn btn-primary btn-sm btn-info btn-block"><a href="{% url 'users:reset_password_send_email' supervisor.supervisor_id 'supervisor' %}" data-baloon="Remove this item from the cart" class="text-light">Resetar Senha</a></button>
                         </div>
                       </div>
                     {% endif %}
+                  </div>
                   </td>
                 </tr>
                 {% endfor %}
@@ -235,6 +243,7 @@
               <td>{{ parent.profile.username }}</td>
               
               <td class="w-100">
+                <div class="container" style="white-space: nowrap; text-align: center">
                 <div class="row">                      
                   <div class="col-md-12">
                     <button type="button" class="btn btn-primary btn-sm btn-info btn-block"><a href="{% url 'users:seesonsofparent' parent.parent_id %}" data-baloon="Remove this item from the cart" class="text-light">Ver Filho(s) Desse Responsável</a></button>
@@ -250,10 +259,11 @@
                 {% if parent.profile %}
                   <div class="row">                      
                     <div class="col-md-12">
-                      <button type="button" class="delete-button btn btn-info btn-sm btn-danger btn-block"><a href="{% url 'users:reset_password_send_email' parent.parent_id 'parent' %}" data-baloon="Remove this item from the cart" class="text-light">Resetar Senha</a></button>
+                      <button type="button" class="btn btn-primary btn-sm btn-info btn-block"><a href="{% url 'users:reset_password_send_email' parent.parent_id 'parent' %}" data-baloon="Remove this item from the cart" class="text-light">Resetar Senha</a></button>
                     </div>
                   </div>
                 {% endif %}
+              </div>
            </td>
          </tr>
          {% endfor %}
@@ -295,11 +305,12 @@
         <td>{{ student.profile.username }}</td>
         <td>{{ student.first_parent.name }} </td>
         <td>{{ student.second_parent.name }}</td>
-        <td>
+        <td class="w-100">
+          <div class="container" style="white-space: nowrap; text-align: center">
           {% if student.needs_parent %}
           <div class="row">                      
             <div class="col-md-12">
-              <button type="button" class="w-100 btn btn-primary btn-sm btn-info btn-block"><a href="{% url 'users:set_parents' student.student_id %}" data-baloon="Remove this item from the cart" class="text-light">Selecionar Responsáveis</a></button>
+              <button type="button" class="btn btn-primary btn-sm btn-info btn-block"><a href="{% url 'users:set_parents' student.student_id %}" data-baloon="Remove this item from the cart" class="text-light">Selecionar Responsáveis</a></button>
             </div>
           </div>
           {% endif %}
@@ -313,10 +324,11 @@
           {% if student.profile %}
             <div class="row">                      
               <div class="col-md-12">
-                <button type="button" class="delete-button btn btn-info btn-sm btn-danger btn-block"><a href="{% url 'users:reset_password_send_email' student.student_id 'student' %}" data-baloon="Remove this item from the cart" class="text-light">Resetar Senha</a></button>
+                <button type="button" class="btn btn-primary btn-sm btn-info btn-block"><a href="{% url 'users:reset_password_send_email' student.student_id 'student' %}" data-baloon="Remove this item from the cart" class="text-light">Resetar Senha</a></button>
               </div>
             </div>
           {% endif %}
+        </div>
      </td>
    </tr>
    {% endfor %}
