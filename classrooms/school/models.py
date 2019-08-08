@@ -1,5 +1,5 @@
 from django.db import models
-from school_users.models import Student, Teacher, Head, Supervisor, Parent
+from school_users.models import Student, Teacher, Head, Supervisor, Parent, Witness
 from block.models import *
 from contract.models import *
 
@@ -21,6 +21,8 @@ class School(models.Model):
 	students = models.ManyToManyField(Student)
 	teachers = models.ManyToManyField(Teacher)
 	parents = models.ManyToManyField(Parent)
+	first_witness = models.ForeignKey(Witness, on_delete=models.SET_NULL, verbose_name = 'Primeira Testemunha', null=True, blank=True, related_name='first_witness_school')
+	second_witness = models.ForeignKey(Witness, on_delete=models.SET_NULL, verbose_name = 'Segunda Testemunha', null=True, blank=True, related_name='second_witness_school')
 	app_name = models.TextField(null=True, blank=True, verbose_name = 'Nome do App')
 
 	@property

@@ -139,3 +139,12 @@ class Student(models.Model):
 
 	def __str__(self):
 		return '{}'.format(self.name)
+
+class Witness(models.Model):
+	"""docstring for Witness"""
+	witness_id = models.AutoField(primary_key = True)
+	name = models.CharField(max_length = 750, null=True, blank=True)
+	rg = models.TextField(null=True, blank=True)
+	cpf = models.TextField(null=True, blank=True)
+	profile = models.OneToOneField(User, on_delete = models.SET_NULL, null=True, blank=True)
+	tell_me_user_id = models.IntegerField(null=True, blank=True)
