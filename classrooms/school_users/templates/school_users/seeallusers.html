@@ -33,11 +33,10 @@
                   <th>{{ head.name }}</th>
                   <td>{{ head.profile.username }}</td>
                   <td>
-                    <div class="container" style="white-space: nowrap; text-align: center">
                     {% if request.user.is_superuser %}
                       <div class="row">                      
                         <div class="col-md-12">
-                          <button type="button" class="btn btn-primary btn-sm btn-info btn-block"><a href="{% url 'users:delete_user' head.head_id 'head' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Diretor</a></button>
+                          <button type="button" class="delete-button btn btn-info btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' head.head_id 'head' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Diretor</a></button>
                         </div>
                       </div>
                     {% endif %}
@@ -48,7 +47,6 @@
                         </div>
                       </div>
                     {% endif %}
-                  </div>
                   </td>
                 </tr>
                 {% endfor %}
@@ -85,11 +83,10 @@
                   <th scope="row">{{ teacher.name }}</th>
                   <td>{{ teacher.profile.username }}</td>
                   <td>
-                    <div class="container" style="white-space: nowrap; text-align: center">
                     {% if request.user.is_superuser %}
                       <div class="row">                      
                         <div class="col-md-12">
-                          <button type="button" class="btn btn-primary btn-sm btn-info btn-block"><a href="{% url 'users:delete_user' teacher.teacher_id 'teacher' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Professor</a></button>
+                          <button type="button" class="delete-button btn btn-info btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' teacher.teacher_id 'teacher' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Professor</a></button>
                         </div>
                       </div>
                     {% endif %}
@@ -100,7 +97,6 @@
                         </div>
                       </div>
                     {% endif %}
-                  </div>
                   </td>
                 </tr>
                 {% endfor %}
@@ -194,7 +190,7 @@
                     {% if request.user.is_superuser %}
                       <div class="row">                      
                         <div class="col-md-12">
-                          <button type="button" class="btn btn-primary btn-sm btn-info btn-block"><a href="{% url 'users:delete_user' supervisor.supervisor_id 'supervisor' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Supervisor</a></button>
+                          <button type="button" class="delete-button btn btn-info btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' supervisor.supervisor_id 'supervisor' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Supervisor</a></button>
                         </div>
                       </div>
                     {% endif %}
@@ -252,7 +248,7 @@
                 {% if request.user.is_superuser %}
                   <div class="row">                      
                     <div class="col-md-12">
-                      <button type="button" class="btn btn-primary btn-sm btn-info btn-block"><a href="{% url 'users:delete_user' parent.parent_id 'parent' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Responsável</a></button>
+                      <button type="button" class="delete-button btn btn-danger btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' parent.parent_id 'parent' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Responsável</a></button>
                     </div>
                   </div>
                 {% endif %}
@@ -317,7 +313,7 @@
           {% if request.user.is_superuser %}
             <div class="row">                      
               <div class="col-md-12">
-                <button type="button" class="btn btn-primary btn-sm btn-info btn-block"><a href="{% url 'users:delete_user' student.student_id 'student' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Estudante</a></button>
+                <button type="button" class="delete-button btn btn-info btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' student.student_id 'student' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Estudante</a></button>
               </div>
             </div>
           {% endif %}
