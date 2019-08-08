@@ -531,6 +531,7 @@ def add_student_to_class_and_school(request, school_id=None, class_id=None):
 						user_creation = form2.save(commit=False)
 						user_creation.profile = user_profile
 						user_creation.name = user_profile.first_name+' '+user_profile.last_name
+						user_creation.maple_bear_email = user_profile.email
 						user_creation.save()
 						student = Student.objects.get(student_id=user_creation.student_id)
 						diff = datetime.date.today() - user_creation.birthday
@@ -623,6 +624,7 @@ def add_student_to_class_and_school(request, school_id=None, class_id=None):
 						user_creation = form2.save(commit=False)
 						user_creation.profile = user_profile
 						user_creation.name = user_profile.first_name+' '+user_profile.last_name
+						user_creation.maple_bear_email = user_profile.email
 						user_creation.save()
 						student = Student.objects.get(student_id=user_creation.student_id)
 						diff = datetime.date.today() - user_creation.birthday
@@ -712,6 +714,7 @@ def add_first_parent_to_student(request, school_id=None, class_id=None, student_
 				user_creation = form2.save(commit=False)
 				user_creation.profile = user_profile
 				user_creation.name = user_profile.first_name+' '+user_profile.last_name
+				user_creation.maple_bear_email = user_profile.email
 				user_creation.save()
 				parent = Parent.objects.get(parent_id=user_creation.parent_id)
 				student_to_add_parent.first_parent = parent
@@ -753,6 +756,7 @@ def add_first_parent_to_student(request, school_id=None, class_id=None, student_
 				user_creation = form2.save(commit=False)
 				user_creation.profile = user_profile
 				user_creation.name = user_profile.first_name+' '+user_profile.last_name
+				user_creation.maple_bear_email = user_profile.email
 				user_creation.save()
 				parent = Parent.objects.get(parent_id=user_creation.parent_id)
 				student_to_add_parent.first_parent = parent
@@ -796,6 +800,7 @@ def add_second_parent_to_student(request, school_id=None, class_id=None, student
 				user_creation = form2.save(commit=False)
 				user_creation.profile = user_profile
 				user_creation.name = user_profile.first_name+' '+user_profile.last_name
+				user_creation.maple_bear_email = user_profile.email
 				user_creation.save()
 				parent = Parent.objects.get(parent_id=user_creation.parent_id)
 				student_to_add_parent.second_parent = parent
@@ -837,6 +842,7 @@ def add_second_parent_to_student(request, school_id=None, class_id=None, student
 				user_creation = form2.save(commit=False)
 				user_creation.profile = user_profile
 				user_creation.name = user_profile.first_name+' '+user_profile.last_name
+				user_creation.maple_bear_email = user_profile.email
 				user_creation.save()
 				parent = Parent.objects.get(parent_id=user_creation.parent_id)
 				student_to_add_parent.second_parent = parent

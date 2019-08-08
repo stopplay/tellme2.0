@@ -282,6 +282,7 @@ def create_user(request):
                                 user_creation = form6.save(commit=False)
                                 user_creation.profile = user_profile
                                 user_creation.name = user_profile.first_name+' '+user_profile.last_name
+                                user_creation.maple_bear_email = user_profile.email
                                 user_creation.save()
                                 messages.success(request, 'Usuário Criado com sucesso!')
                                 current_site = get_current_site(request)
@@ -302,6 +303,7 @@ def create_user(request):
                                 user_creation = form7.save(commit=False)
                                 user_creation.profile = user_profile
                                 user_creation.name = user_profile.first_name+' '+user_profile.last_name
+                                user_creation.maple_bear_email = user_profile.email
                                 user_creation.save()
                                 student_to_add = Student.objects.get(profile=user_profile)
                                 diff = datetime.date.today() - user_creation.birthday
@@ -591,6 +593,7 @@ def create_user(request):
                                 user_creation = form6.save(commit=False)
                                 user_creation.profile = user_profile
                                 user_creation.name = user_profile.first_name+' '+user_profile.last_name
+                                user_creation.maple_bear_email = user_profile.email
                                 user_creation.save()
                                 messages.success(request, 'Usuário Criado com sucesso!')
                                 current_site = get_current_site(request)
@@ -611,6 +614,7 @@ def create_user(request):
                                 user_creation = form7.save(commit=False)
                                 user_creation.profile = user_profile
                                 user_creation.name = user_profile.first_name+' '+user_profile.last_name
+                                user_creation.maple_bear_email = user_profile.email
                                 user_creation.save()
                                 student_to_add = Student.objects.get(profile=user_profile)
                                 diff = datetime.date.today() - user_creation.birthday
@@ -860,6 +864,7 @@ def add_student(request):
             user_creation = form2.save(commit=False)
             user_creation.profile = user_profile
             user_creation.name = user_profile.first_name+' '+user_profile.last_name
+            user_creation.maple_bear_email = user_profile.email
             user_creation.save()
             student = Student.objects.get(profile=user_profile)
             messages.success(request, 'Estudante criado com sucesso!')
@@ -884,6 +889,7 @@ def add_student(request):
             user_creation = form2.save(commit=False)
             user_creation.profile = user_profile
             user_creation.name = user_profile.first_name+' '+user_profile.last_name
+            user_creation.maple_bear_email = user_profile.email
             user_creation.save()
             student = Student.objects.get(profile=user_profile)
             messages.success(request, 'Estudante criado com sucesso!')
@@ -912,6 +918,7 @@ def add_first_parent(request, student_id=None):
             user_creation = form2.save(commit=False)
             user_creation.profile = user_profile
             user_creation.name = user_profile.first_name+' '+user_profile.last_name
+            user_creation.maple_bear_email = user_profile.email
             user_creation.save()
             parent = Parent.objects.get(profile=user_profile)
             student.first_parent = parent
@@ -940,6 +947,7 @@ def add_first_parent(request, student_id=None):
             user_creation = form2.save(commit=False)
             user_creation.profile = user_profile
             user_creation.name = user_profile.first_name+' '+user_profile.last_name
+            user_creation.maple_bear_email = user_profile.email
             user_creation.save()
             parent = Parent.objects.get(profile=user_profile)
             student.first_parent = parent
@@ -970,6 +978,7 @@ def add_second_parent(request, student_id=None):
             user_creation = form2.save(commit=False)
             user_creation.profile = user_profile
             user_creation.name = user_profile.first_name+' '+user_profile.last_name
+            user_creation.maple_bear_email = user_profile.email
             user_creation.save()
             parent = Parent.objects.get(profile=user_profile)
             student.second_parent = parent
@@ -998,6 +1007,7 @@ def add_second_parent(request, student_id=None):
             user_creation = form2.save(commit=False)
             user_creation.profile = user_profile
             user_creation.name = user_profile.first_name+' '+user_profile.last_name
+            user_creation.maple_bear_email = user_profile.email
             user_creation.save()
             parent = Parent.objects.get(profile=user_profile)
             student.second_parent = parent
@@ -1027,6 +1037,7 @@ def add_parent(request, student_id=None, type_of_user= None):
             user_creation = form2.save(commit=False)
             user_creation.profile = user_profile
             user_creation.name = user_profile.first_name+' '+user_profile.last_name
+            user_creation.maple_bear_email = user_profile.email
             user_creation.save()
             current_site = get_current_site(request)
             mail_subject = 'Login para acesso ao app escolar.'
@@ -1072,6 +1083,7 @@ def add_parent(request, student_id=None, type_of_user= None):
             user_creation = form2.save(commit=False)
             user_creation.profile = user_profile
             user_creation.name = user_profile.first_name+' '+user_profile.last_name
+            user_creation.maple_bear_email = user_profile.email
             user_creation.save()
             current_site = get_current_site(request)
             mail_subject = 'Login para acesso ao app escolar.'
