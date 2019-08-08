@@ -37,14 +37,14 @@
                       {% if head.profile %}
                         <div class="row">                      
                           <div class="col-md-12">
-                            <button type="button" class="btn btn-primary btn-block w-100"><a href="{% url 'users:reset_password_send_email' head.head_id 'head' %}" data-baloon="Remove this item from the cart" class="text-light btn btn-primary btn-block w-100">Resetar Senha</a></button>
+                            <a href="{% url 'users:reset_password_send_email' head.head_id 'head' %}" data-baloon="Remove this item from the cart" class="text-light btn btn-primary btn-block w-100">Resetar Senha</a>
                           </div>
                         </div>
                       {% endif %}
                       {% if request.user.is_superuser %}
                         <div class="row">                      
                           <div class="col-md-12">
-                            <button type="button" class="btn btn-danger btn-block"><a href="{% url 'users:delete_user' head.head_id 'head' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Diretor</a></button>
+                            <a href="{% url 'users:delete_user' head.head_id 'head' %}" data-baloon="Remove this item from the cart" class="text-light btn btn-danger btn-block">Deletar Diretor</a>
                           </div>
                         </div>
                       {% endif %}
@@ -89,14 +89,14 @@
                       {% if teacher.profile %}
                         <div class="row">                      
                           <div class="col-md-12">
-                            <button type="button" class="btn btn-primary btn-block w-100"><a href="{% url 'users:reset_password_send_email' teacher.teacher_id 'teacher' %}" data-baloon="Remove this item from the cart" class="text-light btn btn-primary btn-block w-100">Resetar Senha</a></button>
+                            <a href="{% url 'users:reset_password_send_email' teacher.teacher_id 'teacher' %}" data-baloon="Remove this item from the cart" class="text-light btn btn-primary btn-block w-100">Resetar Senha</a>
                           </div>
                         </div>
                       {% endif %}
                       {% if request.user.is_superuser %}
                         <div class="row">                      
                           <div class="col-md-12">
-                            <button type="button" class="btn btn-danger btn-block"><a href="{% url 'users:delete_user' teacher.teacher_id 'teacher' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Professor</a></button>
+                            <button type="button" class="btn btn-danger btn-block"><a href="{% url 'users:delete_user' teacher.teacher_id 'teacher' %}" data-baloon="Remove this item from the cart" class="text-light btn btn-danger btn-block">Deletar Professor</a>
                           </div>
                         </div>
                       {% endif %}
@@ -141,14 +141,14 @@
                       {% if admin.profile %}
                         <div class="row">                      
                           <div class="col-md-12">
-                            <button type="button" class="btn btn-primary btn-block w-100"><a href="{% url 'users:reset_password_send_email' admin.admin_id 'admin' %}" data-baloon="Remove this item from the cart" class="text-light btn btn-primary btn-block w-100">Resetar Senha</a></button>
+                            <a href="{% url 'users:reset_password_send_email' admin.admin_id 'admin' %}" data-baloon="Remove this item from the cart" class="text-light btn btn-primary btn-block w-100">Resetar Senha</a>
                           </div>
                         </div>
                         {% endif %}
                         {% if request.user.is_superuser %}
                         <div class="row">                      
                           <div class="col-md-12">
-                            <button type="button" class="btn btn-danger btn-block"><a href="{% url 'users:delete_user' admin.admin_id 'admin' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Administrador</a></button>
+                            <a href="{% url 'users:delete_user' admin.admin_id 'admin' %}" data-baloon="Remove this item from the cart" class="text-light btn btn-danger btn-block">Deletar Administrador</a>
                           </div>
                         </div>
                         {% endif %}
@@ -194,14 +194,14 @@
                       {% if supervisor.profile %}
                         <div class="row">                      
                           <div class="col-md-12">
-                            <button type="button" class="btn btn-primary btn-block w-100"><a href="{% url 'users:reset_password_send_email' supervisor.supervisor_id 'supervisor' %}" data-baloon="Remove this item from the cart" class="text-light btn btn-primary btn-block w-100">Resetar Senha</a></button>
+                            <a href="{% url 'users:reset_password_send_email' supervisor.supervisor_id 'supervisor' %}" data-baloon="Remove this item from the cart" class="text-light btn btn-primary btn-block w-100">Resetar Senha</a>
                           </div>
                         </div>
                       {% endif %}
                       {% if request.user.is_superuser %}
                         <div class="row">                      
                           <div class="col-md-12">
-                            <button type="button" class="btn btn-danger btn-block"><a href="{% url 'users:delete_user' supervisor.supervisor_id 'supervisor' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Supervisor</a></button>
+                            <a href="{% url 'users:delete_user' supervisor.supervisor_id 'supervisor' %}" data-baloon="Remove this item from the cart" class="text-light btn btn-danger btn-block">Deletar Supervisor</a>
                           </div>
                         </div>
                       {% endif %}
@@ -246,20 +246,20 @@
                 <div class="container" style="white-space: nowrap; text-align: center">
                   <div class="row">                      
                     <div class="col-md-12">
-                      <button type="button" class="btn btn-primary btn-block w-100"><a href="{% url 'users:seesonsofparent' parent.parent_id %}" data-baloon="Remove this item from the cart" class="text-light btn btn-primary btn-block w-100">Ver Filho(s) Desse Responsável</a></button>
+                      <a href="{% url 'users:seesonsofparent' parent.parent_id %}" data-baloon="Remove this item from the cart" class="text-light btn btn-primary btn-block w-100">Ver Filho(s) Desse Responsável</a>
                     </div>
                   </div>
                   {% if parent.profile %}
                     <div class="row">                      
                       <div class="col-md-12">
-                        <button type="button" class="btn btn-primary btn-block w-100"><a href="{% url 'users:reset_password_send_email' parent.parent_id 'parent' %}" data-baloon="Remove this item from the cart" class="text-light btn btn-primary btn-block w-100">Resetar Senha</a></button>
+                        <a href="{% url 'users:reset_password_send_email' parent.parent_id 'parent' %}" data-baloon="Remove this item from the cart" class="text-light btn btn-primary btn-block w-100">Resetar Senha</a>
                       </div>
                     </div>
                   {% endif %}
                   {% if request.user.is_superuser %}
                     <div class="row">                      
                       <div class="col-md-12">
-                        <button type="button" class="btn btn-danger btn-block"><a href="{% url 'users:delete_user' parent.parent_id 'parent' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Responsável</a></button>
+                        <a href="{% url 'users:delete_user' parent.parent_id 'parent' %}" data-baloon="Remove this item from the cart" class="text-light btn btn-danger btn-block">Deletar Responsável</a>
                       </div>
                     </div>
                   {% endif %}
@@ -310,21 +310,21 @@
           {% if student.needs_parent %}
           <div class="row">                      
             <div class="col-md-12">
-              <button type="button" class="btn btn-primary btn-block w-100"><a href="{% url 'users:set_parents' student.student_id %}" data-baloon="Remove this item from the cart" class="text-light btn btn-primary btn-block w-100">Selecionar Responsáveis</a></button>
+              <a href="{% url 'users:set_parents' student.student_id %}" data-baloon="Remove this item from the cart" class="text-light btn btn-primary btn-block w-100">Selecionar Responsáveis</a>
             </div>
           </div>
           {% endif %}
           {% if student.profile %}
             <div class="row">                      
               <div class="col-md-12">
-                <button type="button" class="btn btn-primary btn-block w-100"><a href="{% url 'users:reset_password_send_email' student.student_id 'student' %}" data-baloon="Remove this item from the cart" class="text-light btn btn-primary btn-block w-100">Resetar Senha</a></button>
+                <a href="{% url 'users:reset_password_send_email' student.student_id 'student' %}" data-baloon="Remove this item from the cart" class="text-light btn btn-primary btn-block w-100">Resetar Senha</a>
               </div>
             </div>
           {% endif %}
           {% if request.user.is_superuser %}
             <div class="row">                      
               <div class="col-md-12">
-                <button type="button" class="btn btn-danger btn-block"><a href="{% url 'users:delete_user' student.student_id 'student' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Estudante</a></button>
+                <a href="{% url 'users:delete_user' student.student_id 'student' %}" data-baloon="Remove this item from the cart" class="text-light btn btn-danger btn-block">Deletar Estudante</a>
               </div>
             </div>
           {% endif %}
