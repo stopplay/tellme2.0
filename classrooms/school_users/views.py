@@ -189,9 +189,11 @@ def create_user(request):
                         user = form.save(commit=False)
                         user.username = user.first_name.lower()+user.last_name.lower()
                         i=0
+                        user.username = user.username.replace(" ", "")
                         while User.objects.filter(username=user.username).count()>=1:
                             user.username = user.first_name.lower()+user.last_name.lower()
                             user.username = user.username + str(i)
+                            user.username = user.username.replace(" ", "")
                             i+=1
                         user.save()
                         user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
@@ -494,9 +496,11 @@ def create_user(request):
                         user = form.save(commit=False)
                         user.username = user.first_name.lower()+user.last_name.lower()
                         i=0
+                        user.username = user.username.replace(" ", "")
                         while User.objects.filter(username=user.username).count()>=1:
                             user.username = user.first_name.lower()+user.last_name.lower()
                             user.username = user.username + str(i)
+                            user.username = user.username.replace(" ", "")
                             i+=1
                         user.save()
                         user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
@@ -717,9 +721,11 @@ def create_head_to_school(request, school_id=None):
                     user = form.save(commit=False)
                     user.username=user.first_name.lower()+user.last_name.lower()
                     i=0
+                    user.username = user.username.replace(" ", "")
                     while User.objects.filter(username=user.username).count()>=1:
                         user.username = user.first_name.lower()+user.last_name.lower()
                         user.username = user.username + str(i)
+                        user.username = user.username.replace(" ", "")
                         i+=1
                     user.save()
                     user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
@@ -792,9 +798,11 @@ def create_supervisor_to_school(request, school_id=None):
                         user = form.save(commit=False)
                         user.username=user.first_name.lower()+user.last_name.lower()
                         i=0
+                        user.username = user.username.replace(" ", "")
                         while User.objects.filter(username=user.username).count()>=1:
                             user.username = user.first_name.lower()+user.last_name.lower()
                             user.username = user.username + str(i)
+                            user.username = user.username.replace(" ", "")
                             i+=1
                         user.save()
                         user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
@@ -841,9 +849,11 @@ def add_student(request):
             user = form.save(commit=False)
             user.username=user.first_name.lower()+user.last_name.lower()
             i=0
+            user.username = user.username.replace(" ", "")
             while User.objects.filter(username=user.username).count()>=1:
                 user.username = user.first_name.lower()+user.last_name.lower()
                 user.username = user.username + str(i)
+                user.username = user.username.replace(" ", "")
                 i+=1
             user.save()
             user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
@@ -863,9 +873,11 @@ def add_student(request):
             user = form.save(commit=False)
             user.username=user.first_name.lower()+user.last_name.lower()
             i=0
+            user.username = user.username.replace(" ", "")
             while User.objects.filter(username=user.username).count()>=1:
                 user.username = user.first_name.lower()+user.last_name.lower()
                 user.username = user.username + str(i)
+                user.username = user.username.replace(" ", "")
                 i+=1
             user.save()
             user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
@@ -888,9 +900,11 @@ def add_first_parent(request, student_id=None):
             user = form.save(commit=False)
             user.username=user.first_name.lower()+user.last_name.lower()
             i=0
+            user.username = user.username.replace(" ", "")
             while User.objects.filter(username=user.username).count()>=1:
                 user.username = user.first_name.lower()+user.last_name.lower()
                 user.username = user.username + str(i)
+                user.username = user.username.replace(" ", "")
                 i+=1
             user.save()
             user.username = user.first_name.lower()+user.last_name.lower()
@@ -914,9 +928,11 @@ def add_first_parent(request, student_id=None):
             user = form.save(commit=False)
             user.username=user.first_name.lower()+user.last_name.lower()
             i=0
+            user.username = user.username.replace(" ", "")
             while User.objects.filter(username=user.username).count()>=1:
                 user.username = user.first_name.lower()+user.last_name.lower()
                 user.username = user.username + str(i)
+                user.username = user.username.replace(" ", "")
                 i+=1
             user.save()
             user.username = user.first_name.lower()+user.last_name.lower()
@@ -942,9 +958,11 @@ def add_second_parent(request, student_id=None):
             user = form.save(commit=False)
             user.username=user.first_name.lower()+user.last_name.lower()
             i=0
+            user.username = user.username.replace(" ", "")
             while User.objects.filter(username=user.username).count()>=1:
                 user.username = user.first_name.lower()+user.last_name.lower()
                 user.username = user.username + str(i)
+                user.username = user.username.replace(" ", "")
                 i+=1
             user.save()
             user.username = user.first_name.lower()+user.last_name.lower()
@@ -968,9 +986,11 @@ def add_second_parent(request, student_id=None):
             user = form.save(commit=False)
             user.username=user.first_name.lower()+user.last_name.lower()
             i=0
+            user.username = user.username.replace(" ", "")
             while User.objects.filter(username=user.username).count()>=1:
                 user.username = user.first_name.lower()+user.last_name.lower()
                 user.username = user.username + str(i)
+                user.username = user.username.replace(" ", "")
                 i+=1
             user.save()
             user.username = user.first_name.lower()+user.last_name.lower()
@@ -995,9 +1015,12 @@ def add_parent(request, student_id=None, type_of_user= None):
         if form.is_valid() and form2.is_valid():
             user = form.save(commit=False)
             user.username = user.first_name.lower()+user.last_name.lower()
+            i = 0
+            user.username = user.username.replace(" ", "")
             while User.objects.filter(username=user.username).count()>=1:
                 user.username = user.first_name.lower()+user.last_name.lower()
                 user.username = user.username + str(i)
+                user.username = user.username.replace(" ", "")
                 i+=1
             user.save()
             user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
@@ -1037,10 +1060,12 @@ def add_parent(request, student_id=None, type_of_user= None):
         if form.is_valid() and form2.is_valid():
             user = form.save(commit=False)
             user.username = user.first_name.lower()+user.last_name.lower()
-            i = 1
+            i = 0
+            user.username = user.username.replace(" ", "")
             while User.objects.filter(username=user.username).count()>=1:
                 user.username = user.first_name.lower()+user.last_name.lower()
                 user.username = user.username + str(i)
+                user.username = user.username.replace(" ", "")
                 i+=1
             user.save()
             user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)

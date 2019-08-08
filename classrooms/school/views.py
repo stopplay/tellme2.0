@@ -520,9 +520,11 @@ def add_student_to_class_and_school(request, school_id=None, class_id=None):
 						user = form.save(commit=False)
 						user.username = user.first_name.lower()+user.last_name.lower()
 						i=0
+						user.username = user.username.replace(" ", "")
 						while User.objects.filter(username=user.username).count()>=1:
 							user.username = user.first_name.lower()+user.last_name.lower()
 							user.username = user.username + str(i)
+							user.username = user.username.replace(" ", "")
 							i+=1
 						user.save()
 						user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
@@ -610,9 +612,11 @@ def add_student_to_class_and_school(request, school_id=None, class_id=None):
 						user = form.save(commit=False)
 						user.username = user.first_name.lower()+user.last_name.lower()
 						i=0
+						user.username = user.username.replace(" ", "")
 						while User.objects.filter(username=user.username).count()>=1:
 							user.username = user.first_name.lower()+user.last_name.lower()
 							user.username = user.username + str(i)
+							user.username = user.username.replace(" ", "")
 							i+=1
 						user.save()
 						user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
@@ -697,9 +701,11 @@ def add_first_parent_to_student(request, school_id=None, class_id=None, student_
 				user = form.save(commit=False)
 				user.username = user.first_name.lower()+user.last_name.lower()
 				i=0
+				user.username = user.username.replace(" ", "")
 				while User.objects.filter(username=user.username).count()>=1:
 					user.username = user.first_name.lower()+user.last_name.lower()
 					user.username = user.username + str(i)
+					user.username = user.username.replace(" ", "")
 					i+=1
 				user.save()
 				user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
@@ -736,9 +742,11 @@ def add_first_parent_to_student(request, school_id=None, class_id=None, student_
 				user = form.save(commit=False)
 				user.username = user.first_name.lower()+user.last_name.lower()
 				i=0
+				user.username = user.username.replace(" ", "")
 				while User.objects.filter(username=user.username).count()>=1:
 					user.username = user.first_name.lower()+user.last_name.lower()
 					user.username = user.username + str(i)
+					user.username = user.username.replace(" ", "")
 					i+=1
 				user.save()
 				user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
@@ -777,9 +785,11 @@ def add_second_parent_to_student(request, school_id=None, class_id=None, student
 				user = form.save(commit=False)
 				user.username = user.first_name.lower()+user.last_name.lower()
 				i=0
+				user.username = user.username.replace(" ", "")
 				while User.objects.filter(username=user.username).count()>=1:
 					user.username = user.first_name.lower()+user.last_name.lower()
 					user.username = user.username + str(i)
+					user.username = user.username.replace(" ", "")
 					i+=1
 				user.save()
 				user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
@@ -816,9 +826,11 @@ def add_second_parent_to_student(request, school_id=None, class_id=None, student
 				user = form.save(commit=False)
 				user.username = user.first_name.lower()+user.last_name.lower()
 				i=0
+				user.username = user.username.replace(" ", "")
 				while User.objects.filter(username=user.username).count()>=1:
 					user.username = user.first_name.lower()+user.last_name.lower()
 					user.username = user.username + str(i)
+					user.username = user.username.replace(" ", "")
 					i+=1
 				user.save()
 				user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
