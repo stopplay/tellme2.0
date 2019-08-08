@@ -168,11 +168,13 @@ def delete_school(request, school_id=None):
 			classe.delete()
 		for student in school_to_delete.students.all():
 			if School.objects.filter(students__student_id__exact=student.student_id).count()<2:
-				student.first_parent.profile.delete()
-				student.second_parent.profile.delete()
+				if student.first_parent:
+					student.first_parent.profile.delete()
+					student.first_parent.delete()
+				if student.second_parent:
+					student.second_parent.profile.delete()
+					student.second_parent.delete()
 				student.profile.delete()
-				student.first_parent.delete()
-				student.second_parent.delete()
 				student.delete()
 		if school_to_delete.head:
 			if School.objects.filter(head=school_to_delete.head).count()<2:
@@ -182,6 +184,14 @@ def delete_school(request, school_id=None):
 			if School.objects.filter(adminorsupervisor=school_to_delete.adminorsupervisor).count()<2:
 				school_to_delete.adminorsupervisor.profile.delete()
 				school_to_delete.adminorsupervisor.delete()
+		if school_to_delete.first_witness:
+			if School.objects.filter(first_witness=school_to_delete.first_witness).count()<2:
+				school_to_delete.first_witness.profile.delete()
+				school_to_delete.first_witness.delete()
+		if school_to_delete.second_witness:
+			if School.objects.filter(first_witness=school_to_delete.second_witness).count()<2:
+				school_to_delete.second_witness.profile.delete()
+				school_to_delete.second_witness.delete()
 		school_to_delete.delete()
 		messages.success(request, 'Escola excluída com sucessso!')
 		return redirect('/')
@@ -202,11 +212,11 @@ def add_class(request, school_id=None):
 			classroom = form.save(commit=False)
 			newchain = Chain.objects.create(name="{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name))
 			school_to_add_class.chains.add(newchain)
-			
-			sku = get_sku_by_slm_url(classroom.slm)
-			if sku: classroom.sku = sku
-			print('slm', classroom.slm)
-			print('sku', classroom.sku)
+			if classroom.slm:
+				sku = get_sku_by_slm_url(classroom.slm)
+				if sku: classroom.sku = sku
+				print('slm', classroom.slm)
+				print('sku', classroom.sku)
 			classroom.save()
 			
 			newclassroom = Class.objects.get(class_id=classroom.class_id)
@@ -222,11 +232,11 @@ def add_class(request, school_id=None):
 			classroom = form.save(commit=False)
 			newchain = Chain.objects.create(name="{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name))
 			school_to_add_class.chains.add(newchain)
-
-			sku = get_sku_by_slm_url(classroom.slm)
-			if sku: classroom.sku = sku
-			print('slm', classroom.slm)
-			print('sku', classroom.sku)
+			if classroom.slm:
+				sku = get_sku_by_slm_url(classroom.slm)
+				if sku: classroom.sku = sku
+				print('slm', classroom.slm)
+				print('sku', classroom.sku)
 			classroom.save()
 
 			newclassroom = Class.objects.get(class_id=classroom.class_id)
@@ -537,7 +547,7 @@ def add_student_to_class_and_school(request, school_id=None, class_id=None):
 						diff = datetime.date.today() - user_creation.birthday
 						age = diff.days//365
 						if age >= 18:
-							return redirect('/users/do_u_need_parents/{}/{}/{}'.format(student_to_add.student_id, school_to_add_student.school_id, class_to_add_student.class_id))
+							return redirect('/users/do_u_need_parents/{}/{}/{}'.format(student.student_id, school_to_add_student.school_id, class_to_add_student.class_id))
 						school_to_add_student.students.add(student)
 						class_to_add_student.students.add(student)
 						messages.success(request, 'Estudante criado com sucesso!')
@@ -630,7 +640,7 @@ def add_student_to_class_and_school(request, school_id=None, class_id=None):
 						diff = datetime.date.today() - user_creation.birthday
 						age = diff.days//365
 						if age >= 18:
-							return redirect('/users/do_u_need_parents/{}/{}/{}'.format(student_to_add.student_id, school_to_add_student.school_id, class_to_add_student.class_id))
+							return redirect('/users/do_u_need_parents/{}/{}/{}'.format(student.student_id, school_to_add_student.school_id, class_to_add_student.class_id))
 						school_to_add_student.students.add(student)
 						class_to_add_student.students.add(student)
 						messages.success(request, 'Estudante criado com sucesso!')
@@ -922,3 +932,87 @@ def add_students_to_class_and_school(request, school_id=None, class_id=None):
 			messages.success(request, 'Estudantes adicionados com sucesso!')
 			return redirect('/')
 		return render(request, 'school/add_students_to_school.html', {'is_supervisor':is_supervisor, 'student_users':student_users, 'school':first_school})
+
+def add_first_witness(request, school_id=None):
+	if request.user.is_superuser:
+		form = UserModelForm(request.POST or None)
+		form2 = WitnessModelForm(request.POST or None)
+		school_to_add_witness = School.objects.get(school_id=school_id)
+		if request.method == 'POST':
+			if form.is_valid():
+				user = form.save(commit=False)
+				user.username = user.first_name.lower()+user.last_name.lower()
+				i=0
+				user.username = user.username.replace(" ", "")
+				while User.objects.filter(username=user.username).count()>=1:
+					user.username = user.first_name.lower()+user.last_name.lower()
+					user.username = user.username + str(i)
+					user.username = user.username.replace(" ", "")
+					i+=1
+				user.save()
+				user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
+				user_creation = form2.save(commit=False)
+				user_creation.profile = user_profile
+				user_creation.name = user_profile.first_name+' '+user_profile.last_name
+				user_creation.save()
+				witness = Witness.objects.get(witness_id=user_creation.witness_id)
+				school_to_add_witness.first_witness = witness
+				school_to_add_witness.save(update_fields=['first_witness'])
+				messages.success(request, 'Primeira testemunha adicionada com sucesso')
+				current_site = get_current_site(request)
+				mail_subject = 'Login para acesso ao app escolar.'
+				message = render_to_string('school_users/user_login.html', {
+					'user': user_creation,
+					'domain': current_site.domain,
+					'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+					'token':account_activation_token.make_token(user),
+		           })
+				to_email = form.cleaned_data.get('email')
+				email = EmailMessage(
+	            	mail_subject, message, to=[to_email]
+	            )
+				email.send()
+				return redirect('/schools/{}/add_second_witness'.format(school_id))
+		return render(request, 'school_users/add_first_witness.html', {'form':form, 'form2':form2,'school':school_to_add_witness})
+
+def add_second_witness(request, school_id=None):
+	if request.user.is_superuser:
+		form = UserModelForm(request.POST or None)
+		form2 = WitnessModelForm(request.POST or None)
+		school_to_add_witness = School.objects.get(school_id=school_id)
+		if request.method == 'POST':
+			if form.is_valid():
+				user = form.save(commit=False)
+				user.username = user.first_name.lower()+user.last_name.lower()
+				i=0
+				user.username = user.username.replace(" ", "")
+				while User.objects.filter(username=user.username).count()>=1:
+					user.username = user.first_name.lower()+user.last_name.lower()
+					user.username = user.username + str(i)
+					user.username = user.username.replace(" ", "")
+					i+=1
+				user.save()
+				user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
+				user_creation = form2.save(commit=False)
+				user_creation.profile = user_profile
+				user_creation.name = user_profile.first_name+' '+user_profile.last_name
+				user_creation.save()
+				witness = Witness.objects.get(witness_id=user_creation.witness_id)
+				school_to_add_witness.second_witness = witness
+				school_to_add_witness.save(update_fields=['second_witness'])
+				messages.success(request, 'Segunda testemunha adicionada com sucesso')
+				current_site = get_current_site(request)
+				mail_subject = 'Login para acesso ao app escolar.'
+				message = render_to_string('school_users/user_login.html', {
+					'user': user_creation,
+					'domain': current_site.domain,
+					'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+					'token':account_activation_token.make_token(user),
+		           })
+				to_email = form.cleaned_data.get('email')
+				email = EmailMessage(
+	            	mail_subject, message, to=[to_email]
+	            )
+				email.send()
+				return redirect('/schools/{}/add_class'.format(school_id))
+		return render(request, 'school_users/add_second_witness.html', {'form':form, 'form2':form2,'school':school_to_add_witness})

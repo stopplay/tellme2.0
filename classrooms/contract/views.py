@@ -83,6 +83,8 @@ def extract_text_to_write_and_coords(contract=None, whosigned=None, school=None)
 			time += '0'+str(contract.first_auth_signed_timestamp.time().second)
 		else:
 			time += str(contract.first_auth_signed_timestamp.time().second)
+		if contract.first_auth_witness and contract.second_auth_witness:
+			return { 'x' : 45, 'y' : 50, 'text' : "1. Responsável Financeiro: {} Hash: {}, em {} às {}".format(contract.first_auth_signe.name, contract.first_auth_hash, date, time) }
 		return { 'x' : 45, 'y' : 30, 'text' : "1. Responsável Financeiro: {} Hash: {}, em {} às {}".format(contract.first_auth_signe.name, contract.first_auth_hash, date, time) }
 	elif whosigned == 'second_auth':
 		date = str(contract.second_auth_signed_timestamp.date().day)+'/'+str(contract.second_auth_signed_timestamp.date().month)+'/'+str(contract.second_auth_signed_timestamp.date().year)
@@ -98,6 +100,8 @@ def extract_text_to_write_and_coords(contract=None, whosigned=None, school=None)
 			time += '0'+str(contract.second_auth_signed_timestamp.time().second)
 		else:
 			time += str(contract.second_auth_signed_timestamp.time().second)
+		if contract.first_auth_witness and contract.second_auth_witness:
+			return { 'x' : 45, 'y' : 40, 'text' : "2. Responsável Didático: {} Hash: {}, em {} às {}".format(contract.second_auth_signe.name, contract.second_auth_hash, date, time) }
 		return { 'x' : 45, 'y' : 20, 'text' : "2. Responsável Didático: {} Hash: {}, em {} às {}".format(contract.second_auth_signe.name, contract.second_auth_hash, date, time) }
 	elif whosigned == 'student_auth':
 		date = str(contract.student_auth_signed_timestamp.date().day)+'/'+str(contract.student_auth_signed_timestamp.date().month)+'/'+str(contract.student_auth_signed_timestamp.date().year)
@@ -113,7 +117,39 @@ def extract_text_to_write_and_coords(contract=None, whosigned=None, school=None)
 			time += '0'+str(contract.student_auth_signed_timestamp.time().second)
 		else:
 			time += str(contract.student_auth_signed_timestamp.time().second)
+		if contract.first_auth_witness and contract.second_auth_witness:
+			return { 'x' : 45, 'y' : 40, 'text' : "1. Responsável Financeiro: {} Hash: {}, em {} às {}".format(contract.student_auth_signe.name, contract.student_auth_hash, date, time) }
 		return { 'x' : 45, 'y' : 20, 'text' : "1. Responsável Financeiro: {} Hash: {}, em {} às {}".format(contract.student_auth_signe.name, contract.student_auth_hash, date, time) }
+	elif whosigned == 'first_witness':
+		date = str(contract.first_witness_signed_timestamp.date().day)+'/'+str(contract.first_witness_signed_timestamp.date().month)+'/'+str(contract.first_witness_signed_timestamp.date().year)
+		if contract.first_witness_signed_timestamp.time().hour<10:
+			time = '0'+str(contract.first_witness_signed_timestamp.time().hour)+':'
+		else:
+			time = str(contract.first_witness_signed_timestamp.time().hour)+':'
+		if contract.first_witness_signed_timestamp.time().minute<10:
+			time += '0'+str(contract.first_witness_signed_timestamp.time().minute)+':'
+		else:
+			time += str(contract.first_witness_signed_timestamp.time().minute)+':'
+		if contract.first_witness_signed_timestamp.time().second<10:
+			time += '0'+str(contract.first_witness_signed_timestamp.time().second)
+		else:
+			time += str(contract.first_witness_signed_timestamp.time().second)
+		return { 'x' : 45, 'y' : 20, 'text' : "4. Primeira Testemunha: {} Hash: {}, em {} às {}".format(contract.first_witness_signe.name, contract.first_witness_hash, date, time) }
+	elif whosigned == 'second_witness':
+		date = str(contract.second_witness_signed_timestamp.date().day)+'/'+str(contract.second_witness_signed_timestamp.date().month)+'/'+str(contract.second_witness_signed_timestamp.date().year)
+		if contract.second_witness_signed_timestamp.time().hour<10:
+			time = '0'+str(contract.second_witness_signed_timestamp.time().hour)+':'
+		else:
+			time = str(contract.second_witness_signed_timestamp.time().hour)+':'
+		if contract.second_witness_signed_timestamp.time().minute<10:
+			time += '0'+str(contract.second_witness_signed_timestamp.time().minute)+':'
+		else:
+			time += str(contract.second_witness_signed_timestamp.time().minute)+':'
+		if contract.second_witness_signed_timestamp.time().second<10:
+			time += '0'+str(contract.second_witness_signed_timestamp.time().second)
+		else:
+			time += str(contract.second_witness_signed_timestamp.time().second)
+		return { 'x' : 45, 'y' : 20, 'text' : "5. Segunda Testemunha: {} Hash: {}, em {} às {}".format(contract.second_witness_signe.name, contract.second_witness_hash, date, time) }
 	elif whosigned == 'director':
 		date = str(contract.counter_signed_timestamp.date().day)+'/'+str(contract.counter_signed_timestamp.date().month)+'/'+str(contract.counter_signed_timestamp.date().year)
 		if contract.counter_signed_timestamp.time().hour<10:
@@ -129,13 +165,21 @@ def extract_text_to_write_and_coords(contract=None, whosigned=None, school=None)
 		else:
 			time += str(contract.counter_signed_timestamp.time().second)
 		if contract.first_auth_signe and contract.second_auth_signe:
+			if contract.first_auth_witness and contract.second_auth_witness:
+				return { 'x' : 45, 'y' : 30, 'text' : "3. Representante {}: {} Hash: {}, em {} às {}".format(school.school_name, contract.counter_signe.name, contract.counter_auth_hash, date, time) }
 			return { 'x' : 45, 'y' : 10, 'text' : "3. Representante {}: {} Hash: {}, em {} às {}".format(school.school_name, contract.counter_signe.name, contract.counter_auth_hash, date, time) }
 		elif contract.student_auth_signe:
+			if contract.first_auth_witness and contract.second_auth_witness:
+				return { 'x' : 45, 'y' : 30, 'text' : "2. Representante {}: {} Hash: {}, em {} às {}".format(school.school_name, contract.counter_signe.name, contract.counter_auth_hash, date, time) }
 			return { 'x' : 45, 'y' : 10, 'text' : "2. Representante {}: {} Hash: {}, em {} às {}".format(school.school_name, contract.counter_signe.name, contract.counter_auth_hash, date, time) }
 	elif whosigned == 'all_signed':
 		if contract.first_auth_signe and contract.second_auth_signe:
+			if contract.first_witness_signe and contract.second_witness_signe:
+				return { 'x' : 45, 'y' : 60, 'text' : "Assinado Eletronicamente por:" }
 			return { 'x' : 45, 'y' : 40, 'text' : "Assinado Eletronicamente por:" }
 		elif contract.student_auth_signe:
+			if contract.first_witness_signe and contract.second_witness_signe:
+				return { 'x' : 45, 'y' : 50, 'text' : "Assinado Eletronicamente por:" }
 			return {'x' : 45, 'y' : 30, 'text' : "Assinado Eletronicamente por:" }
 	return {'x' : 45, 'y' : 10, 'text' : "" }
 
@@ -210,15 +254,20 @@ def createacontract(request):
 				wish = request.POST.get('wish' or None)
 				wish_today = request.POST.get('wish_today' or None)
 				contract = form.save(commit=False)
-				school = School.objects.get(chains__name__exact=contract.chain.name)
+				school = School.objects.get(chains__id__exact=contract.chain.id)
 				classe = Class.objects.get(class_id=contract.chain.id)
 				contract.slm = classe.slm
 				contract.name = student.name+' - '+contract.chain.name
+				if school.first_witness and school.second_witness:
+					contract.first_auth_witness = school.first_witness
+					contract.second_auth_witness = school.second_witness
 				if student.needs_parent:
 					if student.first_parent and student.second_parent:
 						contract.counter_signe = school.head
 						contract.first_auth_signe = student.first_parent
 						contract.second_auth_signe = student.second_parent
+						if student.third_parent:
+							contract.third_auth_signe = student.third_parent
 						contract.student_name = student.name
 						if wish == 'sim':
 							if wish_today == 'sim':
@@ -306,15 +355,20 @@ def createacontract(request):
 				wish = request.POST.get('wish' or None)
 				wish_today = request.POST.get('wish_today' or None)
 				contract = form.save(commit=False)
-				school = School.objects.get(chains__name__exact=contract.chain.name)
+				school = School.objects.get(chains__id__exact=contract.chain.id)
 				classe = Class.objects.get(class_id=contract.chain.id)
 				contract.slm = classe.slm
 				contract.name = student.name+' - '+contract.chain.name
+				if school.first_witness and school.second_witness:
+					contract.first_auth_witness = school.first_witness
+					contract.second_auth_witness = school.second_witness
 				if student.needs_parent:
 					if student.first_parent and student.second_parent:
 						contract.counter_signe = school.head
 						contract.first_auth_signe = student.first_parent
 						contract.second_auth_signe = student.second_parent
+						if student.third_parent:
+							contract.third_auth_signe = student.third_parent
 						contract.student_name = student.name
 						if wish == 'sim':
 							if wish_today == 'sim':
@@ -595,7 +649,7 @@ def select_student_to_contract(request):
 			student = Student.objects.get(student_id=selected_user)
 			if student.needs_parent:
 				if not student.first_parent and student.second_parent:
-					messages.warning(request, 'O estudante não tem pelo menos um dos pais associados a ele!')
+					messages.warning(request, 'O estudante não tem pelo menos um dos responsáveis necessários associados a ele!')
 					return redirect('/contracts/select_student_to_contract')
 			return redirect('/contracts/createacontract')
 		return render(request, 'contract/select_student_to_contract.html', {'students':students})
@@ -611,7 +665,7 @@ def select_student_to_contract(request):
 			student = Student.objects.get(student_id=selected_user)
 			if student.needs_parent:
 				if not student.first_parent and student.second_parent:
-					messages.warning(request, 'O estudante não tem pelo menos um dos pais associados a ele!')
+					messages.warning(request, 'O estudante não tem pelo menos um dos responsáveis necessários associados a ele!')
 					return redirect('/contracts/select_student_to_contract')
 			return redirect('/contracts/createacontract')
 		return render(request, 'contract/select_student_to_contract.html', {'students':students, 'is_supervisor':True})

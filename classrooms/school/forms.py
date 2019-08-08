@@ -29,8 +29,8 @@ class ClassModelForm(forms.ModelForm):
 			'class_name': forms.TextInput(attrs={'class':'form-control', 'maxlength':255, 'required':True}),
 			'class_unit': forms.Select(attrs={'class':'form-control', 'required':True}),
 			'enrollment_class_year': forms.NumberInput(attrs={'required':True, 'min':datetime.date.today().year}),
-			'slm': forms.TextInput(attrs={'class':'form-control', 'maxlength':255, 'required':True}),
-			'sku': forms.TextInput(attrs={'class':'form-control', 'maxlength':255, 'required':True}),
+			'slm': forms.TextInput(attrs={'class':'form-control', 'maxlength':255, 'required':False}),
+			'sku': forms.TextInput(attrs={'class':'form-control', 'maxlength':255, 'required':False}),
 		}
 
 class ClassAddTeachersModelForm(forms.ModelForm):

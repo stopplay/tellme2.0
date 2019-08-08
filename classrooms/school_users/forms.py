@@ -88,3 +88,13 @@ class ProfileForStudentModelForm(forms.ModelForm):
 			'maple_bear_password': forms.TextInput(attrs={'type':'password','class':'form-control', 'required':False, 'maxlength':255}),
 			'maple_bear_email': forms.TextInput(attrs={'class':'form-control', 'required':False, 'maxlength':255}),
 		}
+
+class WitnessModelForm(forms.ModelForm):
+	"""docstring for WitnessModelForm"""
+	class Meta:
+		model = Witness
+		fields = ['rg', 'cpf']
+		widgets = {
+			'rg': forms.TextInput(attrs={'class':'form-control', 'required':True, 'maxlength':255}),
+			'cpf': forms.TextInput(attrs={'class':'form-control', 'required':True, 'maxlength':255}),
+		}
