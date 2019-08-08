@@ -266,9 +266,37 @@
                                       </a>
                                     {% endif %}
                                   </div>
-                                {% elif request.user == contract.first_auth_signe.profile or request.user == contract.second_auth_signe.profile or request.user == contract.student_auth_signe.profile %}
+                                {% elif request.user == contract.first_auth_signe.profile %}
                                   <div class="col-md-12">
-                                    {% if contract.first_auth_signed or contract.second_auth_signed or contract.student_auth_signed %}
+                                    {% if contract.first_auth_signed %}
+                                      <!--verde-->
+                                      <button type="button" class="btn btn-success btn-block w-100" style="cursor: not-allowed;">
+                                        Assinado
+                                      </button>
+                                    {% else %}
+                                      <!--Vermelho-->
+                                      <a class="btn btn-primary btn-danger btn-block w-100" onclick="signContract('{% url 'contracts:set_signed' contract.contract_id %}');" href="#" data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal" data-target="#sign-contract-modal">
+                                        Assinar Contrato
+                                      </a>
+                                    {% endif %}                                  
+                                  </div>
+                                {% elif request.user == contract.second_auth_signe.profile %}
+                                  <div class="col-md-12">
+                                    {% if contract.second_auth_signed %}
+                                      <!--verde-->
+                                      <button type="button" class="btn btn-success btn-block w-100" style="cursor: not-allowed;">
+                                        Assinado
+                                      </button>
+                                    {% else %}
+                                      <!--Vermelho-->
+                                      <a class="btn btn-primary btn-danger btn-block w-100" onclick="signContract('{% url 'contracts:set_signed' contract.contract_id %}');" href="#" data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal" data-target="#sign-contract-modal">
+                                        Assinar Contrato
+                                      </a>
+                                    {% endif %}                                  
+                                  </div>
+                                {% elif request.user == contract.student_auth_signe.profile %}
+                                  <div class="col-md-12">
+                                    {% if contract.student_auth_signed %}
                                       <!--verde-->
                                       <button type="button" class="btn btn-success btn-block w-100" style="cursor: not-allowed;">
                                         Assinado
