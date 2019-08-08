@@ -37,7 +37,7 @@
                       {% if head.profile %}
                         <div class="row">                      
                           <div class="col-md-12">
-                            <a href="{% url 'users:reset_password_send_email' head.head_id 'head' %}" data-baloon="Remove this item from the cart" class="btn btn-primary btn-block w-100">Resetar Senha</a>
+                            <a href="{% url 'users:reset_password_send_email' head.head_id 'head' %}" data-baloon="Remove this item from the cart" class="btn btn-primary w-100">Resetar Senha</a>
                           </div>
                         </div>
                       {% endif %}
@@ -89,7 +89,7 @@
                       {% if teacher.profile %}
                         <div class="row">                      
                           <div class="col-md-12">
-                            <a href="{% url 'users:reset_password_send_email' teacher.teacher_id 'teacher' %}" data-baloon="Remove this item from the cart" class="btn btn-primary btn-block w-100">Resetar Senha</a>
+                            <a href="{% url 'users:reset_password_send_email' teacher.teacher_id 'teacher' %}" data-baloon="Remove this item from the cart" class="btn btn-primary w-100">Resetar Senha</a>
                           </div>
                         </div>
                       {% endif %}
@@ -141,7 +141,7 @@
                       {% if admin.profile %}
                         <div class="row">                      
                           <div class="col-md-12">
-                            <a href="{% url 'users:reset_password_send_email' admin.admin_id 'admin' %}" data-baloon="Remove this item from the cart" class="btn btn-primary btn-block w-100">Resetar Senha</a>
+                            <a href="{% url 'users:reset_password_send_email' admin.admin_id 'admin' %}" data-baloon="Remove this item from the cart" class="btn btn-primary w-100">Resetar Senha</a>
                           </div>
                         </div>
                         {% endif %}
@@ -194,7 +194,7 @@
                       {% if supervisor.profile %}
                         <div class="row">                      
                           <div class="col-md-12">
-                            <a href="{% url 'users:reset_password_send_email' supervisor.supervisor_id 'supervisor' %}" data-baloon="Remove this item from the cart" class="btn btn-primary btn-block w-100">Resetar Senha</a>
+                            <a href="{% url 'users:reset_password_send_email' supervisor.supervisor_id 'supervisor' %}" data-baloon="Remove this item from the cart" class="btn btn-primary w-100">Resetar Senha</a>
                           </div>
                         </div>
                       {% endif %}
@@ -246,13 +246,13 @@
                 <div class="container" style="white-space: nowrap; text-align: center">
                   <div class="row">                      
                     <div class="col-md-12">
-                      <a href="{% url 'users:seesonsofparent' parent.parent_id %}" data-baloon="Remove this item from the cart" class="btn btn-primary btn-block w-100">Ver Filho(s) Desse Responsável</a>
+                      <a href="{% url 'users:seesonsofparent' parent.parent_id %}" data-baloon="Remove this item from the cart" class="btn btn-primary w-100">Ver Filho(s) Desse Responsável</a>
                     </div>
                   </div>
                   {% if parent.profile %}
                     <div class="row">                      
                       <div class="col-md-12">
-                        <a href="{% url 'users:reset_password_send_email' parent.parent_id 'parent' %}" data-baloon="Remove this item from the cart" class="btn btn-primary btn-block w-100">Resetar Senha</a>
+                        <a href="{% url 'users:reset_password_send_email' parent.parent_id 'parent' %}" data-baloon="Remove this item from the cart" class="btn btn-primary w-100">Resetar Senha</a>
                       </div>
                     </div>
                   {% endif %}
@@ -310,14 +310,14 @@
           {% if student.needs_parent %}
           <div class="row">                      
             <div class="col-md-12">
-              <a href="{% url 'users:set_parents' student.student_id %}" data-baloon="Remove this item from the cart" class="btn btn-primary btn-block w-100">Selecionar Responsáveis</a>
+              <a href="{% url 'users:set_parents' student.student_id %}" data-baloon="Remove this item from the cart" class="btn btn-primary w-100">Selecionar Responsáveis</a>
             </div>
           </div>
           {% endif %}
           {% if student.profile %}
             <div class="row">                      
               <div class="col-md-12">
-                <a href="{% url 'users:reset_password_send_email' student.student_id 'student' %}" data-baloon="Remove this item from the cart" class="btn btn-primary btn-block w-100">Resetar Senha</a>
+                <a href="{% url 'users:reset_password_send_email' student.student_id 'student' %}" data-baloon="Remove this item from the cart" class="btn btn-primary w-100">Resetar Senha</a>
               </div>
             </div>
           {% endif %}
