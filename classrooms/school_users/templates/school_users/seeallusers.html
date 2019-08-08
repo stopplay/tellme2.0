@@ -310,17 +310,17 @@
             </div>
           </div>
           {% endif %}
-          {% if request.user.is_superuser %}
-            <div class="row">                      
-              <div class="col-md-12">
-                <button type="button" class="delete-button btn btn-info btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' student.student_id 'student' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Estudante</a></button>
-              </div>
-            </div>
-          {% endif %}
           {% if student.profile %}
             <div class="row">                      
               <div class="col-md-12">
                 <button type="button" class="btn btn-primary btn-sm btn-info btn-block"><a href="{% url 'users:reset_password_send_email' student.student_id 'student' %}" data-baloon="Remove this item from the cart" class="text-light">Resetar Senha</a></button>
+              </div>
+            </div>
+          {% endif %}
+          {% if request.user.is_superuser %}
+            <div class="row">                      
+              <div class="col-md-12">
+                <button type="button" class="btn btn-sm btn-danger btn-block"><a href="{% url 'users:delete_user' student.student_id 'student' %}" data-baloon="Remove this item from the cart" class="text-light">Deletar Estudante</a></button>
               </div>
             </div>
           {% endif %}
