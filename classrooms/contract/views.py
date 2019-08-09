@@ -829,7 +829,7 @@ def set_signed(request, contract_id = None):
 				block.save()
 			else:
 				block.index=block.chain.last_block.index + 1
-				block.time_stamp=datetime.datetime.now(tz=pytz.utc)
+				block.time_stamp=timezone.now()
 				block.previous_hash=block.chain.last_block.hash
 				block.nonce=SymmetricEncryption.generate_salt(26)
 				while not block.valid_hash():
@@ -879,7 +879,7 @@ def set_signed(request, contract_id = None):
 				block.save()
 			else:
 				block.index=block.chain.last_block.index + 1
-				block.time_stamp=datetime.datetime.now(tz=pytz.utc)
+				block.time_stamp=timezone.now()
 				block.previous_hash=block.chain.last_block.hash
 				block.nonce=SymmetricEncryption.generate_salt(26)
 				while not block.valid_hash():
@@ -943,7 +943,7 @@ def set_signed(request, contract_id = None):
 			if block.chain.__len__()<1:
 				block.index = 0
 				block.previous_hash = 'NULO'
-				block.time_stamp=datetime.datetime.now(tz=pytz.utc)
+				block.time_stamp=timezone.now()
 				block.nonce = SymmetricEncryption.generate_salt(26)
 				while not block.valid_hash():
 					block.nonce = SymmetricEncryption.generate_salt(26)
@@ -1023,7 +1023,7 @@ def set_signed(request, contract_id = None):
 				block.save()
 			else:
 				block.index=block.chain.last_block.index + 1
-				block.time_stamp=datetime.datetime.now(tz=pytz.utc)
+				block.time_stamp=timezone.now()
 				block.previous_hash=block.chain.last_block.hash
 				block.nonce=SymmetricEncryption.generate_salt(26)
 				while not block.valid_hash():
@@ -1109,7 +1109,7 @@ def set_signed_rest(request, contract_id = None):
 			if block.chain.__len__()<1:
 				block.index = 0
 				block.previous_hash = 'Basic hash for the chain'
-				block.time_stamp=datetime.datetime.now(tz=pytz.utc)
+				block.time_stamp=timezone.now()
 				block.nonce = SymmetricEncryption.generate_salt(26)
 				while not block.valid_hash():
 					block.nonce = SymmetricEncryption.generate_salt(26)
@@ -1117,7 +1117,7 @@ def set_signed_rest(request, contract_id = None):
 				block.save()
 			else:
 				block.index=block.chain.last_block.index + 1
-				block.time_stamp=datetime.datetime.now(tz=pytz.utc)
+				block.time_stamp=timezone.now()
 				block.previous_hash=block.chain.last_block.hash
 				block.nonce=SymmetricEncryption.generate_salt(26)
 				while not block.valid_hash():
@@ -1158,7 +1158,7 @@ def set_signed_rest(request, contract_id = None):
 			if block.chain.__len__()<1:
 				block.index = 0
 				block.previous_hash = 'Basic hash for the chain'
-				block.time_stamp=datetime.datetime.now(tz=pytz.utc)
+				block.time_stamp=timezone.now()
 				block.nonce = SymmetricEncryption.generate_salt(26)
 				while not block.valid_hash():
 					block.nonce = SymmetricEncryption.generate_salt(26)
@@ -1166,7 +1166,7 @@ def set_signed_rest(request, contract_id = None):
 				block.save()
 			else:
 				block.index=block.chain.last_block.index + 1
-				block.time_stamp=datetime.datetime.now(tz=pytz.utc)
+				block.time_stamp=timezone.now()
 				block.previous_hash=block.chain.last_block.hash
 				block.nonce=SymmetricEncryption.generate_salt(26)
 				while not block.valid_hash():
