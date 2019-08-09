@@ -59,6 +59,24 @@
                                   Link
                                 </a>
                         </div>
+                        {% if block.contract.terms_of_contract %}
+                        <div style="margin-left: auto; margin-right: auto;">
+                          <b>Termos aditivos do contrato (1) do bloco:</b>
+                            <a href="{{ contract.terms_of_contract.url }}" data-baloon="Remove this item from the cart">
+                                  <!-- {{ contract.pdf }} -->
+                                  Link
+                                </a>
+                        </div>
+                        {% endif %}
+                        {% if block.contract.terms_of_contract_2 %}
+                        <div style="margin-left: auto; margin-right: auto;">
+                          <b>Termos aditivos do contrato (2) do bloco:</b>
+                            <a href="{{ contract.terms_of_contract_2.url }}" data-baloon="Remove this item from the cart">
+                                  <!-- {{ contract.pdf }} -->
+                                  Link
+                                </a>
+                        </div>
+                        {% endif %}
                         <div style="margin-left: auto; margin-right: auto;">
                           <b>Quem assinou o contrato:</b>
                             {% if block.hash == block.contract.first_auth_hash %}
