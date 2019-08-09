@@ -24,8 +24,9 @@
 							<div class="col-md-11 pr-1">
 								<div class="form-group">
 									<form method="POST" class="" enctype="multipart/form-data"> {% csrf_token %}
+										<p>Selecione um Estudante</p>
 										<select id="select_form" class="form-control chosen-select">
-											<option id="" value="" selected>Selecione um estudante</option>
+											<option id="" value="" selected></option>
 											{% for student in students %}
 											<option value="{{ student.student_id }}">{{ student.name }}</option>
 											{% endfor %}

@@ -26,8 +26,9 @@
 									<form method="POST" enctype="multipart/form-data" class=""> {% csrf_token %}
 
 										<div class="labelandform">
+											<p><label>Você deseja selecionar estudantes existentes?</label></p>
 											<select class="form-control" id="select_form">
-												<option id="" value="" selected>Você deseja selecionar estudantes existentes?</option>
+												<option id="" value="" selected></option>
 												<option value="sim">Sim</option>
 												<option value="não">Não</option>
 											</select>
@@ -64,7 +65,7 @@
 			}
 			else if(selectValor == 'não'){
 				$('#pai').children('#sim').remove();
-				$('#pai').append('<div id="não"><select class="form-control" id="select_form" onchange="selectUser(this)"><option id="" value="" selected>Você deseja importar por CSV ou adicionar apenas um?</option><option value="sim">Importar</option><option value="não">Adicionar apenas um</option></select>')
+				$('#pai').append('<div id="não"><p><label>Você deseja importar por CSV ou adicionar apenas um?</label></p><select class="form-control" id="select_form" onchange="selectUser(this)"><option id="" value="" selected></option><option value="sim">Importar</option><option value="não">Adicionar apenas um</option></select>')
 				document.getElementById('sim/não').value = 'não'
 				$(".chosen-select").chosen({ no_results_text: "Oops, nothing found!" });
 			}

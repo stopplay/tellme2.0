@@ -28,8 +28,9 @@
 
 									<div class="clearfix"></div>
 									<div class="labelandform">
+										<p><label>Selecione o Tipo de Usuário:</label></p>
 										<select class="custom-select" id="select_form">
-											<option id="" value="" selected>Selecione o Tipo de Usuário</option>
+											<option id="" value="" selected></option>
 											{% if request.user.is_superuser %}
 											<option value="head_school">Diretor</option>
 											{% endif %}
@@ -47,8 +48,9 @@
 									<div class="clearfix"></div>
 									<div class="clearfix"></div>
 									<div class="labelandform">
+										<p><label>Selecione a Escola:</label></p>
 										<select class="custom-select" id="select_form_school">
-											<option id="" value="" selected>Selecione a Escola</option>
+											<option id="" value="" selected></option>
 											{% for school in schools %}
 											<option value="{{ school.school_id }}">{{ school.school_name }}</option>
 											{% endfor %}
@@ -58,8 +60,9 @@
 									<div class="clearfix"></div>
 									<div class="clearfix"></div>
 									<div class="labelandform">
+										<p><label>Selecione a Turma:</label></p>
 										<select class="custom-select" id="select_form_class">
-											<option id="" value="" selected>Selecione a Turma</option>
+											<option id="" value="" selected></option>
 										</select>
 									</div>
 									<input type="hidden" id="selected_class" name="selected_class" value="0">
