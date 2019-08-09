@@ -124,10 +124,21 @@ def update_material_orders_from_maple_bear():
 @app.task #1
 def schedule_email(contract, typeof=None, whosend=None):
     if typeof == 'json':
-        first_parent_id = list(contract['first_auth_signe'].values())[0]
-        contract['first_auth_signe'] = Parent.objects.get(parent_id=first_parent_id)
-        second_parent_id = list(contract['second_auth_signe'].values())[0]
-        contract['second_auth_signe'] = Parent.objects.get(parent_id=first_parent_id)
+        if contract['first_auth_signe']:
+            first_parent_id = list(contract['first_auth_signe'].values())[0]
+            contract['first_auth_signe'] = Parent.objects.get(parent_id=first_parent_id)
+        if contract['second_auth_signe']:
+            second_parent_id = list(contract['second_auth_signe'].values())[0]
+            contract['second_auth_signe'] = Parent.objects.get(parent_id=first_parent_id)
+        if contract['student_auth_signe']:
+            student_id = list(contract['student_auth_signe'].values())[0]
+            contract['student_auth_signe'] = Student.objects.get(student_id=student_id)
+        if contract['first_witness_signe']:
+            first_witness_id = list(contract['first_witness_signe'].values())[0]
+            contract['first_witness_signe'] = Witness.objects.get(witness_id=first_witness_id)
+        if contract['second_witness_signe']:
+            second_witness_id = list(contract['second_witness_signe'].values())[0]
+            contract['second_witness_signe'] = Witness.objects.get(witness_id=second_witness_id)
         counter_signe_id = list(list(contract['counter_signe'].values())[0].values())[0]
         contract['counter_signe'] = Head.objects.get(profile=User.objects.get(id=counter_signe_id))
         chain_id = list(contract['chain'].values())[0]
@@ -176,6 +187,30 @@ def schedule_email(contract, typeof=None, whosend=None):
             mail_subject, message, to=[to_email], attachments=attachments
         )
         email.send()
+    if contract.first_witness_signe:
+        mail_subject = 'Contract to be signed'
+        message = render_to_string('contract/sendcontract.html', {
+            'user': contract.first_witness_signe,
+            'contract': contract,
+            'school': school
+        })
+        to_email = contract.first_witness_signe.profile.email
+        email = EmailMessage(
+            mail_subject, message, to=[to_email], attachments=attachments
+        )
+        email.send()
+    if contract.second_witness_signe:
+        mail_subject = 'Contract to be signed'
+        message = render_to_string('contract/sendcontract.html', {
+            'user': contract.second_witness_signe,
+            'contract': contract,
+            'school': school
+        })
+        to_email = contract.second_witness_signe.profile.email
+        email = EmailMessage(
+            mail_subject, message, to=[to_email], attachments=attachments
+        )
+        email.send()
     if whosend == 'admin':
         mail_subject = 'Contract to be signed'
         message = render_to_string('contract/sendcontract.html', {
@@ -197,10 +232,21 @@ def schedule_email(contract, typeof=None, whosend=None):
 @app.task #1
 def schedule_email_without_attachment(contract, typeof=None, whosend=None):
     if typeof == 'json':
-        first_parent_id = list(contract['first_auth_signe'].values())[0]
-        contract['first_auth_signe'] = Parent.objects.get(parent_id=first_parent_id)
-        second_parent_id = list(contract['second_auth_signe'].values())[0]
-        contract['second_auth_signe'] = Parent.objects.get(parent_id=first_parent_id)
+        if contract['first_auth_signe']:
+            first_parent_id = list(contract['first_auth_signe'].values())[0]
+            contract['first_auth_signe'] = Parent.objects.get(parent_id=first_parent_id)
+        if contract['second_auth_signe']:
+            second_parent_id = list(contract['second_auth_signe'].values())[0]
+            contract['second_auth_signe'] = Parent.objects.get(parent_id=first_parent_id)
+        if contract['student_auth_signe']:
+            student_id = list(contract['student_auth_signe'].values())[0]
+            contract['student_auth_signe'] = Student.objects.get(student_id=student_id)
+        if contract['first_witness_signe']:
+            first_witness_id = list(contract['first_witness_signe'].values())[0]
+            contract['first_witness_signe'] = Witness.objects.get(witness_id=first_witness_id)
+        if contract['second_witness_signe']:
+            second_witness_id = list(contract['second_witness_signe'].values())[0]
+            contract['second_witness_signe'] = Witness.objects.get(witness_id=second_witness_id)
         counter_signe_id = list(list(contract['counter_signe'].values())[0].values())[0]
         contract['counter_signe'] = Head.objects.get(profile=User.objects.get(id=counter_signe_id))
         chain_id = list(contract['chain'].values())[0]
@@ -241,6 +287,30 @@ def schedule_email_without_attachment(contract, typeof=None, whosend=None):
             'school': school
         })
         to_email = contract.student_auth_signe.profile.email
+        email = EmailMessage(
+            mail_subject, message, to=[to_email]
+        )
+        email.send()
+    if contract.first_witness_signe:
+        mail_subject = 'Contract to be signed'
+        message = render_to_string('contract/sendcontract.html', {
+            'user': contract.first_witness_signe,
+            'contract': contract,
+            'school': school
+        })
+        to_email = contract.first_witness_signe.profile.email
+        email = EmailMessage(
+            mail_subject, message, to=[to_email]
+        )
+        email.send()
+    if contract.second_witness_signe:
+        mail_subject = 'Contract to be signed'
+        message = render_to_string('contract/sendcontract.html', {
+            'user': contract.second_witness_signe,
+            'contract': contract,
+            'school': school
+        })
+        to_email = contract.second_witness_signe.profile.email
         email = EmailMessage(
             mail_subject, message, to=[to_email]
         )

@@ -866,6 +866,19 @@ def add_student(request):
             user_creation.name = user_profile.first_name+' '+user_profile.last_name
             user_creation.maple_bear_email = user_profile.email
             user_creation.save()
+            current_site = get_current_site(request)
+            mail_subject = 'Login para acesso ao app escolar.'
+            message = render_to_string('school_users/user_login.html', {
+                'user': user_creation,
+                'domain': current_site.domain,
+                'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                'token':account_activation_token.make_token(user),
+            })
+            to_email = form.cleaned_data.get('email')
+            email = EmailMessage(
+                mail_subject, message, to=[to_email]
+            )
+            email.send()
             student = Student.objects.get(profile=user_profile)
             messages.success(request, 'Estudante criado com sucesso!')
             return redirect('/users/add_first_parent/{}'.format(student_id))
@@ -891,6 +904,19 @@ def add_student(request):
             user_creation.name = user_profile.first_name+' '+user_profile.last_name
             user_creation.maple_bear_email = user_profile.email
             user_creation.save()
+            current_site = get_current_site(request)
+            mail_subject = 'Login para acesso ao app escolar.'
+            message = render_to_string('school_users/user_login.html', {
+                'user': user_creation,
+                'domain': current_site.domain,
+                'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                'token':account_activation_token.make_token(user),
+            })
+            to_email = form.cleaned_data.get('email')
+            email = EmailMessage(
+                mail_subject, message, to=[to_email]
+            )
+            email.send()
             student = Student.objects.get(profile=user_profile)
             messages.success(request, 'Estudante criado com sucesso!')
             return redirect('/users/add_first_parent/{}'.format(student_id))
@@ -913,13 +939,25 @@ def add_first_parent(request, student_id=None):
                 user.username = user.username.replace(" ", "")
                 i+=1
             user.save()
-            user.username = user.first_name.lower()+user.last_name.lower()
             user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
             user_creation = form2.save(commit=False)
             user_creation.profile = user_profile
             user_creation.name = user_profile.first_name+' '+user_profile.last_name
             user_creation.maple_bear_email = user_profile.email
             user_creation.save()
+            current_site = get_current_site(request)
+            mail_subject = 'Login para acesso ao app escolar.'
+            message = render_to_string('school_users/user_login.html', {
+                'user': user_creation,
+                'domain': current_site.domain,
+                'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                'token':account_activation_token.make_token(user),
+            })
+            to_email = form.cleaned_data.get('email')
+            email = EmailMessage(
+                mail_subject, message, to=[to_email]
+            )
+            email.send()
             parent = Parent.objects.get(profile=user_profile)
             student.first_parent = parent
             student.save(update_fields=['first_parent'])
@@ -942,13 +980,25 @@ def add_first_parent(request, student_id=None):
                 user.username = user.username.replace(" ", "")
                 i+=1
             user.save()
-            user.username = user.first_name.lower()+user.last_name.lower()
             user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
             user_creation = form2.save(commit=False)
             user_creation.profile = user_profile
             user_creation.name = user_profile.first_name+' '+user_profile.last_name
             user_creation.maple_bear_email = user_profile.email
             user_creation.save()
+            current_site = get_current_site(request)
+            mail_subject = 'Login para acesso ao app escolar.'
+            message = render_to_string('school_users/user_login.html', {
+                'user': user_creation,
+                'domain': current_site.domain,
+                'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                'token':account_activation_token.make_token(user),
+            })
+            to_email = form.cleaned_data.get('email')
+            email = EmailMessage(
+                mail_subject, message, to=[to_email]
+            )
+            email.send()
             parent = Parent.objects.get(profile=user_profile)
             student.first_parent = parent
             student.save(update_fields=['first_parent'])
@@ -973,13 +1023,25 @@ def add_second_parent(request, student_id=None):
                 user.username = user.username.replace(" ", "")
                 i+=1
             user.save()
-            user.username = user.first_name.lower()+user.last_name.lower()
             user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
             user_creation = form2.save(commit=False)
             user_creation.profile = user_profile
             user_creation.name = user_profile.first_name+' '+user_profile.last_name
             user_creation.maple_bear_email = user_profile.email
             user_creation.save()
+            current_site = get_current_site(request)
+            mail_subject = 'Login para acesso ao app escolar.'
+            message = render_to_string('school_users/user_login.html', {
+                'user': user_creation,
+                'domain': current_site.domain,
+                'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                'token':account_activation_token.make_token(user),
+            })
+            to_email = form.cleaned_data.get('email')
+            email = EmailMessage(
+                mail_subject, message, to=[to_email]
+            )
+            email.send()
             parent = Parent.objects.get(profile=user_profile)
             student.second_parent = parent
             student.save(update_fields=['second_parent'])
@@ -1002,18 +1064,30 @@ def add_second_parent(request, student_id=None):
                 user.username = user.username.replace(" ", "")
                 i+=1
             user.save()
-            user.username = user.first_name.lower()+user.last_name.lower()
             user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
             user_creation = form2.save(commit=False)
             user_creation.profile = user_profile
             user_creation.name = user_profile.first_name+' '+user_profile.last_name
             user_creation.maple_bear_email = user_profile.email
             user_creation.save()
+            current_site = get_current_site(request)
+            mail_subject = 'Login para acesso ao app escolar.'
+            message = render_to_string('school_users/user_login.html', {
+                'user': user_creation,
+                'domain': current_site.domain,
+                'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                'token':account_activation_token.make_token(user),
+            })
+            to_email = form.cleaned_data.get('email')
+            email = EmailMessage(
+                mail_subject, message, to=[to_email]
+            )
+            email.send()
             parent = Parent.objects.get(profile=user_profile)
             student.second_parent = parent
             student.save(update_fields=['second_parent'])
             messages.success(request, 'Responsável pedagógico adicionado com sucesso!')
-            return redirect('/users/add_second_parent/{}'.format(student_id))
+            return redirect('/users/create_user'.format(student_id))
         return render(request, 'school_users/add_second_parent.html', {'form':form, 'form2':form2, 'is_supervisor':is_supervisor, 'student':student})
 
 @login_required

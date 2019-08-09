@@ -18,6 +18,8 @@ class SchoolSerializer(serializers.ModelSerializer):
 	adminorsupervisor = SupervisorSerializer()
 	students = StudentSerializer(read_only=True, many=True)
 	teachers = TeacherSerializer(read_only=True, many=True)
+	first_witness = WitnessSerializer()
+	second_witness = WitnessSerializer()
 	class Meta:
 		model = School
 		fields = '__all__'

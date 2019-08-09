@@ -197,6 +197,26 @@
                             </div>
                           {% endif %}
 
+                          {% if contract.first_witness_signe and contract.second_witness_signe %}
+                            <div class="row">
+                              <div class="col-md-2">
+                                {% if contract.all_witness_signed %}
+                                  <div class="margin-5">
+                                    <span class="badge badge-pill badge-success text-success float-right" >.</span>
+                                  </div>
+                                {% else %}
+                                  <div class="margin-5">
+                                    <span class="badge badge-pill badge-danger text-danger float-right" >.</span>
+                                  </div>
+                                {% endif %}
+                              </div>
+
+                              <div class="col-md-10">
+                                <label class="label-to-the-middle">TODAS AS TESTEMUNHAS ASSINARAM</label>
+                              </div>
+                            </div>
+                          {% endif %}
+
                           <div class="row">
                             <div class="col-md-2">
                               {% if contract.counter_signed %}
@@ -226,7 +246,7 @@
                                 <div class="col-md-12">
                                   {% if contract.first_auth_signed or contract.second_auth_signed or contract.counter_signed %}
                                     <a class="btn btn-secondary w-100" href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart">
-                                      Detalhes
+                                      Ver Detalhes
                                     </a>
                                   {% else %}
                                     <div class="dropdown show w-100">
@@ -235,7 +255,7 @@
                                       </a>
                                       <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                         <a class="dropdown-item" href="{% url 'contracts:select_student_to_contract_update' contract.contract_id %}" data-baloon="Remove this item from the cart">Atualizar Contrato</a>
-                                        <a class="dropdown-item" href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart">Detalhes</a>
+                                        <a class="dropdown-item" href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart">Ver Detalhes</a>
                                       </div>
                                     </div>
                                   {% endif %}
@@ -308,6 +328,34 @@
                                       </a>
                                     {% endif %}                                  
                                   </div>
+                                {% elif request.user == contract.first_witness_signe.profile %}
+                                  <div class="col-md-12">
+                                    {% if contract.first_witness_signed %}
+                                      <!--verde-->
+                                      <button type="button" class="btn btn-success btn-block w-100" style="cursor: not-allowed;">
+                                        Assinado
+                                      </button>
+                                    {% else %}
+                                      <!--Vermelho-->
+                                      <a class="btn btn-primary btn-danger btn-block w-100" onclick="signContract('{% url 'contracts:set_signed' contract.contract_id %}');" href="#" data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal" data-target="#sign-contract-modal">
+                                        Assinar Contrato
+                                      </a>
+                                    {% endif %}                                  
+                                  </div>
+                                {% elif request.user == contract.second_witness_signe.profile %}
+                                  <div class="col-md-12">
+                                    {% if contract.second_witness_signed %}
+                                      <!--verde-->
+                                      <button type="button" class="btn btn-success btn-block w-100" style="cursor: not-allowed;">
+                                        Assinado
+                                      </button>
+                                    {% else %}
+                                      <!--Vermelho-->
+                                      <a class="btn btn-primary btn-danger btn-block w-100" onclick="signContract('{% url 'contracts:set_signed' contract.contract_id %}');" href="#" data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal" data-target="#sign-contract-modal">
+                                        Assinar Contrato
+                                      </a>
+                                    {% endif %}                                  
+                                  </div>
                                 {% endif %}
                               </div>
 
@@ -316,7 +364,7 @@
                                   {% if is_supervisor %}
                                     {% if contract.first_auth_signed or contract.second_auth_signed or contract.counter_signed %}
                                       <a class="btn btn-secondary btn-block w-100" href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart">
-                                        Detalhes
+                                        Ver Detalhes
                                       </a>
                                     {% else %}
                                       <div class="dropdown show">
@@ -325,14 +373,14 @@
                                         </a>
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                           <a class="dropdown-item" href="{% url 'contracts:delete_contract' contract.contract_id %}" data-baloon="Remove this item from the cart">Deletar Contrato</a>
-                                          <a class="dropdown-item" href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart">Detalhes</a>
+                                          <a class="dropdown-item" href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart">Ver Detalhes</a>
                     
                                         </div>
                                       </div>
                                     {% endif %}
                                   {% else %}
                                     <a class="btn btn-secondary btn-block w-100" href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart">
-                                      Detalhes
+                                      Ver Detalhes
                                     </a>
                                   {% endif %}
                                 </div>
@@ -343,7 +391,7 @@
                                 <div class="row" >                        
                                   <div class="col-md-12">
                                     <a  class="btn btn-primary btn-block w-100" href="{% url 'contracts:serve_protected' contract.pdf.name contract.contract_id %}" data-baloon="Remove this item from the cart">
-                                      Contrato
+                                      Ver Contrato
                                     </a>
                                   </div>
                                 </div>
@@ -353,7 +401,7 @@
                                 <div class="row">
                                   <div class="col-md-12">
                                     <a class="btn btn-primary w-100" href="{{ contract.terms_of_contract.url }}">
-                                      Termos Aditivos do Contrato (1)
+                                      Ver Termos Aditivos do Contrato (1)
                                     </a>
                                   </div>
                                 </div>
@@ -363,7 +411,7 @@
                                 <div class="row">                      
                                   <div class="col-md-12">
                                     <a class="btn btn-primary w-100" href="{{ contract.terms_of_contract_2.url }}">
-                                        Termos Aditivos do Contrato (2)
+                                        Ver Termos Aditivos do Contrato (2)
                                     </a>
                                   </div>
                                 </div>
@@ -398,6 +446,13 @@
                 <input type="hidden" name="variable" id="variable" value=false>
               </div>      
             </form>
+          </div>
+        {% else %}
+        <div class="card strpied-tabled-with-hover">
+            
+            <div class="card-header ">
+              <h4 class="card-title">Você ainda não possui contrato registrado no sistema!</h4>
+            </div>
           </div>
         {% endif %}
       </div>

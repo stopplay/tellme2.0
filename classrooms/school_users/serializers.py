@@ -49,3 +49,10 @@ class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = '__all__'
+
+class WitnessSerializer(serializers.ModelSerializer):
+    """docstring for WitnessSerializer"""
+    profile = UserSerializer()
+    class Meta:
+        model = Witness
+        fields = '__all__'

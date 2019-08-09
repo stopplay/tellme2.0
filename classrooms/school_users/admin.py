@@ -31,3 +31,8 @@ class StudentAdmin(admin.ModelAdmin):
 	list_display = ['student_id','name', 'profile']
 
 admin.site.register(Student, StudentAdmin)
+
+class WitnessAdmin(admin.ModelAdmin):
+	list_display = ['witness_id','name', 'profile']
+
+admin.site.register(Witness, WitnessAdmin)

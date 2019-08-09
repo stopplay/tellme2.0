@@ -53,6 +53,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.static import serve
 from django.core.exceptions import ObjectDoesNotExist
 import shutil
+from django.template.defaultfilters import filesizeformat
 
 try:
     from StringIO import StringIO
@@ -83,8 +84,8 @@ def extract_text_to_write_and_coords(contract=None, whosigned=None, school=None)
 			time += '0'+str(contract.first_auth_signed_timestamp.time().second)
 		else:
 			time += str(contract.first_auth_signed_timestamp.time().second)
-		if contract.first_auth_witness and contract.second_auth_witness:
-			return { 'x' : 45, 'y' : 50, 'text' : "1. Responsável Financeiro: {} Hash: {}, em {} às {}".format(contract.first_auth_signe.name, contract.first_auth_hash, date, time) }
+		if contract.first_witness_signe and contract.second_witness_signe:
+			return { 'x' : 45, 'y' : 70, 'text' : "1. Responsável Financeiro: {} Hash: {}, em {} às {}".format(contract.first_auth_signe.name, contract.first_auth_hash, date, time) }
 		return { 'x' : 45, 'y' : 30, 'text' : "1. Responsável Financeiro: {} Hash: {}, em {} às {}".format(contract.first_auth_signe.name, contract.first_auth_hash, date, time) }
 	elif whosigned == 'second_auth':
 		date = str(contract.second_auth_signed_timestamp.date().day)+'/'+str(contract.second_auth_signed_timestamp.date().month)+'/'+str(contract.second_auth_signed_timestamp.date().year)
@@ -100,8 +101,8 @@ def extract_text_to_write_and_coords(contract=None, whosigned=None, school=None)
 			time += '0'+str(contract.second_auth_signed_timestamp.time().second)
 		else:
 			time += str(contract.second_auth_signed_timestamp.time().second)
-		if contract.first_auth_witness and contract.second_auth_witness:
-			return { 'x' : 45, 'y' : 40, 'text' : "2. Responsável Didático: {} Hash: {}, em {} às {}".format(contract.second_auth_signe.name, contract.second_auth_hash, date, time) }
+		if contract.first_witness_signe and contract.second_witness_signe:
+			return { 'x' : 45, 'y' : 60, 'text' : "2. Responsável Didático: {} Hash: {}, em {} às {}".format(contract.second_auth_signe.name, contract.second_auth_hash, date, time) }
 		return { 'x' : 45, 'y' : 20, 'text' : "2. Responsável Didático: {} Hash: {}, em {} às {}".format(contract.second_auth_signe.name, contract.second_auth_hash, date, time) }
 	elif whosigned == 'student_auth':
 		date = str(contract.student_auth_signed_timestamp.date().day)+'/'+str(contract.student_auth_signed_timestamp.date().month)+'/'+str(contract.student_auth_signed_timestamp.date().year)
@@ -117,8 +118,8 @@ def extract_text_to_write_and_coords(contract=None, whosigned=None, school=None)
 			time += '0'+str(contract.student_auth_signed_timestamp.time().second)
 		else:
 			time += str(contract.student_auth_signed_timestamp.time().second)
-		if contract.first_auth_witness and contract.second_auth_witness:
-			return { 'x' : 45, 'y' : 40, 'text' : "1. Responsável Financeiro: {} Hash: {}, em {} às {}".format(contract.student_auth_signe.name, contract.student_auth_hash, date, time) }
+		if contract.first_witness_signe and contract.second_witness_signe:
+			return { 'x' : 45, 'y' : 60, 'text' : "1. Responsável Financeiro: {} Hash: {}, em {} às {}".format(contract.student_auth_signe.name, contract.student_auth_hash, date, time) }
 		return { 'x' : 45, 'y' : 20, 'text' : "1. Responsável Financeiro: {} Hash: {}, em {} às {}".format(contract.student_auth_signe.name, contract.student_auth_hash, date, time) }
 	elif whosigned == 'first_witness':
 		date = str(contract.first_witness_signed_timestamp.date().day)+'/'+str(contract.first_witness_signed_timestamp.date().month)+'/'+str(contract.first_witness_signed_timestamp.date().year)
@@ -134,7 +135,11 @@ def extract_text_to_write_and_coords(contract=None, whosigned=None, school=None)
 			time += '0'+str(contract.first_witness_signed_timestamp.time().second)
 		else:
 			time += str(contract.first_witness_signed_timestamp.time().second)
-		return { 'x' : 45, 'y' : 20, 'text' : "4. Primeira Testemunha: {} Hash: {}, em {} às {}".format(contract.first_witness_signe.name, contract.first_witness_hash, date, time) }
+		if contract.first_auth_signe and contract.second_auth_signe:
+			return { 'x' : 45, 'y' : 40, 'text' : "4. Primeira Testemunha: {} Hash: {}, em {} às {}".format(contract.first_witness_signe.name, contract.first_witness_hash, date, time) }
+		return { 'x' : 45, 'y' : 40, 'text' : "3. Primeira Testemunha: {} Hash: {}, em {} às {}".format(contract.first_witness_signe.name, contract.first_witness_hash, date, time) }
+	elif whosigned == 'first_witness_cpf':
+		return { 'x' : 45, 'y' : 30, 'text' : "RG: {} CPF: {}".format(contract.first_witness_signe.rg, contract.first_witness_signe.cpf) }
 	elif whosigned == 'second_witness':
 		date = str(contract.second_witness_signed_timestamp.date().day)+'/'+str(contract.second_witness_signed_timestamp.date().month)+'/'+str(contract.second_witness_signed_timestamp.date().year)
 		if contract.second_witness_signed_timestamp.time().hour<10:
@@ -149,7 +154,11 @@ def extract_text_to_write_and_coords(contract=None, whosigned=None, school=None)
 			time += '0'+str(contract.second_witness_signed_timestamp.time().second)
 		else:
 			time += str(contract.second_witness_signed_timestamp.time().second)
-		return { 'x' : 45, 'y' : 20, 'text' : "5. Segunda Testemunha: {} Hash: {}, em {} às {}".format(contract.second_witness_signe.name, contract.second_witness_hash, date, time) }
+		if contract.first_auth_signe and contract.second_auth_signe:
+			return { 'x' : 45, 'y' : 20, 'text' : "5. Segunda Testemunha: {} Hash: {}, em {} às {}".format(contract.second_witness_signe.name, contract.second_witness_hash, date, time) }
+		return { 'x' : 45, 'y' : 20, 'text' : "4. Segunda Testemunha: {} Hash: {}, em {} às {}".format(contract.second_witness_signe.name, contract.second_witness_hash, date, time) }
+	elif whosigned == 'second_witness_cpf':
+		return { 'x' : 45, 'y' : 10, 'text' : "RG: {} CPF: {}".format(contract.second_witness_signe.rg, contract.second_witness_signe.cpf) }
 	elif whosigned == 'director':
 		date = str(contract.counter_signed_timestamp.date().day)+'/'+str(contract.counter_signed_timestamp.date().month)+'/'+str(contract.counter_signed_timestamp.date().year)
 		if contract.counter_signed_timestamp.time().hour<10:
@@ -165,21 +174,21 @@ def extract_text_to_write_and_coords(contract=None, whosigned=None, school=None)
 		else:
 			time += str(contract.counter_signed_timestamp.time().second)
 		if contract.first_auth_signe and contract.second_auth_signe:
-			if contract.first_auth_witness and contract.second_auth_witness:
-				return { 'x' : 45, 'y' : 30, 'text' : "3. Representante {}: {} Hash: {}, em {} às {}".format(school.school_name, contract.counter_signe.name, contract.counter_auth_hash, date, time) }
+			if contract.first_witness_signe and contract.second_witness_signe:
+				return { 'x' : 45, 'y' : 50, 'text' : "3. Representante {}: {} Hash: {}, em {} às {}".format(school.school_name, contract.counter_signe.name, contract.counter_auth_hash, date, time) }
 			return { 'x' : 45, 'y' : 10, 'text' : "3. Representante {}: {} Hash: {}, em {} às {}".format(school.school_name, contract.counter_signe.name, contract.counter_auth_hash, date, time) }
 		elif contract.student_auth_signe:
-			if contract.first_auth_witness and contract.second_auth_witness:
-				return { 'x' : 45, 'y' : 30, 'text' : "2. Representante {}: {} Hash: {}, em {} às {}".format(school.school_name, contract.counter_signe.name, contract.counter_auth_hash, date, time) }
+			if contract.first_witness_signe and contract.second_witness_signe:
+				return { 'x' : 45, 'y' : 50, 'text' : "2. Representante {}: {} Hash: {}, em {} às {}".format(school.school_name, contract.counter_signe.name, contract.counter_auth_hash, date, time) }
 			return { 'x' : 45, 'y' : 10, 'text' : "2. Representante {}: {} Hash: {}, em {} às {}".format(school.school_name, contract.counter_signe.name, contract.counter_auth_hash, date, time) }
 	elif whosigned == 'all_signed':
 		if contract.first_auth_signe and contract.second_auth_signe:
 			if contract.first_witness_signe and contract.second_witness_signe:
-				return { 'x' : 45, 'y' : 60, 'text' : "Assinado Eletronicamente por:" }
+				return { 'x' : 45, 'y' : 80, 'text' : "Assinado eletronicamente via blockchain por:" }
 			return { 'x' : 45, 'y' : 40, 'text' : "Assinado Eletronicamente por:" }
 		elif contract.student_auth_signe:
 			if contract.first_witness_signe and contract.second_witness_signe:
-				return { 'x' : 45, 'y' : 50, 'text' : "Assinado Eletronicamente por:" }
+				return { 'x' : 45, 'y' : 70, 'text' : "Assinado eletronicamente via blockchain por:" }
 			return {'x' : 45, 'y' : 30, 'text' : "Assinado Eletronicamente por:" }
 	return {'x' : 45, 'y' : 10, 'text' : "" }
 
@@ -205,6 +214,12 @@ def write_pdf(request, contract=None, whosigned=None, school=None):
 	renderPDF.draw(drawing, can, 5, 10)	
 	text_and_coords = extract_text_to_write_and_coords(contract, whosigned, school)
 	can.drawString(text_and_coords['x'], text_and_coords['y'], text_and_coords['text'])
+	if whosigned == 'first_witness':
+		text_and_coords = extract_text_to_write_and_coords(contract, 'first_witness_cpf', school)
+		can.drawString(text_and_coords['x'], text_and_coords['y'], text_and_coords['text'])
+	if whosigned == 'second_witness':
+		text_and_coords = extract_text_to_write_and_coords(contract, 'second_witness_cpf', school)
+		can.drawString(text_and_coords['x'], text_and_coords['y'], text_and_coords['text'])
 	can.showPage()
 	can.save()
 
@@ -254,13 +269,31 @@ def createacontract(request):
 				wish = request.POST.get('wish' or None)
 				wish_today = request.POST.get('wish_today' or None)
 				contract = form.save(commit=False)
+				if contract.pdf.size > 2097152:
+					messages.error(request, 'Por favor mantenha o tamanho do arquivo de contrato enviado abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.pdf.size)))
+					return redirect('/contracts/createacontract')
+				if contract.terms_of_contract:
+					if contract.terms_of_contract.size > 2097152:
+						messages.error(request, 'Por favor mantenha o tamanho do arquivo de termos aditivos de contrato (1) abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.terms_of_contract.size)))
+						return redirect('/contracts/createacontract')
+					if not contract.terms_of_contract.name.endswith('.pdf'):
+						messages.error(request, 'Por favor insira o arquivo de termos aditivos de contrato (1) no tipo correto que é PDF')
+						return redirect('/contracts/createacontract')
+				if contract.terms_of_contract_2:
+					if contract.terms_of_contract_2.size > 2097152:
+						messages.error(request, 'Por favor mantenha o tamanho do arquivo de termos aditivos de contrato (2) abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.terms_of_contract_2.size)))
+						return redirect('/contracts/createacontract')
+					if not contract.terms_of_contract_2.name.endswith('.pdf'):
+						messages.error(request, 'Por favor insira o arquivo de termos aditivos de contrato (2) no tipo correto que é PDF')
+				if not contract.pdf.name.endswith('.pdf'):
+					messages.error(request, 'Por favor insira o arquivo de contrato no tipo correto que é PDF')
 				school = School.objects.get(chains__id__exact=contract.chain.id)
 				classe = Class.objects.get(class_id=contract.chain.id)
 				contract.slm = classe.slm
 				contract.name = student.name+' - '+contract.chain.name
 				if school.first_witness and school.second_witness:
-					contract.first_auth_witness = school.first_witness
-					contract.second_auth_witness = school.second_witness
+					contract.first_witness_signe = school.first_witness
+					contract.second_witness_signe = school.second_witness
 				if student.needs_parent:
 					if student.first_parent and student.second_parent:
 						contract.counter_signe = school.head
@@ -355,13 +388,32 @@ def createacontract(request):
 				wish = request.POST.get('wish' or None)
 				wish_today = request.POST.get('wish_today' or None)
 				contract = form.save(commit=False)
+				if contract.pdf.size > 2097152:
+					messages.error(request, 'Por favor mantenha o tamanho do arquivo de contrato enviado abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.pdf.size)))
+					return redirect('/contracts/createacontract')
+				if contract.terms_of_contract:
+					if contract.terms_of_contract.size > 2097152:
+						messages.error(request, 'Por favor mantenha o tamanho do arquivo de termos aditivos de contrato (1) abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.terms_of_contract.size)))
+						return redirect('/contracts/createacontract')
+					if not contract.terms_of_contract.name.endswith('.pdf'):
+						messages.error(request, 'Por favor insira o arquivo de termos aditivos de contrato (1) no tipo correto que é PDF')
+						return redirect('/contracts/createacontract')
+				if contract.terms_of_contract_2:
+					if contract.terms_of_contract_2.size > 2097152:
+						messages.error(request, 'Por favor mantenha o tamanho do arquivo de termos aditivos de contrato (2) abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.terms_of_contract_2.size)))
+						return redirect('/contracts/createacontract')
+					if not contract.terms_of_contract_2.name.endswith('.pdf'):
+						messages.error(request, 'Por favor insira o arquivo de termos aditivos de contrato (2) no tipo correto que é PDF')
+				if not contract.pdf.name.endswith('.pdf'):
+					messages.error(request, 'Por favor insira o arquivo de contrato no tipo correto que é PDF')
+					return redirect('/contracts/createacontract')
 				school = School.objects.get(chains__id__exact=contract.chain.id)
 				classe = Class.objects.get(class_id=contract.chain.id)
 				contract.slm = classe.slm
 				contract.name = student.name+' - '+contract.chain.name
 				if school.first_witness and school.second_witness:
-					contract.first_auth_witness = school.first_witness
-					contract.second_auth_witness = school.second_witness
+					contract.first_witness_signe = school.first_witness
+					contract.second_witness_signe = school.second_witness
 				if student.needs_parent:
 					if student.first_parent and student.second_parent:
 						contract.counter_signe = school.head
@@ -459,6 +511,24 @@ def updatecontract(request, contract_id=None):
 		if request.method=='POST':
 			if form.is_valid():
 				contract = form.save(commit=False)
+				if contract.pdf.size > 2097152:
+					messages.error(request, 'Por favor mantenha o tamanho do arquivo de contrato enviado abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.pdf.size)))
+					return redirect('/contracts/createacontract')
+				if contract.terms_of_contract:
+					if contract.terms_of_contract.size > 2097152:
+						messages.error(request, 'Por favor mantenha o tamanho do arquivo de termos aditivos de contrato (1) abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.terms_of_contract.size)))
+						return redirect('/contracts/createacontract')
+					if not contract.terms_of_contract.name.endswith('.pdf'):
+						messages.error(request, 'Por favor insira o arquivo de termos aditivos de contrato (1) no tipo correto que é PDF')
+						return redirect('/contracts/createacontract')
+				if contract.terms_of_contract_2:
+					if contract.terms_of_contract_2.size > 2097152:
+						messages.error(request, 'Por favor mantenha o tamanho do arquivo de termos aditivos de contrato (2) abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.terms_of_contract_2.size)))
+						return redirect('/contracts/createacontract')
+					if not contract.terms_of_contract_2.name.endswith('.pdf'):
+						messages.error(request, 'Por favor insira o arquivo de termos aditivos de contrato (2) no tipo correto que é PDF')
+				if not contract.pdf.name.endswith('.pdf'):
+					messages.error(request, 'Por favor insira o arquivo de contrato no tipo correto que é PDF')
 				school = School.objects.get(chains__name__exact=contract.chain.name)
 				if student.first_parent and student.second_parent:
 					contract.counter_signe = school.head
@@ -604,6 +674,14 @@ def seemycontracts(request):
 				if School.objects.get(chains__id__exact=contract.chain.id) not in schools:
 					schools+=[(School.objects.get(chains__id__exact=contract.chain.id).school_id)]
 		schools = School.objects.filter(school_id__in=schools)
+	elif Witness.objects.filter(profile=request.user).count()>=1:
+		contracts += Contract.objects.filter(first_witness_signe=Witness.objects.get(profile=request.user))
+		contracts += Contract.objects.filter(second_witness_signe=Witness.objects.get(profile=request.user))
+		for contract in contracts:
+			if School.objects.filter(chains__id__exact=contract.chain.id).count()>=1:
+				if School.objects.get(chains__id__exact=contract.chain.id) not in schools:
+					schools+=[(School.objects.get(chains__id__exact=contract.chain.id).school_id)]
+		schools = School.objects.filter(school_id__in=schools)
 	elif Head.objects.filter(profile=request.user).count()>=1:
 		is_supervisor = True
 		contracts = Contract.objects.filter(counter_signe=Head.objects.get(profile=request.user))
@@ -733,7 +811,7 @@ def set_signed(request, contract_id = None):
 		if contract.student_auth_signed:
 			messages.warning(request, 'O responsável estudante já assinou este contrato!')
 			return redirect('/contracts/all')
-	if Head.objects.filter(profile=request.user).count()>=1 or Parent.objects.filter(profile=request.user).count()>=1 or Student.objects.filter(profile=request.user).count()>=1:
+	if Head.objects.filter(profile=request.user).count()>=1 or Parent.objects.filter(profile=request.user).count()>=1 or Student.objects.filter(profile=request.user).count()>=1 or Witness.objects.filter(profile=request.user).count()>=1:
 		if Head.objects.filter(profile=request.user).count()>=1:
 			form = BlockModelFormByContract()
 			block = form.save(commit=False)
@@ -792,7 +870,7 @@ def set_signed(request, contract_id = None):
 			block.chain = contract.chain
 			if block.chain.__len__()<1:
 				block.index = 0
-				block.previous_hash = 'Basic hash for the chain'
+				block.previous_hash = 'NULO'
 				block.time_stamp=datetime.datetime.now(tz=pytz.utc)
 				block.nonce = SymmetricEncryption.generate_salt(26)
 				while not block.valid_hash():
@@ -856,6 +934,78 @@ def set_signed(request, contract_id = None):
 				)
 				email.send()
 				messages.success(request, 'Assinado com sucesso!')
+		elif Witness.objects.filter(profile=request.user).count()>=1:
+			form = BlockModelFormByContract()
+			block = form.save(commit=False)
+			block.data = contract.name
+			block.contract = contract
+			block.chain = contract.chain
+			if block.chain.__len__()<1:
+				block.index = 0
+				block.previous_hash = 'NULO'
+				block.time_stamp=datetime.datetime.now(tz=pytz.utc)
+				block.nonce = SymmetricEncryption.generate_salt(26)
+				while not block.valid_hash():
+					block.nonce = SymmetricEncryption.generate_salt(26)
+				block.hash = block.__hash__()
+				block.save()
+			else:
+				block.index=block.chain.last_block.index + 1
+				block.time_stamp=datetime.datetime.now(tz=pytz.utc)
+				block.previous_hash=block.chain.last_block.hash
+				block.nonce=SymmetricEncryption.generate_salt(26)
+				while not block.valid_hash():
+					block.nonce = SymmetricEncryption.generate_salt(26)
+				block.hash = block.__hash__()
+				if block.is_valid_block(block.chain.last_block):
+					print(block.is_valid_block(block.chain.last_block))
+					block.save()
+			attachments = []
+			witness = Witness.objects.get(profile=request.user)
+			if contract.first_witness_signe == witness:
+				contract.first_witness_signed = True
+				contract.first_witness_signed_timestamp = block.time_stamp
+				contract.first_witness_hash = block.hash
+				contract.save(update_fields=['first_witness_signed', 'first_witness_signed_timestamp', 'first_witness_hash'])
+				write_pdf(request, contract, 'first_witness', None)
+				content = contract.pdf.read()
+				attachment = (contract.pdf.name, content, 'application/pdf')
+				attachments.append(attachment)
+				mail_subject = 'Contract has been signed'
+				message = render_to_string('contract/contractsigned.html', {
+					'user': witness,
+					'timestamp': contract.first_auth_signed_timestamp,
+					'block': block,
+					'school': School.objects.get(chains__name__exact=block.chain.name),
+				})
+				to_email = witness.profile.email
+				email = EmailMessage(
+					mail_subject, message, to=[to_email], attachments=attachments
+				)
+				email.send()
+				messages.success(request, 'Assinado com sucesso!')
+			if contract.second_witness_signe == witness:
+				contract.second_witness_signed = True
+				contract.second_witness_signed_timestamp = block.time_stamp
+				contract.second_witness_hash = block.hash
+				contract.save(update_fields=['second_witness_signed', 'second_witness_signed_timestamp', 'second_witness_hash'])
+				write_pdf(request, contract, 'second_witness', None)
+				content = contract.pdf.read()
+				attachment = (contract.pdf.name, content, 'application/pdf')
+				attachments.append(attachment)
+				mail_subject = 'Contract has been signed'
+				message = render_to_string('contract/contractsigned.html', {
+					'user': witness,
+					'timestamp': contract.second_auth_signed_timestamp,
+					'block': block,
+					'school': School.objects.get(chains__name__exact=block.chain.name),
+				})
+				to_email = witness.profile.email
+				email = EmailMessage(
+					mail_subject, message, to=[to_email], attachments=attachments
+				)
+				email.send()
+				messages.success(request, 'Assinado com sucesso!')
 		elif Student.objects.filter(profile=request.user).count()>=1:
 			form = BlockModelFormByContract()
 			block = form.save(commit=False)
@@ -906,12 +1056,26 @@ def set_signed(request, contract_id = None):
 			email.send()
 			messages.success(request, 'Assinado com sucesso!')
 		contract = Contract.objects.get(contract_id=contract_id)
-		if (contract.first_auth_signed and contract.second_auth_signed and contract.counter_signed) or (contract.student_auth_signed and contract.counter_signed):
-			contract.all_signed = True
-			write_pdf(request, contract, 'all_signed')
-			messages.success(request, 'Todos os responsáveis desse contrato assinaram!')
-			contract.save(update_fields=['all_signed'])
-			return redirect('/contracts/all')
+		if contract.first_witness_signe and contract.first_witness_signe:
+			if contract.first_witness_signed and contract.second_witness_signed:
+				contract.all_witness_signed = True
+				messages.success(request, 'Todos as testemunhas assinaram')
+				contract.save(update_fields=['all_witness_signed'])
+			contract = Contract.objects.get(contract_id=contract_id)
+			if (contract.first_auth_signed and contract.second_auth_signed and contract.counter_signed and contract.all_witness_signed) or (contract.student_auth_signed and contract.counter_signed and contract.all_witness_signed):
+				contract.all_signed = True
+				write_pdf(request, contract, 'all_signed')
+				messages.success(request, 'Todos os responsáveis desse contrato assinaram!')
+				contract.save(update_fields=['all_signed'])
+				return redirect('/contracts/all')
+		else:
+			if (contract.first_auth_signed and contract.second_auth_signed and contract.counter_signed) or (contract.student_auth_signed and contract.counter_signed):
+				contract.all_signed = True
+				write_pdf(request, contract, 'all_signed')
+				messages.success(request, 'Todos os responsáveis desse contrato assinaram!')
+				contract.save(update_fields=['all_signed'])
+				return redirect('/contracts/all')
+
 	else:
 		messages.warning(request, 'Você não é diretor nem pai do estudante deste contrato!')
 	return redirect('/contracts/all')
@@ -1111,6 +1275,13 @@ def protected_serve(request, path, contract_id=None, document_root=None):
 		elif Student.objects.filter(profile=request.user).count()>=1:
 			obj = Contract.objects.get(contract_id=contract_id)
 			if Student.objects.get(profile=request.user) == obj.student_auth_signe:
+				obj_pdf_url = obj.pdf.url
+				correct_pdf_url = obj_pdf_url.replace("/media/", "")
+			else:
+				return HttpResponse('Você não tem permissão para acessar esse arquivo')
+		elif Witness.objects.filter(profile=request.user).count()>=1:
+			obj = Contract.objects.get(contract_id=contract_id)
+			if Witness.objects.get(profile=request.user) == obj.first_witness_signe or Witness.objects.get(profile=request.user) == obj.second_witness_signe:
 				obj_pdf_url = obj.pdf.url
 				correct_pdf_url = obj_pdf_url.replace("/media/", "")
 			else:
