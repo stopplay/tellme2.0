@@ -208,43 +208,100 @@ def add_class(request, school_id=None):
 	if request.user.is_superuser:
 		school_to_add_class = School.objects.get(school_id=school_id)
 		form = ClassModelForm(request.POST or None)
-		if form.is_valid():
-			classroom = form.save(commit=False)
-			newchain = Chain.objects.create(name="{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name))
-			school_to_add_class.chains.add(newchain)
-			if classroom.slm:
-				sku = get_sku_by_slm_url(classroom.slm)
-				if sku: classroom.sku = sku
-				print('slm', classroom.slm)
-				print('sku', classroom.sku)
-			classroom.save()
-			
-			newclassroom = Class.objects.get(class_id=classroom.class_id)
-			school_to_add_class.classes.add(newclassroom)
-			messages.success(request, 'Classe adicionada com sucesso!')
-			return redirect('/schools/{}/add_class/{}/add_student'.format(school_id, newclassroom.class_id))
+		if request.method == 'POST':
+			yesorno = request.POST.get('sim/não' or None)
+			if form.is_valid():
+				classroom = form.save(commit=False)
+				newchain = Chain.objects.create(name="{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name))
+				school_to_add_class.chains.add(newchain)
+				if classroom.slm:
+					sku = get_sku_by_slm_url(classroom.slm)
+					if sku: classroom.sku = sku
+					print('slm', classroom.slm)
+					print('sku', classroom.sku)
+				classroom.save()
+				
+				newclassroom = Class.objects.get(class_id=classroom.class_id)
+				school_to_add_class.classes.add(newclassroom)
+				messages.success(request, 'Classe adicionada com sucesso!')
+				if yesorno == 'sim':
+					return redirect('/schools/{}/add_another_class'.format(school_id))
+				return redirect('/schools/{}/add_class/{}/add_student'.format(school_id, newclassroom.class_id))
 		return render(request, 'school/add_class.html', {'form':form})
 	elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
 		is_supervisor = True
 		school_to_add_class = School.objects.get(school_id=school_id)
 		form = ClassModelForm(request.POST or None)
-		if form.is_valid():
-			classroom = form.save(commit=False)
-			newchain = Chain.objects.create(name="{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name))
-			school_to_add_class.chains.add(newchain)
-			if classroom.slm:
-				sku = get_sku_by_slm_url(classroom.slm)
-				if sku: classroom.sku = sku
-				print('slm', classroom.slm)
-				print('sku', classroom.sku)
-			classroom.save()
-
-			newclassroom = Class.objects.get(class_id=classroom.class_id)
-			school_to_add_class.classes.add(newclassroom)
-			messages.success(request, 'Classe adicionada com sucesso!')
-			return redirect('/schools/{}/add_class/{}/add_student'.format(school_id, newclassroom.class_id))
+		if request.method == 'POST':
+			yesorno = request.POST.get('sim/não' or None)
+			if form.is_valid():
+				classroom = form.save(commit=False)
+				newchain = Chain.objects.create(name="{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name))
+				school_to_add_class.chains.add(newchain)
+				if classroom.slm:
+					sku = get_sku_by_slm_url(classroom.slm)
+					if sku: classroom.sku = sku
+					print('slm', classroom.slm)
+					print('sku', classroom.sku)
+				classroom.save()
+				
+				newclassroom = Class.objects.get(class_id=classroom.class_id)
+				school_to_add_class.classes.add(newclassroom)
+				messages.success(request, 'Classe adicionada com sucesso!')
+				if yesorno == 'sim':
+					return redirect('/schools/{}/add_another_class'.format(school_id))
+				return redirect('/schools/{}/add_class/{}/add_student'.format(school_id, newclassroom.class_id))
 		return render(request, 'school/add_class.html', {'form':form, 'is_supervisor':is_supervisor})
 
+@login_required
+def add_another_class(request, school_id=None):
+	if request.user.is_superuser:
+		school_to_add_class = School.objects.get(school_id=school_id)
+		form = ClassModelForm(request.POST or None)
+		if request.method == 'POST':
+			yesorno = request.POST.get('sim/não' or None)
+			if form.is_valid():
+				classroom = form.save(commit=False)
+				newchain = Chain.objects.create(name="{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name))
+				school_to_add_class.chains.add(newchain)
+				if classroom.slm:
+					sku = get_sku_by_slm_url(classroom.slm)
+					if sku: classroom.sku = sku
+					print('slm', classroom.slm)
+					print('sku', classroom.sku)
+				classroom.save()
+				
+				newclassroom = Class.objects.get(class_id=classroom.class_id)
+				school_to_add_class.classes.add(newclassroom)
+				messages.success(request, 'Classe adicionada com sucesso!')
+				if yesorno == 'sim':
+					return redirect('/schools/{}/add_another_class'.format(school_id))
+				return redirect('/schools/{}/add_another_class/add_students_for_multiple_classes'.format(school_id, newclassroom.class_id))
+		return render(request, 'school/add_another_class.html', {'form':form, 'school':school_to_add_class})
+	elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
+		is_supervisor = True
+		school_to_add_class = School.objects.get(school_id=school_id)
+		form = ClassModelForm(request.POST or None)
+		if request.method == 'POST':
+			yesorno = request.POST.get('sim/não' or None)
+			if form.is_valid():
+				classroom = form.save(commit=False)
+				newchain = Chain.objects.create(name="{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name))
+				school_to_add_class.chains.add(newchain)
+				if classroom.slm:
+					sku = get_sku_by_slm_url(classroom.slm)
+					if sku: classroom.sku = sku
+					print('slm', classroom.slm)
+					print('sku', classroom.sku)
+				classroom.save()
+				
+				newclassroom = Class.objects.get(class_id=classroom.class_id)
+				school_to_add_class.classes.add(newclassroom)
+				messages.success(request, 'Classe adicionada com sucesso!')
+				if yesorno == 'sim':
+					return redirect('/schools/{}/add_another_class'.format(school_id))
+				return redirect('/schools/{}/add_another_class/add_students_for_multiple_classes'.format(school_id, newclassroom.class_id))
+		return render(request, 'school/add_another_class.html', {'form':form, 'is_supervisor':is_supervisor, 'school':school_to_add_class})
 
 @csrf_exempt
 @api_view(['POST'])
@@ -699,8 +756,200 @@ def add_student_to_class_and_school(request, school_id=None, class_id=None):
 						messages.error(request, 'Nenhum arquivo enviado')
 						return redirect('/schools/{}/add_class/{}/add_student'.format(school_id, class_id))
 			elif yesorno == 'sim':
-				return redirect('/schools/{}/add_class/{}/add_multiple_students'.format(school_id, class_id))
+				return redirect('/schools/{}/add_another_class/select_class_to_add_students'.format(school_id))
 		return render(request, 'school_users/add_student.html', {'form':form, 'form2':form2, 'is_supervisor':is_supervisor})
+
+@login_required
+def add_students_for_multiple_classes(request, school_id=None):
+	if request.user.is_superuser:
+		school_to_add_student = School.objects.get(school_id=school_id)
+		form = UserModelForm(request.POST or None)
+		form2 = StudentModelForm(request.POST or None)
+		if request.method == 'POST':
+			yesorno = request.POST.get('sim/não')
+			if yesorno == 'não':
+				csv_file = request.FILES.get('file' or None)
+				if csv_file:
+					if not csv_file.name.endswith('.csv'):
+						messages.warning(request, 'O arquivo enviado não é CSV')
+						return redirect('/schools/{}/add_another_class/add_students_for_multiple_classes'.format(school_id, class_id))
+					data_set = csv_file.read().decode('UTF-8')
+					io_string = io.StringIO(data_set)
+					next(io_string)
+					if ',' in data_set:
+						for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+							if column[0]:
+								if column[4]==column[5]:
+									if column[6]:
+										if column[8] and column[9]:
+											_, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[8]), second_parent=Parent.objects.get(tell_me_user_id=column[9]), tell_me_user_id=column[6])
+										else:
+											_, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+										school_to_add_student.students.add(_)
+										if column[10]:
+											class_to_add_student = Class.objects.get(class_id = column[10])
+											class_to_add_student.students.add(_)
+									elif column[7]:
+										_, created = Parent.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[7])
+					elif ';' in data_set:
+						for column in csv.reader(io_string, delimiter=';', quotechar='|'):
+							if column[0]:
+								if column[4]==column[5]:
+									if column[6]:
+										if column[8] and column[9]:
+											_, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[8]), second_parent=Parent.objects.get(tell_me_user_id=column[9]), tell_me_user_id=column[6])
+										else:
+											_, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+										school_to_add_student.students.add(_)
+										if column[10]:
+											class_to_add_student = Class.objects.get(class_id = column[10])
+											class_to_add_student.students.add(_)
+									elif column[7]:
+										_, created = Parent.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[7])
+					messages.success(request, 'Usuários adicionados com sucesso')
+					return redirect('/')
+				else:
+					messages.error(request, 'Nenhum arquivo enviado')
+					return redirect('/schools/{}/add_another_class/add_students_for_multiple_classes'.format(school_id, class_id))
+			elif yesorno == 'sim':
+				return redirect('/schools/{}/add_another_class/select_class_to_add_students'.format(school_id))
+		return render(request, 'school_users/add_students_for_multiple_classes.html', {'school':school_to_add_student})
+	elif Head.objects.filter(profile=request.user).count()>=1:
+		is_supervisor = True
+		school_to_add_student = School.objects.get(school_id=school_id)
+		form = UserModelForm(request.POST or None)
+		form2 = StudentModelForm(request.POST or None)
+		if request.method == 'POST':
+			yesorno = request.POST.get('sim/não')
+			if yesorno == 'não':
+				csv_file = request.FILES.get('file' or None)
+				if csv_file:
+					if not csv_file.name.endswith('.csv'):
+						messages.warning(request, 'O arquivo enviado não é CSV')
+						return redirect('/schools/{}/add_another_class/add_students_for_multiple_classes'.format(school_id))
+					data_set = csv_file.read().decode('UTF-8')
+					io_string = io.StringIO(data_set)
+					next(io_string)
+					if ',' in data_set:
+						for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+							if column[0]:
+								if column[4]==column[5]:
+									if column[6]:
+										if column[8] and column[9]:
+											_, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[8]), second_parent=Parent.objects.get(tell_me_user_id=column[9]), tell_me_user_id=column[6])
+										else:
+											_, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+										school_to_add_student.students.add(_)
+										if column[10]:
+											class_to_add_student = Class.objects.get(class_id = column[10])
+											class_to_add_student.students.add(_)
+									elif column[7]:
+										_, created = Parent.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[7])
+					elif ';' in data_set:
+						for column in csv.reader(io_string, delimiter=';', quotechar='|'):
+							if column[0]:
+								if column[4]==column[5]:
+									if column[6]:
+										if column[8] and column[9]:
+											_, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[8]), second_parent=Parent.objects.get(tell_me_user_id=column[9]), tell_me_user_id=column[6])
+										else:
+											_, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+										school_to_add_student.students.add(_)
+										if column[10]:
+											class_to_add_student = Class.objects.get(class_id = column[10])
+											class_to_add_student.students.add(_)
+									elif column[7]:
+										_, created = Parent.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[7])
+					messages.success(request, 'Usuários adicionados com sucesso')
+					return redirect('/')
+				else:
+					messages.error(request, 'Nenhum arquivo enviado')
+					return redirect('/schools/{}/add_another_class/add_students_for_multiple_classes'.format(school_id, class_id))
+			elif yesorno == 'sim':
+				return redirect('/schools/{}/add_another_class/select_class_to_add_students'.format(school_id))
+		return render(request, 'school_users/add_students_for_multiple_classes.html', {'form':form, 'form2':form2, 'is_supervisor':is_supervisor})
+
+@login_required
+def select_class_to_add_students(request, school_id=None):
+	if request.user.is_superuser:
+		school_to_add_student = School.objects.get(school_id=school_id)
+		if request.method == 'POST':
+			selected_class = request.POST.get('selected_class' or None)
+			classe = Class.objects.get(class_id=selected_class)
+			return redirect('/schools/{}/add_another_class/{}/add_multiple_students'.format(school_id, classe.class_id))
+		return render(request, 'school/select_class_to_add_students.html', {'school':school_to_add_student})
+	elif Head.objects.filter(profile=request.user).count()>=1:
+		school_to_add_student = School.objects.get(school_id=school_id)
+		if request.method == 'POST':
+			selected_class = request.POST.get('selected_class' or None)
+			classe = Class.objects.get(class_id=selected_class)
+			return redirect('/schools/{}/add_another_class/{}/add_multiple_students'.format(school_id, classe.class_id))
+		return render(request, 'school/select_class_to_add_students.html', {'school':school_to_add_student, 'is_supervisor':True})
+
+@login_required
+def add_multple_students_for_class_and_school(request, school_id= None, class_id=None):
+	if request.user.is_superuser:
+		first_school = School.objects.get(school_id=school_id)
+		classe = Class.objects.get(class_id=class_id)
+		student_ids = []
+		if School.objects.filter(head=first_school.head).count()>1:
+			for school in School.objects.filter(head=first_school.head):
+				for student in school.students.all():
+					if student.student_id not in student_ids:
+						student_ids+=[(student.student_id)]
+			student_users = Student.objects.filter(student_id__in=student_ids)
+		else:
+			student_users = Student.objects.all()
+		first_school = School.objects.get(school_id=school_id)
+		if request.method == 'POST':
+			select_all = request.POST.get('variable')
+			yesorno = request.POST.get('sim/não' or None)
+			first_school.students.clear()
+			classe.students.clear()
+			if select_all == 'true':
+				first_school.students.add(*student_users)
+				classe.students.add(*student_users)
+			else:
+				some_var = request.POST.getlist('checks')
+				for var in some_var:
+					student = Student.objects.get(student_id=var)
+					first_school.students.add(student)
+					classe.students.add(student)
+			messages.success(request, 'Estudantes adicionados com sucesso!')
+			if yesorno == 'sim':
+				return redirect('/schools/{}/add_another_class/select_class_to_add_students'.format(school_id))
+			return redirect('/')
+		return render(request, 'school/add_students_to_class_for_multiple_classes.html', {'student_users':student_users, 'school':first_school, 'class':classe})
+	elif Head.objects.filter(profile=request.user).count()>=1:
+		is_supervisor = True
+		first_school = School.objects.get(school_id=school_id)
+		classe = Class.objects.get(class_id=class_id)
+		student_users = []
+		schools = School.objects.filter(head=Head.objects.get(profile=request.user))
+		first_school = School.objects.get(school_id=school_id)
+		for school in schools:
+			for student in school.students.all():
+				if student not in student_users:
+					student_users += [(student)]
+		if request.method == 'POST':
+			select_all = request.POST.get('variable')
+			yesorno = request.POST.get('sim/não' or None)
+			first_school.students.clear()
+			classe.students.clear()
+			if select_all == 'true':
+				first_school.students.add(*student_users)
+				classe.students.add(*student_users)
+			else:
+				some_var = request.POST.getlist('checks')
+				for var in some_var:
+					student = Student.objects.get(student_id=var)
+					first_school.students.add(student)
+					classe.students.add(student)
+			messages.success(request, 'Estudantes adicionados com sucesso!')
+			if yesorno == 'sim':
+				return redirect('/schools/{}/add_another_class/select_class_to_add_students'.format(school_id))
+			return redirect('/')
+		return render(request, 'school/add_students_to_class_for_multiple_classes.html', {'is_supervisor':is_supervisor, 'student_users':student_users, 'school':first_school})
 
 @login_required
 def add_first_parent_to_student(request, school_id=None, class_id=None, student_id=None):

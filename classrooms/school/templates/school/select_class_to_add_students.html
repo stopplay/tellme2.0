@@ -1,0 +1,64 @@
+{% extends 'base.html'%}
+
+{% block title %} Selecionar turma para adicionar estudantes {% endblock %}
+
+{% block content %}
+
+{% load static %}
+<script>
+	$(document).ready(function() {
+		$('.container').removeClass('container');
+	});
+</script>
+
+<div class="content">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-9">
+				<div class="card w-50">
+					<div class="card-header">
+						<h4 class="card-title" align="left">Selecionar turma para adicionar estudantes</h4>
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="col-md-11 pr-1">
+								<div class="form-group">
+									<form method="POST" class="" enctype="multipart/form-data"> {% csrf_token %}
+										<p>Selecione uma Turma</p>
+										<select id="select_form" class="form-control chosen-select">
+											<option id="" value="" selected>--------</option>
+											{% for class in school.classes.all %}
+											<option value="{{ class.class_id }}">{{ class.class_name }}</option>
+											{% endfor %}
+										</select><br>
+										<input type="hidden" id="selected_class" name="selected_class" value="0">
+										
+
+										<div><button type="submit" class="btn btn-info btn-fill btn-sm pull-left mt-2" style="background-color: #213f99; border-color: #213f99">Próximo</button></div>
+
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#select_form').on('change',function(){
+			var selectValor = $(this).val();
+			if (selectValor == '') {
+				document.getElementById('selected_class').value = '0'
+			}
+			else{
+				document.getElementById('selected_class').value = selectValor
+			}
+		});
+	});
+</script>
+
+{% endblock %}

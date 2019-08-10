@@ -21,6 +21,14 @@
 					<div class="card-body">
 						<div class="row">
 							<div class="col-md-11 pr-1">
+								<p><label>Estas são as classes que já foram adicionadas</label></p>
+								{% for class in school.classes.all %}
+									<p><label><b>ID: {{ class.class_id }}</b>  Nome da Turma: {{ class.class_name }}</label></p>
+								{% endfor %}
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-11 pr-1">
 								<div class="form-group">
 									<form method="POST" class=""> {% csrf_token %}
 										<div style="margin-top: 10px; margin-bottom: 10px" id="first_selection">

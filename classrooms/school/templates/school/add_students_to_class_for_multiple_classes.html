@@ -1,0 +1,114 @@
+{% extends 'base.html'%}
+
+{% block title %} Selecionar Estudantes Para a Classe {% endblock %}
+
+{% block content %}
+
+<div class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card strpied-tabled-with-hover">
+          <div class="card-header ">
+            <h4 class="card-title">Estudante(s)</h4>
+
+          </div>
+          <form method="POST" enctype="multipart/form-data" style="width:99%;"> {% csrf_token %}
+            <div class="col-md-12">
+              <button type="submit" class="btn btn-dark btn-sm btn-block sign-multiples-buttons multi-select-button" >Clique Aqui Para Associar os Estudantes Selecionados à Classe</button>
+            </div>
+          <div class="card-body table-full-width table-responsive">
+            <div style="margin-top: 10px; margin-bottom: 10px" id="first_selection">
+              <label>Você deseja selecionar os estudantes de uma outra turma?</label><br>
+              <label style="margin-right: 10px;">Não</label>
+              <label class="switch">
+                <input type="checkbox" id="first_checkbox">
+                <a id="first_slider" class="slider round"></a>
+              </label>
+              <label style="margin-left: 10px">Sim</label>
+            </div>  
+            <table class="table table-hover table-striped display mb-4" id="studentstable">
+              <thead class="">
+          			<tr>
+                  <th><input id="check" type="checkbox" name="select_all"></th>
+          				<th>Nome</th>
+          				<th>Nome de Usuário</th>
+                  <th>Responsável Financeiro</th>
+                  <th>Responsável Didático</th>
+
+          			</tr>
+          		</thead>
+          		<tbody>
+          			{% for student in student_users %}
+          			<tr>
+                  <th>
+                    {% if student in class.students.all %}
+                      <input type="checkbox" name="checks" value="{{ student.student_id }}" checked="true">
+                    {% else %}
+                      <input type="checkbox" name="checks" value="{{ student.student_id }}">
+                    {% endif %}
+                  </th>
+          				<th scope="row">{{ student.name }}</th>
+          				<td>{{ student.profile.username }}</td>
+                  <td>{{ student.first_parent.name }} </td>
+                  <td>{{ student.second_parent.name }}</td>
+          			</tr>
+          			{% endfor %}
+          		</tbody>
+            </table>
+            
+          </div>
+          <input type="hidden" id="variable" name="variable" value='false'>
+          <input type="hidden" id="sim/não" name="sim/não" value="não">
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<script type="text/javascript">
+  $(document).ready( function () {
+    $('#studentstable').DataTable();
+} );
+</script>
+<script type="text/javascript">
+  $(document).ready(function () {
+    $('#check').on('change',function () {
+        var table = $('#studentstable');
+        var check = document.getElementsByName('select_all');
+        var checkboxes = table.children('tbody').children('tr').children('th').children('input');
+        if (check[0].checked == true) {
+            document.getElementById('variable').value = 'true';
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i].type == 'checkbox') {
+                    checkboxes[i].checked = true;
+                }
+            }
+        } else {
+            document.getElementById('variable').value = 'false';
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i].type == 'checkbox') {
+                    checkboxes[i].checked = false;
+                }
+            }
+        }
+    });
+ });
+  $(document).ready(function () {
+    $('#first_slider').on('click', function () {
+      if (!$('#first_checkbox').prop("checked")) {
+        document.getElementById('sim/não').value = 'sim'
+        $('#first_checkbox').attr('checked')
+      }
+      else {
+        document.getElementById('sim/não').value = 'não'
+        $('#first_checkbox').removeAttr('checked')
+      }
+    });
+  });
+</script>
+{% endblock %}
