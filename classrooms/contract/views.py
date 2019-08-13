@@ -285,8 +285,10 @@ def createacontract(request):
 						return redirect('/contracts/createacontract')
 					if not contract.terms_of_contract_2.name.endswith('.pdf'):
 						messages.error(request, 'Por favor insira o arquivo de termos aditivos de contrato (2) no tipo correto que é PDF')
+						return redirect('/contracts/createacontract')
 				if not contract.pdf.name.endswith('.pdf'):
 					messages.error(request, 'Por favor insira o arquivo de contrato no tipo correto que é PDF')
+					return redirect('/contracts/createacontract')
 				school = School.objects.get(chains__id__exact=contract.chain.id)
 				classe = Class.objects.get(class_id=contract.chain.id)
 				contract.slm = classe.slm
@@ -404,6 +406,7 @@ def createacontract(request):
 						return redirect('/contracts/createacontract')
 					if not contract.terms_of_contract_2.name.endswith('.pdf'):
 						messages.error(request, 'Por favor insira o arquivo de termos aditivos de contrato (2) no tipo correto que é PDF')
+						return redirect('/contracts/createacontract')
 				if not contract.pdf.name.endswith('.pdf'):
 					messages.error(request, 'Por favor insira o arquivo de contrato no tipo correto que é PDF')
 					return redirect('/contracts/createacontract')
