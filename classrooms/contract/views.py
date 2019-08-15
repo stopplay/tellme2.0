@@ -814,6 +814,16 @@ def set_signed(request, contract_id = None):
 		if contract.student_auth_signed:
 			messages.warning(request, 'O responsável estudante já assinou este contrato!')
 			return redirect('/contracts/all')
+	if Witness.objects.filter(profile=request.user).count()>=1:
+		witness = Witness.objects.get(profile=request.user)
+		if contract.first_witness_signe == witness:
+			if contract.first_witness_signed:
+				messages.warning(request, 'A primeira testemunha já assinou este contrato!')
+				return redirect('/contracts/all')
+		if contract.second_witness_signe == witness:
+			if contract.second_witness_signed:
+				messages.warning(request, 'A segunda testemunha já assinou este contrato!')
+				return redirect('/contracts/all')
 	if Head.objects.filter(profile=request.user).count()>=1 or Parent.objects.filter(profile=request.user).count()>=1 or Student.objects.filter(profile=request.user).count()>=1 or Witness.objects.filter(profile=request.user).count()>=1:
 		if Head.objects.filter(profile=request.user).count()>=1:
 			form = BlockModelFormByContract()
