@@ -897,6 +897,7 @@ def set_signed(request, contract_id = None):
 				contract.first_auth_signed = True
 				contract.first_auth_signed_timestamp = block.time_stamp
 				contract.first_auth_hash = block.hash
+				school = School.objects.get(chains__id__exact=contract.chain.id)
 				contract.save(update_fields=['first_auth_signed', 'first_auth_signed_timestamp', 'first_auth_hash'])
 				write_pdf(request, contract, 'first_auth', None)
 				content = contract.pdf.read()
@@ -907,7 +908,7 @@ def set_signed(request, contract_id = None):
 					'user': parent,
 					'timestamp': contract.first_auth_signed_timestamp,
 					'block': block,
-					'school': School.objects.get(chains__name__exact=block.chain.name),
+					'school': school,
 				})
 				to_email = parent.profile.email
 				email = EmailMessage(
@@ -919,6 +920,7 @@ def set_signed(request, contract_id = None):
 				contract.second_auth_signed = True
 				contract.second_auth_signed_timestamp = block.time_stamp
 				contract.second_auth_hash = block.hash
+				school = School.objects.get(chains__id__exact=contract.chain.id)
 				contract.save(update_fields=['second_auth_signed', 'second_auth_signed_timestamp', 'second_auth_hash'])
 				write_pdf(request, contract, 'second_auth', None)
 				content = contract.pdf.read()
@@ -929,7 +931,7 @@ def set_signed(request, contract_id = None):
 					'user': parent,
 					'timestamp': contract.second_auth_signed_timestamp,
 					'block': block,
-					'school': School.objects.get(chains__name__exact=block.chain.name),
+					'school': school,
 				})
 				to_email = parent.profile.email
 				email = EmailMessage(
@@ -969,6 +971,7 @@ def set_signed(request, contract_id = None):
 				contract.first_witness_signed = True
 				contract.first_witness_signed_timestamp = block.time_stamp
 				contract.first_witness_hash = block.hash
+				school = School.objects.get(chains__id__exact=contract.chain.id)
 				contract.save(update_fields=['first_witness_signed', 'first_witness_signed_timestamp', 'first_witness_hash'])
 				write_pdf(request, contract, 'first_witness', None)
 				content = contract.pdf.read()
@@ -979,7 +982,7 @@ def set_signed(request, contract_id = None):
 					'user': witness,
 					'timestamp': contract.first_auth_signed_timestamp,
 					'block': block,
-					'school': School.objects.get(chains__name__exact=block.chain.name),
+					'school': school,
 				})
 				to_email = witness.profile.email
 				email = EmailMessage(
@@ -991,6 +994,7 @@ def set_signed(request, contract_id = None):
 				contract.second_witness_signed = True
 				contract.second_witness_signed_timestamp = block.time_stamp
 				contract.second_witness_hash = block.hash
+				school = School.objects.get(chains__id__exact=contract.chain.id)
 				contract.save(update_fields=['second_witness_signed', 'second_witness_signed_timestamp', 'second_witness_hash'])
 				write_pdf(request, contract, 'second_witness', None)
 				content = contract.pdf.read()
@@ -1001,7 +1005,7 @@ def set_signed(request, contract_id = None):
 					'user': witness,
 					'timestamp': contract.second_auth_signed_timestamp,
 					'block': block,
-					'school': School.objects.get(chains__name__exact=block.chain.name),
+					'school': school,
 				})
 				to_email = witness.profile.email
 				email = EmailMessage(
