@@ -19,7 +19,6 @@ from contract.utils import MagentoSoap
 wsdl = 'http://maplebearmkt2.widehomolog.biz/api/v2_soap?wsdl=1'
 username = 'tell-me'
 apiKey = 'tell-me@0619'
-soap = MagentoSoap(wsdl, username, apiKey)
 
 def update_sku_of_slm_material_of_class(class_linked_to_contract):
     sku = class_linked_to_contract.sku
@@ -41,85 +40,92 @@ def update_sku_of_slm_material_of_class(class_linked_to_contract):
 @app.task
 def update_material_orders_from_maple_bear():
     
-    not_purchased_slm_contracts = Contract.objects.filter(purchased_slm=False)
+    try:
+        not_purchased_slm_contracts = Contract.objects.filter(purchased_slm=False)
+        
+        soap = MagentoSoap(wsdl, username, apiKey)
+    
+        soap.start_batch_operations()
+    
+        print('Contracts to process:', len(not_purchased_slm_contracts))
+        counter = 0
+        for contract_not_purchased_slm in not_purchased_slm_contracts:
+            counter += 1
+            if contract_not_purchased_slm.chain != None:
+                
+                contract_chain_id = contract_not_purchased_slm.chain.id
+                class_linked_to_contract = Class.objects.get(class_id=contract_chain_id)
+    
+                if class_linked_to_contract == None: 
+                    continue
+    
+                sku = update_sku_of_slm_material_of_class(class_linked_to_contract)
+                if not sku: 
+                    continue
+    
+                contract_created_entry_date = str(contract_not_purchased_slm.created_at.date())
+    
+                print('==================================================')
+                print('Processing:', counter)
+                print('class_linked_to_contract:', class_linked_to_contract)
+                print('sku:', sku)
+                print('contract_created_entry_date:', contract_created_entry_date)
+    
+                try:
+                    first_parent = contract_not_purchased_slm.first_auth_signe
+                    first_parent_maple_bear_email = first_parent.maple_bear_email
+                    if first_parent_maple_bear_email:
+                        print('first_parent:', first_parent)
+                        print('first_parent_maple_bear_email:', first_parent_maple_bear_email)
+                        # first_parent_has_purchased_slm = soap.has_customer_purchased_product_after_date(first_parent_maple_bear_email, sku, contract_created_entry_date)
+                        first_parent_has_purchased_slm = soap.has_customer_purchased_product(first_parent_maple_bear_email, sku)
+                        print('first_parent_has_purchased_slm:', first_parent_has_purchased_slm)
+                        if first_parent_has_purchased_slm:
+                            contract_not_purchased_slm.purchased_slm = True
+                            contract_not_purchased_slm.save()
+                            print('saved purchased slm')
+                            continue
+                except:
+                    pass
+    
+                try:
+                    second_parent = contract_not_purchased_slm.second_auth_signe
+                    second_parent_maple_bear_email = second_parent.maple_bear_email
+                    if second_parent_maple_bear_email:
+                        print('second_parent:', second_parent)
+                        print('second_parent_maple_bear_email:', second_parent_maple_bear_email)
+                        # second_parent_has_purchased_slm = soap.has_customer_purchased_product_after_date(second_parent_maple_bear_email, sku, contract_created_entry_date)
+                        second_parent_has_purchased_slm = soap.has_customer_purchased_product(second_parent_maple_bear_email, sku)
+                        print('second_parent_has_purchased_slm:', second_parent_has_purchased_slm)
+                        if second_parent_has_purchased_slm:
+                            contract_not_purchased_slm.purchased_slm = True
+                            contract_not_purchased_slm.save()
+                            print('saved purchased slm')
+                            continue
+                except:
+                    pass
+    
+                try:
+                    student = contract_not_purchased_slm.student_auth_signe
+                    student_maple_bear_email = student.maple_bear_email
+                    if student_maple_bear_email:
+                        print('student:', student)
+                        print('student_maple_bear_email:', student_maple_bear_email)
+                        student_has_purchased_slm = soap.has_customer_purchased_product(student_maple_bear_email, sku)
+                        print('student_has_purchased_slm:', student_has_purchased_slm)
+                        if student_has_purchased_slm:
+                            contract_not_purchased_slm.purchased_slm = True
+                            contract_not_purchased_slm.save()
+                            print('saved purchased slm')
+                            continue
+                except:
+                    pass
+    
+        soap.end_batch_operations()
+    except Exception as e:
+        print(e)
+        pass
 
-    soap.start_batch_operations()
-
-    print('Contracts to process:', len(not_purchased_slm_contracts))
-    counter = 0
-    for contract_not_purchased_slm in not_purchased_slm_contracts:
-        counter += 1
-        if contract_not_purchased_slm.chain != None:
-            
-            contract_chain_id = contract_not_purchased_slm.chain.id
-            class_linked_to_contract = Class.objects.get(class_id=contract_chain_id)
-
-            if class_linked_to_contract == None: 
-                continue
-
-            sku = update_sku_of_slm_material_of_class(class_linked_to_contract)
-            if not sku: 
-                continue
-
-            contract_created_entry_date = str(contract_not_purchased_slm.created_at.date())
-
-            print('==================================================')
-            print('Processing:', counter)
-            print('class_linked_to_contract:', class_linked_to_contract)
-            print('sku:', sku)
-            print('contract_created_entry_date:', contract_created_entry_date)
-
-            try:
-                first_parent = contract_not_purchased_slm.first_auth_signe
-                first_parent_maple_bear_email = first_parent.maple_bear_email
-                if first_parent_maple_bear_email:
-                    print('first_parent:', first_parent)
-                    print('first_parent_maple_bear_email:', first_parent_maple_bear_email)
-                    # first_parent_has_purchased_slm = soap.has_customer_purchased_product_after_date(first_parent_maple_bear_email, sku, contract_created_entry_date)
-                    first_parent_has_purchased_slm = soap.has_customer_purchased_product(first_parent_maple_bear_email, sku)
-                    print('first_parent_has_purchased_slm:', first_parent_has_purchased_slm)
-                    if first_parent_has_purchased_slm:
-                        contract_not_purchased_slm.purchased_slm = True
-                        contract_not_purchased_slm.save()
-                        print('saved purchased slm')
-                        continue
-            except:
-                pass
-
-            try:
-                second_parent = contract_not_purchased_slm.second_auth_signe
-                second_parent_maple_bear_email = second_parent.maple_bear_email
-                if second_parent_maple_bear_email:
-                    print('second_parent:', second_parent)
-                    print('second_parent_maple_bear_email:', second_parent_maple_bear_email)
-                    # second_parent_has_purchased_slm = soap.has_customer_purchased_product_after_date(second_parent_maple_bear_email, sku, contract_created_entry_date)
-                    second_parent_has_purchased_slm = soap.has_customer_purchased_product(second_parent_maple_bear_email, sku)
-                    print('second_parent_has_purchased_slm:', second_parent_has_purchased_slm)
-                    if second_parent_has_purchased_slm:
-                        contract_not_purchased_slm.purchased_slm = True
-                        contract_not_purchased_slm.save()
-                        print('saved purchased slm')
-                        continue
-            except:
-                pass
-
-            try:
-                student = contract_not_purchased_slm.student_auth_signe
-                student_maple_bear_email = student.maple_bear_email
-                if student_maple_bear_email:
-                    print('student:', student)
-                    print('student_maple_bear_email:', student_maple_bear_email)
-                    student_has_purchased_slm = soap.has_customer_purchased_product(student_maple_bear_email, sku)
-                    print('student_has_purchased_slm:', student_has_purchased_slm)
-                    if student_has_purchased_slm:
-                        contract_not_purchased_slm.purchased_slm = True
-                        contract_not_purchased_slm.save()
-                        print('saved purchased slm')
-                        continue
-            except:
-                pass
-
-    soap.end_batch_operations()
 
 @app.task #1
 def schedule_email(contract, typeof=None, whosend=None):

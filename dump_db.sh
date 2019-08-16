@@ -1,2 +1,2 @@
-pg_dump -h ls-7c37af3dce7557b4348c952efb76e7cc8481f746.clzycusc5rcf.eu-west-1.rds.amazonaws.com -p 5432 -b -U dbmasteruser -d dbmaster -f dump.sql -F c -Z 9
+pg_dump -h ls-4568c56a5a65d2d7ab38d79a15b648e49bd6edb1.clzycusc5rcf.eu-west-1.rds.amazonaws.com -p 5432 -b -U dbmasteruser -d dbmaster -f dump.sql -F c -Z 9
 pg_restore -h localhost -p 5555 -U postgres -d postgres --no-owner --no-privileges --no-tablespaces --clean --schema public dump.sql
