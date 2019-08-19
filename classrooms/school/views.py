@@ -33,6 +33,7 @@ from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from school_users.tokens import account_activation_token
 from school.utils import get_sku_by_slm_url
+import requests
 
 # Create your views here.
 class SchoolsViewSet(viewsets.ModelViewSet):
@@ -1433,3 +1434,6 @@ def add_witness(request, school_id=None, type_of_user= None):
             messages.success(request, 'Testemunha adicionada com sucesso!')
             return redirect('/schools/{}/set_witnesses'.format(school_id))
         return render(request, 'school/add_witness.html', {'form':form, 'form2':form2, 'is_supervisor':is_supervisor})
+
+def import_xml(request, string):
+	pass

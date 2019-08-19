@@ -45,5 +45,6 @@ urlpatterns = [
     path('verifyvalidchain/<int:class_id>', views.verifyvalidchain, name='verifyvalidchain'),
     path('delete_class/<int:class_id>', views.delete_class, name='delete_class'),
     url('create_block/', views.create_block, name='create_block'),
+    path('import_xml/<string>', views.import_xml, name='import_xml'),
 
 ]
