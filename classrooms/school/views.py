@@ -1337,8 +1337,8 @@ def set_witnesses(request, school_id=None):
         		witnesses_ids += [(school.first_witness.witness_id)]
         	if school.second_witness:
         		witnesses_ids += [(school.second_witness.witness_id)]
-        form.fields["first_witness"].queryset = Witness.objects.filter(witness_id__in=witnessess_ids)
-        form.fields["second_witness"].queryset = Witness.objects.filter(witness_id__in=witnessess_ids)
+        form.fields["first_witness"].queryset = Witness.objects.filter(witness_id__in=witnesses_ids)
+        form.fields["second_witness"].queryset = Witness.objects.filter(witness_id__in=witnesses_ids)
         if form.is_valid():
             new_school = form.save(commit=False)
             new_school.save(update_fields=['first_witness','second_witness'])
