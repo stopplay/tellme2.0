@@ -487,6 +487,36 @@
     </div>
     {% endif %}
 
+    {% if contract.first_witness_signe %}
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label>RESPONSÁVEL PRIMEIRA TESTEMUNHA POR ASSINAR</label>
+          {% if contract.first_witness_signe %}
+          <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.first_witness_signe}}">
+          {% else %}
+          <input type="text" class="form-control" disabled="" placeholder="">
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if contract.second_witness_signe %}
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label>RESPONSÁVEL SEGUNDA TESTEMUNHA POR ASSINAR</label>
+          {% if contract.second_witness_signe %}
+          <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.second_witness_signe}}">
+          {% else %}
+          <input type="text" class="form-control" disabled="" placeholder="">
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
     <div class="row">
       <div class="col-md-12">
         <div class="form-group">
@@ -581,6 +611,38 @@
     </div>
     {% endif %}
 
+    {% if request.user.is_superuser or is_supervisor or request.user == contract.first_witness_signe.profile %}
+    <div class="row">
+      <div class="col-md-6 pr-1">
+        <div class="form-group">
+          <label>PRIMEIRA TESTEMUNHA ASSINARUTA DATA E HORA</label>
+          {% if contract.first_witness_signed_timestamp %}
+
+          <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.first_witness_signed_timestamp.day}}/{{contract.first_witness_signed_timestamp.month}}/{{contract.first_witness_signed_timestamp.year}} às {% if contract.first_witness_signed_timestamp.hour < 10 %}0{{contract.first_witness_signed_timestamp.hour}}{% else %}{{contract.first_witness_signed_timestamp.hour}}{% endif %}:{% if contract.first_witness_signed_timestamp.minute < 10 %}0{{contract.first_witness_signed_timestamp.minute}}{% else %}{{contract.first_witness_signed_timestamp.minute}}{% endif %}:{% if contract.first_witness_signed_timestamp.second < 10 %}0{{contract.first_witness_signed_timestamp.second}}{% else %}{{contract.first_witness_signed_timestamp.second}}{% endif %}">
+          {% else %}
+          <input type="text" class="form-control" disabled="" placeholder="">
+          {% endif %}
+
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    {% if request.user.is_superuser or is_supervisor or request.user == contract.second_witness_signe.profile %}
+    <div class="row">
+      <div class="col-md-6 pr-1">
+        <div class="form-group">
+          <label>SEGUNDA TESTEMUNHA ASSINARUTA DATA E HORA</label>
+          {% if contract.second_witness_signed_timestamp %}
+
+          <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.second_witness_signed_timestamp.day}}/{{contract.second_witness_signed_timestamp.month}}/{{contract.second_witness_signed_timestamp.year}} às {% if contract.second_witness_signed_timestamp.hour < 10 %}0{{contract.second_witness_signed_timestamp.hour}}{% else %}{{contract.second_witness_signed_timestamp.hour}}{% endif %}:{% if contract.second_witness_signed_timestamp.minute < 10 %}0{{contract.second_witness_signed_timestamp.minute}}{% else %}{{contract.second_witness_signed_timestamp.minute}}{% endif %}:{% if contract.second_witness_signed_timestamp.second < 10 %}0{{contract.second_witness_signed_timestamp.second}}{% else %}{{contract.second_witness_signed_timestamp.second}}{% endif %}">
+          {% else %}
+          <input type="text" class="form-control" disabled="" placeholder="">
+          {% endif %}
+
+        </div>
+      </div>
+    </div>
+    {% endif %}
     <div class="clearfix"></div>
   </form>
 </div>

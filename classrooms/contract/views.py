@@ -198,6 +198,18 @@ def get_pdf_filepath(contract=None):
 def get_pdf_signed_output_filepath(contract=None):
 	return settings.MEDIA_ROOT+'/'+contract.pdf.name+'signed'
 
+def get_terms_of_contract_1_filepath(contract=None):
+	return settings.MEDIA_ROOT+'/'+contract.terms_of_contract.name
+
+def get_terms_of_contract_1_signed_output_filepath(contract=None):
+	return settings.MEDIA_ROOT+'/'+contract.terms_of_contract.name+'signed'
+
+def get_terms_of_contract_2_filepath(contract=None):
+	return settings.MEDIA_ROOT+'/'+contract.terms_of_contract_2.name
+
+def get_terms_of_contract_2_signed_output_filepath(contract=None):
+	return settings.MEDIA_ROOT+'/'+contract.terms_of_contract_2.name+'signed'
+
 def write_pdf(request, contract=None, whosigned=None, school=None):
 	
 	packet = StringIO()
@@ -243,6 +255,42 @@ def write_pdf(request, contract=None, whosigned=None, school=None):
 	outputStream.close()
 
 	shutil.copyfile(get_pdf_signed_output_filepath(contract), get_pdf_filepath(contract))
+
+	if contract.terms_of_contract:
+		existing_pdf = PdfFileReader(open(get_terms_of_contract_1_filepath(contract), "rb"))
+		output = PdfFileWriter()
+		output.removeImages(False)
+		
+		# add the "watermark" (which is the new pdf) on the existing page
+		for i in range(0, existing_pdf.getNumPages()):
+			page = existing_pdf.getPage(i)
+			page.mergePage(new_pdf.getPage(0))
+			output.addPage(page)
+
+		# finally, write "output" to a real file
+		outputStream = open(get_terms_of_contract_1_signed_output_filepath(contract), "wb")
+		output.write(outputStream)
+		outputStream.close()
+
+		shutil.copyfile(get_terms_of_contract_1_signed_output_filepath(contract), get_terms_of_contract_1_filepath(contract))
+
+	if contract.terms_of_contract_2:
+		existing_pdf = PdfFileReader(open(get_terms_of_contract_2_filepath(contract), "rb"))
+		output = PdfFileWriter()
+		output.removeImages(False)
+		
+		# add the "watermark" (which is the new pdf) on the existing page
+		for i in range(0, existing_pdf.getNumPages()):
+			page = existing_pdf.getPage(i)
+			page.mergePage(new_pdf.getPage(0))
+			output.addPage(page)
+
+		# finally, write "output" to a real file
+		outputStream = open(get_terms_of_contract_2_signed_output_filepath(contract), "wb")
+		output.write(outputStream)
+		outputStream.close()
+
+		shutil.copyfile(get_terms_of_contract_2_signed_output_filepath(contract), get_terms_of_contract_2_filepath(contract))
 
 
 @login_required
