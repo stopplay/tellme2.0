@@ -5,568 +5,584 @@
 {% block content %}
 
 <div class="content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-9">
-                <div class="card w-50">
-                    <div class="card-header">
-                        <h4 class="card-title">Detalhes do Contrato</h4>
-                    </div>
-                    <div class="card-body">
-                        <form>
-                            {% if school %}
-                            {% if school.sponte_client_number and school.sponte_token %}
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>ID DO CONTRATO SPONTE</label>
-                                        {% if contract.contract_id_sponte %}
-                                        <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.contract_id_sponte}}">
-                                        {% else %}
-                                        <input type="text" class="form-control" disabled="" placeholder="">
-                                        {% endif %}
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="exampleInputEmail1">ID DO CONTRATO DE AULA LIVRE SPONTE</label>
-                                        {% if contract.contract_free_class_id_sponte %}
-                                        <input type="email" class="form-control" disabled="" placeholder="" value="{{contract.contract_free_class_id_sponte}}">
-                                        {% else %}
-                                        <input type="text" class="form-control" disabled="" placeholder="">
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 pr-1">
-                                    <div class="form-group">
-                                        <label>ID DA SITUAÇÃO SPONTE </label>
-                                        {% if contract.situation_id_sponte %}
-                                        <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.situation_id_sponte}}">
-                                        {% else %}
-                                        <input type="text" class="form-control" disabled="" placeholder="">
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                <div class="col-md-6 pl-1">
-                                    <div class="form-group">
-                                        <label>SITUAÇÃO SPONTE </label>
-                                        {% if contract.situation_sponte %}
-                                        <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.situation_sponte}}">
-                                        {% else %}
-                                        <input type="text" class="form-control" disabled="" placeholder="">
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>NOME DO ESTUDANTE SPONTE</label>
-                                        {% if contract.student_name_sponte %}
-                                        <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.student_name_sponte}}">
-                                        {% else %}
-                                        <input type="text" class="form-control" disabled="" placeholder="">
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4 pr-1">
-                                    <div class="form-group">
-                                        <label>ID DO ESTUDANTE SPONTE</label>
-                                        {% if contract.student_id_sponte %}
-                                        <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.student_id_sponte}}">
-                                        {% else %}
-                                        <input type="text" class="form-control" disabled="" placeholder="">
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                <div class="col-md-4 px-1">
-                                    <div class="form-group">
-                                        <label>ID DO CURSO SPONTE</label>
-                                        {% if contract.course_id_sponte %}
-                                        <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.course_id_sponte}}">
-                                        {% else %}
-                                        <input type="text" class="form-control" disabled="" placeholder="">
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                <div class="col-md-4 pl-1">
-                                    <div class="form-group">
-                                        <label>ID DA AULA SPONTE</label>
-                                        {% if contract.class_id_sponte %}
-                                        <input type="number" class="form-control" disabled="" placeholder="" value="{{contract.class_id_sponte}}">
-                                        {% else %}
-                                        <input type="text" class="form-control" disabled="" placeholder="">
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>NOME DA AULA SPONTE</label>
-                                        {% if contract.class_name_sponte %}
-                                        <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.class_name_sponte}}">
-                                        {% else %}
-                                        <input type="text" class="form-control" disabled="" placeholder="">
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>NOME DO CURSO SPONTE</label>
-                                        {% if contract.course_name_sponte %}
-                                        <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.course_name_sponte}}">
-                                        {% else %}
-                                        <input type="text" class="form-control" disabled="" placeholder="">
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div class="row">
-                                <div class="col-md-4 pr-1">
-                                    <div class="form-group">
-                                        <label>ID DO TIPO DE CONTRATO SPONTE</label>
-                                        {% if contract.contract_type_id %}
-                                        <input type="number" class="form-control" disabled="" placeholder="" value="{{contract.contract_type_id}}">
-                                        {% else %}
-                                        <input type="text" class="form-control" disabled="" placeholder="">
-                                        {% endif %}
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4 px-2">
-                                    <div class="form-group">
-                                        <label>DATA INICIAL DO CONTRATO SPONTE</label>
-                                        {% if contract.initial_date_sponte %}
-                                        <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.initial_date_sponte}}">
-                                        {% else %}
-                                        <input type="text" class="form-control" disabled="" placeholder="">
-                                        {% endif %}
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4 pl-1">
-                                    <div class="form-group">
-                                        <label>DATA FINAL DO CONTRATO SPONTE</label>
-                                        {% if contract.end_date_sponte %}
-                                        <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.end_date_sponte}}">
-                                        {% else %}
-                                        <input type="text" class="form-control" disabled="" placeholder="">
-                                        {% endif %}
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-                              <div class="col-md-4 pr-1">
-                                  <div class="form-group">
-                                      <label>DATA DE REGISTRO SPONTE</label>
-                                      {% if contract.date_of_registration_sponte %}
-                                      <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.date_of_registration_sponte}}">
-                                      {% else %}
-                                      <input type="text" class="form-control" disabled="" placeholder="">
-                                      {% endif %}
-                                  </div>
-                              </div>
-
-                              <div class="col-md-4 px-1">
-                                  <div class="form-group">
-                                      <label>TIPO DE REGISTRO SPONTE</label>
-                                      {% if contract.type_of_registration_spontee %}
-                                      <input type="number" class="form-control" disabled="" placeholder="" value="{{contract.type_of_registration_sponte}}">
-                                      {% else %}
-                                      <input type="text" class="form-control" disabled="" placeholder="">
-                                      {% endif %}
-                                  </div>
-                              </div>
-
-                          </div>
-
-                          <div class="row">
-                              <div class="col-md-12">
-                                  <div class="form-group">
-                                      <label>CONTRATANTE SPONTE</label>
-                                      {% if contract.contractor_sponte %}
-                                      <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.contractor_sponte}}">
-                                      {% else %}
-                                      <input type="text" class="form-control" disabled="" placeholder="">
-                                      {% endif %}
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="row">
-                              <div class="col-md-12">
-                                  <div class="form-group">
-                                      <label>NOME DA MATRIZ CURRICULAR SPONTE</label>
-                                      {% if contract.name_of_curricular_matrix_sponte %}
-                                      <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.name_of_curricular_matrix_sponte}}">
-                                      {% else %}
-                                      <input type="text" class="form-control" disabled="" placeholder="">
-                                      {% endif %}
-                                  </div>
-                              </div>
-                          </div>
-
-
-
-
-                          <div class="row">
-
-                              <div class="col-md-4 pr-1">
-                                  <div class="form-group">
-                                      <label>FINANCEIRO LANÇADO SPONTE</label>
-                                      {% if contract.financial_launched_sponte %}
-                                      <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.financial_launched_sponte}}">
-                                      {% else %}
-                                      <input type="text" class="form-control" disabled="" placeholder="">
-                                      {% endif %}
-                                  </div>
-                              </div>
-
-
-                              <div class="col-md-4 px-1">
-                                <div class="form-group">
-                                    <label>NÚMERO DO CONTRATO SPONTE</label>
-                                    {% if contract.contract_number_sponte %}
-                                    <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.contract_number_sponte}}">
-                                    {% else %}
-                                    <input type="text" class="form-control" disabled="" placeholder="">
-                                    {% endif %}
-                                </div>
-                            </div>
-
-                            <div class="col-md-4 pl-1">
-                                <div class="form-group">
-                                    <label>DATA DE FECHAMENTO SPONTE</label>
-                                    {% if contract.closing_date_sponte %}
-                                    <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.closing_date_sponte}}">
-                                    {% else %}
-                                    <input type="text" class="form-control" disabled="" placeholder="">
-                                    {% endif %}
-                                </div>
-                            </div>
-
-                        </div>
-                        {% endif %}
-                        {% endif %}
-
-                        <div class="row">
-                          <div class="col-md-12">
-                              <div class="form-group">
-                                  <label>NOME DO CONTRATO</label>
-                                  {% if contract.name %}
-                                  <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.name}}">
-                                  {% else %}
-                                  <input type="text" class="form-control" disabled="" placeholder="">
-                                  {% endif %}
-                              </div>
-                          </div>
-                      </div>
-                      {% if school %}
-                      <div class="row">
-                          <div class="col-md-12">
-                              <div class="form-group">
-                                  <label>NOME DA ESCOLA</label>
-                                  {% if school.school_name %}
-                                  <input type="text" class="form-control" disabled="" placeholder="" value="{{school.school_name}}">
-                                  {% else %}
-                                  <input type="text" class="form-control" disabled="" placeholder="">
-                                  {% endif %}
-                              </div>
-                          </div>
-                      </div>
-                      {% endif %}
-                      {% if class %}
-                      <div class="row">
-                          <div class="col-md-12">
-                              <div class="form-group">
-                                  <label>NOME DA TURMA</label>
-                                  {% if class.class_name %}
-                                  <input type="text" class="form-control" disabled="" placeholder="" value="{{class.class_name}}">
-                                  {% else %}
-                                  <input type="text" class="form-control" disabled="" placeholder="">
-                                  {% endif %}
-                              </div>
-                          </div>
-                      </div>
-                      {% endif %}
-
-                      <div class="row">
-                          <div class="col-md-4 pr-1">
-                            <div class="form-group">
-                                <label>DATA DO CONTRATO</label>
-                                {% if contract.date %}
-                                <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.date}}">
-                                {% else %}
-                                <input type="text" class="form-control" disabled="" placeholder="">
-                                {% endif %}
-                            </div>
-                        </div>
-
-                        <div class="form-group col-md-8 px-4">
-                          <label>CONTRATO</label>
-                          {% if contract.pdf %}
-                          <div><a href="{% url 'contracts:serve_protected' contract.pdf.name contract.contract_id %}">{{contract.pdf}}</a></div>
-                          {% else %}
-                          <input type="text" class="form-control" disabled="" placeholder="" value="Sem Contrato">
-                          {% endif %}
-                      </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-9">
+        <div class="card w-50">
+          <div class="card-header">
+            <h4 class="card-title">Detalhes do Contrato</h4>
+          </div>
+          <div class="card-body">
+            <form>
+              {% if school %}
+              {% if school.sponte_client_number and school.sponte_token %}
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>ID DO CONTRATO SPONTE</label>
+                    {% if contract.contract_id_sponte %}
+                    <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.contract_id_sponte}}">
+                    {% else %}
+                    <input type="text" class="form-control" disabled="" placeholder="">
+                    {% endif %}
                   </div>
+                </div>
+
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">ID DO CONTRATO DE AULA LIVRE SPONTE</label>
+                    {% if contract.contract_free_class_id_sponte %}
+                    <input type="email" class="form-control" disabled="" placeholder="" value="{{contract.contract_free_class_id_sponte}}">
+                    {% else %}
+                    <input type="text" class="form-control" disabled="" placeholder="">
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 pr-1">
+                  <div class="form-group">
+                    <label>ID DA SITUAÇÃO SPONTE </label>
+                    {% if contract.situation_id_sponte %}
+                    <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.situation_id_sponte}}">
+                    {% else %}
+                    <input type="text" class="form-control" disabled="" placeholder="">
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="col-md-6 pl-1">
+                  <div class="form-group">
+                    <label>SITUAÇÃO SPONTE </label>
+                    {% if contract.situation_sponte %}
+                    <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.situation_sponte}}">
+                    {% else %}
+                    <input type="text" class="form-control" disabled="" placeholder="">
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>NOME DO ESTUDANTE SPONTE</label>
+                    {% if contract.student_name_sponte %}
+                    <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.student_name_sponte}}">
+                    {% else %}
+                    <input type="text" class="form-control" disabled="" placeholder="">
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4 pr-1">
+                  <div class="form-group">
+                    <label>ID DO ESTUDANTE SPONTE</label>
+                    {% if contract.student_id_sponte %}
+                    <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.student_id_sponte}}">
+                    {% else %}
+                    <input type="text" class="form-control" disabled="" placeholder="">
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="col-md-4 px-1">
+                  <div class="form-group">
+                    <label>ID DO CURSO SPONTE</label>
+                    {% if contract.course_id_sponte %}
+                    <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.course_id_sponte}}">
+                    {% else %}
+                    <input type="text" class="form-control" disabled="" placeholder="">
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="col-md-4 pl-1">
+                  <div class="form-group">
+                    <label>ID DA AULA SPONTE</label>
+                    {% if contract.class_id_sponte %}
+                    <input type="number" class="form-control" disabled="" placeholder="" value="{{contract.class_id_sponte}}">
+                    {% else %}
+                    <input type="text" class="form-control" disabled="" placeholder="">
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>NOME DA AULA SPONTE</label>
+                    {% if contract.class_name_sponte %}
+                    <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.class_name_sponte}}">
+                    {% else %}
+                    <input type="text" class="form-control" disabled="" placeholder="">
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>NOME DO CURSO SPONTE</label>
+                    {% if contract.course_name_sponte %}
+                    <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.course_name_sponte}}">
+                    {% else %}
+                    <input type="text" class="form-control" disabled="" placeholder="">
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="row">
+                <div class="col-md-4 pr-1">
+                  <div class="form-group">
+                    <label>ID DO TIPO DE CONTRATO SPONTE</label>
+                    {% if contract.contract_type_id %}
+                    <input type="number" class="form-control" disabled="" placeholder="" value="{{contract.contract_type_id}}">
+                    {% else %}
+                    <input type="text" class="form-control" disabled="" placeholder="">
+                    {% endif %}
+                  </div>
+                </div>
+
+                <div class="col-md-4 px-2">
+                  <div class="form-group">
+                    <label>DATA INICIAL DO CONTRATO SPONTE</label>
+                    {% if contract.initial_date_sponte %}
+                    <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.initial_date_sponte}}">
+                    {% else %}
+                    <input type="text" class="form-control" disabled="" placeholder="">
+                    {% endif %}
+                  </div>
+                </div>
+
+                <div class="col-md-4 pl-1">
+                  <div class="form-group">
+                    <label>DATA FINAL DO CONTRATO SPONTE</label>
+                    {% if contract.end_date_sponte %}
+                    <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.end_date_sponte}}">
+                    {% else %}
+                    <input type="text" class="form-control" disabled="" placeholder="">
+                    {% endif %}
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="row">
+                <div class="col-md-4 pr-1">
+                  <div class="form-group">
+                    <label>DATA DE REGISTRO SPONTE</label>
+                    {% if contract.date_of_registration_sponte %}
+                    <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.date_of_registration_sponte}}">
+                    {% else %}
+                    <input type="text" class="form-control" disabled="" placeholder="">
+                    {% endif %}
+                  </div>
+                </div>
+
+                <div class="col-md-4 px-1">
+                  <div class="form-group">
+                    <label>TIPO DE REGISTRO SPONTE</label>
+                    {% if contract.type_of_registration_spontee %}
+                    <input type="number" class="form-control" disabled="" placeholder="" value="{{contract.type_of_registration_sponte}}">
+                    {% else %}
+                    <input type="text" class="form-control" disabled="" placeholder="">
+                    {% endif %}
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>CONTRATANTE SPONTE</label>
+                    {% if contract.contractor_sponte %}
+                    <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.contractor_sponte}}">
+                    {% else %}
+                    <input type="text" class="form-control" disabled="" placeholder="">
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>NOME DA MATRIZ CURRICULAR SPONTE</label>
+                    {% if contract.name_of_curricular_matrix_sponte %}
+                    <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.name_of_curricular_matrix_sponte}}">
+                    {% else %}
+                    <input type="text" class="form-control" disabled="" placeholder="">
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+
+
+
+
+              <div class="row">
+
+                <div class="col-md-4 pr-1">
+                  <div class="form-group">
+                    <label>FINANCEIRO LANÇADO SPONTE</label>
+                    {% if contract.financial_launched_sponte %}
+                    <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.financial_launched_sponte}}">
+                    {% else %}
+                    <input type="text" class="form-control" disabled="" placeholder="">
+                    {% endif %}
+                  </div>
+                </div>
+
+
+                <div class="col-md-4 px-1">
+                  <div class="form-group">
+                    <label>NÚMERO DO CONTRATO SPONTE</label>
+                    {% if contract.contract_number_sponte %}
+                    <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.contract_number_sponte}}">
+                    {% else %}
+                    <input type="text" class="form-control" disabled="" placeholder="">
+                    {% endif %}
+                  </div>
+                </div>
+
+                <div class="col-md-4 pl-1">
+                  <div class="form-group">
+                    <label>DATA DE FECHAMENTO SPONTE</label>
+                    {% if contract.closing_date_sponte %}
+                    <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.closing_date_sponte}}">
+                    {% else %}
+                    <input type="text" class="form-control" disabled="" placeholder="">
+                    {% endif %}
+                  </div>
+                </div>
+
+              </div>
+              {% endif %}
+              {% endif %}
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>NOME DO CONTRATO</label>
+                    {% if contract.name %}
+                    <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.name}}">
+                    {% else %}
+                    <input type="text" class="form-control" disabled="" placeholder="">
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+              {% if school %}
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>NOME DA ESCOLA</label>
+                    {% if school.school_name %}
+                    <input type="text" class="form-control" disabled="" placeholder="" value="{{school.school_name}}">
+                    {% else %}
+                    <input type="text" class="form-control" disabled="" placeholder="">
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+              {% endif %}
+              {% if class %}
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>NOME DA TURMA</label>
+                    {% if class.class_name %}
+                    <input type="text" class="form-control" disabled="" placeholder="" value="{{class.class_name}}">
+                    {% else %}
+                    <input type="text" class="form-control" disabled="" placeholder="">
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+              {% endif %}
+
+              <div class="row">
+                <div class="col-md-4 pr-1">
+                  <div class="form-group">
+                    <label>DATA DO CONTRATO</label>
+                    {% if contract.date %}
+                    <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.date}}">
+                    {% else %}
+                    <input type="text" class="form-control" disabled="" placeholder="">
+                    {% endif %}
+                  </div>
+                </div>
+
+                <div class="form-group col-md-8 px-4">
+                  <label>CONTRATO</label>
+                  {% if contract.pdf %}
+                  <div><a href="{% url 'contracts:serve_protected' contract.pdf.name contract.contract_id %}">{{contract.pdf}}</a></div>
+                  {% else %}
+                  <input type="text" class="form-control" disabled="" placeholder="" value="Sem Contrato">
+                  {% endif %}
+                </div>
+              </div>
+              {% if contract.terms_of_contract %}
+              <div class="row">
+                <div class="form-group col-md-12 px-4">
+                  <label>PRIMEIRO TERMO DO CONTRATO</label>
                   {% if contract.terms_of_contract %}
-                  <div class="row">
-                    <div class="form-group col-md-12 px-4">
-                      <label>PRIMEIRO TERMO DO CONTRATO</label>
-                      {% if contract.terms_of_contract %}
-                      <div><a href="{{contract.terms_of_contract.url}}">{{contract.terms_of_contract}}</a></div>
-                      {% else %}
-                      <input type="text" class="form-control" disabled="" placeholder="" value="Sem Primeiro Termo do Contrato">
-                      {% endif %}
-                  </div>
+                  <div><a href="{{contract.terms_of_contract.url}}">{{contract.terms_of_contract}}</a></div>
+                  {% else %}
+                  <input type="text" class="form-control" disabled="" placeholder="" value="Sem Primeiro Termo do Contrato">
+                  {% endif %}
+                </div>
               </div>
               {% endif %}
               {% if contract.terms_of_contract %}
               <div class="row">
                 <div class="form-group col-md-12 px-4">
-                    <label>SEGUNDO TERMO DO CONTRATO</label>
-                    {% if contract.terms_of_contract %}
-                    <div><a href="{{contract.terms_of_contract.url}}">{{contract.terms_of_contract}}</a></div>
-                    {% else %}
-                    <input type="text" class="form-control" disabled="" placeholder="" value="Sem Segundo Termo do Contrato">
-                    {% endif %}
+                  <label>SEGUNDO TERMO DO CONTRATO</label>
+                  {% if contract.terms_of_contract %}
+                  <div><a href="{{contract.terms_of_contract.url}}">{{contract.terms_of_contract}}</a></div>
+                  {% else %}
+                  <input type="text" class="form-control" disabled="" placeholder="" value="Sem Segundo Termo do Contrato">
+                  {% endif %}
                 </div>
-            </div>
-            {%endif%}
+              </div>
+              {%endif%}
 
 
-            {% if request.user.is_superuser or is_supervisor %}
-            <div class="row">
+              {% if request.user.is_superuser or is_supervisor %}
+              <div class="row">
                 {% if contract.first_auth_signe %}
                 <div class="col-md-4 pr-1">
-                    <div class="form-group">
-                        <label>RESPONSÁVEL FINANCEIRO ASSINADO</label>
-                        {% if contract.first_auth_signed %}
-                        <div>
-                         <span class="badge badge-pill badge-success text-success" >.</span>
-                     </div>
-                     {% else %}
-                     <div>
-                        <span class="badge badge-pill badge-danger text-danger" >.</span>
-                    </div>
-                    {% endif %}
-                    <!--<input type="text" class="form-control" disabled="" placeholder="" value="{{contract.first_auth_signed}}">-->
-                </div>
-            </div>
-            {% endif %}
-            {% if contract.first_auth_signe %}
-            <div class="col-md-4 px-1">
-                <div class="form-group">
-                    <label>RESPONSÁVEL PEDAGÓGICO ASSINADO</label>
-
-                    {% if contract.second_auth_signed %}
+                  <div class="form-group">
+                    <label>RESPONSÁVEL FINANCEIRO ASSINADO</label>
+                    {% if contract.first_auth_signed %}
                     <div>
                      <span class="badge badge-pill badge-success text-success" >.</span>
+                   </div>
+                   {% else %}
+                   <div>
+                    <span class="badge badge-pill badge-danger text-danger" >.</span>
+                  </div>
+                  {% endif %}
+                  <!--<input type="text" class="form-control" disabled="" placeholder="" value="{{contract.first_auth_signed}}">-->
+                </div>
+              </div>
+              {% endif %}
+              {% if contract.first_auth_signe %}
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label>RESPONSÁVEL PEDAGÓGICO ASSINADO</label>
+
+                  {% if contract.second_auth_signed %}
+                  <div>
+                   <span class="badge badge-pill badge-success text-success" >.</span>
                  </div>
                  {% else %}
                  <div>
-                    <span class="badge badge-pill badge-danger text-danger" >.</span>
+                  <span class="badge badge-pill badge-danger text-danger" >.</span>
                 </div>
                 {% endif %}
                 <!--  <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.second_auth_signed}}">-->
+              </div>
             </div>
-        </div>
-        {% endif %}
-        {% if contract.student_auth_signe %}
-        <div class="col-md-4 pr-1">
-            <div class="form-group">
+            {% endif %}
+            {% if contract.student_auth_signe %}
+            <div class="col-md-4 pr-1">
+              <div class="form-group">
                 <label>RESPONSÁVEL ESTUDANTE ASSINADO</label>
                 {% if contract.student_auth_signed %}
                 <div>
                  <span class="badge badge-pill badge-success text-success" >.</span>
+               </div>
+               {% else %}
+               <div>
+                <span class="badge badge-pill badge-danger text-danger" >.</span>
+              </div>
+              {% endif %}
+              <!--<input type="text" class="form-control" disabled="" placeholder="" value="{{contract.first_auth_signed}}">-->
+            </div>
+          </div>
+          {% endif %}
+      </div>
+
+
+      <div class="row">
+        <div class="col-md-4 pr-1">
+          <div class="form-group">
+            <label>DIRETOR RESPONSÁVEL ASSINADO</label>
+            {% if contract.counter_signed %}
+            <div>
+             <span class="badge badge-pill badge-success text-success" >.</span>
+           </div>
+           {% else %}
+           <div>
+            <span class="badge badge-pill badge-danger text-danger" >.</span>
+          </div>
+          {% endif %}
+          <!--<input type="text" class="form-control" disabled="" placeholder="" value="{{contract.counter_signed}}">-->
+        </div>
+      </div>
+      {% if contract.first_witness_signe and contract.second_witness_signe %}
+          <div class="col-md-4 pr-1">
+            <div class="form-group">
+              <label>TODAS AS TESTEMUNHAS ASSINARAM</label>
+              {% if contract.all_witness_signed %}
+              <div>
+               <span class="badge badge-pill badge-success text-success" >.</span>
              </div>
              {% else %}
              <div>
-                <span class="badge badge-pill badge-danger text-danger" >.</span>
+              <span class="badge badge-pill badge-danger text-danger" >.</span>
             </div>
             {% endif %}
             <!--<input type="text" class="form-control" disabled="" placeholder="" value="{{contract.first_auth_signed}}">-->
+          </div>
         </div>
-    </div>
-    {% endif %}
-</div>
-
-
-<div class="row">
-  <div class="col-md-4 pr-1">
-    <div class="form-group">
-        <label>DIRETOR RESPONSÁVEL ASSINADO</label>
-        {% if contract.counter_signed %}
-        <div>
-         <span class="badge badge-pill badge-success text-success" >.</span>
-     </div>
-     {% else %}
-     <div>
-        <span class="badge badge-pill badge-danger text-danger" >.</span>
-    </div>
-    {% endif %}
-    <!--<input type="text" class="form-control" disabled="" placeholder="" value="{{contract.counter_signed}}">-->
-</div>
-</div>
-
-</div>
-
-{% if contract.first_auth_signe %}
-<div class="row">
-    <div class="col-md-12">
-        <div class="form-group">
-            <label>RESPONSÁVEL FINANCEIRO POR ASSINAR</label>
-            {% if contract.first_auth_signe %}
-            <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.first_auth_signe}}">
-            {% else %}
-            <input type="text" class="form-control" disabled="" placeholder="">
-            {% endif %}
-        </div>
-    </div>
-</div>
-{% endif %}
-{% if contract.second_auth_signe %}
-<div class="row">
-    <div class="col-md-12">
-        <div class="form-group">
-            <label>RESPONSÁVEL PEDAGÓGICO POR ASSINAR</label>
-            {% if contract.second_auth_signe %}
-            <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.second_auth_signe}}">
-            {% else %}
-            <input type="text" class="form-control" disabled="" placeholder="">
-            {% endif %}
-        </div>
-    </div>
-</div>
-{% endif %}
-
-{% if contract.student_auth_signe %}
-<div class="row">
-    <div class="col-md-12">
-        <div class="form-group">
-            <label>RESPONSÁVEL ESTUDANTE POR ASSINAR</label>
-            {% if contract.student_auth_signe %}
-            <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.student_auth_signe}}">
-            {% else %}
-            <input type="text" class="form-control" disabled="" placeholder="">
-            {% endif %}
-        </div>
-    </div>
-</div>
-{% endif %}
-
-<div class="row">
-  <div class="col-md-12">
-    <div class="form-group">
-        <label>DIRETOR RESPONSÁVEL POR ASSINAR</label>
-        {% if contract.counter_signe %}
-        <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.counter_signe}}">
-        {% else %}
-        <input type="text" class="form-control" disabled="" placeholder="">
         {% endif %}
     </div>
-</div>
 
-</div>
-
-<div class="row">
-  <div class="col-md-12">
-    <div class="form-group">
-        <label>NOME DO ALUNO</label>
-        {% if contract.student_name %}
-        <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.student_name}}">
-        {% else %}
-        <input type="text" class="form-control" disabled="" placeholder="">
-        {% endif %}
-    </div>
-</div>
-
-</div>
-{% endif %}
-
-{% if contract.first_auth_signe %}
-{% if request.user == contract.first_auth_signe.profile or request.user.is_superuser or is_supervisor %}
-<div class="row">
-    <div class="col-md-6 pr-1">
+    {% if contract.first_auth_signe %}
+    <div class="row">
+      <div class="col-md-12">
         <div class="form-group">
-            <label>RESPONSÁVEL FINANCEIRO ASSINATURA DATA E HORA</label>
-            {% if contract.first_auth_signed_timestamp %}
-            <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.first_auth_signed_timestamp.day}}/{{contract.first_auth_signed_timestamp.month}}/{{contract.first_auth_signed_timestamp.year}} às {% if contract.first_auth_signed_timestamp.hour < 10 %}0{{contract.first_auth_signed_timestamp.hour}}{% else %}{{contract.first_auth_signed_timestamp.hour}}{% endif %}:{% if contract.first_auth_signed_timestamp.minute < 10 %}0{{contract.first_auth_signed_timestamp.minute}}{% else %}{{contract.first_auth_signed_timestamp.minute}}{% endif %}:{% if contract.first_auth_signed_timestamp.second < 10 %}0{{contract.first_auth_signed_timestamp.second}}{% else %}{{contract.first_auth_signed_timestamp.second}}{% endif %}">
-            {% else %}
-            <input type="text" class="form-control" disabled="" placeholder="">
-            {% endif %}
+          <label>RESPONSÁVEL FINANCEIRO POR ASSINAR</label>
+          {% if contract.first_auth_signe %}
+          <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.first_auth_signe}}">
+          {% else %}
+          <input type="text" class="form-control" disabled="" placeholder="">
+          {% endif %}
         </div>
+      </div>
     </div>
-</div>
-{% endif %}
-{% endif %}
-{% if contract.second_auth_signe %}
-{% if request.user == contract.second_auth_signe.profile or request.user.is_superuser or is_supervisor %}
-<div class="row">
-    <div class="col-md-6 pr-1">
+    {% endif %}
+    {% if contract.second_auth_signe %}
+    <div class="row">
+      <div class="col-md-12">
         <div class="form-group">
-            <label>RESPONSÁVEL PEDAGÓGICO ASSINATURA DATA E HORA</label>
-            {% if contract.second_auth_signed_timestamp %}
-            <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.second_auth_signed_timestamp.day}}/{{contract.second_auth_signed_timestamp.month}}/{{contract.second_auth_signed_timestamp.year}} às {% if contract.second_auth_signed_timestamp.hour < 10 %}0{{contract.second_auth_signed_timestamp.hour}}{% else %}{{contract.second_auth_signed_timestamp.hour}}{% endif %}:{% if contract.second_auth_signed_timestamp.minute < 10 %}0{{contract.second_auth_signed_timestamp.minute}}{% else %}{{contract.second_auth_signed_timestamp.minute}}{% endif %}:{% if contract.second_auth_signed_timestamp.second < 10 %}0{{contract.second_auth_signed_timestamp.second}}{% else %}{{contract.second_auth_signed_timestamp.second}}{% endif %}">
-            {% else %}
-            <input type="text" class="form-control" disabled="" placeholder="">
-            {% endif %}
+          <label>RESPONSÁVEL PEDAGÓGICO POR ASSINAR</label>
+          {% if contract.second_auth_signe %}
+          <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.second_auth_signe}}">
+          {% else %}
+          <input type="text" class="form-control" disabled="" placeholder="">
+          {% endif %}
         </div>
+      </div>
     </div>
-</div>
-{% endif %}
-{% endif %}
-{% if contract.student_auth_signe %}
-{% if request.user == contract.student_auth_signe.profile or request.user.is_superuser or is_supervisor %}
-<div class="row">
-    <div class="col-md-6 pr-1">
+    {% endif %}
+
+    {% if contract.student_auth_signe %}
+    <div class="row">
+      <div class="col-md-12">
         <div class="form-group">
-            <label>RESPONSÁVEL ESTUDANTE ASSINATURA DATA E HORA</label>
-            {% if contract.student_auth_signed_timestamp %}
-            <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.student_auth_signed_timestamp.day}}/{{contract.student_auth_signed_timestamp.month}}/{{contract.student_auth_signed_timestamp.year}} às {% if contract.student_auth_signed_timestamp.hour < 10 %}0{{contract.student_auth_signed_timestamp.hour}}{% else %}{{contract.student_auth_signed_timestamp.hour}}{% endif %}:{% if contract.student_auth_signed_timestamp.minute < 10 %}0{{contract.student_auth_signed_timestamp.minute}}{% else %}{{contract.student_auth_signed_timestamp.minute}}{% endif %}:{% if contract.student_auth_signed_timestamp.second < 10 %}0{{contract.student_auth_signed_timestamp.second}}{% else %}{{contract.student_auth_signed_timestamp.second}}{% endif %}">
-            {% else %}
-            <input type="text" class="form-control" disabled="" placeholder="">
-            {% endif %}
+          <label>RESPONSÁVEL ESTUDANTE POR ASSINAR</label>
+          {% if contract.student_auth_signe %}
+          <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.student_auth_signe}}">
+          {% else %}
+          <input type="text" class="form-control" disabled="" placeholder="">
+          {% endif %}
         </div>
+      </div>
     </div>
-</div>
-{% endif %}
-{% endif %}
-{% if request.user.is_superuser or is_supervisor %}
-<div class="row">
-    <div class="col-md-6 pr-1">
+    {% endif %}
+
+    <div class="row">
+      <div class="col-md-12">
         <div class="form-group">
-            <label>DIRETOR RESPONSÁVEL ASSINARUTA DATA E HORA</label>
-            {% if contract.counter_signed_timestamp %}
+          <label>DIRETOR RESPONSÁVEL POR ASSINAR</label>
+          {% if contract.counter_signe %}
+          <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.counter_signe}}">
+          {% else %}
+          <input type="text" class="form-control" disabled="" placeholder="">
+          {% endif %}
+        </div>
+      </div>
 
-            <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.counter_signed_timestamp.day}}/{{contract.counter_signed_timestamp.month}}/{{contract.counter_signed_timestamp.year}} às {% if contract.counter_signed_timestamp.hour < 10 %}0{{contract.counter_signed_timestamp.hour}}{% else %}{{contract.counter_signed_timestamp.hour}}{% endif %}:{% if contract.counter_signed_timestamp.minute < 10 %}0{{contract.counter_signed_timestamp.minute}}{% else %}{{contract.counter_signed_timestamp.minute}}{% endif %}:{% if contract.counter_signed_timestamp.second < 10 %}0{{contract.counter_signed_timestamp.second}}{% else %}{{contract.counter_signed_timestamp.second}}{% endif %}">
-            {% else %}
-            <input type="text" class="form-control" disabled="" placeholder="">
-            {% endif %}
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label>NOME DO ALUNO</label>
+          {% if contract.student_name %}
+          <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.student_name}}">
+          {% else %}
+          <input type="text" class="form-control" disabled="" placeholder="">
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+    {% endif %}
+
+    {% if contract.first_auth_signe %}
+    {% if request.user == contract.first_auth_signe.profile or request.user.is_superuser or is_supervisor %}
+    <div class="row">
+      <div class="col-md-6 pr-1">
+        <div class="form-group">
+          <label>RESPONSÁVEL FINANCEIRO ASSINATURA DATA E HORA</label>
+          {% if contract.first_auth_signed_timestamp %}
+          <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.first_auth_signed_timestamp.day}}/{{contract.first_auth_signed_timestamp.month}}/{{contract.first_auth_signed_timestamp.year}} às {% if contract.first_auth_signed_timestamp.hour < 10 %}0{{contract.first_auth_signed_timestamp.hour}}{% else %}{{contract.first_auth_signed_timestamp.hour}}{% endif %}:{% if contract.first_auth_signed_timestamp.minute < 10 %}0{{contract.first_auth_signed_timestamp.minute}}{% else %}{{contract.first_auth_signed_timestamp.minute}}{% endif %}:{% if contract.first_auth_signed_timestamp.second < 10 %}0{{contract.first_auth_signed_timestamp.second}}{% else %}{{contract.first_auth_signed_timestamp.second}}{% endif %}">
+          {% else %}
+          <input type="text" class="form-control" disabled="" placeholder="">
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    {% endif %}
+    {% if contract.second_auth_signe %}
+    {% if request.user == contract.second_auth_signe.profile or request.user.is_superuser or is_supervisor %}
+    <div class="row">
+      <div class="col-md-6 pr-1">
+        <div class="form-group">
+          <label>RESPONSÁVEL PEDAGÓGICO ASSINATURA DATA E HORA</label>
+          {% if contract.second_auth_signed_timestamp %}
+          <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.second_auth_signed_timestamp.day}}/{{contract.second_auth_signed_timestamp.month}}/{{contract.second_auth_signed_timestamp.year}} às {% if contract.second_auth_signed_timestamp.hour < 10 %}0{{contract.second_auth_signed_timestamp.hour}}{% else %}{{contract.second_auth_signed_timestamp.hour}}{% endif %}:{% if contract.second_auth_signed_timestamp.minute < 10 %}0{{contract.second_auth_signed_timestamp.minute}}{% else %}{{contract.second_auth_signed_timestamp.minute}}{% endif %}:{% if contract.second_auth_signed_timestamp.second < 10 %}0{{contract.second_auth_signed_timestamp.second}}{% else %}{{contract.second_auth_signed_timestamp.second}}{% endif %}">
+          {% else %}
+          <input type="text" class="form-control" disabled="" placeholder="">
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    {% endif %}
+    {% if contract.student_auth_signe %}
+    {% if request.user == contract.student_auth_signe.profile or request.user.is_superuser or is_supervisor %}
+    <div class="row">
+      <div class="col-md-6 pr-1">
+        <div class="form-group">
+          <label>RESPONSÁVEL ESTUDANTE ASSINATURA DATA E HORA</label>
+          {% if contract.student_auth_signed_timestamp %}
+          <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.student_auth_signed_timestamp.day}}/{{contract.student_auth_signed_timestamp.month}}/{{contract.student_auth_signed_timestamp.year}} às {% if contract.student_auth_signed_timestamp.hour < 10 %}0{{contract.student_auth_signed_timestamp.hour}}{% else %}{{contract.student_auth_signed_timestamp.hour}}{% endif %}:{% if contract.student_auth_signed_timestamp.minute < 10 %}0{{contract.student_auth_signed_timestamp.minute}}{% else %}{{contract.student_auth_signed_timestamp.minute}}{% endif %}:{% if contract.student_auth_signed_timestamp.second < 10 %}0{{contract.student_auth_signed_timestamp.second}}{% else %}{{contract.student_auth_signed_timestamp.second}}{% endif %}">
+          {% else %}
+          <input type="text" class="form-control" disabled="" placeholder="">
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    {% endif %}
+    {% if request.user.is_superuser or is_supervisor %}
+    <div class="row">
+      <div class="col-md-6 pr-1">
+        <div class="form-group">
+          <label>DIRETOR RESPONSÁVEL ASSINARUTA DATA E HORA</label>
+          {% if contract.counter_signed_timestamp %}
+
+          <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.counter_signed_timestamp.day}}/{{contract.counter_signed_timestamp.month}}/{{contract.counter_signed_timestamp.year}} às {% if contract.counter_signed_timestamp.hour < 10 %}0{{contract.counter_signed_timestamp.hour}}{% else %}{{contract.counter_signed_timestamp.hour}}{% endif %}:{% if contract.counter_signed_timestamp.minute < 10 %}0{{contract.counter_signed_timestamp.minute}}{% else %}{{contract.counter_signed_timestamp.minute}}{% endif %}:{% if contract.counter_signed_timestamp.second < 10 %}0{{contract.counter_signed_timestamp.second}}{% else %}{{contract.counter_signed_timestamp.second}}{% endif %}">
+          {% else %}
+          <input type="text" class="form-control" disabled="" placeholder="">
+          {% endif %}
 
         </div>
+      </div>
     </div>
-</div>
-{% endif %}
+    {% endif %}
 
-<div class="clearfix"></div>
-</form>
+    <div class="clearfix"></div>
+  </form>
 </div>
 </div>
 </div>

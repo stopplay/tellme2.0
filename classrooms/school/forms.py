@@ -20,6 +20,16 @@ class SchoolModelForm(forms.ModelForm):
 			'app_name': forms.TextInput(attrs={'class':'form-control', 'required':False}),
 		}
 
+class SetWitnessModelForm(forms.ModelForm):
+	"""docstring for ManagerModelForm"""
+	class Meta:
+		model = School
+		fields = ['first_witness','second_witness']
+		widgets = {
+			'first_witness': forms.Select(attrs={'class':'form-control chosen-select'}),
+			'second_witness': forms.Select(attrs={'class':'form-control chosen-select'}),
+		}
+
 class ClassModelForm(forms.ModelForm):
 	"""docstring for UserModelForm"""
 	class Meta:

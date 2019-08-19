@@ -1312,3 +1312,124 @@ def add_second_witness(request, school_id=None):
 				email.send()
 				return redirect('/schools/{}/add_class'.format(school_id))
 		return render(request, 'school_users/add_second_witness.html', {'form':form, 'form2':form2,'school':school_to_add_witness})
+
+@login_required
+def set_witnesses(request, school_id=None):
+    if request.user.is_superuser:
+    	instance = get_object_or_404(School, school_id=school_id)
+    	form = SetWitnessModelForm(request.POST or None, instance=instance)
+    	if form.is_valid():
+            new_school = form.save(commit=False)
+            new_school.save(update_fields=['first_witness','second_witness'])
+            messages.success(request, 'Testemunhas Selecionadas com Sucesso')
+            return redirect('/')
+    	return render(request, 'school/set_witnesses.html', {'form':form, 'school_id':school_id})
+    elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
+        is_supervisor = True
+        instance = get_object_or_404(Student, student_id=student_id)
+        form = SetWitnessModelForm(request.POST or None, instance=instance)
+        witnesses_ids = []
+        schools = None
+        if Head.objects.filter(profile=request.user).count()>=1:
+            schools = School.objects.filter(head=Head.objects.get(profile=request.user))
+        for school in schools:
+        	if school.first_witness:
+        		witnesses_ids += [(school.first_witness.witness_id)]
+        	if school.second_witness:
+        		witnesses_ids += [(school.second_witness.witness_id)]
+        form.fields["first_witness"].queryset = Witness.objects.filter(witness_id__in=witness_ids)
+        form.fields["second_witness"].queryset = Witness.objects.filter(witness_id__in=witness_ids)
+        if form.is_valid():
+            new_school = form.save(commit=False)
+            new_school.save(update_fields=['first_witness','second_witness'])
+            messages.success(request, 'Testemunhas Selecionadas com Sucesso')
+            return redirect('/')
+        return render(request, 'school/set_witnesses.html', {'form':form, 'school_id':school_id, 'is_supervisor':is_supervisor})
+
+@login_required
+def add_witness(request, school_id=None, type_of_user= None):
+    if request.user.is_superuser:
+        school = School.objects.get(school_id=school_id)
+        form = UserModelForm(request.POST or None)
+        form2 = WitnessModelForm(request.POST or None)
+        if form.is_valid() and form2.is_valid():
+            user = form.save(commit=False)
+            user.username = user.first_name.lower()+user.last_name.lower()
+            i = 0
+            user.username = user.username.replace(" ", "")
+            while User.objects.filter(username=user.username).count()>=1:
+                user.username = user.first_name.lower()+user.last_name.lower()
+                user.username = user.username + str(i)
+                user.username = user.username.replace(" ", "")
+                i+=1
+            user.save()
+            user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
+            user_creation = form2.save(commit=False)
+            user_creation.profile = user_profile
+            user_creation.name = user_profile.first_name+' '+user_profile.last_name
+            user_creation.save()
+            current_site = get_current_site(request)
+            mail_subject = 'Login para acesso ao app escolar.'
+            message = render_to_string('school_users/user_login.html', {
+                'user': user_creation,
+                'domain': current_site.domain,
+                'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                'token':account_activation_token.make_token(user),
+            })
+            to_email = form.cleaned_data.get('email')
+            email = EmailMessage(
+                mail_subject, message, to=[to_email]
+            )
+            email.send()
+            witness = Witness.objects.get(profile=user_profile)
+            if type_of_user == 'first_wintess':
+                school.first_witness = wintess
+            elif type_of_user == 'second_wintess':
+                school.second_witness = wintess
+            school.save(update_fields=['first_witness','second_witness'])
+            messages.success(request, 'Testemunha adicionada com sucesso!')
+            return redirect('/schools/{}/set_witnesses'.format(school_id))
+        return render(request, 'school/add_witness.html', {'form':form, 'form2':form2})
+    elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
+        is_supervisor = True
+        school = School.objects.get(school_id=school_id)
+        form = UserModelForm(request.POST or None)
+        form2 = WitnessModelForm(request.POST or None)
+        if form.is_valid() and form2.is_valid():
+            user = form.save(commit=False)
+            user.username = user.first_name.lower()+user.last_name.lower()
+            i = 0
+            user.username = user.username.replace(" ", "")
+            while User.objects.filter(username=user.username).count()>=1:
+                user.username = user.first_name.lower()+user.last_name.lower()
+                user.username = user.username + str(i)
+                user.username = user.username.replace(" ", "")
+                i+=1
+            user.save()
+            user_profile = get_object_or_404(User, username=user.username,first_name=user.first_name,last_name=user.last_name,email=user.email,password=user.password)
+            user_creation = form2.save(commit=False)
+            user_creation.profile = user_profile
+            user_creation.name = user_profile.first_name+' '+user_profile.last_name
+            user_creation.save()
+            current_site = get_current_site(request)
+            mail_subject = 'Login para acesso ao app escolar.'
+            message = render_to_string('school_users/user_login.html', {
+                'user': user_creation,
+                'domain': current_site.domain,
+                'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                'token':account_activation_token.make_token(user),
+            })
+            to_email = form.cleaned_data.get('email')
+            email = EmailMessage(
+                mail_subject, message, to=[to_email]
+            )
+            email.send()
+            witness = Witness.objects.get(profile=user_profile)
+            if type_of_user == 'first_wintess':
+                school.first_witness = wintess
+            elif type_of_user == 'second_wintess':
+                school.second_witness = wintess
+            school.save(update_fields=['first_witness','second_witness'])
+            messages.success(request, 'Testemunha adicionada com sucesso!')
+            return redirect('/schools/{}/set_witnesses'.format(school_id))
+        return render(request, 'school/add_witness.html', {'form':form, 'form2':form2, 'is_supervisor':is_supervisor})
