@@ -1326,7 +1326,7 @@ def set_witnesses(request, school_id=None):
     	return render(request, 'school/set_witnesses.html', {'form':form, 'school_id':school_id})
     elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
         is_supervisor = True
-        instance = get_object_or_404(Student, student_id=student_id)
+        instance = get_object_or_404(School, school_id=school_id)
         form = SetWitnessModelForm(request.POST or None, instance=instance)
         witnesses_ids = []
         schools = None
