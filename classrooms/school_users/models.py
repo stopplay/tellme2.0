@@ -105,6 +105,8 @@ class Student(models.Model):
 	midia_sponte = models.TextField(null=True, blank=True)
 	bithday_sponte = models.TextField(null=True, blank=True)
 	cep_sponte = models.TextField(null=True, blank=True)
+	operation_return_message_sponte = models.TextField(null=True, blank=True)
+	responsibles_sponte = models.TextField(null=True, blank=True)
 	address_sponte = models.TextField(null=True, blank=True)
 	address_number_sponte = models.TextField(null=True, blank=True)
 	register_date_sponte = models.TextField(null=True, blank=True)

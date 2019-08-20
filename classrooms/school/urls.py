@@ -13,6 +13,8 @@ router.register(r'schools', views.SchoolsViewSet)
 app_name = 'school'
 urlpatterns = [
     url('', include(router.urls)),
+    url('import_xml/', views.import_xml, name='import_xml'),
+    url('import_sponte/', views.import_sponte, name='import_sponte'),
     path('seeclassbyid/<int:class_id>', views.seeclassbyid, name="seeclassbyid"),
     path('blockchain/<int:chain_id>', views.seechainbyid, name="seechainbyid"),
     url('add_school/', views.create_school, name="add_school"),
@@ -45,6 +47,5 @@ urlpatterns = [
     path('verifyvalidchain/<int:class_id>', views.verifyvalidchain, name='verifyvalidchain'),
     path('delete_class/<int:class_id>', views.delete_class, name='delete_class'),
     url('create_block/', views.create_block, name='create_block'),
-    path('import_xml/<string>', views.import_xml, name='import_xml'),
 
 ]

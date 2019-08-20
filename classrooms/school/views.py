@@ -1435,5 +1435,37 @@ def add_witness(request, school_id=None, type_of_user= None):
             return redirect('/schools/{}/set_witnesses'.format(school_id))
         return render(request, 'school/add_witness.html', {'form':form, 'form2':form2, 'is_supervisor':is_supervisor})
 
-def import_xml(request, string):
-	pass
+def import_xml(request):
+	xml_content = ''
+	try:
+		url_string = request.GET.get('url', '')
+		print('url_string', url_string)
+		xml_content = requests.get(url_string)
+		print('xml_content', xml_content)
+		return HttpResponse(xml_content, content_type='application/xml')
+	except:
+		return HttpResponse(xml_content, content_type='application/xml')
+
+def import_sponte(request):
+	xml_content = ''
+	try:
+		base_url = 'http://api.sponteeducacional.net.br/WSAPIEdu.asmx/'
+		path = request.GET.get('path', '')
+		and_query = '&'
+		params = []
+
+		print(request.GET)
+
+		for query_key, query_value in request.GET.items():
+			if query_key != 'path':
+				params += [ query_key + '=' + query_value ]
+
+		sponte_url = base_url + path + '?' + and_query.join(params)
+		print('sponte_url', sponte_url)
+		xml_response = requests.get(sponte_url)
+		xml_content = xml_response.text
+		response = HttpResponse(xml_content, content_type='text/xml')
+		print('response', response)
+		return response
+	except:
+		return HttpResponse(xml_content, content_type='text/xml')
