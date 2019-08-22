@@ -43,9 +43,25 @@ class ParentSerializer(serializers.ModelSerializer):
 
 class StudentSerializer(serializers.ModelSerializer):
     """docstring for StudentSerializer"""
-    profile = UserSerializer()
-    first_parent = ParentSerializer()
-    second_parent = ParentSerializer()
+    profile = UserSerializer(required=False)
+    first_parent = ParentSerializer(required=False)
+    second_parent = ParentSerializer(required=False)
+    
+    def create(self, validated_data):
+       
+        student_data = {}
+        profile_data = {}
+
+        if 'profile' in validated_data:
+            profile_data = dict(validated_data['profile'])
+            del validated_data['profile']
+            student_data = validated_data
+            student_data['profile'] = User.objects.create(**profile_data)
+        else:
+            student_data = validated_data
+
+        return Student.objects.create(**student_data)
+        
     class Meta:
         model = Student
         fields = '__all__'
