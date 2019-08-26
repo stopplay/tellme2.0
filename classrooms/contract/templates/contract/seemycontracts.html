@@ -461,30 +461,32 @@
                                   </div>
                                 {% endif %}
                               {% endif %}
-                              {% if contract.chain.name %}
-                                {% for school in schools %}
-                                  {% if contract.chain in school.chains.all %}
-                                    {% if school.is_maple_bear %}
-                                      {% if not contract.is_paid %}
-                                        <div class="row">                      
-                                          <div class="col-md-12">
-                                            <a class="btn btn-primary w-100" href="{% url 'contracts:set_contract_paid' contract.contract_id %}">
-                                              Setar contrato como pago
-                                            </a>
+                              {% if request.user.is_superuser or is_supervisor %}
+                                {% if contract.chain.name %}
+                                  {% for school in schools %}
+                                    {% if contract.chain in school.chains.all %}
+                                      {% if school.is_maple_bear %}
+                                        {% if not contract.is_paid %}
+                                          <div class="row">                      
+                                            <div class="col-md-12">
+                                              <a class="btn btn-primary w-100" href="{% url 'contracts:set_contract_paid' contract.contract_id %}">
+                                                Setar contrato como pago
+                                              </a>
+                                            </div>
                                           </div>
-                                        </div>
-                                      {% else %}
-                                        <div class="row">                      
-                                          <div class="col-md-12">
-                                            <button type="button" class="btn btn-success btn-block w-100" style="cursor: not-allowed;">
-                                              Contrato pago
-                                            </button>
+                                        {% else %}
+                                          <div class="row">                      
+                                            <div class="col-md-12">
+                                              <button type="button" class="btn btn-success btn-block w-100" style="cursor: not-allowed;">
+                                                Contrato pago
+                                              </button>
+                                            </div>
                                           </div>
-                                        </div>
+                                        {% endif %}
                                       {% endif %}
                                     {% endif %}
-                                  {% endif %}
-                                {% endfor %}
+                                  {% endfor %}
+                                {% endif %}
                               {% endif %}
                           </div>
                         </td>
