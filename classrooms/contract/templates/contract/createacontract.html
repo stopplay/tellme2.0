@@ -24,9 +24,8 @@
 							<div class="col-md-11 pr-1">
 								<div class="form-group">
 									<form method="POST" class="" enctype="multipart/form-data" > {% csrf_token %}
-										<div style="margin-top: 10px">
-
 											{{ form.as_p }}
+											<div style="margin-top: 10px">
 											<p><label>Você deseja enviar este contrato por email? (Recomendado)</label><br><label
 												style="margin-right: 10px">Não</label><label class="switch">
 													<input type="checkbox" id="first_checkbox" checked>

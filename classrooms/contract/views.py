@@ -709,6 +709,21 @@ def mark_slm_purchased(request, contract_id):
 		contract.save()
 
 	return redirect('/contracts/all')
+
+@login_required
+def set_contract_paid(request, contract_id):
+	contract = Contract.objects.get(contract_id=contract_id)
+
+	# first_auth_signe
+	# second_auth_signe
+	# student_auth_signe
+
+	if contract:
+		contract.is_paid = True
+		contract.save(update_fields=['is_paid'])
+		messages.success(request, 'O contrato foi setado como pago')
+
+	return redirect('/contracts/all')
 	
 @login_required
 def seemycontracts(request):

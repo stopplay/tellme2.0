@@ -48,7 +48,10 @@ def create_school(request):
 	if request.user.is_superuser:
 		form = SchoolModelForm(request.POST or None)
 		if form.is_valid():
+			wish = request.POST.get('wish' or None)
 			school = form.save(commit=False)
+			if wish == 'sim':
+				school.is_maple_bear = True
 			school.save()
 			form = SchoolModelForm()
 			school_to_add_head = School.objects.get(school_id=school.school_id)
