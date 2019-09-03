@@ -68,3 +68,4 @@ psycopg2-binary
 zeep
 bs4
 data-wizard
+xmltodict

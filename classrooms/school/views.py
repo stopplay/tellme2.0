@@ -18,7 +18,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework.status import (
     HTTP_400_BAD_REQUEST,
     HTTP_404_NOT_FOUND,
-    HTTP_200_OK
+    HTTP_200_OK,
+	HTTP_403_FORBIDDEN
 )
 from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
@@ -34,6 +35,10 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from school_users.tokens import account_activation_token
 from school.utils import get_sku_by_slm_url
 import requests
+from django.core import serializers
+from django.http import JsonResponse
+from xml.etree import cElementTree as ET
+from collections import defaultdict
 
 # Create your views here.
 class SchoolsViewSet(viewsets.ModelViewSet):
@@ -120,6 +125,62 @@ def seeallschools_rest(request):
 		return Response({'schools':schools_rest.data})
 	return redirect('/')
 
+def etree_to_dict(t):
+    d = {t.tag: {} if t.attrib else None}
+    children = list(t)
+    if children:
+        dd = defaultdict(list)
+        for dc in map(etree_to_dict, children):
+            for k, v in dc.iteritems():
+                dd[k].append(v)
+        d = {t.tag: {k:v[0] if len(v) == 1 else v for k, v in dd.iteritems()}}
+    if t.attrib:
+        d[t.tag].update(('@' + k, v) for k, v in t.attrib.iteritems())
+    if t.text:
+        text = t.text.strip()
+        if children or t.attrib:
+            if text:
+              d[t.tag]['#text'] = text
+        else:
+            d[t.tag] = text
+    return d
+
+def get_school_students(sponte_client_number, token):
+	url = "http://api.sponteeducacional.net.br/WSAPIEdu.asmx/GetAlunos?nCodigoCliente={}&sToken={}&sParametrosBusca=inadimplente=0".format(sponte_client_number, token)
+	students_xml = requests.get(url).content
+#	e = ET.XML(students_xml)
+	# print(e)
+	# students_dict = etree_to_dict(e)
+	# students_dict = xmltodict.parse(students_xml)
+	print(students_dict)
+#	print(students_dict)
+	# print(serializers.deserialize('xml', students_xml))
+	return []
+
+def save_students_to_school(user, school_id=None):
+	is_superuser = user.is_superuser;
+	head_or_supervisor = Head.objects.filter(profile=request.user).count() >= 1 or Supervisor.objects.filter(profile=request.user).count() >= 1
+	school = School.objects.get(school_id=school_id)
+	students = get_school_students(school.sponte_client_number, school.sponte_token)
+
+	if is_superuser or head_or_supervisor:
+		for student in students:
+			school.students.add(student)
+		school.save()
+		return True
+	return False
+
+@login_required
+def pull_students(request, school_id=None):
+
+	could_save = save_students_to_school(request.user, school_id)
+
+	if could_save:		
+		return JsonResponse({'success' : 'OK'}, status=HTTP_200_OK)
+	else:
+		return JsonResponse({'error' : 'Não autorizado'}, status=HTTP_403_FORBIDDEN)
+
+
 @login_required
 def update_school(request, school_id=None):
 	if request.user.is_superuser:
@@ -130,12 +191,12 @@ def update_school(request, school_id=None):
 			for classe in school.classes.all():
 				chain = Chain.objects.get(id=classe.class_id)
 				chain.name = "{0}-{1}-{2}-{3}".format(school.school_name, classe.enrollment_class_year, classe.class_unit, classe.class_name)
-				chain.save(update_fields=['name'])
+				chain.save(update_fields=['name'])		
 
 			school.save(update_fields=['school_name', 'head', 'sponte_client_number', 'country', 'state', 'city','app_name'])
 			messages.success(request, 'A escola foi atualizada com sucesso!')
 			return redirect('/')
-		return render(request, 'school/update_school.html', {'form':form})
+		return render(request, 'school/update_school.html', {'form':form, 'school_id': school_id})
 	elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
 		is_supervisor = True
 		instance = School.objects.get(school_id=school_id)
@@ -149,7 +210,7 @@ def update_school(request, school_id=None):
 			school.save(update_fields=['school_name', 'head', 'sponte_client_number', 'country', 'state', 'city','app_name', 'sku'])
 			messages.success(request, 'A escola foi atualizada com sucesso!')
 			return redirect('/')
-		return render(request, 'school/update_school.html', {'form':form, 'is_supervisor':is_supervisor})
+		return render(request, 'school/update_school.html', {'form':form, 'is_supervisor':is_supervisor, 'school_id': school_id})
 
 @csrf_exempt
 @api_view(['POST'])
