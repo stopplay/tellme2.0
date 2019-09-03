@@ -589,7 +589,7 @@ def updatecontract(request, contract_id=None):
 					content = contract.pdf.read()
 					attachment = (contract.pdf.name, content, 'application/pdf')
 					attachments.append(attachment)
-					mail_subject = 'Contract to be signed'
+					mail_subject = 'Contrato a ser assinado'
 					message = render_to_string('contract/sendcontract.html', {
 						'user': contract.first_auth_signe,
 					})
@@ -598,7 +598,7 @@ def updatecontract(request, contract_id=None):
 						mail_subject, message, to=[to_email], attachments=attachments
 					)
 					email.send()
-					mail_subject = 'Contract to be signed'
+					mail_subject = 'Contrato a ser assinado'
 					message = render_to_string('contract/sendcontract.html', {
 						'user': contract.second_auth_signe,
 					})
@@ -607,7 +607,7 @@ def updatecontract(request, contract_id=None):
 						mail_subject, message, to=[to_email], attachments=attachments
 					)
 					email.send()
-					mail_subject = 'Contract to be signed'
+					mail_subject = 'Contrato a ser assinado'
 					message = render_to_string('contract/sendcontract.html', {
 						'user': contract.counter_signe,
 					})
@@ -666,7 +666,7 @@ def createacontract_rest(request):
 		content = contract.pdf.read()
 		attachment = (contract.pdf.name, content, 'application/pdf')
 		attachments.append(attachment)
-		mail_subject = 'Contract to be signed'
+		mail_subject = 'Contrato a ser assinado'
 		message = render_to_string('contract/sendcontract.html', {
 			'user': contract.first_auth_signe,
 		})
@@ -675,7 +675,7 @@ def createacontract_rest(request):
 			mail_subject, message, to=[to_email], attachments=attachments
 		)
 		email.send()
-		mail_subject = 'Contract to be signed'
+		mail_subject = 'Contrato a ser assinado'
 		message = render_to_string('contract/sendcontract.html', {
 			'user': contract.second_auth_signe,
 		})
@@ -684,7 +684,7 @@ def createacontract_rest(request):
 			mail_subject, message, to=[to_email], attachments=attachments
 		)
 		email.send()
-		mail_subject = 'Contract to be signed'
+		mail_subject = 'Contrato a ser assinado'
 		message = render_to_string('contract/sendcontract.html', {
 			'user': contract.counter_signe,
 		})
@@ -925,7 +925,7 @@ def set_signed(request, contract_id = None):
 			content = contract.pdf.read()
 			attachment = (contract.pdf.name, content, 'application/pdf')
 			attachments.append(attachment)
-			mail_subject = 'Contract has been signed'
+			mail_subject = 'O contrato foi assinado'
 			message = render_to_string('contract/contractsigned.html', {
 				'user': head,
 				'timestamp': contract.counter_signed_timestamp,
@@ -976,7 +976,7 @@ def set_signed(request, contract_id = None):
 				content = contract.pdf.read()
 				attachment = (contract.pdf.name, content, 'application/pdf')
 				attachments.append(attachment)
-				mail_subject = 'Contract has been signed'
+				mail_subject = 'O contrato foi assinado'
 				message = render_to_string('contract/contractsigned.html', {
 					'user': parent,
 					'timestamp': contract.first_auth_signed_timestamp,
@@ -999,7 +999,7 @@ def set_signed(request, contract_id = None):
 				content = contract.pdf.read()
 				attachment = (contract.pdf.name, content, 'application/pdf')
 				attachments.append(attachment)
-				mail_subject = 'Contract has been signed'
+				mail_subject = 'O contrato foi assinado'
 				message = render_to_string('contract/contractsigned.html', {
 					'user': parent,
 					'timestamp': contract.second_auth_signed_timestamp,
@@ -1050,7 +1050,7 @@ def set_signed(request, contract_id = None):
 				content = contract.pdf.read()
 				attachment = (contract.pdf.name, content, 'application/pdf')
 				attachments.append(attachment)
-				mail_subject = 'Contract has been signed'
+				mail_subject = 'O contrato foi assinado'
 				message = render_to_string('contract/contractsigned.html', {
 					'user': witness,
 					'timestamp': contract.first_auth_signed_timestamp,
@@ -1073,7 +1073,7 @@ def set_signed(request, contract_id = None):
 				content = contract.pdf.read()
 				attachment = (contract.pdf.name, content, 'application/pdf')
 				attachments.append(attachment)
-				mail_subject = 'Contract has been signed'
+				mail_subject = 'O contrato foi assinado'
 				message = render_to_string('contract/contractsigned.html', {
 					'user': witness,
 					'timestamp': contract.second_auth_signed_timestamp,
@@ -1122,7 +1122,7 @@ def set_signed(request, contract_id = None):
 			content = contract.pdf.read()
 			attachment = (contract.pdf.name, content, 'application/pdf')
 			attachments.append(attachment)
-			mail_subject = 'Contract has been signed'
+			mail_subject = 'O contrato foi assinado'
 			message = render_to_string('contract/contractsigned.html', {
 				'user': student,
 				'timestamp': contract.student_auth_signed_timestamp,
@@ -1216,7 +1216,7 @@ def set_signed_rest(request, contract_id = None):
 			content = contract.pdf.read()
 			attachment = (contract.pdf.name, content, 'application/pdf')
 			attachments.append(attachment)
-			mail_subject = 'Contract has been signed'
+			mail_subject = 'O contrato foi assinado'
 			message = render_to_string('contract/contractsigned.html', {
 				'user': head,
 				'timestamp': contract.counter_signed_timestamp,
@@ -1266,7 +1266,7 @@ def set_signed_rest(request, contract_id = None):
 				content = contract.pdf.read()
 				attachment = (contract.pdf.name, content, 'application/pdf')
 				attachments.append(attachment)
-				mail_subject = 'Contract has been signed'
+				mail_subject = 'O contrato foi assinado'
 				message = render_to_string('contract/contractsigned.html', {
 					'user': parent,
 					'timestamp': contract.first_auth_signed_timestamp,
@@ -1288,7 +1288,7 @@ def set_signed_rest(request, contract_id = None):
 				content = contract.pdf.read()
 				attachment = (contract.pdf.name, content, 'application/pdf')
 				attachments.append(attachment)
-				mail_subject = 'Contract has been signed'
+				mail_subject = 'O contrato foi assinado'
 				message = render_to_string('contract/contractsigned.html', {
 					'user': parent,
 					'timestamp': contract.second_auth_signed_timestamp,

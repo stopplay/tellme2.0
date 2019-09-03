@@ -2,7 +2,7 @@
 
 
 Olá {{ user.name }},
-Este é o seu login para sua conta no app Sua Escola: {{ user.profile.username }}
+Este é o seu login para sua conta{% if type_of_user %}, como {{ type_of_user }},{% endif %} no módulo de Contratos - Tellme School. Login: {{ user.profile.username }}
 Por favor vá para o link abaixo afim de resetar sua senha:
 http://{{ domain }}{% url 'users:reset_password' uidb64=uid token=token %}
 

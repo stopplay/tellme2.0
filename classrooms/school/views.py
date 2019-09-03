@@ -890,19 +890,6 @@ def add_student_to_class_and_school(request, school_id=None, class_id=None):
 						school_to_add_student.students.add(student)
 						class_to_add_student.students.add(student)
 						messages.success(request, 'Estudante criado com sucesso!')
-						current_site = get_current_site(request)
-						mail_subject = 'Login para acesso ao app escolar.'
-						message = render_to_string('school_users/user_login.html', {
-							'user': user_creation,
-							'domain': current_site.domain,
-							'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
-							'token':account_activation_token.make_token(user),
-			            })
-						to_email = form.cleaned_data.get('email')
-						email = EmailMessage(
-			            	mail_subject, message, to=[to_email]
-			            )
-						email.send()
 						return redirect('/schools/{}/add_class/{}/add_student/{}/add_first_parent_to_student'.format(school_id, class_id, student.student_id))
 				elif importornoimport == 'sim':
 					csv_file = request.FILES.get('file' or None)
@@ -995,19 +982,6 @@ def add_student_to_class_and_school(request, school_id=None, class_id=None):
 						school_to_add_student.students.add(student)
 						class_to_add_student.students.add(student)
 						messages.success(request, 'Estudante criado com sucesso!')
-						current_site = get_current_site(request)
-						mail_subject = 'Login para acesso ao app escolar.'
-						message = render_to_string('school_users/user_login.html', {
-							'user': user_creation,
-							'domain': current_site.domain,
-							'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
-							'token':account_activation_token.make_token(user),
-			            })
-						to_email = form.cleaned_data.get('email')
-						email = EmailMessage(
-			            	mail_subject, message, to=[to_email]
-			            )
-						email.send()
 						return redirect('/schools/{}/add_class/{}/add_student/{}/add_first_parent_to_student'.format(school_id, class_id, student.student_id))
 				elif importornoimport == 'sim':
 					csv_file = request.FILES.get('file' or None)
@@ -1308,19 +1282,6 @@ def add_first_parent_to_student(request, school_id=None, class_id=None, student_
 				student_to_add_parent.first_parent = parent
 				student_to_add_parent.save(update_fields=['first_parent'])
 				messages.success(request, 'Responsável financeiro criado com sucesso!')
-				current_site = get_current_site(request)
-				mail_subject = 'Login para acesso ao app escolar.'
-				message = render_to_string('school_users/user_login.html', {
-					'user': user_creation,
-					'domain': current_site.domain,
-					'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
-					'token':account_activation_token.make_token(user),
-		           })
-				to_email = form.cleaned_data.get('email')
-				email = EmailMessage(
-	            	mail_subject, message, to=[to_email]
-	            )
-				email.send()
 				return redirect('/schools/{}/add_class/{}/add_student/{}/add_second_parent_to_student'.format(school_id, class_id, student_to_add_parent.student_id))
 		return render(request, 'school_users/add_first_parent.html', {'form':form, 'form2':form2, 'student':student_to_add_parent})
 	elif Head.objects.filter(profile=request.user).count()>=1:
@@ -1350,19 +1311,6 @@ def add_first_parent_to_student(request, school_id=None, class_id=None, student_
 				student_to_add_parent.first_parent = parent
 				student_to_add_parent.save(update_fields=['first_parent'])
 				messages.success(request, 'Responsável financeiro criado com sucesso!')
-				current_site = get_current_site(request)
-				mail_subject = 'Login para acesso ao app escolar.'
-				message = render_to_string('school_users/user_login.html', {
-					'user': user_creation,
-					'domain': current_site.domain,
-					'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
-					'token':account_activation_token.make_token(user),
-		           })
-				to_email = form.cleaned_data.get('email')
-				email = EmailMessage(
-	            	mail_subject, message, to=[to_email]
-	            )
-				email.send()
 				return redirect('/schools/{}/add_class/{}/add_student/{}/add_second_parent_to_student'.format(school_id, class_id, student_to_add_parent.student_id))
 		return render(request, 'school_users/add_first_parent.html', {'form':form, 'form2':form2, 'student':student_to_add_parent, 'is_supervisor':is_supervisor})
 
@@ -1394,19 +1342,6 @@ def add_second_parent_to_student(request, school_id=None, class_id=None, student
 				student_to_add_parent.second_parent = parent
 				student_to_add_parent.save(update_fields=['second_parent'])
 				messages.success(request, 'Responsável pedagógico criado com sucesso!')
-				current_site = get_current_site(request)
-				mail_subject = 'Login para acesso ao app escolar.'
-				message = render_to_string('school_users/user_login.html', {
-					'user': user_creation,
-					'domain': current_site.domain,
-					'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
-					'token':account_activation_token.make_token(user),
-	            })
-				to_email = form.cleaned_data.get('email')
-				email = EmailMessage(
-	            	mail_subject, message, to=[to_email]
-	            )
-				email.send()
 				return redirect('/')
 		return render(request, 'school_users/add_second_parent.html', {'form':form, 'form2':form2, 'student':student_to_add_parent})
 	elif Head.objects.filter(profile=request.user).count()>=1:
@@ -1436,19 +1371,6 @@ def add_second_parent_to_student(request, school_id=None, class_id=None, student
 				student_to_add_parent.second_parent = parent
 				student_to_add_parent.save(update_fields=['second_parent'])
 				messages.success(request, 'Responsável pedagógico criado com sucesso!')
-				current_site = get_current_site(request)
-				mail_subject = 'Login para acesso ao app escolar.'
-				message = render_to_string('school_users/user_login.html', {
-					'user': user_creation,
-					'domain': current_site.domain,
-					'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
-					'token':account_activation_token.make_token(user),
-		           })
-				to_email = form.cleaned_data.get('email')
-				email = EmailMessage(
-	            	mail_subject, message, to=[to_email]
-	            )
-				email.send()
 				return redirect('/')
 		return render(request, 'school_users/add_second_parent.html', {'form':form, 'form2':form2, 'student':student_to_add_parent, 'is_supervisor':is_supervisor})
 
@@ -1544,6 +1466,7 @@ def add_first_witness(request, school_id=None):
 					'domain': current_site.domain,
 					'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
 					'token':account_activation_token.make_token(user),
+					'type_of_user':'testemunha',
 		           })
 				to_email = form.cleaned_data.get('email')
 				email = EmailMessage(
@@ -1586,6 +1509,7 @@ def add_second_witness(request, school_id=None):
 					'domain': current_site.domain,
 					'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
 					'token':account_activation_token.make_token(user),
+					'type_of_user':'testemunha',
 		           })
 				to_email = form.cleaned_data.get('email')
 				email = EmailMessage(
