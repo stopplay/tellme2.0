@@ -37,6 +37,7 @@ class SupervisorSerializer(serializers.ModelSerializer):
 class ParentSerializer(serializers.ModelSerializer):
     """docstring for ParentSerializer"""
     profile = UserSerializer(required=False)
+    
     def create(self, validated_data):
        
         parent_data = {}

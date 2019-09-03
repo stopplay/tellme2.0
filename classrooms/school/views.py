@@ -39,6 +39,8 @@ from django.core import serializers
 from django.http import JsonResponse
 from xml.etree import cElementTree as ET
 from collections import defaultdict
+from .services import *
+from django.contrib.auth.models import User
 
 # Create your views here.
 class SchoolsViewSet(viewsets.ModelViewSet):
@@ -61,6 +63,9 @@ def create_school(request):
 			form = SchoolModelForm()
 			school_to_add_head = School.objects.get(school_id=school.school_id)
 			messages.success(request, '{} adicionada corretamente!'.format(school_to_add_head.school_name))
+			if school_to_add_head.sponte_client_number and school_to_add_head.sponte_token:
+				save_students_to_school(request, school_to_add_head.school_id)
+				save_parents(request, school_to_add_head.school_id)
 			return redirect('/users/create_head_to_school/{}'.format(school_to_add_head.school_id))
 		return render(request, 'school/add_school.html', {'form':form})
 	return redirect('/')
@@ -145,30 +150,235 @@ def etree_to_dict(t):
             d[t.tag] = text
     return d
 
-def get_school_students(sponte_client_number, token):
-	url = "http://api.sponteeducacional.net.br/WSAPIEdu.asmx/GetAlunos?nCodigoCliente={}&sToken={}&sParametrosBusca=inadimplente=0".format(sponte_client_number, token)
-	students_xml = requests.get(url).content
-#	e = ET.XML(students_xml)
-	# print(e)
-	# students_dict = etree_to_dict(e)
-	# students_dict = xmltodict.parse(students_xml)
-	print(students_dict)
-#	print(students_dict)
-	# print(serializers.deserialize('xml', students_xml))
-	return []
+def create_student_with_extracted_data(aluno):
+	student_id_sponte = None
+	name = None
+	cpf_sponte = None
+	rg_sponte = None
+	midia_sponte = None
+	bithday_sponte = None
+	cep_sponte = None
+	address_sponte = None
+	address_number_sponte = None
+	register_date_sponte = None
+	RA_sponte = None
+	note_sponte = None
+	telephone_sponte = None
+	cell_phone_sponte = None
+	current_class_id = None
+	financial_responsible_id_sponte = None
+	didatic_responsible_id_sponte = None
+	registration_number_sponte = None
+	gender_sponte = None
+	situation_sponte = None
+	city_sponte = None
+	neighborhood_sponte = None
+	email = None
+	username = None
+	password = None
+	hometown_sponte = None
+	overdue_sponte = None
+	origin_sponte = None
+	original_name_sponte = None
+	course_of_interest_sponte = None
+	for mindata in aluno:
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}AlunoID':
+			student_id_sponte =  mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}Nome':
+			name = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}CPF':
+			cpf_sponte = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}RG':
+			rg_sponte = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}Midia':
+			midia_sponte = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}DataNascimento':
+			bithday_sponte = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}CEP':
+			cep_sponte = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}Endereco':
+			address_sponte = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}NumeroEndereco':
+			address_number_sponte = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}Email':
+			email = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}DataCadastro':
+			register_date_sponte = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}RA':
+			RA_sponte = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}LoginPortal':
+			username = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}SenhaPortal':
+			password = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}Observacao':
+			note_sponte = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}Telefone':
+			telephone_sponte = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}Celular':
+			cell_phone_sponte = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}TurmaAtual':
+			current_class_id = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}ResponsavelFinanceiroID':
+			financial_responsible_id_sponte = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}ResponsavelDidaticoID':
+			didatic_responsible_id_sponte = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}NumeroMatricula':
+			registration_number_sponte = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}Sexo':
+			gender_sponte = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}Situacao':
+			situation_sponte = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}Cidade':
+			city_sponte = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}Bairro':
+			neighborhood_sponte = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}CidadeNatal':
+			hometown_sponte = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}Inadimplente':
+			overdue_sponte = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}Origem':
+			origin_sponte = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}NomeOrigem':
+			original_name_sponte = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}CursoInteresse':
+			course_of_interest_sponte = mindata.text
+	if username:
+		return Student.objects.create(student_id_sponte=student_id_sponte, name=name, cpf_sponte=cpf_sponte, midia_sponte=midia_sponte, bithday_sponte=bithday_sponte, cep_sponte=cep_sponte, address_sponte=address_sponte, address_number_sponte=address_number_sponte, register_date_sponte=register_date_sponte, RA_sponte=RA_sponte, note_sponte=note_sponte, telephone_sponte=telephone_sponte, cell_phone_sponte=cell_phone_sponte, current_class_id=current_class_id, financial_responsible_id_sponte=financial_responsible_id_sponte, didatic_responsible_id_sponte=didatic_responsible_id_sponte, registration_number_sponte=registration_number_sponte, gender_sponte=gender_sponte, situation_sponte=situation_sponte, city_sponte=city_sponte, neighborhood_sponte=neighborhood_sponte, hometown_sponte=hometown_sponte, overdue_sponte=overdue_sponte, origin_sponte=origin_sponte, original_name_sponte=original_name_sponte, course_of_interest_sponte=course_of_interest_sponte, profile=User.objects.create_user(username=username, first_name=name.split(' ')[0], last_name=name.split(' ')[-1], password=password, email=email))
+	return None
 
-def save_students_to_school(user, school_id=None):
-	is_superuser = user.is_superuser;
+def get_school_students(sponte_client_number, token):
+	e = get_alunos(sponte_client_number, token, "inadimplente=0")
+	students = []
+	for aluno in e:
+		student = create_student_with_extracted_data(aluno)
+		if not student == None:
+			students += [(student)]
+	return students
+
+def save_students_to_school(request, school_id=None):
+	is_superuser = request.user.is_superuser;
 	head_or_supervisor = Head.objects.filter(profile=request.user).count() >= 1 or Supervisor.objects.filter(profile=request.user).count() >= 1
 	school = School.objects.get(school_id=school_id)
 	students = get_school_students(school.sponte_client_number, school.sponte_token)
-
 	if is_superuser or head_or_supervisor:
 		for student in students:
 			school.students.add(student)
 		school.save()
 		return True
 	return False
+
+def create_parent_with_extracted_data(parent):
+	responsible_id_sponte = None
+	name = None
+	cpf_or_cnpj_sponte = None
+	rg_sponte = None
+	bithday_sponte = None
+	cep_sponte = None
+	address_sponte = None
+	address_number_sponte = None
+	note_sponte = None
+	telephone_sponte = None
+	cell_phone_sponte = None
+	gender_sponte = None
+	city_sponte = None
+	neighborhood_sponte = None
+	kind_of_person = None
+	email = None
+	username = None
+	password = None
+	hometown_sponte = None
+	overdue_sponte = None
+	origin_sponte = None
+	original_name_sponte = None
+	course_of_interest_sponte = None
+	for mindata in parent:
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}ResponsavelID':
+			responsible_id_sponte =  mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}Nome':
+			name = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}CPFCNPJ':
+			cpf_or_cnpj_sponte = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}RG':
+			rg_sponte = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}DataNascimento':
+			bithday_sponte = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}CEP':
+			cep_sponte = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}Endereco':
+			address_sponte = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}NumeroEndereco':
+			address_number_sponte = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}Email':
+			email = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}LoginPortal':
+			username = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}SenhaPortal':
+			password = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}Observacao':
+			note_sponte = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}Telefone':
+			telephone_sponte = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}Celular':
+			cell_phone_sponte = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}Sexo':
+			gender_sponte = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}Situacao':
+			situation_sponte = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}Cidade':
+			city_sponte = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}Bairro':
+			neighborhood_sponte = mindata.text
+		if mindata.tag == '{http://api.sponteeducacional.net.br/}TipoPessoa':
+			kind_of_person = mindata.text
+	if username:
+		if User.objects.filter(username=username).count()<1:
+			return Parent.objects.create(responsible_id_sponte=responsible_id_sponte, name=name, cpf_or_cnpj_sponte=cpf_or_cnpj_sponte, bithday_sponte=bithday_sponte, cep_sponte=cep_sponte, address_sponte=address_sponte, address_number_sponte=address_number_sponte, note_sponte=note_sponte, telephone_sponte=telephone_sponte, cell_phone_sponte=cell_phone_sponte, gender_sponte=gender_sponte,  city_sponte=city_sponte, neighborhood_sponte=neighborhood_sponte, kind_of_person=kind_of_person, profile=User.objects.create_user(username=username, first_name=name.split(' ')[0], last_name=name.split(' ')[-1], password=password, email=email))
+	return None
+
+def get_school_parents(sponte_client_number, token):
+	parents = []
+	e = get_parents(sponte_client_number, token, "nome=a")
+	for parent in e:
+		newparent = create_parent_with_extracted_data(parent)
+		if not newparent == None and newparent not in parents:
+			parents += [(newparent)]
+	e = get_parents(sponte_client_number, token, "nome=e")
+	for parent in e:
+		newparent = create_parent_with_extracted_data(parent)
+		if not newparent == None and newparent not in parents:
+			parents += [(newparent)]
+	e = get_parents(sponte_client_number, token, "nome=i")
+	for parent in e:
+		newparent = create_parent_with_extracted_data(parent)
+		if not newparent == None and newparent not in parents:
+			parents += [(newparent)]
+	e = get_parents(sponte_client_number, token, "nome=o")
+	for parent in e:
+		newparent = create_parent_with_extracted_data(parent)
+		if not newparent == None and newparent not in parents:
+			parents += [(newparent)]
+	e = get_parents(sponte_client_number, token, "nome=u")
+	for parent in e:
+		newparent = create_parent_with_extracted_data(parent)
+		if not newparent == None and newparent not in parents:
+			parents += [(newparent)]
+	return parents
+
+def save_parents(request, school_id=None):
+	is_superuser = request.user.is_superuser;
+	head_or_supervisor = Head.objects.filter(profile=request.user).count() >= 1 or Supervisor.objects.filter(profile=request.user).count() >= 1
+	school = School.objects.get(school_id=school_id)
+	parents = get_school_parents(school.sponte_client_number, school.sponte_token)
+	if is_superuser or head_or_supervisor:
+		for student in school.students.all():
+			if Parent.objects.filter(responsible_id_sponte=student.financial_responsible_id_sponte).count()>=1:
+				student.first_parent = Parent.objects.get(responsible_id_sponte=student.financial_responsible_id_sponte)
+			if Parent.objects.filter(responsible_id_sponte=student.didatic_responsible_id_sponte).count()>=1:
+				student.second_parent = Parent.objects.get(responsible_id_sponte=student.didatic_responsible_id_sponte)
+			student.save(update_fields=['first_parent', 'second_parent'])
+		return True
+	return False
+
 
 @login_required
 def pull_students(request, school_id=None):
