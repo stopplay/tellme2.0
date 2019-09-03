@@ -36,7 +36,22 @@ class SupervisorSerializer(serializers.ModelSerializer):
 
 class ParentSerializer(serializers.ModelSerializer):
     """docstring for ParentSerializer"""
-    profile = UserSerializer()
+    profile = UserSerializer(required=False)
+    def create(self, validated_data):
+       
+        parent_data = {}
+        profile_data = {}
+
+        if 'profile' in validated_data:
+            profile_data = dict(validated_data['profile'])
+            del validated_data['profile']
+            parent_data = validated_data
+            parent_data['profile'] = User.objects.create(**profile_data)
+        else:
+            parent_data = validated_data
+
+        return Parent.objects.create(**parent_data)
+
     class Meta:
         model = Parent
         fields = '__all__'
