@@ -507,6 +507,8 @@ def add_students_to_school(request, school_id=None):
 			student_users = Student.objects.filter(student_id__in=student_ids)
 		else:
 			student_users = Student.objects.all()
+		if not student_users:
+			student_users = Student.objects.all()
 		if request.method == 'POST':
 			select_all = request.POST.get('variable')
 			school.students.clear()
