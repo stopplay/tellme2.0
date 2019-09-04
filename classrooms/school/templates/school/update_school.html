@@ -1,8 +1,27 @@
 {% extends 'base.html'%}
+{% load static %}
 
 {% block title %} Atualizar a Escola {% endblock %}
 
 {% block content %}
+
+<style>
+	.spinner {
+		background: url('{% static "img/spinner.gif" %}');
+		background-repeat: no-repeat;
+		background-size: 26px 26px;	
+		background-position-y: 50%;	
+	}
+
+	.success-pull-students {
+		background-color:  rgb(41, 195, 41) !important;
+	}
+
+	.error-pull-students {
+		background-color: red !important;
+	}
+</style>
+
 <div class="content">
 	<div class="container-fluid">
 		<div class="row">
@@ -17,8 +36,15 @@
 								<div class="form-group">
 									<form method="POST">{% csrf_token %}
 										{{ form.as_p }}
-									<div><button type="submit" class="btn btn-info btn-fill pull-left" style="background-color: #213f99; border-color: #213f99">Atualizar</button></div>
+										<div class="row">
+											<div class="col-md-12">
+												<button type="submit" class="btn btn-info btn-fill w-100" style="background-color: #213f99; border-color: #213f99">Atualizar</button>
+											</div>
+										</div>
 									</form>
+									<button id="pull_students_button" type="submit" class="btn btn-info btn-fill w-100" style="background-color: #213f99; border-color: #213f99">
+										Obter Alunos Sponte
+									</button>
 								</div>
 							</div>
 						</div>
@@ -30,5 +56,41 @@
 	</div>
 </div>
 
+<script>
+
+	$('#pull_students_button').click(pullStudents);
+
+	$.ajaxSetup({
+		xhrFields: {
+			withCredentials: true
+		},
+		crossDomain: true
+	});
+	
+	function pullStudents(event) {
+		
+		event.stopPropagation();
+		event.preventDefault();
+
+		$(event.target).addClass('spinner');
+		$(event.target).removeClass('success-pull-students');
+		$(event.target).removeClass('error-pull-students');
+
+		var pullStudentsUrl = '/schools/{{school_id}}/pull_students';
+		
+		$.getJSON(pullStudentsUrl)
+			.done(function(response) {
+				$(event.target).removeClass('spinner');
+				$(event.target).addClass('success-pull-students');
+				console.log('response', response);
+			})
+			.fail(function(error) {
+				$(event.target).removeClass('spinner');
+				$(event.target).addClass('error-pull-students');
+				console.log('error', error);
+			});
+	}
+
+</script>
 
 {% endblock %}

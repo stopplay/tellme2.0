@@ -388,7 +388,11 @@ def save_parents(request, school_id=None):
 @login_required
 def pull_students(request, school_id=None):
 
-	could_save = save_students_to_school(request.user, school_id)
+	could_save = False
+	school = School.objects.get(school_id=school_id)
+	if school.sponte_client_number and school.sponte_token:
+		could_save = save_students_to_school(request, school_id)
+		could_save = save_parents(request, school_id) and could_save
 
 	if could_save:		
 		return JsonResponse({'success' : 'OK'}, status=HTTP_200_OK)
