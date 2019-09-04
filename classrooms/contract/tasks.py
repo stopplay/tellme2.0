@@ -158,7 +158,7 @@ def schedule_email(contract, typeof=None, whosend=None):
     attachments.append(attachment)
     school = School.objects.get(chains__id__exact = contract.chain.id)
     if contract.first_auth_signe:
-        mail_subject = 'Contract to be signed'
+        mail_subject = 'Contrato a ser assinado'
         message = render_to_string('contract/sendcontract.html', {
             'user': contract.first_auth_signe,
             'contract': contract,
@@ -170,7 +170,7 @@ def schedule_email(contract, typeof=None, whosend=None):
         )
         email.send()
     if contract.second_auth_signe:
-        mail_subject = 'Contract to be signed'
+        mail_subject = 'Contrato a ser assinado'
         message = render_to_string('contract/sendcontract.html', {
             'user': contract.second_auth_signe,
             'contract': contract,
@@ -182,7 +182,7 @@ def schedule_email(contract, typeof=None, whosend=None):
         )
         email.send()
     if contract.student_auth_signe:
-        mail_subject = 'Contract to be signed'
+        mail_subject = 'Contrato a ser assinado'
         message = render_to_string('contract/sendcontract.html', {
             'user': contract.student_auth_signe,
             'contract': contract,
@@ -194,7 +194,7 @@ def schedule_email(contract, typeof=None, whosend=None):
         )
         email.send()
     if contract.first_witness_signe:
-        mail_subject = 'Contract to be signed'
+        mail_subject = 'Contrato a ser assinado'
         message = render_to_string('contract/sendcontract.html', {
             'user': contract.first_witness_signe,
             'contract': contract,
@@ -206,7 +206,7 @@ def schedule_email(contract, typeof=None, whosend=None):
         )
         email.send()
     if contract.second_witness_signe:
-        mail_subject = 'Contract to be signed'
+        mail_subject = 'Contrato a ser assinado'
         message = render_to_string('contract/sendcontract.html', {
             'user': contract.second_witness_signe,
             'contract': contract,
@@ -218,7 +218,7 @@ def schedule_email(contract, typeof=None, whosend=None):
         )
         email.send()
     if whosend == 'admin':
-        mail_subject = 'Contract to be signed'
+        mail_subject = 'Contrato a ser assinado'
         message = render_to_string('contract/sendcontract.html', {
             'user': contract.counter_signe,
             'contract': contract,
@@ -262,7 +262,7 @@ def schedule_email_without_attachment(contract, typeof=None, whosend=None):
         contract.pdf.name = os.path.join(os.path.dirname(settings.BASE_DIR),'media_cdn', contract.pdf.name)
     school = School.objects.get(chains__id__exact = contract.chain.id)
     if contract.first_auth_signe:
-        mail_subject = 'Contract to be signed'
+        mail_subject = 'Contrato a ser assinado'
         message = render_to_string('contract/sendcontract.html', {
             'user': contract.first_auth_signe,
             'contract': contract,
@@ -274,7 +274,7 @@ def schedule_email_without_attachment(contract, typeof=None, whosend=None):
         )
         email.send()
     if contract.second_auth_signe:
-        mail_subject = 'Contract to be signed'
+        mail_subject = 'Contrato a ser assinado'
         message = render_to_string('contract/sendcontract.html', {
             'user': contract.second_auth_signe,
             'contract': contract,
@@ -286,7 +286,7 @@ def schedule_email_without_attachment(contract, typeof=None, whosend=None):
         )
         email.send()
     if contract.student_auth_signe:
-        mail_subject = 'Contract to be signed'
+        mail_subject = 'Contrato a ser assinado'
         message = render_to_string('contract/sendcontract.html', {
             'user': contract.student_auth_signe,
             'contract': contract,
@@ -298,7 +298,7 @@ def schedule_email_without_attachment(contract, typeof=None, whosend=None):
         )
         email.send()
     if contract.first_witness_signe:
-        mail_subject = 'Contract to be signed'
+        mail_subject = 'Contrato a ser assinado'
         message = render_to_string('contract/sendcontract.html', {
             'user': contract.first_witness_signe,
             'contract': contract,
@@ -310,7 +310,7 @@ def schedule_email_without_attachment(contract, typeof=None, whosend=None):
         )
         email.send()
     if contract.second_witness_signe:
-        mail_subject = 'Contract to be signed'
+        mail_subject = 'Contrato a ser assinado'
         message = render_to_string('contract/sendcontract.html', {
             'user': contract.second_witness_signe,
             'contract': contract,
@@ -322,7 +322,7 @@ def schedule_email_without_attachment(contract, typeof=None, whosend=None):
         )
         email.send()
     if whosend == 'admin':
-        mail_subject = 'Contract to be signed'
+        mail_subject = 'Contrato a ser assinado'
         message = render_to_string('contract/sendcontract.html', {
             'user': contract.counter_signe,
             'contract': contract,
