@@ -5,13 +5,17 @@
 
 {% block content %}
 
-
+<style>
+    .non-interactable {
+      pointer-events: none;
+    }
+</style>
 
 <div class="content">
   <div class="container-fluid">
     <div class="row">
       {% if head_users %}
-      <p><a class="btn btn-primary" id="headstablebutton" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" style="margin-left: 10px">
+      <p><a class="btn btn-primary non-interactable" id="headstablebutton" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" style="margin-left: 10px">
         Diretor(es)
       </a></p>
       <div class="collapse col-md-12" id="collapseExample">
@@ -63,7 +67,7 @@
       {% endif %}
 
       {% if teacher_users %}
-      <p><a class="btn btn-primary" id="teacherstablebutton" data-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample2" style="margin-left: 10px">
+      <p><a class="btn btn-primary non-interactable" id="teacherstablebutton" data-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample2" style="margin-left: 10px">
         Professor(es)
       </a></p>
       <div class="collapse col-md-12" id="collapseExample2">
@@ -115,7 +119,7 @@
       {% endif %}
 
       {% if admin_users %}
-      <p><a class="btn btn-primary"id="adminstablebutton" data-toggle="collapse" href="#collapseExample3" role="button" aria-expanded="false" aria-controls="collapseExample3" style="margin-left: 10px">
+      <p><a class="btn btn-primary non-interactable" id="adminstablebutton" data-toggle="collapse" href="#collapseExample3" role="button" aria-expanded="false" aria-controls="collapseExample3" style="margin-left: 10px">
         Administrador(es)
       </a></p>
       <div class="collapse col-md-12" id="collapseExample3">
@@ -168,7 +172,7 @@
 
 
       {% if supervisor_users %}
-      <p><a class="btn btn-primary" id="supervisorstablebutton" data-toggle="collapse" href="#collapseExample4" role="button" aria-expanded="false" aria-controls="collapseExample4" style="margin-left: 10px">
+      <p><a class="btn btn-primary non-interactable" id="supervisorstablebutton" data-toggle="collapse" href="#collapseExample4" role="button" aria-expanded="false" aria-controls="collapseExample4" style="margin-left: 10px">
         Supervisor(es)
       </a></p>
       <div class="collapse col-md-12" id="collapseExample4">
@@ -220,7 +224,7 @@
       {% endif %}
 
       {% if parent_users %}
-      <p><a class="btn btn-primary" id="parentstablebutton" data-toggle="collapse" href="#collapseExample5" role="button" aria-expanded="false" aria-controls="collapseExample5" style="margin-left: 10px">
+      <p><a class="btn btn-primary non-interactable" id="parentstablebutton" data-toggle="collapse" href="#collapseExample5" role="button" aria-expanded="false" aria-controls="collapseExample5" style="margin-left: 10px">
         Responsável(eis)
       </a></p>
       <div class="collapse col-md-12" id="collapseExample5">
@@ -279,7 +283,7 @@
 
 
 {% if student_users %}
-<p><a class="btn btn-primary" id="studentstablebutton" data-toggle="collapse" href="#collapseExample6" role="button" aria-expanded="true" aria-controls="collapseExample6" style="margin-left: 10px">
+<p><a class="btn btn-primary non-interactable" id="studentstablebutton" data-toggle="collapse" href="#collapseExample6" role="button" aria-expanded="true" aria-controls="collapseExample6" style="margin-left: 10px">
   Estudante(s)
 </a></p>
 <div class="collapse col-md-12" id="collapseExample6">
@@ -347,59 +351,46 @@
 </div>
 </div>
 
-<style>
-  .non-interactable {
-    pointer-events: none;
-  }
-  
-  .spinner {
-		background: url('{% static "img/spinner.gif" %}');
-		background-repeat: no-repeat;
-		background-size: 26px 26px;	
-		background-position-y: 50%;	
-	}
-
-</style>
-
-
 <script type="text/javascript">
   $(document).ready( function () {
 
-    $('#studentstablebutton').addClass('non-interactable spinner');
-    $('#teacherstablebutton').addClass('non-interactable spinner');
-    $('#parentstablebutton').addClass('non-interactable spinner');
-    $('#supervisorstablebutton').addClass('non-interactable spinner');
-    $('#headstablebutton').addClass('non-interactable spinner');
-    $('#adminstablebutton').addClass('non-interactable spinner');
+    $('#studentstablebutton').addClass('non-interactable');
+    $('#teacherstablebutton').addClass('non-interactable');
+    $('#parentstablebutton').addClass('non-interactable');
+    $('#supervisorstablebutton').addClass('non-interactable');
+    $('#headstablebutton').addClass('non-interactable');
+    $('#adminstablebutton').addClass('non-interactable');
 
     $('#studentstable').DataTable({
       initComplete: function() {
-        $('#studentstablebutton').removeClass('non-interactable spinner');
+        setTimeout(function() {
+          $('#studentstablebutton').removeClass('non-interactable');
+        }, 2000);
       }
     });
     $('#teacherstable').DataTable({
       initComplete: function() {
-        $('#teacherstablebutton').removeClass('non-interactable spinner');
+        $('#teacherstablebutton').removeClass('non-interactable');
       }
     });
     $('#parentstable').DataTable({
       initComplete: function() {
-        $('#parentstablebutton').removeClass('non-interactable spinner');
+        $('#parentstablebutton').removeClass('non-interactable');
       }
     });
     $('#supervisorstable').DataTable({
       initComplete: function() {
-        $('#supervisorstablebutton').removeClass('non-interactable spinner');
+        $('#supervisorstablebutton').removeClass('non-interactable');
       }
     });
     $('#headstable').DataTable({
       initComplete: function() {
-        $('#headstablebutton').removeClass('non-interactable spinner');
+        $('#headstablebutton').removeClass('non-interactable');
       }
     });
     $('#adminstable').DataTable({
       initComplete: function() {
-        $('#adminstablebutton').removeClass('non-interactable spinner');
+        $('#adminstablebutton').removeClass('non-interactable');
       }
     });
   } );
