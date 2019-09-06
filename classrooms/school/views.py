@@ -337,7 +337,8 @@ def create_parent_with_extracted_data(parent):
 		if User.objects.filter(username=username).count()<1:
 			return Parent.objects.create(responsible_id_sponte=responsible_id_sponte, name=name, cpf_or_cnpj_sponte=cpf_or_cnpj_sponte, bithday_sponte=bithday_sponte, cep_sponte=cep_sponte, address_sponte=address_sponte, address_number_sponte=address_number_sponte, note_sponte=note_sponte, telephone_sponte=telephone_sponte, cell_phone_sponte=cell_phone_sponte, gender_sponte=gender_sponte,  city_sponte=city_sponte, neighborhood_sponte=neighborhood_sponte, kind_of_person=kind_of_person, profile=User.objects.create_user(username=username, first_name=name.split(' ')[0], last_name=name.split(' ')[-1], password=password, email=email))
 		else:
-			return Parent.objects.get(profile=User.objects.get(username=username))
+			if Parent.objects.filter(profile=User.objects.get(username=username)).count()>=1
+				return Parent.objects.get(profile=User.objects.get(username=username))
 	return None
 
 def get_school_parents(sponte_client_number, token):
