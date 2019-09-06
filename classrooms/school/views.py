@@ -470,21 +470,25 @@ def delete_school(request, school_id=None):
 					student.second_parent.delete()
 				student.profile.delete()
 				student.delete()
-		if not school_to_delete.head == None:
+		if school_to_delete.head:
 			if School.objects.filter(head=school_to_delete.head).count()<2:
-				school_to_delete.head.profile.delete()
+				if school_to_delete.head.profile:
+					school_to_delete.head.profile.delete()
 				school_to_delete.head.delete()
-		if not school_to_delete.adminorsupervisor == None:
+		if school_to_delete.adminorsupervisor:
 			if School.objects.filter(adminorsupervisor=school_to_delete.adminorsupervisor).count()<2:
-				school_to_delete.adminorsupervisor.profile.delete()
+				if school_to_delete.adminorsupervisor.profile:
+					school_to_delete.adminorsupervisor.profile.delete()
 				school_to_delete.adminorsupervisor.delete()
-		if not school_to_delete.first_witness == None:
+		if school_to_delete.first_witness:
 			if School.objects.filter(first_witness=school_to_delete.first_witness).count()<2:
-				school_to_delete.first_witness.profile.delete()
+				if school_to_delete.first_witness.profile:
+					school_to_delete.first_witness.profile.delete()
 				school_to_delete.first_witness.delete()
-		if not school_to_delete.second_witness == None:
+		if school_to_delete.second_witness:
 			if School.objects.filter(first_witness=school_to_delete.second_witness).count()<2:
-				school_to_delete.second_witness.profile.delete()
+				if school_to_delete.second_witness.profile:
+					school_to_delete.second_witness.profile.delete()
 				school_to_delete.second_witness.delete()
 		school_to_delete.delete()
 		messages.success(request, 'Escola excluída com sucessso!')
