@@ -246,7 +246,8 @@ def create_student_with_extracted_data(aluno):
 		if User.objects.filter(username=username).count()<1:
 			return Student.objects.create(student_id_sponte=student_id_sponte, name=name, cpf_sponte=cpf_sponte, midia_sponte=midia_sponte, bithday_sponte=bithday_sponte, cep_sponte=cep_sponte, address_sponte=address_sponte, address_number_sponte=address_number_sponte, register_date_sponte=register_date_sponte, RA_sponte=RA_sponte, note_sponte=note_sponte, telephone_sponte=telephone_sponte, cell_phone_sponte=cell_phone_sponte, current_class_id=current_class_id, financial_responsible_id_sponte=financial_responsible_id_sponte, didatic_responsible_id_sponte=didatic_responsible_id_sponte, registration_number_sponte=registration_number_sponte, gender_sponte=gender_sponte, situation_sponte=situation_sponte, city_sponte=city_sponte, neighborhood_sponte=neighborhood_sponte, hometown_sponte=hometown_sponte, overdue_sponte=overdue_sponte, origin_sponte=origin_sponte, original_name_sponte=original_name_sponte, course_of_interest_sponte=course_of_interest_sponte, profile=User.objects.create_user(username=username, first_name=name.split(' ')[0], last_name=name.split(' ')[-1], password=password, email=email))
 		else:
-			return Student.objects.get(profile=User.objects.get(username=username))
+			if Student.objects.filter(profile=User.objects.get(username=username)).count()>=1:
+				return Student.objects.get(profile=User.objects.get(username=username))
 	return None
 
 def get_school_students(sponte_client_number, token):
@@ -375,12 +376,20 @@ def save_parents(request, school_id=None):
 	head_or_supervisor = Head.objects.filter(profile=request.user).count() >= 1 or Supervisor.objects.filter(profile=request.user).count() >= 1
 	school = School.objects.get(school_id=school_id)
 	parents = get_school_parents(school.sponte_client_number, school.sponte_token)
+	parents_ids = []
+	for parent in parents:
+		if parent.parent_id not in parents_ids:
+			parents_ids += [(parent.parent_id)]
 	if is_superuser or head_or_supervisor:
 		for student in school.students.all():
 			if Parent.objects.filter(responsible_id_sponte=student.financial_responsible_id_sponte).count()>=1:
-				student.first_parent = Parent.objects.get(responsible_id_sponte=student.financial_responsible_id_sponte)
+				for parent in Parent.objects.filter(responsible_id_sponte=student.financial_responsible_id_sponte):
+					if parent.parent_id in parents_ids:
+						student.first_parent = parent
 			if Parent.objects.filter(responsible_id_sponte=student.didatic_responsible_id_sponte).count()>=1:
-				student.second_parent = Parent.objects.get(responsible_id_sponte=student.didatic_responsible_id_sponte)
+				for parent in Parent.objects.filter(responsible_id_sponte=student.didatic_responsible_id_sponte):
+					if parent.parent_id in parents_ids:
+						student.second_parent = parent
 			student.save(update_fields=['first_parent', 'second_parent'])
 		return True
 	return False
