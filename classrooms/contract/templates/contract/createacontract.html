@@ -24,6 +24,9 @@
 							<div class="col-md-11 pr-1">
 								<div class="form-group">
 									<form method="POST" class="" enctype="multipart/form-data" > {% csrf_token %}
+										<div style="margin-top: 10px">
+											<p><label>Por favor nao enviar arquivos com os seguintes caracteres no nome: ã, á, à, é, è, í, ì, õ, ó, ò, ú, ù, ç. Isso também inclui estes mesmos caracteres em minúsculo.</label><br>
+											</div>
 											{{ form.as_p }}
 											<div style="margin-top: 10px">
 											<p><label>Você deseja enviar este contrato por email? (Recomendado)</label><br><label
