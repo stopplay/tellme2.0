@@ -640,7 +640,7 @@ def select_director_to_contract(request, contract_id=None):
 			selected_user = request.POST.get('selected_user' or None)
 			head_to_contract = Head.objects.get(head_id=selected_user)
 			contract.counter_signe = head_to_contract
-			contract.save(update_fields='counter_signe')
+			contract.save(update_fields=['counter_signe'])
 			return redirect('/contracts/all')
 		return render(request, 'contract/select_director_to_contract.html', {'directors':directors})
 	elif Head.objects.filter(profile=request.user).count()>=1:
@@ -648,7 +648,7 @@ def select_director_to_contract(request, contract_id=None):
 			selected_user = request.POST.get('selected_user' or None)
 			head_to_contract = Head.objects.get(head_id=selected_user)
 			contract.counter_signe = head_to_contract
-			contract.save(update_fields='counter_signe')
+			contract.save(update_fields=['counter_signe'])
 			return redirect('/contracts/all')
 		return render(request, 'contract/select_director_to_contract.html', {'directors':directors})
 
