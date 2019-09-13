@@ -638,7 +638,11 @@ def select_director_to_contract(request, contract_id=None):
 	if request.user.is_superuser:
 		if request.method == 'POST':
 			selected_user = request.POST.get('selected_user' or None)
-			head_to_contract = Head.objects.get(head_id=selected_user)
+			if Head.objects.filter(head_id=selected_user).count()>=1:
+				head_to_contract = Head.objects.get(head_id=selected_user)
+			else:
+				messages.warning(request, 'Por favor selecione um diretor para este contrato')
+				return redirect('/contracts/select_director_to_contract/{}'.format(contract.contract_id))
 			contract.counter_signe = head_to_contract
 			mail_subject = 'Contrato a ser assinado'
 			message = render_to_string('contract/sendcontract.html', {
@@ -658,7 +662,11 @@ def select_director_to_contract(request, contract_id=None):
 	elif Head.objects.filter(profile=request.user).count()>=1:
 		if request.method == 'POST':
 			selected_user = request.POST.get('selected_user' or None)
-			head_to_contract = Head.objects.get(head_id=selected_user)
+			if Head.objects.filter(head_id=selected_user).count()>=1:
+				head_to_contract = Head.objects.get(head_id=selected_user)
+			else:
+				messages.warning(request, 'Por favor selecione um diretor para este contrato')
+				return redirect('/contracts/select_director_to_contract/{}'.format(contract.contract_id))
 			contract.counter_signe = head_to_contract
 			contract.save(update_fields=['counter_signe'])
 			messages.success('Diretor selecionado com sucesso!')
