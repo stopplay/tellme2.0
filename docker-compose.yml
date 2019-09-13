@@ -28,7 +28,7 @@ services:
       - ./media_cdn:/usr/src/app/media_cdn
     command: sh run_migrations.sh
     ports:
-      - 80:80
+      - 8000:8000
     depends_on:
       - db-contract
     networks:
