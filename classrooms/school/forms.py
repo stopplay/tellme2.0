@@ -24,7 +24,7 @@ class SchoolModelFormWithSupervisor(forms.ModelForm):
 	"""docstring for UserModelForm"""
 	class Meta:
 		model = School
-		fields = ['school_name', 'sponte_client_number', 'sponte_token', 'tell_me_school_id', 'country', 'state', 'city', 'app_name', 'supervisor', 'head']
+		fields = ['school_name', 'sponte_client_number', 'sponte_token', 'tell_me_school_id', 'country', 'state', 'city', 'app_name', 'adminorsupervisor']
 		widgets = {
 			'school_name': forms.TextInput(attrs={'class':'form-control', 'maxlength':255, 'required':True}),
 			'enrollment_year': forms.NumberInput(),
@@ -35,7 +35,7 @@ class SchoolModelFormWithSupervisor(forms.ModelForm):
 			'state': forms.TextInput(attrs={'class':'form-control', 'required':False}),
 			'city': forms.TextInput(attrs={'class':'form-control', 'required':False}),
 			'app_name': forms.TextInput(attrs={'class':'form-control', 'required':False}),
-			'supervisor': forms.Select(attrs={'class':'form-control, chosen-select', 'required':False}),
+			'adminorsupervisor': forms.Select(attrs={'class':'form-control, chosen-select', 'required':False}),
 		}
 
 class SetWitnessModelForm(forms.ModelForm):
