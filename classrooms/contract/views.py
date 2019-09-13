@@ -641,7 +641,7 @@ def select_director_to_contract(request, contract_id=None):
 			head_to_contract = Head.objects.get(head_id=selected_user)
 			contract.counter_signe = head_to_contract
 			mail_subject = 'Contrato a ser assinado'
-			message = render_to_string('contract', {
+			message = render_to_string('contract/sendcontract.html', {
 				'user':contract.counter_signe,
 				'contract': contract,
 				'school': school
