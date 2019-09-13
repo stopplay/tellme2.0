@@ -651,6 +651,7 @@ def select_director_to_contract(request, contract_id=None):
 				mail_subject, message, to=[to_email]
 			)
 			email.send()
+			messages.success('Diretor selecionado com sucesso!')
 			contract.save(update_fields=['counter_signe'])
 			return redirect('/contracts/all')
 		return render(request, 'contract/select_director_to_contract.html', {'directors':directors})
@@ -660,6 +661,7 @@ def select_director_to_contract(request, contract_id=None):
 			head_to_contract = Head.objects.get(head_id=selected_user)
 			contract.counter_signe = head_to_contract
 			contract.save(update_fields=['counter_signe'])
+			messages.success('Diretor selecionado com sucesso!')
 			return redirect('/contracts/all')
 		return render(request, 'contract/select_director_to_contract.html', {'directors':directors})
 
