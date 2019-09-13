@@ -852,7 +852,7 @@ def select_student_to_contract_update(request, contract_id=None):
 #weverton
 @login_required
 def seecontractdetails(request, contract_id=None):
-	clsse = None
+	classe = None
 	school = None
 	is_supervisor = False
 	if Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
