@@ -25,8 +25,8 @@
 									{% if school.chains.all %}
 										<th>Cadeias</th>
 									{% endif %}
-									{% if school.head %}
-										<th>Diretor</th>
+									{% if school.heads.all %}
+										<th>Diretores</th>
 									{% endif %}
 									{% if school.adminorsupervisor %}
 										<th>Supervisor</th>
@@ -71,8 +71,10 @@
 										{% endfor %}
 									</th>
 									{% endif %}
-									{% if school.head %}
-										<th>{{ school.head.name }}</th>
+									{% if school.heads.all %}
+										{% for head in school.heads.all %}
+											<label>Nome do Diretor: {{ head.name }}</label><br>
+										{% endfor %}
 									{% endif %}
 									{% if school.adminorsupervisor %}
 										<th>{{ school.adminorsupervisor.name }}</th>
