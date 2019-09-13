@@ -346,7 +346,6 @@ def createacontract(request):
 					contract.second_witness_signe = school.second_witness
 				if student.needs_parent:
 					if student.first_parent and student.second_parent:
-						contract.counter_signe = school.head
 						contract.first_auth_signe = student.first_parent
 						contract.second_auth_signe = student.second_parent
 						if student.third_parent:
@@ -354,6 +353,7 @@ def createacontract(request):
 						contract.student_name = student.name
 						if wish == 'sim':
 							if wish_today == 'sim':
+								contract.save()
 								tasks.schedule_email(contract, 'normal', 'admin')
 							elif wish_today == 'não':
 								date = request.POST.get('date' or None)
@@ -368,6 +368,7 @@ def createacontract(request):
 									return redirect('/contracts/createacontract')
 						else:
 							if wish_today == 'sim':
+								contract.save()
 								tasks.schedule_email_without_attachment(contract,'normal', 'admin')
 							elif wish_today == 'não':
 								date = request.POST.get('date' or None)
@@ -381,9 +382,8 @@ def createacontract(request):
 									messages.error(request, 'Você não informou a data em que o contrato será enviado!')
 									return redirect('/contracts/createacontract')
 						messages.success(request, 'Contrato criado com sucesso!')
-						return redirect('/contracts/all')
+						return redirect('/contracts/select_director_to_contract/{}'.format(contract.contract_id))
 				else:
-					contract.counter_signe = school.head
 					contract.student_auth_signe = student
 					contract.student_name = student.name
 					if wish == 'sim':
@@ -402,6 +402,7 @@ def createacontract(request):
 									return redirect('/contracts/createacontract')
 					else:
 						if wish_today == 'sim':
+							contract.save()
 							tasks.schedule_email_without_attachment(contract,'normal', 'admin')
 						elif wish_today == 'não':
 							date = request.POST.get('date' or None)
@@ -415,7 +416,7 @@ def createacontract(request):
 								messages.error(request, 'Você não informou a data em que o contrato será enviado!')
 								return redirect('/contracts/createacontract')
 					messages.success(request, 'Contrato criado com sucesso!')
-					return redirect('/contracts/all')
+					return redirect('/contracts/select_director_to_contract/{}'.format(contract.contract_id))
 		return render(request, 'contract/createacontract.html', {'form':form, 'student':student, 'tomorrow':tomorrow})
 	elif Head.objects.filter(profile=request.user).count()>=1:
 		is_supervisor = True
@@ -467,7 +468,6 @@ def createacontract(request):
 					contract.second_witness_signe = school.second_witness
 				if student.needs_parent:
 					if student.first_parent and student.second_parent:
-						contract.counter_signe = school.head
 						contract.first_auth_signe = student.first_parent
 						contract.second_auth_signe = student.second_parent
 						if student.third_parent:
@@ -475,6 +475,7 @@ def createacontract(request):
 						contract.student_name = student.name
 						if wish == 'sim':
 							if wish_today == 'sim':
+								contract.save()
 								tasks.schedule_email(contract, 'normal', 'director')
 							elif wish_today == 'não':
 								date = request.POST.get('date' or None)
@@ -489,6 +490,7 @@ def createacontract(request):
 									return redirect('/contracts/createacontract')
 						else:
 							if wish_today == 'sim':
+								contract.save()
 								tasks.schedule_email_without_attachment(contract,'normal', 'director')
 							elif wish_today == 'não':
 								date = request.POST.get('date' or None)
@@ -502,13 +504,13 @@ def createacontract(request):
 									messages.error(request, 'Você não informou a data em que o contrato será enviado!')
 									return redirect('/contracts/createacontract')
 						messages.success(request, 'Contrato criado com sucesso!')
-						return redirect('/contracts/all')
+						return redirect('/contracts/select_director_to_contract/{}'.format(contract.contract_id))
 				else:
-					contract.counter_signe = school.head
 					contract.student_auth_signe = student
 					contract.student_name = student.name
 					if wish == 'sim':
 						if wish_today == 'sim':
+							contract.save()
 							tasks.schedule_email(contract, 'normal', 'director')
 						elif wish_today == 'não':
 							date = request.POST.get('date' or None)
@@ -523,6 +525,7 @@ def createacontract(request):
 								return redirect('/contracts/createacontract')
 					else:
 						if wish_today == 'sim':
+							contract.save()
 							tasks.schedule_email_without_attachment(contract,'normal', 'director')
 						elif wish_today == 'não':
 							date = request.POST.get('date' or None)
@@ -536,7 +539,7 @@ def createacontract(request):
 								messages.error(request, 'Você não informou a data em que o contrato será enviado!')
 								return redirect('/contracts/createacontract')
 					messages.success(request, 'Contrato criado com sucesso!')
-					return redirect('/contracts/all')
+					return redirect('/contracts/select_director_to_contract/{}'.format(contract.contract_id))
 		return render(request, 'contract/createacontract.html', {'form':form, 'is_supervisor':is_supervisor, 'student':student, 'tomorrow':tomorrow})
 	return redirect('/')
 
@@ -626,6 +629,27 @@ def updatecontract(request, contract_id=None):
 				messages.warning(request, 'O estudante não tem pelo menos um dos pais associados a ele!')
 		return render(request, 'contract/updatecontract.html', {'form':form, 'students':students})
 	return redirect('/')
+
+@login_required
+def select_director_to_contract(request, contract_id=None):
+	school = School.objects.get(chains__id__exact=contract.chain.id)
+	directors = school.heads.all()
+	if request.user.is_superuser:
+		if request.method == 'POST':
+			selected_user = request.POST.get('selected_user' or None)
+			head_to_contract = Head.objects.get(head_id=selected_user)
+			contract.counter_signe = head_to_contract
+			contract.save(update_fields='counter_signe')
+			return redirect('/contracts/all')
+		return render(request, 'contract/select_director_to_contract.html', {'directors':directors})
+	elif Head.objects.filter(profile=request.user).count()>=1:
+		if request.method == 'POST':
+			selected_user = request.POST.get('selected_user' or None)
+			head_to_contract = Head.objects.get(head_id=selected_user)
+			contract.counter_signe = head_to_contract
+			contract.save(update_fields='counter_signe')
+			return redirect('/contracts/all')
+		return render(request, 'contract/select_director_to_contract.html', {'directors':directors})
 
 @csrf_exempt
 def createacontract_rest(request):
@@ -799,7 +823,7 @@ def select_student_to_contract(request):
 		return render(request, 'contract/select_student_to_contract.html', {'students':students})
 	elif Head.objects.filter(profile=request.user).count()>=1:
 		students_ids = []
-		for school in School.objects.filter(head=Head.objects.get(profile=request.user)):
+		for school in School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id):
 			for student in school.students.all():
 				students_ids += [(student.student_id)]
 		students = Student.objects.filter(student_id__in=students_ids)
