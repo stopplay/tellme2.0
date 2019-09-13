@@ -632,6 +632,7 @@ def updatecontract(request, contract_id=None):
 
 @login_required
 def select_director_to_contract(request, contract_id=None):
+	contract = Contract.objects.get(contract_id=contract_id)
 	school = School.objects.get(chains__id__exact=contract.chain.id)
 	directors = school.heads.all()
 	if request.user.is_superuser:
