@@ -3,7 +3,7 @@ from .models import *
 
 # Register your models here.
 class SchoolAdmin(admin.ModelAdmin):
-	list_display = ['school_id','school_name', 'get_classes', 'get_chains', 'head', 'sponte_client_number', 'country', 'state', 'city']
+	list_display = ['school_id','school_name', 'get_classes', 'get_chains', 'sponte_client_number', 'country', 'state', 'city']
 
 	def get_chains(self, obj):
 		return "\n".join([chain.name for chain in obj.chains.all()])

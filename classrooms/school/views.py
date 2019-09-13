@@ -422,7 +422,7 @@ def update_school(request, school_id=None):
 				chain.name = "{0}-{1}-{2}-{3}".format(school.school_name, classe.enrollment_class_year, classe.class_unit, classe.class_name)
 				chain.save(update_fields=['name'])		
 
-			school.save(update_fields=['school_name', 'head', 'sponte_client_number', 'country', 'state', 'city','app_name', 'adminorsupervisor'])
+			school.save(update_fields=['school_name', 'sponte_client_number', 'country', 'state', 'city','app_name', 'adminorsupervisor'])
 			messages.success(request, 'A escola foi atualizada com sucesso!')
 			return redirect('/')
 		return render(request, 'school/update_school.html', {'form':form, 'school_id': school_id})
@@ -436,7 +436,7 @@ def update_school(request, school_id=None):
 				chain = Chain.objects.get(id=classe.class_id)
 				chain.name = "{0}-{1}-{2}-{3}".format(school.school_name, classe.enrollment_class_year, classe.class_unit, classe.class_name)
 				chain.save(update_fields=['name'])
-			school.save(update_fields=['school_name', 'head', 'sponte_client_number', 'country', 'state', 'city','app_name', 'adminorsupervisor'])
+			school.save(update_fields=['school_name', 'sponte_client_number', 'country', 'state', 'city','app_name', 'adminorsupervisor'])
 			messages.success(request, 'A escola foi atualizada com sucesso!')
 			return redirect('/')
 		return render(request, 'school/update_school.html', {'form':form, 'is_supervisor':is_supervisor, 'school_id': school_id})

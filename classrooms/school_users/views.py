@@ -684,15 +684,17 @@ def create_head_to_school(request, school_id=None):
                     )
                     email.send()
                     head_to_add = get_object_or_404(Head, profile=user_profile)
-                    school_to_add_head.head = head_to_add
-                    school_to_add_head.save(update_fields=['head'])
+                    school_to_add_head.heads.add(head_to_add)
                     messages.success(request, '{} adicionado com sucesso à escola {}'.format(head_to_add.name, school_to_add_head.school_name))
+                    if school_to_add_head.heads.all().count() < school_to_add_head.quantity_of_directors:
+                        return redirect('/users/create_head_to_school/{}'.format(school_to_add_head.school_id))
                     return redirect('/users/create_supervisor_to_school/{}'.format(school_id))
             else:
                 head = Head.objects.get(head_id=selected_user)
-                school_to_add_head.head = head
-                school_to_add_head.save(update_fields=['head'])
+                school_to_add_head.heads.add(head)
                 messages.success(request, '{} adicionado com sucesso à escola {}'.format(head.name, school_to_add_head.school_name))
+                if school_to_add_head.heads.all().count() < school_to_add_head.quantity_of_directors:
+                    return redirect('/users/create_head_to_school/{}'.format(school_to_add_head.school_id))
                 return redirect('/users/create_supervisor_to_school/{}'.format(school_id))
         return render(request, 'school_users/create_head_to_school.html', {'form':form, 'form2':form2, 'school':school_to_add_head, 'head_users':head_users})
 
