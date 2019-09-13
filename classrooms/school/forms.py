@@ -38,6 +38,25 @@ class SchoolModelFormWithSupervisor(forms.ModelForm):
 			'adminorsupervisor': forms.Select(attrs={'class':'form-control chosen-select', 'required':False}),
 		}
 
+class SchoolModelFormWithSupervisorAndDirector(forms.ModelForm):
+	"""docstring for UserModelForm"""
+	class Meta:
+		model = School
+		fields = ['school_name', 'sponte_client_number', 'sponte_token', 'tell_me_school_id', 'country', 'state', 'city', 'app_name', 'adminorsupervisor', 'head']
+		widgets = {
+			'school_name': forms.TextInput(attrs={'class':'form-control', 'maxlength':255, 'required':True}),
+			'enrollment_year': forms.NumberInput(),
+			'sponte_client_number': forms.NumberInput(attrs={'class':'form-control', 'required':False ,'min':0}),
+			'sponte_token': forms.TextInput(attrs={'class':'form-control', 'required':False, 'min':0}),
+			'tell_me_school_id': forms.TextInput(attrs={'class':'form-control', 'required':False, 'min':0}),
+			'country': forms.TextInput(attrs={'class':'form-control', 'required':False}),
+			'state': forms.TextInput(attrs={'class':'form-control', 'required':False}),
+			'city': forms.TextInput(attrs={'class':'form-control', 'required':False}),
+			'app_name': forms.TextInput(attrs={'class':'form-control', 'required':False}),
+			'adminorsupervisor': forms.Select(attrs={'class':'form-control chosen-select', 'required':False}),
+			'head': forms.Select(attrs={'class':'form-control chosen-select', 'required':False}),
+		}
+
 class SetWitnessModelForm(forms.ModelForm):
 	"""docstring for ManagerModelForm"""
 	class Meta:

@@ -414,7 +414,7 @@ def pull_students(request, school_id=None):
 def update_school(request, school_id=None):
 	if request.user.is_superuser:
 		instance = School.objects.get(school_id=school_id)
-		form = SchoolModelFormWithSupervisor(request.POST or None, instance=instance)
+		form = SchoolModelFormWithSupervisorAndDirector(request.POST or None, instance=instance)
 		if form.is_valid():
 			school = form.save(commit=False)
 			for classe in school.classes.all():
@@ -429,7 +429,7 @@ def update_school(request, school_id=None):
 	elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
 		is_supervisor = True
 		instance = School.objects.get(school_id=school_id)
-		form = SchoolModelForm(request.POST or None, instance=instance)
+		form = SchoolModelFormWithSupervisor(request.POST or None, instance=instance)
 		if form.is_valid():
 			school = form.save(commit=False)
 			for classe in school.classes.all():
