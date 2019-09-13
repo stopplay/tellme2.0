@@ -218,17 +218,18 @@ def schedule_email(contract, typeof=None, whosend=None):
         )
         email.send()
     if whosend == 'admin':
-        mail_subject = 'Contrato a ser assinado'
-        message = render_to_string('contract/sendcontract.html', {
-            'user': contract.counter_signe,
-            'contract': contract,
-            'school': school
-        })
-        to_email = contract.counter_signe.profile.email
-        email = EmailMessage(
-            mail_subject, message, to=[to_email], attachments=attachments
-        )
-        email.send()
+        if contract.counter_signe:
+            mail_subject = 'Contrato a ser assinado'
+            message = render_to_string('contract/sendcontract.html', {
+                'user': contract.counter_signe,
+                'contract': contract,
+                'school': school
+            })
+            to_email = contract.counter_signe.profile.email
+            email = EmailMessage(
+                mail_subject, message, to=[to_email], attachments=attachments
+            )
+            email.send()
     contract.email_sent = True
     if typeof == 'json':
         contract.save(update_fields=['email_sent'])
@@ -322,17 +323,18 @@ def schedule_email_without_attachment(contract, typeof=None, whosend=None):
         )
         email.send()
     if whosend == 'admin':
-        mail_subject = 'Contrato a ser assinado'
-        message = render_to_string('contract/sendcontract.html', {
-            'user': contract.counter_signe,
-            'contract': contract,
-            'school': school
-        })
-        to_email = contract.counter_signe.profile.email
-        email = EmailMessage(
-            mail_subject, message, to=[to_email]
-        )
-        email.send()
+        if contract.counter_signe:
+            mail_subject = 'Contrato a ser assinado'
+            message = render_to_string('contract/sendcontract.html', {
+                'user': contract.counter_signe,
+                'contract': contract,
+                'school': school
+            })
+            to_email = contract.counter_signe.profile.email
+            email = EmailMessage(
+                mail_subject, message, to=[to_email]
+            )
+            email.send()
     contract.email_sent = True
     if typeof == 'json':
         contract.save(update_fields=['email_sent'])
