@@ -424,7 +424,7 @@ def update_school(request, school_id=None):
 
 			school.save(update_fields=['school_name', 'sponte_client_number', 'country', 'state', 'city','app_name', 'adminorsupervisor'])
 			messages.success(request, 'A escola foi atualizada com sucesso!')
-			return redirect('/users/create_head_to_school/{}'.format(school_id))
+			return redirect('/')
 		return render(request, 'school/update_school.html', {'form':form, 'school_id': school_id})
 	elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
 		is_supervisor = True
@@ -438,7 +438,7 @@ def update_school(request, school_id=None):
 				chain.save(update_fields=['name'])
 			school.save(update_fields=['school_name', 'sponte_client_number', 'country', 'state', 'city','app_name', 'adminorsupervisor'])
 			messages.success(request, 'A escola foi atualizada com sucesso!')
-			return redirect('/users/create_head_to_school/{}'.format(school_id))
+			return redirect('/')
 		return render(request, 'school/update_school.html', {'form':form, 'is_supervisor':is_supervisor, 'school_id': school_id})
 
 @csrf_exempt
