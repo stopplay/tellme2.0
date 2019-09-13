@@ -72,9 +72,11 @@
 									</th>
 									{% endif %}
 									{% if school.heads.all %}
-										{% for head in school.heads.all %}
-											<label>Nome do Diretor: {{ head.name }}</label><br>
-										{% endfor %}
+										<th>
+											{% for head in school.heads.all %}
+												<label>Nome do Diretor: {{ head.name }}</label><br>
+											{% endfor %}
+										</th>
 									{% endif %}
 									{% if school.adminorsupervisor %}
 										<th>{{ school.adminorsupervisor.name }}</th>
