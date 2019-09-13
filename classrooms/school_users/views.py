@@ -1075,8 +1075,10 @@ def seeallusers_by_school(request, school_id=None):
         if school_id:
             school = School.objects.get(school_id=school_id)
         if school:
-            if school.head:
-                head_users += [(school.head)]
+            if school.heads.all():
+                for head in school.heads.all():
+                    if head not in head_users:
+                        head_users += [(head)]
             if school.adminorsupervisor:
                 supervisor_users += [(school.adminorsupervisor)]
             teacher_users = school.teachers.all()
@@ -1107,8 +1109,10 @@ def seeallusers_by_school(request, school_id=None):
         if school_id:
             school = School.objects.get(school_id=school_id)
         if school:
-            if school.head:
-                head_users += [(school.head)]
+            if school.heads.all():
+                for head in school.heads.all():
+                    if head not in head_users:
+                        head_users += [(head)]
             if school.adminorsupervisor:
                 supervisor_users += [(school.adminorsupervisor)]
             teacher_users = school.teachers.all()
