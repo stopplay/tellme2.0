@@ -35,7 +35,7 @@ class SchoolModelFormWithSupervisor(forms.ModelForm):
 			'state': forms.TextInput(attrs={'class':'form-control', 'required':False}),
 			'city': forms.TextInput(attrs={'class':'form-control', 'required':False}),
 			'app_name': forms.TextInput(attrs={'class':'form-control', 'required':False}),
-			'adminorsupervisor': forms.Select(attrs={'class':'form-control, chosen-select', 'required':False}),
+			'adminorsupervisor': forms.Select(attrs={'class':'form-control chosen-select', 'required':False}),
 		}
 
 class SetWitnessModelForm(forms.ModelForm):
