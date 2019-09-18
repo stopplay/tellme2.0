@@ -1617,11 +1617,12 @@ def add_witness(request, school_id=None, type_of_user= None):
 	                mail_subject, message, to=[to_email]
 	            )
 	            email.send()
-	            witness = Witness.objects.get(profile=user_profile)
-	            if type_of_user == 'first_wintess':
-	                school.first_witness = wintess
-	            elif type_of_user == 'second_wintess':
-	                school.second_witness = wintess
+	            first_wintess_verify = type_of_user == 'first_wintess'
+	            second_witness_verify = type_of_user == 'second_witness'
+	            if first_wintess_verify:
+	                school.first_witness = Witness.objects.get(profile=user_profile)
+	            elif second_witness_verify:
+	                school.second_witness = Witness.objects.get(profile=user_profile)
 	            school.save(update_fields=['first_witness','second_witness'])
 	            messages.success(request, 'Testemunha adicionada com sucesso!')
 	            return redirect('/schools/{}/set_witnesses'.format(school_id))
@@ -1661,11 +1662,12 @@ def add_witness(request, school_id=None, type_of_user= None):
 	                mail_subject, message, to=[to_email]
 	            )
 	            email.send()
-	            witness = Witness.objects.get(profile=user_profile)
-	            if type_of_user == 'first_wintess':
-	                school.first_witness = wintess
-	            elif type_of_user == 'second_wintess':
-	                school.second_witness = wintess
+	            first_wintess_verify = type_of_user == 'first_wintess'
+	            second_witness_verify = type_of_user == 'second_witness'
+	            if first_wintess_verify:
+	                school.first_witness = Witness.objects.get(profile=user_profile)
+	            elif second_witness_verify:
+	                school.second_witness = Witness.objects.get(profile=user_profile)
 	            school.save(update_fields=['first_witness','second_witness'])
 	            messages.success(request, 'Testemunha adicionada com sucesso!')
 	            return redirect('/schools/{}/set_witnesses'.format(school_id))
