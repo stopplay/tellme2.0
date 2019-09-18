@@ -312,7 +312,7 @@ def create_user(request):
         if Head.objects.filter(profile=request.user).count()>=1:
             schools = School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id)
         if Supervisor.objects.filter(profile=request.user).count()>=1:
-            schools = School.objects.filter(head=Supervisor.objects.get(profile=request.user))
+            schools = School.objects.filter(adminorsupervisor=Supervisor.objects.get(profile=request.user))
         is_supervisor = True
         form = UserModelForm(request.POST or None)
         form2 = HeadModelForm(request.POST or None)
