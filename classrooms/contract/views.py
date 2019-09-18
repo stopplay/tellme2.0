@@ -429,7 +429,7 @@ def createacontract(request):
 		else:
 			messages.warning(request, 'Por favor selecione um estudante')
 			return redirect('/contracts/select_student_to_contract')
-		for school in School.objects.filter(head=Head.objects.get(profile=request.user)):
+		for school in School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id):
 			for classe in school.classes.all():
 				if student in classe.students.all():
 					chains += [(classe.class_id)]
