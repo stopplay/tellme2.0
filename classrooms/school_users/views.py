@@ -310,7 +310,7 @@ def create_user(request):
     elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
         schools = None
         if Head.objects.filter(profile=request.user).count()>=1:
-            schools = School.objects.filter(head=Head.objects.get(profile=request.user))
+            schools = School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id)
         if Supervisor.objects.filter(profile=request.user).count()>=1:
             schools = School.objects.filter(head=Supervisor.objects.get(profile=request.user))
         is_supervisor = True
@@ -1042,7 +1042,7 @@ def seeallusers(request):
         school = None
         schools = []
         if Head.objects.filter(profile=request.user).count()>=1:
-            schools = School.objects.filter(head=Head.objects.get(profile=request.user))
+            schools = School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id)
         elif Supervisor.objects.filter(profile=request.user).count()>=1:
             schools = School.objects.filter(adminorsupervisor=Supervisor.objects.get(profile=request.user))
         is_supervisor = True
@@ -1127,7 +1127,7 @@ def seeallusers_by_school(request, school_id=None):
         else:
             schools = []
             if Head.objects.filter(profile=request.user).count()>=1:
-                schools = School.objects.filter(head=Head.objects.get(profile=request.user))
+                schools = School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id)
             elif Supervisor.objects.filter(profile=request.user).count()>=1:
                 schools = School.objects.filter(adminorsupervisor=Supervisor.objects.get(profile=request.user))
             for school in schools:
@@ -1228,7 +1228,7 @@ def set_parents(request, student_id=None):
         parents_ids = []
         schools = None
         if Head.objects.filter(profile=request.user).count()>=1:
-            schools = School.objects.filter(head=Head.objects.get(profile=request.user))
+            schools = School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id)
         if Supervisor.objects.filter(profile=request.user).count()>=1:
             schools = School.objects.filter(adminorsupervisor=Supervisor.objects.get(profile=request.user))
         for school in schools:
