@@ -821,7 +821,14 @@ def add_students_to_school(request, school_id=None):
 	elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
 		is_supervisor = True
 		school = School.objects.get(school_id=school_id)
-		student_users = school.students.all()
+		student_ids = []
+		if School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id).count()>1:
+			for school in School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id):
+				for student in school.students.all():
+					if student.student_id not in student_ids:
+						student_ids+=[(student.student_id)]
+		student_users = Student.objects.filter(student_id__in=student_ids)
+		school = School.objects.get(school_id=school_id)
 		if request.method == 'POST':
 			select_all = request.POST.get('variable')
 			school.students.clear()
