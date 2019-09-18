@@ -23,104 +23,128 @@
 						<div class="row">
 							<div class="col-md-11 pr-1">
 								<div class="form-group">
-									<form method="POST" class="" enctype="multipart/form-data" > {% csrf_token %}
+									<form method="POST" class="" enctype="multipart/form-data" id="myForm"
+									data-urlclasses="{% url 'contracts:directors_choices_ajax' %}"> {% csrf_token %}
 										<div style="margin-top: 10px">
 											<p><label>Por favor nao enviar arquivos com os seguintes caracteres no nome: ã, á, à, é, è, í, ì, õ, ó, ò, ú, ù, ç. Isso também inclui estes mesmos caracteres em minúsculo.</label><br>
 											</div>
+
 											{{ form.as_p }}
-											<div style="margin-top: 10px">
-											<p><label>Você deseja enviar este contrato por email? (Recomendado)</label><br><label
-												style="margin-right: 10px">Não</label><label class="switch">
-													<input type="checkbox" id="first_checkbox" checked>
-													<a id="first_slider" class="slider round"></a>
-												</label><label style="margin-left: 10px">Sim</label></p>
+											<div class="labelandform">
+												<p><label>Selecione o diretor:</label></p>
+												<select class="custom-select" id="select_form_class">
+													<option id="" value="" selected></option>
+												</select>
 											</div>
-											<div>
-												<p><label>Você deseja agendar o envio deste email?</label><br><label
-													style="margin-right: 10px">Não</label><label class="switch"><input
-														type="checkbox" id="second_checkbox"><a id="second_slider"
-														class="slider round" onclick="select()"></a></label><label
-														style="margin-left: 10px">Sim</label></p><input type="hidden"
-														id="wish_today" name="wish_today" value="sim">
-													</div>
-													<div id="pai">
-													</div>
-													<div id="child">
-													</div>
-													<input type="hidden" id="wish" name="wish" value="sim">
+											<div style="margin-top: 10px">
+												<p><label>Você deseja enviar este contrato por email? (Recomendado)</label><br><label
+													style="margin-right: 10px">Não</label><label class="switch">
+														<input type="checkbox" id="first_checkbox" checked>
+														<a id="first_slider" class="slider round"></a>
+													</label><label style="margin-left: 10px">Sim</label></p>
+												</div>
+												<div>
+													<p><label>Você deseja agendar o envio deste email?</label><br><label
+														style="margin-right: 10px">Não</label><label class="switch"><input
+															type="checkbox" id="second_checkbox"><a id="second_slider"
+															class="slider round" onclick="select()"></a></label><label
+															style="margin-left: 10px">Sim</label></p><input type="hidden"
+															id="wish_today" name="wish_today" value="sim">
+														</div>
+														<div id="pai">
+														</div>
+														<div id="child">
+														</div>
+														<input type="hidden" id="wish" name="wish" value="sim">
 
 
-													<div><button type="submit" class="btn btn-info btn-fill btn-sm pull-left mt-2"
-														style="background-color: #213f99; border-color: #213f99">Criar Novo
-													Contrato</button></div>
+														<div><button type="submit" class="btn btn-info btn-fill btn-sm pull-left mt-2"
+															style="background-color: #213f99; border-color: #213f99">Criar Novo
+														Contrato</button></div>
 
-												</form>
+													</form>
+												</div>
 											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-						</div>
 
+						</div>
 					</div>
 				</div>
-			</div>
-			<script type="text/javascript">
-				$(document).ready(function () {
-					$('#select_form').on('change', function () {
-						var selectValor = $(this).val();
-						if (selectValor == '') {
-							document.getElementById('selected_user').value = '0'
+				<script type="text/javascript">
+					$(document).ready(function () {
+						$('#id_chain').on('change', function () {
+							setGenPasswordToFields(['id_{{user_form.password1.name}}', 'id_{{user_form.password2.name}}']);
+							let urlClasses = $('#myForm').data('urlclasses')
+							var selectValor = $(this).val();
+							$.ajax({
+								url: urlClasses,
+								data: {
+									id: selectValor
+								},
+								success: function (response) {
+									$('#select_form_class').html(response)
+								}
+							})
+						});
+					});
+					$(document).ready(function () {
+						$('#select_form').on('change', function () {
+							var selectValor = $(this).val();
+							if (selectValor == '') {
+								document.getElementById('selected_user').value = '0'
+							}
+							else {
+								document.getElementById('selected_user').value = selectValor
+							}
+						});
+					});
+					$(document).ready(function () {
+						$('#first_input').on('change', function () {
+							var selectValor = $(this).val($(this).is(':checked'));
+							if (selectValor == '') {
+								$('#pai').children('div').remove();
+								$('#child').children('div').remove();
+							}
+							else if (selectValor == true) {
+
+							}
+							else if (selectValor == false) {
+								$('#pai').children('div').remove();
+								$('#child').children('div').remove();
+								document.getElementById('wish').value = 'não'
+								document.getElementById('wish_today').value = 'não'
+							}
+						});
+					});
+					$(document).on("click", "#first_slider", function () {
+						if (!$('#first_checkbox').prop("checked")) {
+							document.getElementById('wish').value = 'sim'
+							$('#first_checkbox').attr('checked')
 						}
 						else {
-							document.getElementById('selected_user').value = selectValor
-						}
-					});
-				});
-				$(document).ready(function () {
-					$('#first_input').on('change', function () {
-						var selectValor = $(this).val($(this).is(':checked'));
-						if (selectValor == '') {
-							$('#pai').children('div').remove();
-							$('#child').children('div').remove();
-						}
-						else if (selectValor == true) {
-
-						}
-						else if (selectValor == false) {
 							$('#pai').children('div').remove();
 							$('#child').children('div').remove();
 							document.getElementById('wish').value = 'não'
-							document.getElementById('wish_today').value = 'não'
+							$('#first_checkbox').removeAttr('checked')
 						}
 					});
-				});
-				$(document).on("click", "#first_slider", function () {
-					if (!$('#first_checkbox').prop("checked")) {
-						document.getElementById('wish').value = 'sim'
-						$('#first_checkbox').attr('checked')
-					}
-					else {
-						$('#pai').children('div').remove();
-						$('#child').children('div').remove();
-						document.getElementById('wish').value = 'não'
-						$('#first_checkbox').removeAttr('checked')
-					}
-				});
-				function select() {
-					if (!$('#second_checkbox').prop("checked")) {
-						$('#child').append('<div id="não"><p><div class="form-group"><label>Que dia você deseja que seja enviado o seu contrato?</label><label>Data do Agendamento: </label><input class="form-control" type="date" name="date" min="{{ tomorrow }}"></div><div class="form-group"><label>Que horário do dia acima você deseja que seja enviado o seu contrato?</label><label>Hora do Agendamento: </label><input class="form-control" type="time" name="time"></div></p></div>')
-						document.getElementById('wish_today').value = 'não'
+					function select() {
+						if (!$('#second_checkbox').prop("checked")) {
+							$('#child').append('<div id="não"><p><div class="form-group"><label>Que dia você deseja que seja enviado o seu contrato?</label><label>Data do Agendamento: </label><input class="form-control" type="date" name="date" min="{{ tomorrow }}"></div><div class="form-group"><label>Que horário do dia acima você deseja que seja enviado o seu contrato?</label><label>Hora do Agendamento: </label><input class="form-control" type="time" name="time"></div></p></div>')
+							document.getElementById('wish_today').value = 'não'
 
+						}
+						else {
+							$('#second_checkbox').removeAttr('checked')
+							$('#child').children('#não').remove();
+							document.getElementById('wish_today').value = 'sim'
+							$('#second_checkbox').attr('checked')
+						}
 					}
-					else {
-						$('#second_checkbox').removeAttr('checked')
-						$('#child').children('#não').remove();
-						document.getElementById('wish_today').value = 'sim'
-						$('#second_checkbox').attr('checked')
-					}
-				}
-			</script>
-			<script>(function(e,t,n){var r=e.querySelectorAll("html")[0];r.className=r.className.replace(/(^|\s)no-js(\s|$)/,"$1js$2")})(document,window,0);</script>
+				</script>
+				<script>(function(e,t,n){var r=e.querySelectorAll("html")[0];r.className=r.className.replace(/(^|\s)no-js(\s|$)/,"$1js$2")})(document,window,0);</script>
 
-			{% endblock %}
+				{% endblock %}

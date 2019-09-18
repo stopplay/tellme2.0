@@ -1420,3 +1420,9 @@ def protected_serve(request, path, contract_id=None, document_root=None):
 			return serve(request, path, document_root)
 	except ObjectDoesNotExist:
 		return HttpResponse('Você não tem permissão para acessar esse arquivo')
+
+def directors_choices_ajax(request):
+    chain_id = request.GET.get('id')
+    school = School.objects.get(chains__id__exact=chain_id)
+    context = {'directors':school.heads.all()}
+    return render(request, 'contract/directors_choices.html', context)
