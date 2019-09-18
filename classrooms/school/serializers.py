@@ -14,7 +14,7 @@ class SchoolSerializer(serializers.ModelSerializer):
 	"""docstring for SchoolSerializer"""
 	classes = ClassSerializer(read_only=True, many=True)
 	chains = ChainSerializer(read_only=True, many=True)
-	head = HeadSerializer()
+	heads = HeadSerializer(read_only=True, many=True)
 	adminorsupervisor = SupervisorSerializer()
 	students = StudentSerializer(read_only=True, many=True)
 	teachers = TeacherSerializer(read_only=True, many=True)
