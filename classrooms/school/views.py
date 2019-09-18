@@ -796,7 +796,7 @@ def add_students_to_school(request, school_id=None):
 		student_ids = []
 		for head in school.heads.all():
 			if School.objects.filter(heads__head_id__exact=head.head_id).count()>1:
-				for school in School.objects.filter(head=school.head):
+				for school in School.objects.filter(heads__head_id__exact=head.head_id):
 					for student in school.students.all():
 						if student.student_id not in student_ids:
 							student_ids+=[(student.student_id)]
@@ -1216,8 +1216,8 @@ def add_multple_students_for_class_and_school(request, school_id= None, class_id
 		classe = Class.objects.get(class_id=class_id)
 		student_ids = []
 		for head in first_school.heads.all():
-			if School.objects.filter(head=first_school.head).count()>1:
-				for school in School.objects.filter(head=first_school.head):
+			if School.objects.filter(heads__head_id__exact=head.head_id).count()>1:
+				for school in School.objects.filter(heads__head_id__exact=head.head_id):
 					for student in school.students.all():
 						if student.student_id not in student_ids:
 							student_ids+=[(student.student_id)]
