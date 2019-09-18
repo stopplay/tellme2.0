@@ -295,253 +295,270 @@ def write_pdf(request, contract=None, whosigned=None, school=None):
 
 @login_required
 def createacontract(request):
-	tomorrow = datetime.date.today()+datetime.timedelta(days=1)
-	tomorrow = tomorrow.strftime('%Y-%m-%d')
-	if request.user.is_superuser:
-		form = ContractModelFormWithoutSponte(request.POST or None, request.FILES)
-		students = Student.objects.all().order_by('name')
-		chains = []
-		selected_user = request.session['selected_user']
-		if Student.objects.filter(student_id = selected_user).count()>=1:
-			student = Student.objects.get(student_id = selected_user)
-		else:
-			messages.warning(request, 'Por favor selecione um estudante')
-			return redirect('/contracts/select_student_to_contract')
-		for school in School.objects.all():
-			for classe in school.classes.all():
-				if student in classe.students.all():
-					chains += [(classe.class_id)]
-		form.fields["chain"].queryset = Chain.objects.filter(id__in=chains)
-		if request.method == 'POST':
-			if form.is_valid():
-				wish = request.POST.get('wish' or None)
-				wish_today = request.POST.get('wish_today' or None)
-				contract = form.save(commit=False)
-				if contract.pdf.size > 2097152:
-					messages.error(request, 'Por favor mantenha o tamanho do arquivo de contrato enviado abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.pdf.size)))
-					return redirect('/contracts/createacontract')
-				if contract.terms_of_contract:
-					if contract.terms_of_contract.size > 2097152:
-						messages.error(request, 'Por favor mantenha o tamanho do arquivo de termos aditivos de contrato (1) abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.terms_of_contract.size)))
-						return redirect('/contracts/createacontract')
-					if not contract.terms_of_contract.name.endswith('.pdf'):
-						messages.error(request, 'Por favor insira o arquivo de termos aditivos de contrato (1) no tipo correto que é PDF')
-						return redirect('/contracts/createacontract')
-				if contract.terms_of_contract_2:
-					if contract.terms_of_contract_2.size > 2097152:
-						messages.error(request, 'Por favor mantenha o tamanho do arquivo de termos aditivos de contrato (2) abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.terms_of_contract_2.size)))
-						return redirect('/contracts/createacontract')
-					if not contract.terms_of_contract_2.name.endswith('.pdf'):
-						messages.error(request, 'Por favor insira o arquivo de termos aditivos de contrato (2) no tipo correto que é PDF')
-						return redirect('/contracts/createacontract')
-				if not contract.pdf.name.endswith('.pdf'):
-					messages.error(request, 'Por favor insira o arquivo de contrato no tipo correto que é PDF')
-					return redirect('/contracts/createacontract')
-				school = School.objects.get(chains__id__exact=contract.chain.id)
-				classe = Class.objects.get(class_id=contract.chain.id)
-				contract.slm = classe.slm
-				contract.name = student.name+' - '+contract.chain.name
-				if school.first_witness and school.second_witness:
-					contract.first_witness_signe = school.first_witness
-					contract.second_witness_signe = school.second_witness
-				if student.needs_parent:
-					if student.first_parent and student.second_parent:
-						contract.first_auth_signe = student.first_parent
-						contract.second_auth_signe = student.second_parent
-						if student.third_parent:
-							contract.third_auth_signe = student.third_parent
-						contract.student_name = student.name
-						if wish == 'sim':
-							if wish_today == 'sim':
-								contract.save()
-								tasks.schedule_email(contract, 'normal', 'admin')
-							elif wish_today == 'não':
-								date = request.POST.get('date' or None)
-								time = request.POST.get('time' or None)
-								if date and time:
-									contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
-									contract.save()
-									contract_rest = ContractSerializer(contract)
-									tasks.schedule_email.apply_async((contract_rest.data, 'json', 'admin'), eta=contract.sent_date)
-								else:
-									messages.error(request, 'Você não informou a data em que o contrato será enviado!')
-									return redirect('/contracts/createacontract')
-						else:
-							if wish_today == 'sim':
-								contract.save()
-								tasks.schedule_email_without_attachment(contract,'normal', 'admin')
-							elif wish_today == 'não':
-								date = request.POST.get('date' or None)
-								time = request.POST.get('time' or None)
-								if date and time:
-									contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
-									contract.save()
-									contract_rest = ContractSerializer(contract)
-									tasks.schedule_email.apply_async((contract_rest.data, 'json', 'admin'), eta=contract.sent_date)
-								else:
-									messages.error(request, 'Você não informou a data em que o contrato será enviado!')
-									return redirect('/contracts/createacontract')
-						messages.success(request, 'Contrato criado com sucesso!')
-						return redirect('/contracts/select_director_to_contract/{}'.format(contract.contract_id))
-				else:
-					contract.student_auth_signe = student
-					contract.student_name = student.name
-					if wish == 'sim':
-							if wish_today == 'sim':
-								tasks.schedule_email(contract, 'normal', 'admin')
-							elif wish_today == 'não':
-								date = request.POST.get('date' or None)
-								time = request.POST.get('time' or None)
-								if date and time:
-									contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
-									contract.save()
-									contract_rest = ContractSerializer(contract)
-									tasks.schedule_email.apply_async((contract_rest.data, 'json', 'admin'), eta=contract.sent_date)
-								else:
-									messages.error(request, 'Você não informou a data em que o contrato será enviado!')
-									return redirect('/contracts/createacontract')
-					else:
-						if wish_today == 'sim':
-							contract.save()
-							tasks.schedule_email_without_attachment(contract,'normal', 'admin')
-						elif wish_today == 'não':
-							date = request.POST.get('date' or None)
-							time = request.POST.get('time' or None)
-							if date and time:
-								contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
-								contract.save()
-								contract_rest = ContractSerializer(contract)
-								tasks.schedule_email.apply_async((contract_rest.data, 'json', 'admin'), eta=contract.sent_date)
-							else:
-								messages.error(request, 'Você não informou a data em que o contrato será enviado!')
-								return redirect('/contracts/createacontract')
-					messages.success(request, 'Contrato criado com sucesso!')
-					return redirect('/contracts/select_director_to_contract/{}'.format(contract.contract_id))
-		return render(request, 'contract/createacontract.html', {'form':form, 'student':student, 'tomorrow':tomorrow})
-	elif Head.objects.filter(profile=request.user).count()>=1:
-		is_supervisor = True
-		form = ContractModelFormWithoutSponte(request.POST or None, request.FILES)
-		chains = []
-		students_ids = []
-		selected_user = request.session['selected_user']
-		if Student.objects.filter(student_id = selected_user).count()>=1:
-			student = Student.objects.get(student_id = selected_user)
-		else:
-			messages.warning(request, 'Por favor selecione um estudante')
-			return redirect('/contracts/select_student_to_contract')
-		for school in School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id):
-			for classe in school.classes.all():
-				if student in classe.students.all():
-					chains += [(classe.class_id)]
-		form.fields["chain"].queryset = Chain.objects.filter(id__in=chains)
-		if request.method == 'POST':
-			if form.is_valid():
-				wish = request.POST.get('wish' or None)
-				wish_today = request.POST.get('wish_today' or None)
-				contract = form.save(commit=False)
-				if contract.pdf.size > 2097152:
-					messages.error(request, 'Por favor mantenha o tamanho do arquivo de contrato enviado abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.pdf.size)))
-					return redirect('/contracts/createacontract')
-				if contract.terms_of_contract:
-					if contract.terms_of_contract.size > 2097152:
-						messages.error(request, 'Por favor mantenha o tamanho do arquivo de termos aditivos de contrato (1) abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.terms_of_contract.size)))
-						return redirect('/contracts/createacontract')
-					if not contract.terms_of_contract.name.endswith('.pdf'):
-						messages.error(request, 'Por favor insira o arquivo de termos aditivos de contrato (1) no tipo correto que é PDF')
-						return redirect('/contracts/createacontract')
-				if contract.terms_of_contract_2:
-					if contract.terms_of_contract_2.size > 2097152:
-						messages.error(request, 'Por favor mantenha o tamanho do arquivo de termos aditivos de contrato (2) abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.terms_of_contract_2.size)))
-						return redirect('/contracts/createacontract')
-					if not contract.terms_of_contract_2.name.endswith('.pdf'):
-						messages.error(request, 'Por favor insira o arquivo de termos aditivos de contrato (2) no tipo correto que é PDF')
-						return redirect('/contracts/createacontract')
-				if not contract.pdf.name.endswith('.pdf'):
-					messages.error(request, 'Por favor insira o arquivo de contrato no tipo correto que é PDF')
-					return redirect('/contracts/createacontract')
-				school = School.objects.get(chains__id__exact=contract.chain.id)
-				classe = Class.objects.get(class_id=contract.chain.id)
-				contract.slm = classe.slm
-				contract.name = student.name+' - '+contract.chain.name
-				if school.first_witness and school.second_witness:
-					contract.first_witness_signe = school.first_witness
-					contract.second_witness_signe = school.second_witness
-				if student.needs_parent:
-					if student.first_parent and student.second_parent:
-						contract.first_auth_signe = student.first_parent
-						contract.second_auth_signe = student.second_parent
-						if student.third_parent:
-							contract.third_auth_signe = student.third_parent
-						contract.student_name = student.name
-						if wish == 'sim':
-							if wish_today == 'sim':
-								contract.save()
-								tasks.schedule_email(contract, 'normal', 'director')
-							elif wish_today == 'não':
-								date = request.POST.get('date' or None)
-								time = request.POST.get('time' or None)
-								if date and time:
-									contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
-									contract.save()
-									contract_rest = ContractSerializer(contract)
-									tasks.schedule_email.apply_async((contract_rest.data, 'json', 'director'), eta=contract.sent_date)
-								else:
-									messages.error(request, 'Você não informou a data em que o contrato será enviado!')
-									return redirect('/contracts/createacontract')
-						else:
-							if wish_today == 'sim':
-								contract.save()
-								tasks.schedule_email_without_attachment(contract,'normal', 'director')
-							elif wish_today == 'não':
-								date = request.POST.get('date' or None)
-								time = request.POST.get('time' or None)
-								if date and time:
-									contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
-									contract.save()
-									contract_rest = ContractSerializer(contract)
-									tasks.schedule_email.apply_async((contract_rest.data, 'json', 'director'), eta=contract.sent_date)
-								else:
-									messages.error(request, 'Você não informou a data em que o contrato será enviado!')
-									return redirect('/contracts/createacontract')
-						messages.success(request, 'Contrato criado com sucesso!')
-						return redirect('/contracts/select_director_to_contract/{}'.format(contract.contract_id))
-				else:
-					contract.student_auth_signe = student
-					contract.student_name = student.name
-					if wish == 'sim':
-						if wish_today == 'sim':
-							contract.save()
-							tasks.schedule_email(contract, 'normal', 'director')
-						elif wish_today == 'não':
-							date = request.POST.get('date' or None)
-							time = request.POST.get('time' or None)
-							if date and time:
-								contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
-								contract.save()
-								contract_rest = ContractSerializer(contract)
-								tasks.schedule_email.apply_async((contract_rest.data, 'json', 'director'), eta=contract.sent_date)
-							else:
-								messages.error(request, 'Você não informou a data em que o contrato será enviado!')
-								return redirect('/contracts/createacontract')
-					else:
-						if wish_today == 'sim':
-							contract.save()
-							tasks.schedule_email_without_attachment(contract,'normal', 'director')
-						elif wish_today == 'não':
-							date = request.POST.get('date' or None)
-							time = request.POST.get('time' or None)
-							if date and time:
-								contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
-								contract.save()
-								contract_rest = ContractSerializer(contract)
-								tasks.schedule_email.apply_async((contract_rest.data, 'json', 'director'), eta=contract.sent_date)
-							else:
-								messages.error(request, 'Você não informou a data em que o contrato será enviado!')
-								return redirect('/contracts/createacontract')
-					messages.success(request, 'Contrato criado com sucesso!')
-					return redirect('/contracts/select_director_to_contract/{}'.format(contract.contract_id))
-		return render(request, 'contract/createacontract.html', {'form':form, 'is_supervisor':is_supervisor, 'student':student, 'tomorrow':tomorrow})
-	return redirect('/')
+    request.POST.get('selected_user' or None)
+    tomorrow = datetime.date.today()+datetime.timedelta(days=1)
+    tomorrow = tomorrow.strftime('%Y-%m-%d')
+    if request.user.is_superuser:
+        form = ContractModelFormWithoutSponte(request.POST or None, request.FILES)
+        students = Student.objects.all().order_by('name')
+        chains = []
+        selected_user = request.session['selected_user']
+        if Student.objects.filter(student_id = selected_user).count()>=1:
+            student = Student.objects.get(student_id = selected_user)
+        else:
+            messages.warning(request, 'Por favor selecione um estudante')
+            return redirect('/contracts/select_student_to_contract')
+        for school in School.objects.all():
+            for classe in school.classes.all():
+                if student in classe.students.all():
+                    chains += [(classe.class_id)]
+        form.fields["chain"].queryset = Chain.objects.filter(id__in=chains)
+        if request.method == 'POST':
+            if form.is_valid():
+                wish = request.POST.get('wish' or None)
+                wish_today = request.POST.get('wish_today' or None)
+                selected_user = request.POST.get('selected_user' or None)
+                head = None
+                if Head.objects.filter(head_id = selected_user).count()>=1:
+                    head = Head.objects.get(head_id = selected_user)
+                else:
+                    messages.warning(request, 'Você não selecionou nenhum diretor')
+                    return redirect('/contracts/createacontract')
+                contract = form.save(commit=False)
+                if contract.pdf.size > 2097152:
+                    messages.error(request, 'Por favor mantenha o tamanho do arquivo de contrato enviado abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.pdf.size)))
+                    return redirect('/contracts/createacontract')
+                if contract.terms_of_contract:
+                    if contract.terms_of_contract.size > 2097152:
+                        messages.error(request, 'Por favor mantenha o tamanho do arquivo de termos aditivos de contrato (1) abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.terms_of_contract.size)))
+                        return redirect('/contracts/createacontract')
+                    if not contract.terms_of_contract.name.endswith('.pdf'):
+                        messages.error(request, 'Por favor insira o arquivo de termos aditivos de contrato (1) no tipo correto que é PDF')
+                        return redirect('/contracts/createacontract')
+                if contract.terms_of_contract_2:
+                    if contract.terms_of_contract_2.size > 2097152:
+                        messages.error(request, 'Por favor mantenha o tamanho do arquivo de termos aditivos de contrato (2) abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.terms_of_contract_2.size)))
+                        return redirect('/contracts/createacontract')
+                    if not contract.terms_of_contract_2.name.endswith('.pdf'):
+                        messages.error(request, 'Por favor insira o arquivo de termos aditivos de contrato (2) no tipo correto que é PDF')
+                        return redirect('/contracts/createacontract')
+                if not contract.pdf.name.endswith('.pdf'):
+                    messages.error(request, 'Por favor insira o arquivo de contrato no tipo correto que é PDF')
+                    return redirect('/contracts/createacontract')
+                school = School.objects.get(chains__id__exact=contract.chain.id)
+                classe = Class.objects.get(class_id=contract.chain.id)
+                contract.slm = classe.slm
+                contract.name = student.name+' - '+contract.chain.name
+                contract.counter_signe = head
+                if school.first_witness and school.second_witness:
+                    contract.first_witness_signe = school.first_witness
+                    contract.second_witness_signe = school.second_witness
+                if student.needs_parent:
+                    if student.first_parent and student.second_parent:
+                        contract.first_auth_signe = student.first_parent
+                        contract.second_auth_signe = student.second_parent
+                        if student.third_parent:
+                            contract.third_auth_signe = student.third_parent
+                        contract.student_name = student.name
+                        if wish == 'sim':
+                            if wish_today == 'sim':
+                                contract.save()
+                                tasks.schedule_email(contract, 'normal', 'admin')
+                            elif wish_today == 'não':
+                                date = request.POST.get('date' or None)
+                                time = request.POST.get('time' or None)
+                                if date and time:
+                                    contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
+                                    contract.save()
+                                    contract_rest = ContractSerializer(contract)
+                                    tasks.schedule_email.apply_async((contract_rest.data, 'json', 'admin'), eta=contract.sent_date)
+                                else:
+                                    messages.error(request, 'Você não informou a data em que o contrato será enviado!')
+                                    return redirect('/contracts/createacontract')
+                        else:
+                            if wish_today == 'sim':
+                                contract.save()
+                                tasks.schedule_email_without_attachment(contract,'normal', 'admin')
+                            elif wish_today == 'não':
+                                date = request.POST.get('date' or None)
+                                time = request.POST.get('time' or None)
+                                if date and time:
+                                    contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
+                                    contract.save()
+                                    contract_rest = ContractSerializer(contract)
+                                    tasks.schedule_email.apply_async((contract_rest.data, 'json', 'admin'), eta=contract.sent_date)
+                                else:
+                                    messages.error(request, 'Você não informou a data em que o contrato será enviado!')
+                                    return redirect('/contracts/createacontract')
+                        messages.success(request, 'Contrato criado com sucesso!')
+                        return redirect('/contracts/all/'.format(contract.contract_id))
+                else:
+                    contract.student_auth_signe = student
+                    contract.student_name = student.name
+                    if wish == 'sim':
+                        if wish_today == 'sim':
+                            tasks.schedule_email(contract, 'normal', 'admin')
+                        elif wish_today == 'não':
+                            date = request.POST.get('date' or None)
+                            time = request.POST.get('time' or None)
+                            if date and time:
+                                contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
+                                contract.save()
+                                contract_rest = ContractSerializer(contract)
+                                tasks.schedule_email.apply_async((contract_rest.data, 'json', 'admin'), eta=contract.sent_date)
+                            else:
+                                messages.error(request, 'Você não informou a data em que o contrato será enviado!')
+                                return redirect('/contracts/createacontract')
+                    else:
+                        if wish_today == 'sim':
+                            contract.save()
+                            tasks.schedule_email_without_attachment(contract,'normal', 'admin')
+                        elif wish_today == 'não':
+                            date = request.POST.get('date' or None)
+                            time = request.POST.get('time' or None)
+                            if date and time:
+                                contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
+                                contract.save()
+                                contract_rest = ContractSerializer(contract)
+                                tasks.schedule_email.apply_async((contract_rest.data, 'json', 'admin'), eta=contract.sent_date)
+                            else:
+                                messages.error(request, 'Você não informou a data em que o contrato será enviado!')
+                                return redirect('/contracts/createacontract')
+                    messages.success(request, 'Contrato criado com sucesso!')
+                    return redirect('/contracts/all/'.format(contract.contract_id))
+        return render(request, 'contract/createacontract.html', {'form':form, 'student':student, 'tomorrow':tomorrow})
+    elif Head.objects.filter(profile=request.user).count()>=1:
+        is_supervisor = True
+        form = ContractModelFormWithoutSponte(request.POST or None, request.FILES)
+        chains = []
+        students_ids = []
+        selected_user = request.session['selected_user']
+        if Student.objects.filter(student_id = selected_user).count()>=1:
+            student = Student.objects.get(student_id = selected_user)
+        else:
+            messages.warning(request, 'Por favor selecione um estudante')
+            return redirect('/contracts/select_student_to_contract')
+        for school in School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id):
+            for classe in school.classes.all():
+                if student in classe.students.all():
+                    chains += [(classe.class_id)]
+        form.fields["chain"].queryset = Chain.objects.filter(id__in=chains)
+        if request.method == 'POST':
+            if form.is_valid():
+                wish = request.POST.get('wish' or None)
+                wish_today = request.POST.get('wish_today' or None)
+                selected_user = request.POST.get('selected_user' or None)
+                head = None
+                if Head.objects.filter(head_id = selected_user).count()>=1:
+                    head = Head.objects.get(head_id = selected_user)
+                else:
+                    messages.warning(request, 'Você não selecionou nenhum diretor')
+                    return redirect('/contracts/createacontract')
+                contract = form.save(commit=False)
+                if contract.pdf.size > 2097152:
+                    messages.error(request, 'Por favor mantenha o tamanho do arquivo de contrato enviado abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.pdf.size)))
+                    return redirect('/contracts/createacontract')
+                if contract.terms_of_contract:
+                    if contract.terms_of_contract.size > 2097152:
+                        messages.error(request, 'Por favor mantenha o tamanho do arquivo de termos aditivos de contrato (1) abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.terms_of_contract.size)))
+                        return redirect('/contracts/createacontract')
+                    if not contract.terms_of_contract.name.endswith('.pdf'):
+                        messages.error(request, 'Por favor insira o arquivo de termos aditivos de contrato (1) no tipo correto que é PDF')
+                        return redirect('/contracts/createacontract')
+                if contract.terms_of_contract_2:
+                    if contract.terms_of_contract_2.size > 2097152:
+                        messages.error(request, 'Por favor mantenha o tamanho do arquivo de termos aditivos de contrato (2) abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.terms_of_contract_2.size)))
+                        return redirect('/contracts/createacontract')
+                    if not contract.terms_of_contract_2.name.endswith('.pdf'):
+                        messages.error(request, 'Por favor insira o arquivo de termos aditivos de contrato (2) no tipo correto que é PDF')
+                        return redirect('/contracts/createacontract')
+                if not contract.pdf.name.endswith('.pdf'):
+                    messages.error(request, 'Por favor insira o arquivo de contrato no tipo correto que é PDF')
+                    return redirect('/contracts/createacontract')
+                school = School.objects.get(chains__id__exact=contract.chain.id)
+                classe = Class.objects.get(class_id=contract.chain.id)
+                contract.slm = classe.slm
+                contract.name = student.name+' - '+contract.chain.name
+                contract.counter_signe = head
+                if school.first_witness and school.second_witness:
+                    contract.first_witness_signe = school.first_witness
+                    contract.second_witness_signe = school.second_witness
+                if student.needs_parent:
+                    if student.first_parent and student.second_parent:
+                        contract.first_auth_signe = student.first_parent
+                        contract.second_auth_signe = student.second_parent
+                        if student.third_parent:
+                            contract.third_auth_signe = student.third_parent
+                        contract.student_name = student.name
+                        if wish == 'sim':
+                            if wish_today == 'sim':
+                                contract.save()
+                                tasks.schedule_email(contract, 'normal', 'director')
+                            elif wish_today == 'não':
+                                date = request.POST.get('date' or None)
+                                time = request.POST.get('time' or None)
+                                if date and time:
+                                    contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
+                                    contract.save()
+                                    contract_rest = ContractSerializer(contract)
+                                    tasks.schedule_email.apply_async((contract_rest.data, 'json', 'director'), eta=contract.sent_date)
+                                else:
+                                    messages.error(request, 'Você não informou a data em que o contrato será enviado!')
+                                    return redirect('/contracts/createacontract')
+                        else:
+                            if wish_today == 'sim':
+                                contract.save()
+                                tasks.schedule_email_without_attachment(contract,'normal', 'director')
+                            elif wish_today == 'não':
+                                date = request.POST.get('date' or None)
+                                time = request.POST.get('time' or None)
+                                if date and time:
+                                    contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
+                                    contract.save()
+                                    contract_rest = ContractSerializer(contract)
+                                    tasks.schedule_email.apply_async((contract_rest.data, 'json', 'director'), eta=contract.sent_date)
+                                else:
+                                    messages.error(request, 'Você não informou a data em que o contrato será enviado!')
+                                    return redirect('/contracts/createacontract')
+                        messages.success(request, 'Contrato criado com sucesso!')
+                        return redirect('/contracts/all/'.format(contract.contract_id))
+                else:
+                    contract.student_auth_signe = student
+                    contract.student_name = student.name
+                    if wish == 'sim':
+                        if wish_today == 'sim':
+                            contract.save()
+                            tasks.schedule_email(contract, 'normal', 'director')
+                        elif wish_today == 'não':
+                            date = request.POST.get('date' or None)
+                            time = request.POST.get('time' or None)
+                            if date and time:
+                                contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
+                                contract.save()
+                                contract_rest = ContractSerializer(contract)
+                                tasks.schedule_email.apply_async((contract_rest.data, 'json', 'director'), eta=contract.sent_date)
+                            else:
+                                messages.error(request, 'Você não informou a data em que o contrato será enviado!')
+                                return redirect('/contracts/createacontract')
+                    else:
+                        if wish_today == 'sim':
+                            contract.save()
+                            tasks.schedule_email_without_attachment(contract,'normal', 'director')
+                        elif wish_today == 'não':
+                            date = request.POST.get('date' or None)
+                            time = request.POST.get('time' or None)
+                            if date and time:
+                                contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
+                                contract.save()
+                                contract_rest = ContractSerializer(contract)
+                                tasks.schedule_email.apply_async((contract_rest.data, 'json', 'director'), eta=contract.sent_date)
+                            else:
+                                messages.error(request, 'Você não informou a data em que o contrato será enviado!')
+                                return redirect('/contracts/createacontract')
+                    messages.success(request, 'Contrato criado com sucesso!')
+                    return redirect('/contracts/all/'.format(contract.contract_id))
+        return render(request, 'contract/createacontract.html', {'form':form, 'is_supervisor':is_supervisor, 'student':student, 'tomorrow':tomorrow})
+    return redirect('/')
 
 @login_required
 def updatecontract(request, contract_id=None):
