@@ -1431,7 +1431,7 @@ def add_students_to_class_and_school(request, school_id=None, class_id=None):
 		first_school = School.objects.get(school_id=school_id)
 		classe = Class.objects.get(class_id=class_id)
 		student_users = []
-		schools = School.objects.filter(head=Head.objects.get(profile=request.user))
+		schools = School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id)
 		first_school = School.objects.get(school_id=school_id)
 		for school in schools:
 			for student in school.students.all():
