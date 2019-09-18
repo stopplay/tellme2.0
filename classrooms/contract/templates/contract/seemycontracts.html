@@ -119,23 +119,25 @@
 
                         <td>
                           <!--sign-->
-                          <div class="row">
-                            <div class="col-md-2">
-                              {% if contract.purchased_slm %}
-                                <div class="margin-5">
-                                  <span class="badge badge-pill badge-success text-success float-right" >.</span>
-                                </div>
-                              {% else %}
-                                <div class="margin-5">
-                                  <span class="badge badge-pill badge-danger text-danger float-right" >.</span>
-                                </div>
-                              {% endif %}
-                            </div>
+                          {% if contract.slm %}
+                            <div class="row">
+                              <div class="col-md-2">
+                                {% if contract.purchased_slm %}
+                                  <div class="margin-5">
+                                    <span class="badge badge-pill badge-success text-success float-right" >.</span>
+                                  </div>
+                                {% else %}
+                                  <div class="margin-5">
+                                    <span class="badge badge-pill badge-danger text-danger float-right" >.</span>
+                                  </div>
+                                {% endif %}
+                              </div>
 
-                            <div class="col-md-10">
-                              <label class="label-to-the-middle">MATERIAL SLM COMPRADO</label>
+                              <div class="col-md-10">
+                                <label class="label-to-the-middle">MATERIAL SLM COMPRADO</label>
+                              </div>
                             </div>
-                          </div>
+                          {% endif %}
 
                           {% if contract.student_auth_signe %}
                             <div class="row">
@@ -444,6 +446,15 @@
                               {% endif %}
                               {% if contract.slm %}
                                 {% if not contract.purchased_slm %}
+                                  {% if is_supervisor %}
+                                  <div class="row">                      
+                                    <div class="col-md-12">
+                                      <a class="btn btn-primary w-100" href="{% url 'contracts:mark_slm_purchased' contract.contract_id %}">
+                                        Marcar material slm comprado como verdadeiro
+                                      </a>
+                                    </div>
+                                  </div>
+                                  {% else %}
                                   <div class="row">                      
                                     <div class="col-md-12">
                                       <a class="btn btn-primary w-100" href="{{ contract.slm }}">
@@ -451,6 +462,7 @@
                                       </a>
                                     </div>
                                   </div>
+                                  {% endif %}
                                 {% else %}
                                   <div class="row">                      
                                     <div class="col-md-12">
