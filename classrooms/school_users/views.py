@@ -1047,8 +1047,9 @@ def seeallusers(request):
             schools = School.objects.filter(adminorsupervisor=Supervisor.objects.get(profile=request.user))
         is_supervisor = True
         for school in schools:
-            if school.head not in head_users:
-                head_users += [(school.head)]
+            for head in school.heads.all():
+                if head not in head_users:
+                    head_users += [(head)]
             if school.adminorsupervisor not in supervisor_users:
                 supervisor_users += [(school.adminorsupervisor)]
             teacher_users += school.teachers.all()
@@ -1075,7 +1076,7 @@ def seeallusers_by_school(request, school_id=None):
         if school_id:
             school = School.objects.get(school_id=school_id)
         if school:
-            if school.heads.all():
+            if school.heads.all().count()>=1:
                 for head in school.heads.all():
                     if head not in head_users:
                         head_users += [(head)]
@@ -1109,7 +1110,7 @@ def seeallusers_by_school(request, school_id=None):
         if school_id:
             school = School.objects.get(school_id=school_id)
         if school:
-            if school.heads.all():
+            if school.heads.all().count()>=1:
                 for head in school.heads.all():
                     if head not in head_users:
                         head_users += [(head)]
@@ -1131,8 +1132,10 @@ def seeallusers_by_school(request, school_id=None):
             elif Supervisor.objects.filter(profile=request.user).count()>=1:
                 schools = School.objects.filter(adminorsupervisor=Supervisor.objects.get(profile=request.user))
             for school in schools:
-                if school.head not in head_users:
-                    head_users += [(school.head)]
+                if school.heads.all().count()>=1:
+                    for head in school.heads.all():
+                        if head not in head_users:
+                            head_users += [(head)]
                 if school.adminorsupervisor not in supervisor_users:
                     supervisor_users += [(school.adminorsupervisor)]
                 teacher_users += school.teachers.all()
