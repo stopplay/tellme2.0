@@ -471,11 +471,11 @@ def delete_school(request, school_id=None):
 					student.second_parent.delete()
 				student.profile.delete()
 				student.delete()
-		if school_to_delete.head:
-			if School.objects.filter(head=school_to_delete.head).count()<2:
-				if school_to_delete.head.profile:
-					school_to_delete.head.profile.delete()
-				school_to_delete.head.delete()
+		for head in school_to_delete.heads.all():
+			if School.objects.filter(heads__head_id__exact=head.head_id).count()<2:
+				if head.profile:
+					head.profile.delete()
+				head.delete()
 		if school_to_delete.adminorsupervisor:
 			if School.objects.filter(adminorsupervisor=school_to_delete.adminorsupervisor).count()<2:
 				if school_to_delete.adminorsupervisor.profile:
@@ -1559,7 +1559,7 @@ def set_witnesses(request, school_id=None):
         witnesses_ids = []
         schools = None
         if Head.objects.filter(profile=request.user).count()>=1:
-            schools = School.objects.filter(head=Head.objects.get(profile=request.user))
+            schools = School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id)
         for school in schools:
         	if school.first_witness:
         		witnesses_ids += [(school.first_witness.witness_id)]
