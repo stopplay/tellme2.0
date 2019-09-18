@@ -1402,8 +1402,8 @@ def add_students_to_class_and_school(request, school_id=None, class_id=None):
 		classe = Class.objects.get(class_id=class_id)
 		student_ids = []
 		for head in first_school.heads.all():
-			if School.objects.filter(head=first_school.head).count()>1:
-				for school in School.objects.filter(head=first_school.head):
+			if School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id).count()>1:
+				for school in School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id):
 					for student in school.students.all():
 						if student.student_id not in student_ids:
 							student_ids+=[(student.student_id)]
