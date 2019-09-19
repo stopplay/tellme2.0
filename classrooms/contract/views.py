@@ -900,17 +900,53 @@ def seecontractdetails(request, contract_id=None):
 @api_view(['GET'])
 def seemycontracts_rest(request):
 	contracts = []
+	contracts_ids = []
 	is_parent = False
 	is_supervisor = False
-	if Supervisor.objects.filter(profile=request.user).count()>=1:
-		is_supervisor = True
-		contracts = Contract.objects.filter(counter_signe=Supervisor.objects.get(profile=request.user))
-	elif Parent.objects.filter(profile=request.user).count()>=1:
-		is_parent = True
+	schools = []
+	if Parent.objects.filter(profile=request.user).count()>=1:
+		is_client = True
 		contracts += Contract.objects.filter(first_auth_signe=Parent.objects.get(profile=request.user))
 		contracts += Contract.objects.filter(second_auth_signe=Parent.objects.get(profile=request.user))
+		for contract in contracts:
+			if School.objects.filter(chains__id__exact=contract.chain.id).count()>=1:
+				if School.objects.get(chains__id__exact=contract.chain.id) not in schools:
+					schools+=[(School.objects.get(chains__id__exact=contract.chain.id).school_id)]
+		schools = School.objects.filter(school_id__in=schools)
+	elif Witness.objects.filter(profile=request.user).count()>=1:
+		contracts += Contract.objects.filter(first_witness_signe=Witness.objects.get(profile=request.user))
+		contracts += Contract.objects.filter(second_witness_signe=Witness.objects.get(profile=request.user))
+		for contract in contracts:
+			if School.objects.filter(chains__id__exact=contract.chain.id).count()>=1:
+				if School.objects.get(chains__id__exact=contract.chain.id) not in schools:
+					schools+=[(School.objects.get(chains__id__exact=contract.chain.id).school_id)]
+		schools = School.objects.filter(school_id__in=schools)
+	elif Head.objects.filter(profile=request.user).count()>=1:
+		is_supervisor = True
+		contracts = Contract.objects.filter(counter_signe=Head.objects.get(profile=request.user))
+		for contract in contracts:
+			if School.objects.filter(chains__id__exact=contract.chain.id).count()>=1:
+				if School.objects.get(chains__id__exact=contract.chain.id) not in schools:
+					schools+=[(School.objects.get(chains__id__exact=contract.chain.id).school_id)]
+		schools = School.objects.filter(school_id__in=schools)
+	elif Student.objects.filter(profile=request.user).count()>=1:
+		if not Student.objects.get(profile=request.user).needs_parent:
+			is_client = True
+			contracts = Contract.objects.filter(student_auth_signe=Student.objects.get(profile=request.user))
+			for contract in contracts:
+				if School.objects.filter(chains__id__exact=contract.chain.id).count()>=1:
+					if School.objects.get(chains__id__exact=contract.chain.id) not in schools:
+						schools+=[(School.objects.get(chains__id__exact=contract.chain.id).school_id)]
+			schools = School.objects.filter(school_id__in=schools)
+		else:
+			return HttpResponse('Você não foi adicionado como responsável financeiro portanto não pode ver contratos')
 	elif request.user.is_superuser:
 		contracts = Contract.objects.all()
+		schools = School.objects.all()
+	for contract in contracts:
+		if contract.contract_id not in contracts_ids:
+			contracts_ids += [(contract.contract_id)]
+	contracts = Contract.objects.filter(contract_id__in=contracts_ids)
 	contracts_rest = ContractSerializer(contracts, many=True)
 	return Response({'contracts':contracts_rest.data, 'is_parent':is_parent, 'is_supervisor':is_supervisor})
 

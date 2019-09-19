@@ -19,6 +19,7 @@ urlpatterns = [
     path('seecontractdetails/<int:contract_id>', views.seecontractdetails, name="seecontractdetails"),
     path('select_director_to_contract/<int:contract_id>', views.select_director_to_contract, name="select_director_to_contract"),
     url('all/', views.seemycontracts, name="seemycontracts"),
+    url('all_rest/', views.seemycontracts_rest, name="seemycontracts_rest"),
     path('set_signed/<int:contract_id>', views.set_signed, name='set_signed'),
     path('set_signed_rest/<int:contract_id>', views.set_signed_rest, name='set_signed_rest'),
     path('updatecontract/<int:contract_id>', views.updatecontract, name='updatecontract'),
