@@ -427,7 +427,7 @@ def createacontract(request):
                     messages.success(request, 'Contrato criado com sucesso!')
                     return redirect('/contracts/all/'.format(contract.contract_id))
         return render(request, 'contract/createacontract.html', {'form':form, 'student':student, 'tomorrow':tomorrow})
-    elif Head.objects.filter(profile=request.user).count()>=1:
+    elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
         is_supervisor = True
         form = ContractModelFormWithoutSponte(request.POST or None, request.FILES)
         chains = []
