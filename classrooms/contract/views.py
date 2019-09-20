@@ -1482,7 +1482,7 @@ def protected_serve(request, path, contract_id=None, document_root=None):
 				correct_pdf_url = obj_pdf_url.replace("/media/", "")
 			else:
 				return HttpResponse('Você não tem permissão para acessar esse arquivo')
-		elif request.user.is_superuser:
+		elif request.user.is_superuser or Supervisor.objects.filter(profile=request.user).count()>=1:
 			obj = Contract.objects.get(contract_id=contract_id)
 			obj_pdf_url = obj.pdf.url
 			correct_pdf_url = obj_pdf_url.replace("/media/", "")
