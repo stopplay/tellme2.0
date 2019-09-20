@@ -855,11 +855,16 @@ def select_student_to_contract(request):
 					return redirect('/contracts/select_student_to_contract')
 			return redirect('/contracts/createacontract')
 		return render(request, 'contract/select_student_to_contract.html', {'students':students})
-	elif Head.objects.filter(profile=request.user).count()>=1:
+	elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
 		students_ids = []
-		for school in School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id):
-			for student in school.students.all():
-				students_ids += [(student.student_id)]
+		if Head.objects.filter(profile=request.user).count()>=1:
+			for school in School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id):
+				for student in school.students.all():
+					students_ids += [(student.student_id)]
+		elif Supervisor.objects.filter(profile=request.user).count()>=1:
+			for school in School.objects.filter(adminorsupervisor=Supervisor.objects.get(profile=request.user)):
+				for student in school.students.all():
+					students_ids += [(student.student_id)]
 		students = Student.objects.filter(student_id__in=students_ids)
 		if request.method == 'POST':
 			selected_user = request.POST.get('selected_user' or None)
