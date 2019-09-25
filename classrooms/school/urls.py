@@ -5,6 +5,7 @@ from . import views
 
 router = routers.DefaultRouter()
 router.register(r'schools', views.SchoolsViewSet)
+router.register(r'schools_minimal', views.SchoolsViewSetMinimal)
 
 
 # Wire up our API using automatic URL routing.

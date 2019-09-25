@@ -50,6 +50,13 @@ class SchoolsViewSet(viewsets.ModelViewSet):
     # filter_backends = (DjangoFilterBackend)
     filterset_fields = '__all__'
 
+class SchoolsViewSetMinimal(viewsets.ModelViewSet):
+    """docstring for SchoolsViewSet"""
+    queryset = School.objects.all()
+    serializer_class = MinimalSchoolSerializer
+    # filter_backends = (DjangoFilterBackend)
+    filterset_fields = '__all__'
+
 @login_required
 def create_school(request):
 	if request.user.is_superuser:

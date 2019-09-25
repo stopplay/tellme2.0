@@ -23,3 +23,10 @@ class SchoolSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = School
 		fields = '__all__'
+
+class MinimalSchoolSerializer(serializers.ModelSerializer):
+	"""docstring for SchoolSerializer"""
+	chains = ChainSerializer(read_only=True, many=True)
+	class Meta:
+		model = School
+		fields = '__all__'
