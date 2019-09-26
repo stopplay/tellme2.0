@@ -31,6 +31,7 @@ import datetime
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.forms import SetPasswordForm
+import psycopg2
 
 # Create your views here.
 @login_required
@@ -1063,6 +1064,52 @@ def seeallusers(request):
                         parent_users += [(student.second_parent)]
         return render(request, 'school_users/seeallusers.html', {'head_users':head_users,'teacher_users':teacher_users,'admin_users':admin_users,'supervisor_users':supervisor_users,'parent_users':parent_users,'student_users':student_users, 'is_supervisor':is_supervisor})
     return redirect('/')
+
+@login_required
+def seeusersbyquery(request):
+    if request.user.is_superuser:
+        type_of_user = None
+        school_users = []
+        if request.method == 'POST':
+            type_of_user = request.POST.get('type_of_user' or None)
+            connection = psycopg2.connect(user="dbmasteruser", password="`DsO=)P!+9e[&i`=a?W9(&36`|tKJ8k?", host="ls-dd6fedb602e2f839b3beb6c05c7a0f619ae20106.cztxoubiiizv.us-east-1.rds.amazonaws.com", port="5432", database="dbmaster")
+            name = request.POST.get('name' or None)
+            cursor = connection.cursor()
+            if type_of_user == 'director':
+                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_head AS school_user JOIN auth_user AS a_user ON school_user.name LIKE '%{}%' AND a_user.username LIKE '%{}%'".format(name, name.lower())
+                cursor.execute(postgreSQL_select_Query)
+                all_users = cursor.fetchall()
+                for user in all_users:
+                    head = Head.objects.get(head_id=user[0])
+                    if head not in school_users:
+                        school_users += [(head)]
+            elif type_of_user == 'supervisor':
+                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_supervisor AS school_user JOIN auth_user AS a_user ON school_user.name LIKE '%{}%' AND a_user.username LIKE '%{}%'".format(name, name.lower())
+                cursor.execute(postgreSQL_select_Query)
+                all_users = cursor.fetchall()
+                for user in all_users:
+                    supervisor = Supervisor.objects.get(supervisor_id=user[0])
+                    if supervisor not in school_users:
+                        school_users += [(supervisor)]
+            elif type_of_user == 'parent':
+                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_parent AS school_user JOIN auth_user AS a_user ON school_user.name LIKE '%{}%' AND a_user.username LIKE '%{}%'".format(name, name.lower())
+                cursor.execute(postgreSQL_select_Query)
+                all_users = cursor.fetchall()
+                for user in all_users:
+                    parent = Parent.objects.get(parent_id=user[0])
+                    if parent not in school_users:
+                        school_users += [(parent)]
+            elif type_of_user == 'student':
+                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_student AS school_user JOIN auth_user AS a_user ON school_user.name LIKE '%{}%' AND a_user.username LIKE '%{}%'".format(name, name.lower())
+                cursor.execute(postgreSQL_select_Query)
+                all_users = cursor.fetchall()
+                for user in all_users:
+                    student = Student.objects.get(student_id=user[0])
+                    if student not in school_users:
+                        school_users += [(student)]
+        return render(request, 'school_users/seeusersbyquery.html', {'type_of_user':type_of_user, 'school_users':school_users})
+    elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
+        return seeallusers(request)
 
 def seeallusers_by_school(request, school_id=None):
     if request.user.is_superuser:

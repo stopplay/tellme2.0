@@ -15,7 +15,7 @@ app_name = 'users'
 urlpatterns = [
     # url('', include(router.urls)),
     url('create_user/', views.create_user, name="create_user"),
-    url('all/', views.seeallusers, name="seeallusers"),
+    url('all/', views.seeusersbyquery, name="seeallusers"),
     path('all_by_school/<int:school_id>', views.seeallusers_by_school, name='seeallusers_by_school'),
     url('all_rest/', views.seeallusers_rest),
     path('delete_user/<int:user_id>/<type_of_user>', views.delete_user, name='delete_user'),

@@ -1,0 +1,172 @@
+{% extends 'base.html'%}
+
+{% block title %} Criar um Novo Usuário {% endblock %}
+
+{% block content %}
+<script>
+	$(document).ready(function () {
+		$('.container').removeClass('container');
+	});
+	setGenPasswordToFields(['id_{{user_form.password1.name}}', 'id_{{user_form.password2.name}}']);
+</script>
+
+
+<div class="content">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-9">
+				<div class="card w-50">
+					<div class="card-header">
+						<h4 class="card-title">Criar um Novo Usuário</h4>
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="col-md-11 pr-1">
+								<div class="form-group">
+									<form method="POST" enctype="multipart/form-data"> {% csrf_token %}
+
+									<div class="clearfix"></div>
+									<div class="labelandform">
+										<p><label>Selecione o Tipo de Usuário:</label></p>
+										<select class="custom-select" id="select_form">
+											<option id="" value="" selected></option>
+											{% if request.user.is_superuser %}
+											<option value="director">Diretor</option>
+											<option value="supervisor">Supervisor</option>
+											{% endif %}
+											<option value="parent">Responsáveis</option>
+											<option value="student">Estudante</option>
+										</select>
+									</div>
+									<input type="text" id="name" name="name" placeholder="Insira o nome do usuário aqui...">
+									<input type="hidden" id="type_of_user" name="type_of_user">
+									<div style="margin-top: 10px"><button class="btn btn-info btn-fill pull-left" type="submit"
+													style="background-color: #213f99; border-color: #213f99">Pesquisar usuário</button>
+															<!-- <button class="btn btn-info btn-fill pull-right" id="generate_password" style="background-color: #213f99; border-color: #213f99" onclick="generate_password()">
+															Gerar Senha</button> --></div>
+									<div class="clearfix"></div>
+								</form>
+							</div>
+						</div>
+					</div>
+				    <div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
+</div>
+{% if school_users %}
+	<div class="content">
+  		<div class="container-fluid">
+			<div class="row">
+				<p><a class="btn btn-primary non-interactable" id="headstablebutton" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" style="margin-left: 10px">
+				        Resultados
+				      </a></p>
+				      <div class="collapse col-md-12" id="collapseExample">
+				        <div class="card strpied-tabled-with-hover">
+				          <div class="card-header ">
+				            <h4 class="card-title">Resultados</h4>
+
+				          </div>
+
+				          <div class="card-body table-full-width table-responsive">
+				            <table class="table table-hover table-striped display mb-4" id="headstable">
+				              <thead>
+				                <tr>
+				                  <th >Nome</th>
+				                  <th >Nome de Usuário</th>
+				                  {% if type_of_user == 'student' %}
+				                  	<th>Responsável Financeiro</th>
+          							<th>Responsável Pedagógico</th>
+				                  {% endif %}
+				                  <th >Ações</th>
+				                </tr>
+				              </thead>
+				              <tbody>
+				                {% for user in school_users %}
+				                <tr>
+				                  <th>{{ user.name }}</th>
+				                  <td>{{ user.profile.username }}</td>
+				                  {% if type_of_user == 'student' %}
+				                  <td>{{ student.first_parent.name }} </td>
+        						  <td>{{ student.second_parent.name }}</td>
+        						  {% endif %}
+				                  <td class="w-100">
+				                    <div class="container" style="white-space: nowrap; text-align: center">
+				                      {% if type_of_user == 'student' %}
+				                        <div class="row" style="margin-bottom: 10px">                      
+								            <div class="col-md-12">
+								              <a href="{% url 'users:set_parents' user.student_id %}" data-baloon="Remove this item from the cart" class="btn btn-primary w-100">Selecionar Responsáveis</a>
+								            </div>
+							          </div>
+				                      {% endif %}
+				                      {% if user.profile %}
+				                        <div class="row" style="margin-bottom: 10px">                      
+				                          <div class="col-md-12">
+				                          	{% if type_of_user == 'director' %}
+				                          		<a href="{% url 'users:reset_password_send_email' user.head_id 'head' %}" data-baloon="Remove this item from the cart" class="btn btn-primary w-100">Resetar Senha</a>
+				                          	{% elif type_of_user == 'supervisor' %}
+				                          		<a href="{% url 'users:reset_password_send_email' user.supervisor_id 'supervisor' %}" data-baloon="Remove this item from the cart" class="btn btn-primary w-100">Resetar Senha</a>
+				                          	{% elif type_of_user == 'parent' %}
+				                          		<a href="{% url 'users:reset_password_send_email' user.parent_id 'parent' %}" data-baloon="Remove this item from the cart" class="btn btn-primary w-100">Resetar Senha</a>
+				                          	{% elif type_of_user == 'student' %}
+				                          		<a href="{% url 'users:reset_password_send_email' user.student_id 'student' %}" data-baloon="Remove this item from the cart" class="btn btn-primary w-100">Resetar Senha</a>
+				                          	{% endif %}
+				                          </div>
+				                        </div>
+				                      {% endif %}
+				                      {% if request.user.is_superuser %}
+				                        <div class="row">                      
+				                          <div class="col-md-12">
+				                          	{% if type_of_user == 'director' %}
+				                          		<a href="{% url 'users:delete_user' user.head_id 'head' %}" data-baloon="Remove this item from the cart" class="btn btn-danger btn-block">Deletar Diretor </a>
+				                          	{% elif type_of_user == 'supervisor' %}
+				                          		<a href="{% url 'users:delete_user' user.supervisor_id 'supervisor' %}" data-baloon="Remove this item from the cart" class="btn btn-danger btn-block">Deletar Supervisor</a>
+				                          	{% elif type_of_user == 'parent' %}
+				                          		<a href="{% url 'users:delete_user' user.parent_id 'parent' %}" data-baloon="Remove this item from the cart" class="btn btn-danger btn-block">Deletar Responsável</a>
+				                          	{% elif type_of_user == 'student' %}
+				                          		<a href="{% url 'users:delete_user' user.student_id 'student'%}" data-baloon="Remove this item from the cart" class="btn btn-danger btn-block">Deletar Estudante</a>
+				                          	{% endif %}
+				                          </div>
+				                        </div>
+				                      {% endif %}
+				                    </div>
+				                  </td>
+				                </tr>
+				                {% endfor %}
+				              </tbody>
+				            </table>
+				          </div>
+				        </div>
+				      </div>
+				  </div>
+				</div>
+			</div>
+				      {% endif %}
+<script type="text/javascript">
+	$(document).ready(function () {
+		$('#select_form').on('change', function () {
+			setGenPasswordToFields(['id_{{user_form.password1.name}}', 'id_{{user_form.password2.name}}']);
+			var selectValor = $(this).val();
+			if (selectValor == '') {
+				document.getElementById('type_of_user').value = ''
+			}
+			else {
+				document.getElementById('type_of_user').value = selectValor
+			}
+		});
+});
+	$(document).ready( function () {
+
+    $('#headstablebutton').addClass('non-interactable');
+    $('#headstable').DataTable({
+      initComplete: function() {
+        $('#headstablebutton').removeClass('non-interactable');
+      }
+    });
+  } );
+</script>
+
+{% endblock %}
