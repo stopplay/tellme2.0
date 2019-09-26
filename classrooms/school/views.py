@@ -41,6 +41,7 @@ from xml.etree import cElementTree as ET
 from collections import defaultdict
 from .services import *
 from django.contrib.auth.models import User
+from django.db import transaction
 
 # Create your views here.
 class SchoolsViewSet(viewsets.ModelViewSet):
@@ -76,6 +77,7 @@ def create_school(request):
 					save_parents(request, school_to_add_head.school_id)
 				return redirect('/users/create_head_to_school/{}'.format(school_to_add_head.school_id))
 			except TypeError as e:
+				transaction.rollback()
 				messages.warning(request, 'O número ou token sponte está inválido')
 				return redirect('/schools/add_school')
 		return render(request, 'school/add_school.html', {'form':form})
