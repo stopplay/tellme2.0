@@ -76,10 +76,10 @@ def create_school(request):
 					save_students_to_school(request, school_to_add_head.school_id)
 					save_parents(request, school_to_add_head.school_id)
 				return redirect('/users/create_head_to_school/{}'.format(school_to_add_head.school_id))
-			except TypeError as e:
-				transaction.rollback()
-				messages.warning(request, 'O número ou token sponte está inválido')
-				return redirect('/schools/add_school')
+		except TypeError as e:
+			transaction.rollback()
+			messages.warning(request, 'O número ou token sponte está inválido')
+			return redirect('/schools/add_school')
 		return render(request, 'school/add_school.html', {'form':form})
 	return redirect('/')
 
