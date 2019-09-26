@@ -258,30 +258,30 @@ def create_student_with_extracted_data(aluno):
 	return None
 
 def get_school_students(sponte_client_number, token):
+	
+	e = get_alunos(sponte_client_number, token, "inadimplente=0")
+	students = []
+	for aluno in e:
+		student = create_student_with_extracted_data(aluno)
+		if not student == None and student not in students:
+			students += [(student)]
+	return students
+
+def save_students_to_school(request, school_id=None):
 	try:
-		e = get_alunos(sponte_client_number, token, "inadimplente=0")
-		students = []
-		for aluno in e:
-			student = create_student_with_extracted_data(aluno)
-			if not student == None and student not in students:
-				students += [(student)]
-		return students
+		is_superuser = request.user.is_superuser;
+		head_or_supervisor = Head.objects.filter(profile=request.user).count() >= 1 or Supervisor.objects.filter(profile=request.user).count() >= 1
+		school = School.objects.get(school_id=school_id)
+		students = get_school_students(school.sponte_client_number, school.sponte_token)
+		if is_superuser or head_or_supervisor:
+			for student in students:
+				school.students.add(student)
+			school.save()
+			return True
+		return False
 	except Exception as e:
 		messages.warning(request, 'O número ou token sponte está inválido')
 		return redirect('/schools/add_school')
-
-
-def save_students_to_school(request, school_id=None):
-	is_superuser = request.user.is_superuser;
-	head_or_supervisor = Head.objects.filter(profile=request.user).count() >= 1 or Supervisor.objects.filter(profile=request.user).count() >= 1
-	school = School.objects.get(school_id=school_id)
-	students = get_school_students(school.sponte_client_number, school.sponte_token)
-	if is_superuser or head_or_supervisor:
-		for student in students:
-			school.students.add(student)
-		school.save()
-		return True
-	return False
 
 def create_parent_with_extracted_data(parent):
 	responsible_id_sponte = None
