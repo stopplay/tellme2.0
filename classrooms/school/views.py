@@ -61,25 +61,25 @@ class SchoolsViewSetMinimal(viewsets.ModelViewSet):
 @login_required
 def create_school(request):
 	if request.user.is_superuser:
-			form = SchoolModelForm(request.POST or None)
-			if form.is_valid():
-				wish = request.POST.get('wish' or None)
-				school = form.save(commit=False)
-				if wish == 'sim':
-					school.is_maple_bear = True
-				school.save()
-				form = SchoolModelForm()
-				school_to_add_head = School.objects.get(school_id=school.school_id)
-				messages.success(request, '{} adicionada corretamente!'.format(school_to_add_head.school_name))
-				if school_to_add_head.sponte_client_number and school_to_add_head.sponte_token:
-					try:
-						save_students_to_school(request, school_to_add_head.school_id)
-						save_parents(request, school_to_add_head.school_id)
-					except TypeError as e:
-						transaction.rollback()
-						messages.warning(request, 'O número ou token sponte está inválido')
-						return redirect('/schools/add_school')
-				return redirect('/users/create_head_to_school/{}'.format(school_to_add_head.school_id))
+		form = SchoolModelForm(request.POST or None)
+		if form.is_valid():
+			wish = request.POST.get('wish' or None)
+			school = form.save(commit=False)
+			if wish == 'sim':
+				school.is_maple_bear = True
+			school.save()
+			form = SchoolModelForm()
+			school_to_add_head = School.objects.get(school_id=school.school_id)
+			messages.success(request, '{} adicionada corretamente!'.format(school_to_add_head.school_name))
+			if school_to_add_head.sponte_client_number and school_to_add_head.sponte_token:
+				try:
+					save_students_to_school(request, school_to_add_head.school_id)
+					save_parents(request, school_to_add_head.school_id)
+				except TypeError as e:
+					transaction.rollback()
+					messages.warning(request, 'O número ou token sponte está inválido')
+					return redirect('/schools/add_school')
+			return redirect('/users/create_head_to_school/{}'.format(school_to_add_head.school_id))
 		return render(request, 'school/add_school.html', {'form':form})
 	return redirect('/')
 
