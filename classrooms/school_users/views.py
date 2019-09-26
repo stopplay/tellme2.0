@@ -1076,7 +1076,7 @@ def seeusersbyquery(request):
             name = request.POST.get('name' or None)
             cursor = connection.cursor()
             if type_of_user == 'director':
-                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_head AS school_user JOIN auth_user AS a_user ON school_user.name LIKE '%{}%' AND a_user.username LIKE '%{}%'".format(name, name.lower())
+                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_head AS school_user WHERE school_user.name LIKE '%{}%'".format(name)
                 cursor.execute(postgreSQL_select_Query)
                 all_users = cursor.fetchall()
                 for user in all_users:
@@ -1084,7 +1084,7 @@ def seeusersbyquery(request):
                     if head not in school_users:
                         school_users += [(head)]
             elif type_of_user == 'supervisor':
-                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_supervisor AS school_user JOIN auth_user AS a_user ON school_user.name LIKE '%{}%' AND a_user.username LIKE '%{}%'".format(name, name.lower())
+                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_supervisor AS school_user WHERE school_user.name LIKE '%{}%'".format(name)
                 cursor.execute(postgreSQL_select_Query)
                 all_users = cursor.fetchall()
                 for user in all_users:
@@ -1092,7 +1092,7 @@ def seeusersbyquery(request):
                     if supervisor not in school_users:
                         school_users += [(supervisor)]
             elif type_of_user == 'parent':
-                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_parent AS school_user JOIN auth_user AS a_user ON school_user.name LIKE '%{}%' AND a_user.username LIKE '%{}%'".format(name, name.lower())
+                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_parent AS school_user WHERE school_user.name LIKE '%{}%'".format(name)
                 cursor.execute(postgreSQL_select_Query)
                 all_users = cursor.fetchall()
                 for user in all_users:
@@ -1100,7 +1100,7 @@ def seeusersbyquery(request):
                     if parent not in school_users:
                         school_users += [(parent)]
             elif type_of_user == 'student':
-                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_student AS school_user JOIN auth_user AS a_user ON school_user.name LIKE '%{}%' AND a_user.username LIKE '%{}%'".format(name, name.lower())
+                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_student AS school_user WHERE school_user.name LIKE '%{}%'".format(name)
                 cursor.execute(postgreSQL_select_Query)
                 all_users = cursor.fetchall()
                 for user in all_users:
@@ -1122,7 +1122,7 @@ def seeusersbyquery(request):
             name = request.POST.get('name' or None)
             cursor = connection.cursor()
             if type_of_user == 'director':
-                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_head AS school_user JOIN auth_user AS a_user ON school_user.name LIKE '%{}%' AND a_user.username LIKE '%{}%'".format(name, name.lower())
+                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_head AS school_user WHERE school_user.name LIKE '%{}%'".format(name)
                 cursor.execute(postgreSQL_select_Query)
                 all_users = cursor.fetchall()
                 for user in all_users:
@@ -1132,7 +1132,7 @@ def seeusersbyquery(request):
                             if head_user == head and head not in school_users:
                                 school_users += [(head)]
             elif type_of_user == 'supervisor':
-                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_supervisor AS school_user JOIN auth_user AS a_user ON school_user.name LIKE '%{}%' AND a_user.username LIKE '%{}%'".format(name, name.lower())
+                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_supervisor AS school_user WHERE school_user.name LIKE '%{}%'".format(name)
                 cursor.execute(postgreSQL_select_Query)
                 all_users = cursor.fetchall()
                 for user in all_users:
@@ -1141,7 +1141,7 @@ def seeusersbyquery(request):
                         if school.adminorsupervisor == supervisor and supervisor not in school_users:
                             school_users += [(supervisor)]
             elif type_of_user == 'parent':
-                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_parent AS school_user JOIN auth_user AS a_user ON school_user.name LIKE '%{}%' AND a_user.username LIKE '%{}%'".format(name, name.lower())
+                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_parent AS school_user WHERE school_user.name LIKE '%{}%'".format(name)
                 cursor.execute(postgreSQL_select_Query)
                 all_users = cursor.fetchall()
                 for user in all_users:
@@ -1153,7 +1153,7 @@ def seeusersbyquery(request):
                             if student.second_parent == parent and parent not in school_users:
                                 school_users += [(parent)]
             elif type_of_user == 'student':
-                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_student AS school_user JOIN auth_user AS a_user ON school_user.name LIKE '%{}%' AND a_user.username LIKE '%{}%'".format(name, name.lower())
+                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_student AS school_user WHERE school_user.name LIKE '%{}%'".format(name)
                 cursor.execute(postgreSQL_select_Query)
                 all_users = cursor.fetchall()
                 for user in all_users:
