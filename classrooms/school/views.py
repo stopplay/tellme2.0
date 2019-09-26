@@ -60,20 +60,24 @@ class SchoolsViewSetMinimal(viewsets.ModelViewSet):
 @login_required
 def create_school(request):
 	if request.user.is_superuser:
-		form = SchoolModelForm(request.POST or None)
-		if form.is_valid():
-			wish = request.POST.get('wish' or None)
-			school = form.save(commit=False)
-			if wish == 'sim':
-				school.is_maple_bear = True
-			school.save()
-			form = SchoolModelForm()
-			school_to_add_head = School.objects.get(school_id=school.school_id)
-			messages.success(request, '{} adicionada corretamente!'.format(school_to_add_head.school_name))
-			if school_to_add_head.sponte_client_number and school_to_add_head.sponte_token:
-				save_students_to_school(request, school_to_add_head.school_id)
-				save_parents(request, school_to_add_head.school_id)
-			return redirect('/users/create_head_to_school/{}'.format(school_to_add_head.school_id))
+		try:
+			form = SchoolModelForm(request.POST or None)
+			if form.is_valid():
+				wish = request.POST.get('wish' or None)
+				school = form.save(commit=False)
+				if wish == 'sim':
+					school.is_maple_bear = True
+				school.save()
+				form = SchoolModelForm()
+				school_to_add_head = School.objects.get(school_id=school.school_id)
+				messages.success(request, '{} adicionada corretamente!'.format(school_to_add_head.school_name))
+				if school_to_add_head.sponte_client_number and school_to_add_head.sponte_token:
+					save_students_to_school(request, school_to_add_head.school_id)
+					save_parents(request, school_to_add_head.school_id)
+				return redirect('/users/create_head_to_school/{}'.format(school_to_add_head.school_id))
+			except TypeError as e:
+				messages.warning(request, 'O número ou token sponte está inválido')
+				return redirect('/schools/add_school')
 		return render(request, 'school/add_school.html', {'form':form})
 	return redirect('/')
 
@@ -268,20 +272,16 @@ def get_school_students(sponte_client_number, token):
 	return students
 
 def save_students_to_school(request, school_id=None):
-	try:
-		is_superuser = request.user.is_superuser;
-		head_or_supervisor = Head.objects.filter(profile=request.user).count() >= 1 or Supervisor.objects.filter(profile=request.user).count() >= 1
-		school = School.objects.get(school_id=school_id)
-		students = get_school_students(school.sponte_client_number, school.sponte_token)
-		if is_superuser or head_or_supervisor:
-			for student in students:
-				school.students.add(student)
-			school.save()
-			return True
-		return False
-	except Exception as e:
-		messages.warning(request, 'O número ou token sponte está inválido')
-		return redirect('/schools/add_school')
+	is_superuser = request.user.is_superuser;
+	head_or_supervisor = Head.objects.filter(profile=request.user).count() >= 1 or Supervisor.objects.filter(profile=request.user).count() >= 1
+	school = School.objects.get(school_id=school_id)
+	students = get_school_students(school.sponte_client_number, school.sponte_token)
+	if is_superuser or head_or_supervisor:
+		for student in students:
+			school.students.add(student)
+		school.save()
+		return True
+	return False
 
 def create_parent_with_extracted_data(parent):
 	responsible_id_sponte = None
