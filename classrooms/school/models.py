@@ -14,7 +14,7 @@ class School(models.Model):
 	adminorsupervisor = models.ForeignKey(Supervisor, on_delete=models.SET_NULL, verbose_name = 'Admin/Supervisor', null=True, blank=True)
 	sponte_client_number = models.IntegerField(null=True, blank=True, verbose_name = 'SPONTE ID')
 	sponte_token = models.TextField(null=True, blank=True, verbose_name = 'SPONTE Token')
-	tell_me_school_id = models.TextField(null=True, blank=True, verbose_name = 'TellMe ID')
+	tell_me_school_id = models.IntegerField(null=True, blank=True, verbose_name = 'TellMe ID')
 	country = models.TextField(null=True, blank=True, verbose_name = 'País')
 	state = models.TextField(null=True, blank=True, verbose_name = 'Estado')
 	city = models.TextField(null=True, blank=True, verbose_name = 'Cidade')
