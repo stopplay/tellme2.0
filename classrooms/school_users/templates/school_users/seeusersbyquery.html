@@ -30,10 +30,8 @@
 										<p><label>Selecione o Tipo de Usuário:</label></p>
 										<select class="custom-select" id="select_form">
 											<option id="" value="" selected></option>
-											{% if request.user.is_superuser %}
 											<option value="director">Diretor</option>
 											<option value="supervisor">Supervisor</option>
-											{% endif %}
 											<option value="parent">Responsáveis</option>
 											<option value="student">Estudante</option>
 										</select>
@@ -144,7 +142,11 @@
 				  </div>
 				</div>
 			</div>
-				      {% endif %}
+			{% else %}
+			  {% if type_of_user %}
+			  	<h4>Não há nenhum resultado para a pesquisa feita</h4>
+			  {% endif %}
+			{% endif %}
 <script type="text/javascript">
 	$(document).ready(function () {
 		$('#select_form').on('change', function () {
