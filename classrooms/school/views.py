@@ -78,8 +78,9 @@ def create_school(request):
 				return redirect('/users/create_head_to_school/{}'.format(school_to_add_head.school_id))
 		except Exception:
 			storage = messages.get_messages(request)
-			storage.used = True
-			transaction.rollback()
+			for message in storage:
+			    del message
+			school_to_add_head.delete()
 			messages.warning(request, 'O número ou token sponte está inválido')
 			return redirect('/schools/add_school')
 		return render(request, 'school/add_school.html', {'form':form})
