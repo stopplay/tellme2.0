@@ -75,7 +75,7 @@ def create_school(request):
 				try:
 					save_students_to_school(request, school_to_add_head.school_id)
 					save_parents(request, school_to_add_head.school_id)
-				except TypeError as e:
+				except Exception:
 					transaction.rollback()
 					messages.warning(request, 'O número ou token sponte está inválido')
 					return redirect('/schools/add_school')
