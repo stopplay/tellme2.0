@@ -258,13 +258,18 @@ def create_student_with_extracted_data(aluno):
 	return None
 
 def get_school_students(sponte_client_number, token):
-	e = get_alunos(sponte_client_number, token, "inadimplente=0")
-	students = []
-	for aluno in e:
-		student = create_student_with_extracted_data(aluno)
-		if not student == None and student not in students:
-			students += [(student)]
-	return students
+	try:
+		e = get_alunos(sponte_client_number, token, "inadimplente=0")
+		students = []
+		for aluno in e:
+			student = create_student_with_extracted_data(aluno)
+			if not student == None and student not in students:
+				students += [(student)]
+		return students
+	except Exception as e:
+		messages.warning(request, 'O número ou token sponte está inválido')
+		return redirect('/schools/add_school')
+
 
 def save_students_to_school(request, school_id=None):
 	is_superuser = request.user.is_superuser;
