@@ -128,7 +128,7 @@ def update_material_orders_from_maple_bear():
 
 
 @app.task #1
-def schedule_email(contract, typeof=None, whosend=None):
+def schedule_email(contract, typeof=None, whosend=None, domain=None):
     if typeof == 'json':
         if contract['first_auth_signe']:
             first_parent_id = list(contract['first_auth_signe'].values())[0]
@@ -157,12 +157,15 @@ def schedule_email(contract, typeof=None, whosend=None):
     attachment = (contract.pdf.name, content, 'application/pdf')
     attachments.append(attachment)
     school = School.objects.get(chains__id__exact = contract.chain.id)
+    classe = Class.objects.get(class_id = contract.chain.id)
     if contract.first_auth_signe:
         mail_subject = 'Contrato a ser assinado'
         message = render_to_string('contract/sendcontract.html', {
             'user': contract.first_auth_signe,
             'contract': contract,
-            'school': school
+            'school': school,
+            'class': classe,
+            'domain':domain,
         })
         to_email = contract.first_auth_signe.profile.email
         email = EmailMessage(
@@ -174,7 +177,9 @@ def schedule_email(contract, typeof=None, whosend=None):
         message = render_to_string('contract/sendcontract.html', {
             'user': contract.second_auth_signe,
             'contract': contract,
-            'school': school
+            'school': school,
+            'class': classe,
+            'domain':domain,
         })
         to_email = contract.second_auth_signe.profile.email
         email = EmailMessage(
@@ -186,7 +191,9 @@ def schedule_email(contract, typeof=None, whosend=None):
         message = render_to_string('contract/sendcontract.html', {
             'user': contract.student_auth_signe,
             'contract': contract,
-            'school': school
+            'school': school,
+            'class': classe,
+            'domain':domain,
         })
         to_email = contract.student_auth_signe.profile.email
         email = EmailMessage(
@@ -198,7 +205,9 @@ def schedule_email(contract, typeof=None, whosend=None):
         message = render_to_string('contract/sendcontract.html', {
             'user': contract.first_witness_signe,
             'contract': contract,
-            'school': school
+            'school': school,
+            'class': classe,
+            'domain':domain,
         })
         to_email = contract.first_witness_signe.profile.email
         email = EmailMessage(
@@ -210,7 +219,9 @@ def schedule_email(contract, typeof=None, whosend=None):
         message = render_to_string('contract/sendcontract.html', {
             'user': contract.second_witness_signe,
             'contract': contract,
-            'school': school
+            'school': school,
+            'class': classe,
+            'domain':domain,
         })
         to_email = contract.second_witness_signe.profile.email
         email = EmailMessage(
@@ -223,7 +234,9 @@ def schedule_email(contract, typeof=None, whosend=None):
             message = render_to_string('contract/sendcontract.html', {
                 'user': contract.counter_signe,
                 'contract': contract,
-                'school': school
+                'school': school,
+                'class': classe,
+                'domain':domain,
             })
             to_email = contract.counter_signe.profile.email
             email = EmailMessage(
@@ -237,7 +250,7 @@ def schedule_email(contract, typeof=None, whosend=None):
         contract.save()
 
 @app.task #1
-def schedule_email_without_attachment(contract, typeof=None, whosend=None):
+def schedule_email_without_attachment(contract, typeof=None, whosend=None, domain=None):
     if typeof == 'json':
         if contract['first_auth_signe']:
             first_parent_id = list(contract['first_auth_signe'].values())[0]
@@ -262,12 +275,15 @@ def schedule_email_without_attachment(contract, typeof=None, whosend=None):
         contract.pdf.name = contract.pdf.name.split('/')[1]
         contract.pdf.name = os.path.join(os.path.dirname(settings.BASE_DIR),'media_cdn', contract.pdf.name)
     school = School.objects.get(chains__id__exact = contract.chain.id)
+    classe = Class.objects.get(class_id = contract.chain.id)
     if contract.first_auth_signe:
         mail_subject = 'Contrato a ser assinado'
         message = render_to_string('contract/sendcontract.html', {
             'user': contract.first_auth_signe,
             'contract': contract,
-            'school': school
+            'school': school,
+            'class':classe,
+            'domain':domain,
         })
         to_email = contract.first_auth_signe.profile.email
         email = EmailMessage(
@@ -279,7 +295,9 @@ def schedule_email_without_attachment(contract, typeof=None, whosend=None):
         message = render_to_string('contract/sendcontract.html', {
             'user': contract.second_auth_signe,
             'contract': contract,
-            'school': school
+            'school': school,
+            'class':classe,
+            'domain':domain,
         })
         to_email = contract.second_auth_signe.profile.email
         email = EmailMessage(
@@ -291,7 +309,9 @@ def schedule_email_without_attachment(contract, typeof=None, whosend=None):
         message = render_to_string('contract/sendcontract.html', {
             'user': contract.student_auth_signe,
             'contract': contract,
-            'school': school
+            'school': school,
+            'class':classe,
+            'domain':domain,
         })
         to_email = contract.student_auth_signe.profile.email
         email = EmailMessage(
@@ -303,7 +323,9 @@ def schedule_email_without_attachment(contract, typeof=None, whosend=None):
         message = render_to_string('contract/sendcontract.html', {
             'user': contract.first_witness_signe,
             'contract': contract,
-            'school': school
+            'school': school,
+            'class':classe,
+            'domain':domain,
         })
         to_email = contract.first_witness_signe.profile.email
         email = EmailMessage(
@@ -315,7 +337,9 @@ def schedule_email_without_attachment(contract, typeof=None, whosend=None):
         message = render_to_string('contract/sendcontract.html', {
             'user': contract.second_witness_signe,
             'contract': contract,
-            'school': school
+            'school': school,
+            'class':classe,
+            'domain':domain,
         })
         to_email = contract.second_witness_signe.profile.email
         email = EmailMessage(
@@ -328,7 +352,9 @@ def schedule_email_without_attachment(contract, typeof=None, whosend=None):
             message = render_to_string('contract/sendcontract.html', {
                 'user': contract.counter_signe,
                 'contract': contract,
-                'school': school
+                'school': school,
+                'class':classe,
+                'domain':domain,
             })
             to_email = contract.counter_signe.profile.email
             email = EmailMessage(

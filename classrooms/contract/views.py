@@ -298,6 +298,7 @@ def createacontract(request):
     request.POST.get('selected_user' or None)
     tomorrow = datetime.date.today()+datetime.timedelta(days=1)
     tomorrow = tomorrow.strftime('%Y-%m-%d')
+    current_site = get_current_site(request)
     if request.user.is_superuser:
         form = ContractModelFormWithoutSponte(request.POST or None, request.FILES)
         students = Student.objects.all().order_by('name')
@@ -363,7 +364,7 @@ def createacontract(request):
                         if wish == 'sim':
                             if wish_today == 'sim':
                                 contract.save()
-                                tasks.schedule_email(contract, 'normal', 'admin')
+                                tasks.schedule_email(contract, 'normal', 'admin', current_site.domain)
                             elif wish_today == 'não':
                                 date = request.POST.get('date' or None)
                                 time = request.POST.get('time' or None)
@@ -378,7 +379,7 @@ def createacontract(request):
                         else:
                             if wish_today == 'sim':
                                 contract.save()
-                                tasks.schedule_email_without_attachment(contract,'normal', 'admin')
+                                tasks.schedule_email_without_attachment(contract,'normal', 'admin', current_site.domain)
                             elif wish_today == 'não':
                                 date = request.POST.get('date' or None)
                                 time = request.POST.get('time' or None)
@@ -397,7 +398,7 @@ def createacontract(request):
                     contract.student_name = student.name
                     if wish == 'sim':
                         if wish_today == 'sim':
-                            tasks.schedule_email(contract, 'normal', 'admin')
+                            tasks.schedule_email(contract, 'normal', 'admin', current_site.domain)
                         elif wish_today == 'não':
                             date = request.POST.get('date' or None)
                             time = request.POST.get('time' or None)
@@ -412,7 +413,7 @@ def createacontract(request):
                     else:
                         if wish_today == 'sim':
                             contract.save()
-                            tasks.schedule_email_without_attachment(contract,'normal', 'admin')
+                            tasks.schedule_email_without_attachment(contract,'normal', 'admin', current_site.domain)
                         elif wish_today == 'não':
                             date = request.POST.get('date' or None)
                             time = request.POST.get('time' or None)
@@ -499,7 +500,7 @@ def createacontract(request):
                         if wish == 'sim':
                             if wish_today == 'sim':
                                 contract.save()
-                                tasks.schedule_email(contract, 'normal', 'director')
+                                tasks.schedule_email(contract, 'normal', 'director', current_site.domain)
                             elif wish_today == 'não':
                                 date = request.POST.get('date' or None)
                                 time = request.POST.get('time' or None)
@@ -514,7 +515,7 @@ def createacontract(request):
                         else:
                             if wish_today == 'sim':
                                 contract.save()
-                                tasks.schedule_email_without_attachment(contract,'normal', 'director')
+                                tasks.schedule_email_without_attachment(contract,'normal', 'director', current_site.domain)
                             elif wish_today == 'não':
                                 date = request.POST.get('date' or None)
                                 time = request.POST.get('time' or None)
@@ -534,7 +535,7 @@ def createacontract(request):
                     if wish == 'sim':
                         if wish_today == 'sim':
                             contract.save()
-                            tasks.schedule_email(contract, 'normal', 'director')
+                            tasks.schedule_email(contract, 'normal', 'director', current_site.domain)
                         elif wish_today == 'não':
                             date = request.POST.get('date' or None)
                             time = request.POST.get('time' or None)
@@ -549,7 +550,7 @@ def createacontract(request):
                     else:
                         if wish_today == 'sim':
                             contract.save()
-                            tasks.schedule_email_without_attachment(contract,'normal', 'director')
+                            tasks.schedule_email_without_attachment(contract,'normal', 'director', current_site.domain)
                         elif wish_today == 'não':
                             date = request.POST.get('date' or None)
                             time = request.POST.get('time' or None)

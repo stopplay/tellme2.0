@@ -3,18 +3,20 @@
 
 Olá {{ user.name }}.
 
-Você está recebendo esse email para lhe informar que você tem uma contrato, {{ contract.name }}, {{ contract.student_name }}, por Matricula {{ contract.date.year }} dentro do seu app Sua Escola por {{ school.school_name }}, para ser assinado, se for do seu interesse.
+Você está recebendo esse email para lhe informar que você tem uma contrato, {{ contract.student_name }} - {{ class.class_name }}, {{ contract.student_name }}, por Matricula {{ contract.date.year }} dentro do seu app Sua Escola por {{ school.school_name }}, para ser assinado, se for do seu interesse.
 
 {% if user == contract.first_auth_signe or user == contract.second_auth_signe or user == contract.student_auth_signe %}
+{% if contract.slm %}
 Primeiro passo:
 Conecte os seus detalhes magento através desse link:
-{% url 'users:profile' %}
+http://{{ domain }}{% url 'users:profile' %}
 
 Segundo passo:
 Faça a compra dos materiais neste link:
 {{ contract.slm }}
 
 O processamento da compra pode demorar até 24 horas
+{% endif %}
 {% endif %}
 
 Para assiná-lo, basta seguir os passos dentro do app.
