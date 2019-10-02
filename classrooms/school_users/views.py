@@ -162,6 +162,8 @@ def create_user(request):
                                                 _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[8]), second_parent=Parent.objects.get(tell_me_user_id=column[9]), tell_me_user_id=column[6])
                                             else:
                                                 _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+                                            school_to_add.students.add(_)
+                                            class_to_add.students.add(_)
                                         elif column[7]:
                                              _, created = Parent.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[7])
 
@@ -174,6 +176,8 @@ def create_user(request):
                                                 _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[8]), second_parent=Parent.objects.get(tell_me_user_id=column[9]), tell_me_user_id=column[6])
                                             else:
                                                 _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+                                            school_to_add.students.add(_)
+                                            class_to_add.students.add(_)
                                         elif column[7]:
                                              _, created = Parent.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[7])
                     messages.success(request, 'Usuários criados com sucesso!')
@@ -1076,7 +1080,7 @@ def seeusersbyquery(request):
             name = request.POST.get('name' or None)
             cursor = connection.cursor()
             if type_of_user == 'director':
-                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_head AS school_user WHERE school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%'".format(name, name.lower(), name.upper())
+                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_head AS school_user WHERE school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%'".format(name, name.lower(), name.upper(), name.capitalize())
                 cursor.execute(postgreSQL_select_Query)
                 all_users = cursor.fetchall()
                 for user in all_users:
@@ -1084,7 +1088,7 @@ def seeusersbyquery(request):
                     if head not in school_users:
                         school_users += [(head)]
             elif type_of_user == 'supervisor':
-                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_supervisor AS school_user WHERE school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%'".format(name, name.lower(), name.upper())
+                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_supervisor AS school_user WHERE school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%'".format(name, name.lower(), name.upper(), name.capitalize())
                 cursor.execute(postgreSQL_select_Query)
                 all_users = cursor.fetchall()
                 for user in all_users:
@@ -1092,7 +1096,7 @@ def seeusersbyquery(request):
                     if supervisor not in school_users:
                         school_users += [(supervisor)]
             elif type_of_user == 'parent':
-                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_parent AS school_user WHERE school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%'".format(name, name.lower(), name.upper())
+                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_parent AS school_user WHERE school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%'".format(name, name.lower(), name.upper(), name.capitalize())
                 cursor.execute(postgreSQL_select_Query)
                 all_users = cursor.fetchall()
                 for user in all_users:
@@ -1100,7 +1104,7 @@ def seeusersbyquery(request):
                     if parent not in school_users:
                         school_users += [(parent)]
             elif type_of_user == 'student':
-                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_student AS school_user WHERE school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%'".format(name, name.lower(), name.upper())
+                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_student AS school_user WHERE school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%'".format(name, name.lower(), name.upper(), name.capitalize())
                 cursor.execute(postgreSQL_select_Query)
                 all_users = cursor.fetchall()
                 for user in all_users:

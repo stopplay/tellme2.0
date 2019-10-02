@@ -83,8 +83,8 @@
 				                  <th>{{ user.name }}</th>
 				                  <td>{{ user.profile.username }}</td>
 				                  {% if type_of_user == 'student' %}
-				                  <td>{{ student.first_parent.name }} </td>
-        						  <td>{{ student.second_parent.name }}</td>
+					                  <td>{{ user.first_parent.name }} </td>
+	        						  <td>{{ user.second_parent.name }}</td>
         						  {% endif %}
 				                  <td class="w-100">
 				                    <div class="container" style="white-space: nowrap; text-align: center">
