@@ -19,7 +19,7 @@ class School(models.Model):
 	state = models.TextField(null=True, blank=True, verbose_name = 'Estado')
 	city = models.TextField(null=True, blank=True, verbose_name = 'Cidade')
 	quantity_of_directors = models.IntegerField(null=True, blank=True, default=1, verbose_name='Quantidade de Diretores')
-	students = models.ManyToManyField(Student)
+	students = models.ManyToManyField(Student, blank=True, verbose_name = 'Estudantes')
 	teachers = models.ManyToManyField(Teacher)
 	parents = models.ManyToManyField(Parent)
 	first_witness = models.ForeignKey(Witness, on_delete=models.SET_NULL, verbose_name = 'Primeira Testemunha', null=True, blank=True, related_name='first_witness_school')
@@ -85,7 +85,7 @@ class Class(models.Model):
 	enrollment_class_year = models.IntegerField(default=2019, verbose_name= 'Ano da turma')
 	slm = models.TextField(null=True, blank=True, verbose_name = 'Materiais URL')
 	sku = models.TextField(null=True, blank=True, verbose_name = 'SKU do Material')
-	students = models.ManyToManyField(Student)
+	students = models.ManyToManyField(Student, blank=True, verbose_name = 'Estudantes')
 	teachers = models.ManyToManyField(Teacher)
 	def __str__(self):
 		return self.class_name
