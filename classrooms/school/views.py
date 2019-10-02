@@ -647,6 +647,7 @@ def update_class(request, class_id=None):
 				if sku: classroom.sku = sku
 				print('slm', classroom.slm)
 				print('sku', classroom.sku)
+			form.save_m2m()
 			classroom.save(update_fields=['class_name', 'class_unit', 'enrollment_class_year','slm', 'sku'])
 
 			messages.success(request, 'Classe e blockchain referente à classe atualizadas com sucesso!')
@@ -668,6 +669,7 @@ def update_class(request, class_id=None):
 				if sku: classroom.sku = sku
 				print('slm', classroom.slm)
 				print('sku', classroom.sku)
+			form.save_m2m()				
 			classroom.save(update_fields=['class_name', 'class_unit', 'enrollment_class_year','slm', 'sku'])
 			
 			messages.success(request, 'Classe e blockchain referente à classe atualizadas com sucesso!')
