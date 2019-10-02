@@ -72,13 +72,14 @@ class ClassModelForm(forms.ModelForm):
 	"""docstring for UserModelForm"""
 	class Meta:
 		model = Class
-		fields = ['class_name', 'class_unit', 'enrollment_class_year', 'slm', 'sku']
+		fields = ['class_name', 'class_unit', 'enrollment_class_year', 'slm', 'sku', 'students']
 		widgets = {
 			'class_name': forms.TextInput(attrs={'class':'form-control', 'maxlength':255, 'required':True}),
 			'class_unit': forms.Select(attrs={'class':'form-control', 'required':True}),
 			'enrollment_class_year': forms.NumberInput(attrs={'required':True, 'min':datetime.date.today().year}),
 			'slm': forms.TextInput(attrs={'class':'form-control', 'maxlength':255, 'required':False}),
 			'sku': forms.TextInput(attrs={'class':'form-control', 'maxlength':255, 'required':False}),
+			'students': forms.SelectMultiple(attrs={'class':'form-control'}),
 		}
 
 class ClassAddTeachersModelForm(forms.ModelForm):

@@ -637,15 +637,16 @@ def update_class(request, class_id=None):
 		school_to_update_class = School.objects.get(classes__class_id__exact=class_to_update.class_id)
 		chain_to_be_updated = Chain.objects.get(id=class_id)
 		form = ClassModelForm(request.POST or None, instance=class_to_update)
+		form.fields['students'].queryset = school_to_update_class.students.all()
 		if form.is_valid():
 			classroom = form.save(commit=False)
 			chain_to_be_updated.name = "{0}-{1}-{2}-{3}".format(school_to_update_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name)
 			chain_to_be_updated.save(update_fields=['name'])
-
-			sku = get_sku_by_slm_url(classroom.slm)
-			if sku: classroom.sku = sku
-			print('slm', classroom.slm)
-			print('sku', classroom.sku)
+			if classroom.slm:
+				sku = get_sku_by_slm_url(classroom.slm)
+				if sku: classroom.sku = sku
+				print('slm', classroom.slm)
+				print('sku', classroom.sku)
 			classroom.save(update_fields=['class_name', 'class_unit', 'enrollment_class_year','slm', 'sku'])
 
 			messages.success(request, 'Classe e blockchain referente à classe atualizadas com sucesso!')
@@ -657,15 +658,16 @@ def update_class(request, class_id=None):
 		school_to_update_class = School.objects.get(classes__class_id__exact=class_to_update.class_id)
 		chain_to_be_updated = Chain.objects.get(id=class_id)
 		form = ClassModelForm(request.POST or None, instance=class_to_update)
+		form.fields['students'].queryset = school_to_update_class.students.all()
 		if form.is_valid():
 			classroom = form.save(commit=False)
 			chain_to_be_updated.name = "{0}-{1}-{2}-{3}".format(school_to_update_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name)
 			chain_to_be_updated.save(update_fields=['name'])
-
-			sku = get_sku_by_slm_url(classroom.slm)
-			if sku: classroom.sku = sku
-			print('slm', classroom.slm)
-			print('sku', classroom.sku)
+			if classroom.slm:
+				sku = get_sku_by_slm_url(classroom.slm)
+				if sku: classroom.sku = sku
+				print('slm', classroom.slm)
+				print('sku', classroom.sku)
 			classroom.save(update_fields=['class_name', 'class_unit', 'enrollment_class_year','slm', 'sku'])
 			
 			messages.success(request, 'Classe e blockchain referente à classe atualizadas com sucesso!')
