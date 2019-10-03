@@ -559,6 +559,16 @@
           {% endif %}
         </div>
       </div>
+      <div class="col-md-6 pr-1">
+        <div class="form-group">
+          <label>RESPONSÁVEL FINANCEIRO HASH</label>
+          {% if contract.first_auth_hash %}
+          <input type="text" class="form-control" disabled="" placeholder="" value="{{ contract.first_auth_hash }}">
+          {% else %}
+          <input type="text" class="form-control" disabled="" placeholder="">
+          {% endif %}
+        </div>
+      </div>
     </div>
     {% endif %}
     {% endif %}
@@ -575,6 +585,16 @@
           {% endif %}
         </div>
       </div>
+      <div class="col-md-6 pr-1">
+        <div class="form-group">
+          <label>RESPONSÁVEL PEDAGÓGICO HASH</label>
+          {% if contract.second_auth_hash %}
+          <input type="text" class="form-control" disabled="" placeholder="" value="{{ contract.second_auth_auth_hash }}">
+          {% else %}
+          <input type="text" class="form-control" disabled="" placeholder="">
+          {% endif %}
+        </div>
+      </div>
     </div>
     {% endif %}
     {% endif %}
@@ -586,6 +606,16 @@
           <label>RESPONSÁVEL ESTUDANTE ASSINATURA DATA E HORA</label>
           {% if contract.student_auth_signed_timestamp %}
           <input type="text" class="form-control" disabled="" placeholder="" value="{{contract.student_auth_signed_timestamp.day}}/{{contract.student_auth_signed_timestamp.month}}/{{contract.student_auth_signed_timestamp.year}} às {% if contract.student_auth_signed_timestamp.hour < 10 %}0{{contract.student_auth_signed_timestamp.hour}}{% else %}{{contract.student_auth_signed_timestamp.hour}}{% endif %}:{% if contract.student_auth_signed_timestamp.minute < 10 %}0{{contract.student_auth_signed_timestamp.minute}}{% else %}{{contract.student_auth_signed_timestamp.minute}}{% endif %}:{% if contract.student_auth_signed_timestamp.second < 10 %}0{{contract.student_auth_signed_timestamp.second}}{% else %}{{contract.student_auth_signed_timestamp.second}}{% endif %}">
+          {% else %}
+          <input type="text" class="form-control" disabled="" placeholder="">
+          {% endif %}
+        </div>
+      </div>
+      <div class="col-md-6 pr-1">
+        <div class="form-group">
+          <label>RESPONSÁVEL ESTUDANTE HASH</label>
+          {% if contract.student_auth_hash %}
+          <input type="text" class="form-control" disabled="" placeholder="" value="{{ contract.student_auth_hash }}">
           {% else %}
           <input type="text" class="form-control" disabled="" placeholder="">
           {% endif %}
@@ -608,6 +638,16 @@
 
         </div>
       </div>
+      <div class="col-md-6 pr-1">
+        <div class="form-group">
+          <label>DIRETOR RESPONSÁVEL HASH</label>
+          {% if contract.counter_auth_hash %}
+          <input type="text" class="form-control" disabled="" placeholder="" value="{{ contract.counter_auth_hash }}">
+          {% else %}
+          <input type="text" class="form-control" disabled="" placeholder="">
+          {% endif %}
+        </div>
+      </div>
     </div>
     {% endif %}
 
@@ -625,6 +665,16 @@
 
         </div>
       </div>
+      <div class="col-md-6 pr-1">
+        <div class="form-group">
+          <label>PRIMEIRA TESTEMUNHA HASH</label>
+          {% if contract.first_witness_hash %}
+          <input type="text" class="form-control" disabled="" placeholder="" value="{{ contract.first_witness_hash }}">
+          {% else %}
+          <input type="text" class="form-control" disabled="" placeholder="">
+          {% endif %}
+        </div>
+      </div>
     </div>
     {% endif %}
     {% if request.user.is_superuser or is_supervisor or request.user == contract.second_witness_signe.profile %}
@@ -639,6 +689,16 @@
           <input type="text" class="form-control" disabled="" placeholder="">
           {% endif %}
 
+        </div>
+      </div>
+      <div class="col-md-6 pr-1">
+        <div class="form-group">
+          <label>SEGUNDA TESTEMUNHA HASH</label>
+          {% if contract.second_witness_hash %}
+          <input type="text" class="form-control" disabled="" placeholder="" value="{{ contract.second_witness_hash }}">
+          {% else %}
+          <input type="text" class="form-control" disabled="" placeholder="">
+          {% endif %}
         </div>
       </div>
     </div>
