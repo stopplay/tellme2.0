@@ -559,7 +559,9 @@
           {% endif %}
         </div>
       </div>
-      <div class="col-md-6 pr-1">
+    </div>
+    <div class="row">
+      <div class="col-md-12">
         <div class="form-group">
           <label>RESPONSÁVEL FINANCEIRO HASH</label>
           {% if contract.first_auth_hash %}
@@ -585,11 +587,13 @@
           {% endif %}
         </div>
       </div>
-      <div class="col-md-6 pr-1">
+    </div>
+    <div class="row">
+      <div class="col-md-12">
         <div class="form-group">
           <label>RESPONSÁVEL PEDAGÓGICO HASH</label>
           {% if contract.second_auth_hash %}
-          <input type="text" class="form-control" disabled="" placeholder="" value="{{ contract.second_auth_auth_hash }}">
+          <input type="text" class="form-control" disabled="" placeholder="" value="{{ contract.second_auth_hash }}">
           {% else %}
           <input type="text" class="form-control" disabled="" placeholder="">
           {% endif %}
@@ -611,7 +615,9 @@
           {% endif %}
         </div>
       </div>
-      <div class="col-md-6 pr-1">
+    </div>
+    <div class="row">
+      <div class="col-md-12">
         <div class="form-group">
           <label>RESPONSÁVEL ESTUDANTE HASH</label>
           {% if contract.student_auth_hash %}
@@ -638,7 +644,9 @@
 
         </div>
       </div>
-      <div class="col-md-6 pr-1">
+    </div>
+    <div class="row">
+      <div class="col-md-12">
         <div class="form-group">
           <label>DIRETOR RESPONSÁVEL HASH</label>
           {% if contract.counter_auth_hash %}
@@ -665,7 +673,9 @@
 
         </div>
       </div>
-      <div class="col-md-6 pr-1">
+    </div>
+    <div class="row">
+      <div class="col-md-12">
         <div class="form-group">
           <label>PRIMEIRA TESTEMUNHA HASH</label>
           {% if contract.first_witness_hash %}
@@ -691,7 +701,9 @@
 
         </div>
       </div>
-      <div class="col-md-6 pr-1">
+    </div>
+    <div class="row">
+      <div class="col-md-12">
         <div class="form-group">
           <label>SEGUNDA TESTEMUNHA HASH</label>
           {% if contract.second_witness_hash %}
