@@ -42,21 +42,25 @@ from collections import defaultdict
 from .services import *
 from django.contrib.auth.models import User
 from django.db import transaction
+from classrooms.pagination import *
+from classrooms.ordering import *
 
 # Create your views here.
 class SchoolsViewSet(viewsets.ModelViewSet):
     """docstring for SchoolsViewSet"""
-    queryset = School.objects.all()
+    queryset = School.objects.all().order_by('school_id')
     serializer_class = SchoolSerializer
-    # filter_backends = (DjangoFilterBackend)
+    filter_backends = (DjangoFilterBackend, MyCustomOrdering)
     filterset_fields = '__all__'
+    pagination_class = GeneralPagination
 
 class SchoolsViewSetMinimal(viewsets.ModelViewSet):
     """docstring for SchoolsViewSet"""
-    queryset = School.objects.all()
+    queryset = School.objects.all().order_by('school_id')
     serializer_class = MinimalSchoolSerializer
-    # filter_backends = (DjangoFilterBackend)
+    filter_backends = (DjangoFilterBackend, MyCustomOrdering)
     filterset_fields = '__all__'
+    pagination_class = GeneralPagination
 
 @login_required
 def create_school(request):
