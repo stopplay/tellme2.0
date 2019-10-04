@@ -54,6 +54,8 @@ from django.views.static import serve
 from django.core.exceptions import ObjectDoesNotExist
 import shutil
 from django.template.defaultfilters import filesizeformat
+from classrooms.pagination import *
+from classrooms.ordering import *
 
 try:
     from StringIO import StringIO
@@ -63,10 +65,11 @@ except ImportError:
 # Create your views here.
 class ContractsViewSet(viewsets.ModelViewSet):
     """docstring for ContinentsViewSet"""
-    queryset = Contract.objects.all()
+    queryset = Contract.objects.all().order_by('contract_id')
     serializer_class = ContractSerializer
-    # filter_backends = (DjangoFilterBackend)
-    filterset_fields = ['contract_id','name','contract_id_sponte','situation_id_sponte','situation_sponte','student_name_sponte','student_id_sponte','course_id_sponte','class_id_sponte','class_name_sponte','course_name_sponte','contract_type_id','initial_date_sponte','contract_free_class_id_sponte','end_date_sponte','date_of_registration_sponte','type_of_registration_sponte','contractor_sponte','name_of_curricular_matrix_sponte','financial_launched_sponte','contract_number_sponte','closing_date_sponte', 'first_auth_signe', 'first_auth_signed', 'second_auth_signe', 'second_auth_signed', 'counter_signe', 'counter_signed']
+    filter_backends = (DjangoFilterBackend, MyCustomOrdering)
+    filterset_fields = ('contract_id','name','contract_id_sponte','situation_id_sponte','situation_sponte','student_name_sponte','student_id_sponte','course_id_sponte','class_id_sponte','class_name_sponte','course_name_sponte','contract_type_id','initial_date_sponte','contract_free_class_id_sponte','end_date_sponte','date_of_registration_sponte','type_of_registration_sponte','contractor_sponte','name_of_curricular_matrix_sponte','financial_launched_sponte','contract_number_sponte','closing_date_sponte', 'first_auth_signe', 'first_auth_signed', 'second_auth_signe', 'second_auth_signed', 'counter_signe', 'counter_signed')
+    pagination_class = GeneralPagination
 
 def extract_text_to_write_and_coords(contract=None, whosigned=None, school=None):
 
