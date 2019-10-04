@@ -1659,7 +1659,7 @@ def set_signed_rest(request, contract_id = None):
                 messages.success(request, 'Todos os responsáveis desse contrato assinaram!')
                 contract.save(update_fields=['all_signed'])
                 contract_rest = ContractSerializer(contract)
-            return get_data(request, contract_rest, 'Assinado com sucesso! Todos os responsáveis desse contrato assinaram!' , 'success')
+                return get_data(request, contract_rest, 'Assinado com sucesso! Todos os responsáveis desse contrato assinaram!' , 'success')
         else:
             if (contract.first_auth_signed and contract.second_auth_signed and contract.counter_signed) or (contract.student_auth_signed and contract.counter_signed):
                 contract.all_signed = True
@@ -1667,7 +1667,7 @@ def set_signed_rest(request, contract_id = None):
                 messages.success(request, 'Todos os responsáveis desse contrato assinaram!')
                 contract.save(update_fields=['all_signed'])
                 contract_rest = ContractSerializer(contract)
-            return get_data(request, contract_rest, 'Assinado com sucesso! Todos os responsáveis desse contrato assinaram!' , 'success')
+                return get_data(request, contract_rest, 'Assinado com sucesso! Todos os responsáveis desse contrato assinaram!' , 'success')
     else:
         messages.warning(request, 'Você não é diretor nem pai do estudante deste contrato!')
         contract_rest = ContractSerializer(contract)
