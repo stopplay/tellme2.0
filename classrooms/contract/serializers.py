@@ -12,4 +12,4 @@ class ContractSerializer(serializers.ModelSerializer):
     chain = ChainSerializer()
     class Meta:
         model = Contract
-        fields = '__all__'
+        exclude = ['third_auth_signe']
