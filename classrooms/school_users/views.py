@@ -309,6 +309,20 @@ def create_user(request):
                                 school_to_add.students.add(student_to_add)
                                 class_to_add.students.add(student_to_add)
                                 messages.success(request, 'Usuário criado com sucesso!')
+                                current_site = get_current_site(request)
+                                mail_subject = 'Login de acesso ao módulo de Contratos - Tellme School.'
+                                message = render_to_string('school_users/user_login.html', {
+                                    'user': user_creation,
+                                    'domain': current_site.domain,
+                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                                    'token':account_activation_token.make_token(user),
+                                    'type_of_user':'supervisor',
+                                })
+                                to_email = form.cleaned_data.get('email')
+                                email = EmailMessage(
+                                            mail_subject, message, to=[to_email]
+                                )
+                                email.send()
                                 return redirect('/users/add_first_parent/{}'.format(student_to_add.student_id))
                     return redirect('/users/create_user')
         return render(request, 'school_users/createuser.html', {'user_form':form,'head_form':form2,'teacher_form':form3,'admin_form':form4,'supervisor_form':form5,'parent_form':form6,'student_form':form7, 'schools':schools})
@@ -598,6 +612,20 @@ def create_user(request):
                                 school_to_add.students.add(student_to_add)
                                 class_to_add.students.add(student_to_add)
                                 messages.success(request, 'Usuário criado com sucesso!')
+                                current_site = get_current_site(request)
+                                mail_subject = 'Login de acesso ao módulo de Contratos - Tellme School.'
+                                message = render_to_string('school_users/user_login.html', {
+                                    'user': user_creation,
+                                    'domain': current_site.domain,
+                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                                    'token':account_activation_token.make_token(user),
+                                    'type_of_user':'supervisor',
+                                })
+                                to_email = form.cleaned_data.get('email')
+                                email = EmailMessage(
+                                            mail_subject, message, to=[to_email]
+                                )
+                                email.send()
                                 return redirect('/users/add_first_parent/{}'.format(student_to_add.student_id))
                     return redirect('/users/create_user')
         return render(request, 'school_users/createuser.html', {'user_form':form,'head_form':form2,'teacher_form':form3,'admin_form':form4,'supervisor_form':form5,'parent_form':form6,'student_form':form7,'is_supervisor':is_supervisor, 'schools':schools})
@@ -623,6 +651,20 @@ def do_u_need_parents(request, student_id=None, school_id=None, class_id=None):
                 school_to_add.students.add(student_to_add)
                 class_to_add.students.add(student_to_add)
             messages.success(request, 'Usuário criado com sucesso!')
+            current_site = get_current_site(request)
+            mail_subject = 'Login de acesso ao módulo de Contratos - Tellme School.'
+            message = render_to_string('school_users/user_login.html', {
+                'user': student,
+                'domain': current_site.domain,
+                'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                'token':account_activation_token.make_token(user),
+                'type_of_user':'supervisor',
+            })
+            to_email = student.profile.email
+            email = EmailMessage(
+                mail_subject, message, to=[to_email]
+            )
+            email.send()
             if yesorno == 'não':
                 messages.success(request, 'Você criou este estudante e o colocou como próprio responsável financeiro')
                 return redirect('/users/create_user')
@@ -642,6 +684,18 @@ def do_u_need_parents(request, student_id=None, school_id=None, class_id=None):
             messages.success(request, 'Usuário criado com sucesso!')
             current_site = get_current_site(request)
             mail_subject = 'Login de acesso ao módulo de Contratos - Tellme School.'
+            message = render_to_string('school_users/user_login.html', {
+                'user': student,
+                'domain': current_site.domain,
+                'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                'token':account_activation_token.make_token(user),
+                'type_of_user':'supervisor',
+            })
+            to_email = student.profile.email
+            email = EmailMessage(
+                mail_subject, message, to=[to_email]
+            )
+            email.send()
             if yesorno == 'não':
                 messages.success(request, 'Você criou este estudante e o colocou como próprio responsável financeiro')
                 return redirect('/users/create_user')
@@ -865,6 +919,20 @@ def add_first_parent(request, student_id=None):
             student.first_parent = parent
             student.save(update_fields=['first_parent'])
             messages.success(request, 'Responsável financeiro adicionado com sucesso!')
+            current_site = get_current_site(request)
+            mail_subject = 'Login de acesso ao módulo de Contratos - Tellme School.'
+            message = render_to_string('school_users/user_login.html', {
+                'user': student,
+                'domain': current_site.domain,
+                'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                'token':account_activation_token.make_token(user),
+                'type_of_user':'supervisor',
+            })
+            to_email = form.cleaned_data.get('email')
+            email = EmailMessage(
+                mail_subject, message, to=[to_email]
+            )
+            email.send()
             return redirect('/users/add_second_parent/{}'.format(student_id))
         return render(request, 'school_users/add_first_parent.html', {'form':form, 'form2':form2, 'student':student})
     elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
@@ -894,6 +962,20 @@ def add_first_parent(request, student_id=None):
             student.first_parent = parent
             student.save(update_fields=['first_parent'])
             messages.success(request, 'Responsável financeiro adicionado com sucesso!')
+            current_site = get_current_site(request)
+            mail_subject = 'Login de acesso ao módulo de Contratos - Tellme School.'
+            message = render_to_string('school_users/user_login.html', {
+                'user': user_creation,
+                'domain': current_site.domain,
+                'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                'token':account_activation_token.make_token(user),
+                'type_of_user':'supervisor',
+            })
+            to_email = form.cleaned_data.get('email')
+            email = EmailMessage(
+                mail_subject, message, to=[to_email]
+            )
+            email.send()
             return redirect('/users/add_second_parent/{}'.format(student_id))
         return render(request, 'school_users/add_first_parent.html', {'form':form, 'form2':form2, 'is_supervisor':is_supervisor, 'student':student})
 
@@ -925,6 +1007,20 @@ def add_second_parent(request, student_id=None):
             student.second_parent = parent
             student.save(update_fields=['second_parent'])
             messages.success(request, 'Responsável pedagógico adicionado com sucesso!')
+            current_site = get_current_site(request)
+            mail_subject = 'Login de acesso ao módulo de Contratos - Tellme School.'
+            message = render_to_string('school_users/user_login.html', {
+                'user': user_creation,
+                'domain': current_site.domain,
+                'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                'token':account_activation_token.make_token(user),
+                'type_of_user':'supervisor',
+            })
+            to_email = form.cleaned_data.get('email')
+            email = EmailMessage(
+                mail_subject, message, to=[to_email]
+            )
+            email.send()
             return redirect('/users/create_user/')
         return render(request, 'school_users/add_second_parent.html', {'form':form, 'form2':form2, 'student':student})
     elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
@@ -954,6 +1050,20 @@ def add_second_parent(request, student_id=None):
             student.second_parent = parent
             student.save(update_fields=['second_parent'])
             messages.success(request, 'Responsável pedagógico adicionado com sucesso!')
+            current_site = get_current_site(request)
+            mail_subject = 'Login de acesso ao módulo de Contratos - Tellme School.'
+            message = render_to_string('school_users/user_login.html', {
+                'user': user_creation,
+                'domain': current_site.domain,
+                'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                'token':account_activation_token.make_token(user),
+                'type_of_user':'supervisor',
+            })
+            to_email = form.cleaned_data.get('email')
+            email = EmailMessage(
+                mail_subject, message, to=[to_email]
+            )
+            email.send()
             return redirect('/users/create_user'.format(student_id))
         return render(request, 'school_users/add_second_parent.html', {'form':form, 'form2':form2, 'is_supervisor':is_supervisor, 'student':student})
 
@@ -990,6 +1100,20 @@ def add_parent(request, student_id=None, type_of_user= None):
                 student.third_parent = parent
             student.save(update_fields=['first_parent','second_parent', 'third_parent'])
             messages.success(request, 'Responsável adicionado com sucesso!')
+            current_site = get_current_site(request)
+            mail_subject = 'Login de acesso ao módulo de Contratos - Tellme School.'
+            message = render_to_string('school_users/user_login.html', {
+                'user': user_creation,
+                'domain': current_site.domain,
+                'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                'token':account_activation_token.make_token(user),
+                'type_of_user':'supervisor',
+            })
+            to_email = form.cleaned_data.get('email')
+            email = EmailMessage(
+                mail_subject, message, to=[to_email]
+            )
+            email.send()
             return redirect('/users/set_parents/{}'.format(student_id))
         return render(request, 'school_users/add_parent.html', {'form':form, 'form2':form2})
     elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
