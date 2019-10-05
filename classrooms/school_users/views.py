@@ -49,6 +49,7 @@ def create_user(request):
         selected_school = request.POST.get('selected_school', 0)
         selected_class = request.POST.get('selected_class', 0)
         school_to_add = None
+        class_to_add = None
         if School.objects.filter(school_id=selected_school).count()>=1:
             school_to_add = School.objects.get(school_id=selected_school)
         if Class.objects.filter(class_id=selected_class).count()>=1:
@@ -143,6 +144,10 @@ def create_user(request):
                                             _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[7]), second_parent=Parent.objects.get(tell_me_user_id=column[8]), tell_me_user_id=column[6])
                                         else:
                                             _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+                                        if school_to_add:
+                                                school_to_add.students.add(_)
+                                        if class_to_add:
+                                            class_to_add.students.add(_)
                         elif ';' in data_set:
                             for column in csv.reader(io_string, delimiter=';', quotechar='|'):
                                 if column[0]:
@@ -151,6 +156,10 @@ def create_user(request):
                                             _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[7]), second_parent=Parent.objects.get(tell_me_user_id=column[8]), tell_me_user_id=column[6])
                                         else:
                                             _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+                                        if school_to_add:
+                                                school_to_add.students.add(_)
+                                        if class_to_add:
+                                            class_to_add.students.add(_)
 
                     elif selected_user == '7':
                         if ',' in data_set:
@@ -162,8 +171,10 @@ def create_user(request):
                                                 _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[8]), second_parent=Parent.objects.get(tell_me_user_id=column[9]), tell_me_user_id=column[6])
                                             else:
                                                 _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
-                                            school_to_add.students.add(_)
-                                            class_to_add.students.add(_)
+                                            if school_to_add:
+                                                school_to_add.students.add(_)
+                                            if class_to_add:
+                                                class_to_add.students.add(_)
                                         elif column[7]:
                                              _, created = Parent.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[7])
 
@@ -176,8 +187,10 @@ def create_user(request):
                                                 _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[8]), second_parent=Parent.objects.get(tell_me_user_id=column[9]), tell_me_user_id=column[6])
                                             else:
                                                 _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
-                                            school_to_add.students.add(_)
-                                            class_to_add.students.add(_)
+                                            if school_to_add:
+                                                school_to_add.students.add(_)
+                                            if class_to_add:
+                                                class_to_add.students.add(_)
                                         elif column[7]:
                                              _, created = Parent.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[7])
                     messages.success(request, 'Usuários criados com sucesso!')
@@ -441,8 +454,10 @@ def create_user(request):
                                             _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[7]), second_parent=Parent.objects.get(tell_me_user_id=column[8]), tell_me_user_id=column[6])
                                         else:
                                             _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
-                                        school_to_add.students.add(_)
-                                        class_to_add.students.add(_)
+                                        if school_to_add:
+                                                school_to_add.students.add(_)
+                                        if class_to_add:
+                                            class_to_add.students.add(_)
                         elif ';' in data_set:
                             for column in csv.reader(io_string, delimiter=';', quotechar='|'):
                                 if column[0]:
@@ -451,8 +466,10 @@ def create_user(request):
                                             _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[7]), second_parent=Parent.objects.get(tell_me_user_id=column[8]), tell_me_user_id=column[6])
                                         else:
                                             _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
-                                        school_to_add.students.add(_)
-                                        class_to_add.students.add(_)
+                                        if school_to_add:
+                                                school_to_add.students.add(_)
+                                        if class_to_add:
+                                            class_to_add.students.add(_)
                     elif selected_user == '7':
                         if ',' in data_set:
                             for column in csv.reader(io_string, delimiter=',', quotechar='|'):
@@ -463,8 +480,10 @@ def create_user(request):
                                                 _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[8]), second_parent=Parent.objects.get(tell_me_user_id=column[9]), tell_me_user_id=column[6])
                                             else:
                                                 _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
-                                            school_to_add.students.add(_)
-                                            class_to_add.students.add(_)
+                                            if school_to_add:
+                                                school_to_add.students.add(_)
+                                            if class_to_add:
+                                                class_to_add.students.add(_)
                                         elif column[7]:
                                              _, created = Parent.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[7])
 
@@ -477,8 +496,10 @@ def create_user(request):
                                                 _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[8]), second_parent=Parent.objects.get(tell_me_user_id=column[9]), tell_me_user_id=column[6])
                                             else:
                                                 _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
-                                            school_to_add.students.add(_)
-                                            class_to_add.students.add(_)
+                                            if school_to_add:
+                                                school_to_add.students.add(_)
+                                            if class_to_add:
+                                                class_to_add.students.add(_)
                                         elif column[7]:
                                              _, created = Parent.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[7])
                     messages.success(request, 'Usuários criados com sucesso!')
