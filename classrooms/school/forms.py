@@ -25,7 +25,7 @@ class SchoolModelFormWithSupervisor(forms.ModelForm):
 	"""docstring for UserModelForm"""
 	class Meta:
 		model = School
-		fields = ['school_name', 'sponte_client_number', 'sponte_token', 'tell_me_school_id', 'country', 'state', 'city', 'app_name', 'adminorsupervisor', 'value_per_contract']
+		fields = ['school_name', 'sponte_client_number', 'sponte_token', 'tell_me_school_id', 'country', 'state', 'city', 'app_name', 'adminorsupervisor']
 		widgets = {
 			'school_name': forms.TextInput(attrs={'class':'form-control', 'maxlength':255, 'required':True}),
 			'enrollment_year': forms.NumberInput(),
@@ -37,14 +37,13 @@ class SchoolModelFormWithSupervisor(forms.ModelForm):
 			'city': forms.TextInput(attrs={'class':'form-control', 'required':False}),
 			'app_name': forms.TextInput(attrs={'class':'form-control', 'required':False}),
 			'adminorsupervisor': forms.Select(attrs={'class':'form-control chosen-select', 'required':False}),
-			'value_per_contract': forms.NumberInput(attrs={'class':'form-control', 'required':False, 'min':0}),
 		}
 
 class SchoolModelFormWithSupervisorAndDirector(forms.ModelForm):
 	"""docstring for UserModelForm"""
 	class Meta:
 		model = School
-		fields = ['school_name', 'sponte_client_number', 'sponte_token', 'tell_me_school_id', 'country', 'state', 'city', 'app_name', 'adminorsupervisor', 'heads']
+		fields = ['school_name', 'sponte_client_number', 'sponte_token', 'tell_me_school_id', 'country', 'state', 'city', 'app_name', 'adminorsupervisor', 'heads', 'value_per_contract']
 		widgets = {
 			'school_name': forms.TextInput(attrs={'class':'form-control', 'maxlength':255, 'required':True}),
 			'enrollment_year': forms.NumberInput(),
@@ -57,6 +56,7 @@ class SchoolModelFormWithSupervisorAndDirector(forms.ModelForm):
 			'app_name': forms.TextInput(attrs={'class':'form-control', 'required':False}),
 			'adminorsupervisor': forms.Select(attrs={'class':'form-control chosen-select', 'required':False}),
 			'heads': forms.SelectMultiple(attrs={'class':'form-control chosen-select', 'required':False}),
+			'value_per_contract': forms.NumberInput(attrs={'class':'form-control', 'required':False, 'min':0}),
 		}
 
 class SetWitnessModelForm(forms.ModelForm):
