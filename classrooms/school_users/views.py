@@ -677,8 +677,8 @@ def do_u_need_parents(request, student_id=None, school_id=None, class_id=None):
             message = render_to_string('school_users/user_login.html', {
                 'user': student,
                 'domain': current_site.domain,
-                'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
-                'token':account_activation_token.make_token(user),
+                'uid':urlsafe_base64_encode(force_bytes(student.profile.pk)).decode(),
+                'token':account_activation_token.make_token(student.profile),
                 'type_of_user':'supervisor',
             })
             to_email = student.profile.email
@@ -708,8 +708,8 @@ def do_u_need_parents(request, student_id=None, school_id=None, class_id=None):
             message = render_to_string('school_users/user_login.html', {
                 'user': student,
                 'domain': current_site.domain,
-                'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
-                'token':account_activation_token.make_token(user),
+                'uid':urlsafe_base64_encode(force_bytes(student.profile.pk)).decode(),
+                'token':account_activation_token.make_token(student.profile),
                 'type_of_user':'supervisor',
             })
             to_email = student.profile.email
