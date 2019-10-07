@@ -26,6 +26,7 @@ class School(models.Model):
 	second_witness = models.ForeignKey(Witness, on_delete=models.SET_NULL, verbose_name = 'Segunda Testemunha', null=True, blank=True, related_name='second_witness_school')
 	app_name = models.TextField(null=True, blank=True, verbose_name = 'Nome do App')
 	is_maple_bear = models.BooleanField(default=False)
+	value_per_contract = models.FloatField(default=0.00, null=True, blank=True, verbose_name = 'Valor por Contrato')
 
 	@property
 	def quantity_of_contracts_signed(self):

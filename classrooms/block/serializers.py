@@ -10,7 +10,7 @@ class SchoolSerializer(serializers.ModelSerializer):
     """docstring for SchoolSerializer"""
     class Meta:
         model = School
-        fields = ['school_id', 'school_name']
+        fields = ['school_id', 'school_name', 'value_per_contract']
         
 
 class TransactionSerializer(serializers.ModelSerializer):
