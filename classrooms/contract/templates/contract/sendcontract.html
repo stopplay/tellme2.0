@@ -1,27 +1,30 @@
 {% autoescape off %}
 
+Olá {{ user.name }}!
 
-Olá {{ user.name }}.
+Você está recebendo esse email para lhe informar que você tem um contrato para ser assinado dentro do seu app {{ school.school_name }}, em nome do(a) aluno(a) {{ contract.student_name }} - {{ class.class_name }}.
 
-Você está recebendo esse email para lhe informar que você tem um contrato, {{ contract.student_name }} - {{ class.class_name }}, pela Matricula {{ class.enrollment_class_year }} dentro do seu app {{ school.school_name }}, para ser assinado.
+No menu do seu aplicativo, você irá encontrar o ícone “Matrícula” com o contrato enviado pela escola. Para assinar, basta seguir os passos dentro do app, muito rápido e bem simples!
+
+Anexamos aqui uma cópia do contrato que deverá ser assinado pelo aplicativo.
 
 {% if user == contract.first_auth_signe or user == contract.second_auth_signe or user == contract.student_auth_signe %}
 {% if contract.slm %}
+Mas, se você não tem o aplicativo da escola instalado no seu telefone, você também poderá assinar o contrato acessando os links e seguindo os passos abaixo:
+
 Primeiro passo:
-Conecte os seus detalhes através deste link:
-https://{{ domain }}{% url 'users:profile' %}
+Acesse o link https://{{ domain }}{% url 'users:profile' %} e leia e assine o contrato.
 
 Segundo passo:
-Faça a compra dos materiais neste link:
-{{ contract.slm }}
+Faça a compra dos materiais SLM pelo link {{ contract.slm }}.
 
 O processamento da compra pode demorar até 24 horas
 {% endif %}
 {% endif %}
 
-Assine o contrato. Para assiná-lo, basta seguir os passos dentro do app.
+Atenciosamente,
 
-Tellme School - tornando sua vida mais simples!
+{{ school.school_name }} / Tellme School - tornando sua vida mais simples!
 
 
 
