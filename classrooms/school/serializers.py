@@ -29,4 +29,4 @@ class MinimalSchoolSerializer(serializers.ModelSerializer):
 	chains = ChainSerializer(read_only=True, many=True)
 	class Meta:
 		model = School
-		fields = '__all__'
+		fields = ['school_id', 'school_name', 'classes', 'chains', 'heads', 'adminorsupervisor', 'sponte_client_number', 'sponte_token', 'tell_me_school_id', 'country', 'state', 'city', 'quantity_of_directors', 'students', 'teachers', 'parents', 'first_witness', 'second_witness', 'app_name', 'is_maple_bear', 'quantity_of_contracts_signed', 'quantity_of_contracts_total', 'quantity_of_contracts_not_signed']
