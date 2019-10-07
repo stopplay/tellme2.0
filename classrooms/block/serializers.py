@@ -1,9 +1,17 @@
 from rest_framework import serializers
 from .models import Block, Chain, Peer, Transactions
+from school.models import School
 
 import logging
 
 log = logging.getLogger(__name__)
+
+class SchoolSerializer(serializers.ModelSerializer):
+    """docstring for SchoolSerializer"""
+    class Meta:
+        model = School
+        fields = ['school_id', 'school_name']
+        
 
 class TransactionSerializer(serializers.ModelSerializer):
 
@@ -29,7 +37,7 @@ class ChainSerializer(serializers.ModelSerializer):
     block_set = BlockSerializer(many=True,
                                 read_only=True,
                                 allow_null=True)
-
+    school_set =  SchoolSerializer(many=True, read_only=True, allow_null=True)
     class Meta:
         model = Chain
         fields = '__all__'
