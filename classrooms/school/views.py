@@ -442,7 +442,7 @@ def update_school(request, school_id=None):
 				chain.name = "{0}-{1}-{2}-{3}".format(school.school_name, classe.enrollment_class_year, classe.class_unit, classe.class_name)
 				chain.save(update_fields=['name'])		
 			form.save_m2m()
-			school.save(update_fields=['school_name', 'sponte_client_number', 'sponte_token', 'country', 'state', 'city','app_name', 'adminorsupervisor', 'tell_me_school_id', 'value_per_contract', 'students'])
+			school.save(update_fields=['school_name', 'sponte_client_number', 'sponte_token', 'country', 'state', 'city','app_name', 'adminorsupervisor', 'tell_me_school_id', 'value_per_contract'])
 			messages.success(request, 'A escola foi atualizada com sucesso!')
 			return redirect('/')
 		return render(request, 'school/update_school.html', {'form':form, 'school_id': school_id})
