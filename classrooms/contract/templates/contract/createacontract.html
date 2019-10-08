@@ -26,7 +26,7 @@
 									<form method="POST" class="" enctype="multipart/form-data" id="myForm"
 									data-urlclasses="{% url 'contracts:directors_choices_ajax' %}"> {% csrf_token %}
 										<div style="margin-top: 10px">
-											<p><label>Por favor nao enviar arquivos com os seguintes caracteres no nome: ã, á, à, é, è, í, ì, õ, ó, ò, ú, ù, ç. Isso também inclui estes mesmos caracteres em minúsculo.</label><br>
+											<p><label>Por favor não enviar arquivos com os seguintes caracteres no nome: ã, á, à, é, è, í, ì, õ, ó, ò, ú, ù, ç. Isso também inclui estes mesmos caracteres em minúsculo.</label><br>
 											</div>
 											<input type="hidden" id="selected_user" name="selected_user" value="0">
 											{{ form.as_p }}
