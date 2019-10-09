@@ -1645,3 +1645,15 @@ def seesonsofparent(request, parent_id=None):
             if student not in sons:
                 sons += [(student)]
         return render(request, 'school_users/sonsofparent.html', {'parent':parent, 'sons':sons, 'is_supervisor':True})
+
+@csrf_exempt
+def update_profile(request):
+    user = User.objects.get(id=current_user(request).data.get("id"))
+    if Parent.objects.filter(profile=user).count()>=1:
+        parent = Parent.objects.get(profile=user)
+        received_json_data=json.loads(request.body)
+        maple_bear_email = received_json_data.get("maple_bear_email")
+        parent.maple_bear_email = maple_bear_email
+        parent.save(update_fields='maple_bear_email')
+        parent_rest = ParentSerializer(parent)
+        return get_data(request, parent_rest, 'O email do usuário foi alterado com sucesso!', 'success')
