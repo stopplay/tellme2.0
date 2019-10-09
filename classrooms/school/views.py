@@ -271,7 +271,7 @@ def create_student_with_extracted_data(aluno):
 	return None
 
 def get_school_students(sponte_client_number, token):
-	e = get_alunos(sponte_client_number, token, "inadimplente=0")
+	e = get_alunos(sponte_client_number, token, "SituacaoAlunoID=-1")
 	students = []
 	for aluno in e:
 		student = create_student_with_extracted_data(aluno)
