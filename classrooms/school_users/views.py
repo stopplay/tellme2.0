@@ -32,6 +32,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.forms import SetPasswordForm
 import psycopg2
+import json
 
 # Create your views here.
 @login_required
@@ -1649,9 +1650,9 @@ def seesonsofparent(request, parent_id=None):
 @csrf_exempt
 def update_profile(request):
     user = User.objects.get(id=current_user(request).data.get("id"))
+    received_json_data=json.loads(request.body)
     if Parent.objects.filter(profile=user).count()>=1:
         parent = Parent.objects.get(profile=user)
-        received_json_data=json.loads(request.body)
         maple_bear_email = received_json_data.get("maple_bear_email")
         parent.maple_bear_email = maple_bear_email
         parent.save(update_fields='maple_bear_email')
@@ -1659,7 +1660,6 @@ def update_profile(request):
         return get_data(request, parent_rest, 'O email do maple bear do usuário foi alterado com sucesso!', 'success')
     if Student.objects.filter(profile=user).count()>=1:
         student = Student.objects.get(profile=user)
-        received_json_data=json.loads(request.body)
         maple_bear_email = received_json_data.get("maple_bear_email")
         student.maple_bear_email = maple_bear_email
         student.save(update_fields='maple_bear_email')

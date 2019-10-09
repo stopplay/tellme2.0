@@ -56,6 +56,7 @@ import shutil
 from django.template.defaultfilters import filesizeformat
 from classrooms.pagination import *
 from classrooms.ordering import *
+import json
 
 try:
     from StringIO import StringIO
