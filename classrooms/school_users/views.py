@@ -1656,4 +1656,14 @@ def update_profile(request):
         parent.maple_bear_email = maple_bear_email
         parent.save(update_fields='maple_bear_email')
         parent_rest = ParentSerializer(parent)
-        return get_data(request, parent_rest, 'O email do usuário foi alterado com sucesso!', 'success')
+        return get_data(request, parent_rest, 'O email do maple bear do usuário foi alterado com sucesso!', 'success')
+    if Student.objects.filter(profile=user).count()>=1:
+        student = Student.objects.get(profile=user)
+        received_json_data=json.loads(request.body)
+        maple_bear_email = received_json_data.get("maple_bear_email")
+        student.maple_bear_email = maple_bear_email
+        student.save(update_fields='maple_bear_email')
+        student_rest = StudentSerializer(student)
+        return get_data(request, student_rest, 'O email do maple bear do usuário foi alterado com sucesso!', 'success')
+    user_rest = UserSerializer(user)
+    return get_data(request, user_rest, 'O usuário não é responsável no sistema!', 'warning')
