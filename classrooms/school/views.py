@@ -483,7 +483,7 @@ def delete_school(request, school_id=None):
 			classe.delete()
 		for student in school_to_delete.students.all():
 			if School.objects.filter(students__student_id__exact=student.student_id).count()<2:
-				if not student.first_parent == user_to_delete.second_parent:
+				if not student.first_parent == student.second_parent:
 					if student.first_parent.profile:
 						student.first_parent.profile.delete()
 					student.first_parent.delete()
