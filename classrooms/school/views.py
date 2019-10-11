@@ -483,14 +483,20 @@ def delete_school(request, school_id=None):
 			classe.delete()
 		for student in school_to_delete.students.all():
 			if School.objects.filter(students__student_id__exact=student.student_id).count()<2:
-				if student.first_parent:
-					student.first_parent.profile.delete()
-					student.first_parent.delete()
-				if student.second_parent:
-					student.second_parent.profile.delete()
-					student.second_parent.delete()
-				student.profile.delete()
-				student.delete()
+				if not user_to_delete.first_parent == user_to_delete.second_parent:
+                    if user_to_delete.first_parent.profile:
+                        user_to_delete.first_parent.profile.delete()
+                    user_to_delete.first_parent.delete()
+                    if user_to_delete.second_parent.profile:
+                        user_to_delete.second_parent.profile.delete()
+                    user_to_delete.second_parent.delete()
+                else:
+                    if user_to_delete.first_parent.profile:
+                        user_to_delete.first_parent.profile.delete()
+                    user_to_delete.first_parent.delete()
+				if student.profile:
+		            student.profile.delete()
+		        student.delete()
 		for head in school_to_delete.heads.all():
 			if School.objects.filter(heads__head_id__exact=head.head_id).count()<2:
 				if head.profile:
