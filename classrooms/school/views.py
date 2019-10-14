@@ -170,7 +170,7 @@ def etree_to_dict(t):
             d[t.tag] = text
     return d
 
-def create_student_with_extracted_data(aluno):
+def create_student_with_extracted_data(aluno, school_name):
 	student_id_sponte = None
 	name = None
 	cpf_sponte = None
@@ -263,6 +263,7 @@ def create_student_with_extracted_data(aluno):
 		if mindata.tag == '{http://api.sponteeducacional.net.br/}CursoInteresse':
 			course_of_interest_sponte = mindata.text
 	if username:
+		username = school_name + '-' + username
 		if User.objects.filter(username=username).count()<1:
 			return Student.objects.create(student_id_sponte=student_id_sponte, name=name, cpf_sponte=cpf_sponte, midia_sponte=midia_sponte, bithday_sponte=bithday_sponte, cep_sponte=cep_sponte, address_sponte=address_sponte, address_number_sponte=address_number_sponte, register_date_sponte=register_date_sponte, RA_sponte=RA_sponte, note_sponte=note_sponte, telephone_sponte=telephone_sponte, cell_phone_sponte=cell_phone_sponte, current_class_id=current_class_id, financial_responsible_id_sponte=financial_responsible_id_sponte, didatic_responsible_id_sponte=didatic_responsible_id_sponte, registration_number_sponte=registration_number_sponte, gender_sponte=gender_sponte, situation_sponte=situation_sponte, city_sponte=city_sponte, neighborhood_sponte=neighborhood_sponte, hometown_sponte=hometown_sponte, overdue_sponte=overdue_sponte, origin_sponte=origin_sponte, original_name_sponte=original_name_sponte, course_of_interest_sponte=course_of_interest_sponte, profile=User.objects.create_user(username=username, first_name=name.split(' ')[0], last_name=name.split(' ')[-1], password=password, email=email))
 		else:
@@ -270,11 +271,11 @@ def create_student_with_extracted_data(aluno):
 				return Student.objects.get(profile=User.objects.get(username=username))
 	return None
 
-def get_school_students(sponte_client_number, token):
+def get_school_students(sponte_client_number, token, school_name):
 	e = get_alunos(sponte_client_number, token, "SituacaoAlunoID=-1")
 	students = []
 	for aluno in e:
-		student = create_student_with_extracted_data(aluno)
+		student = create_student_with_extracted_data(aluno, school_name)
 		if not student == None and student not in students:
 			students += [(student)]
 	return students
@@ -283,7 +284,7 @@ def save_students_to_school(request, school_id=None):
 	is_superuser = request.user.is_superuser;
 	head_or_supervisor = Head.objects.filter(profile=request.user).count() >= 1 or Supervisor.objects.filter(profile=request.user).count() >= 1
 	school = School.objects.get(school_id=school_id)
-	students = get_school_students(school.sponte_client_number, school.sponte_token)
+	students = get_school_students(school.sponte_client_number, school.sponte_token, school.school_name)
 	if is_superuser or head_or_supervisor:
 		for student in students:
 			school.students.add(student)
@@ -291,7 +292,7 @@ def save_students_to_school(request, school_id=None):
 		return True
 	return False
 
-def create_parent_with_extracted_data(parent):
+def create_parent_with_extracted_data(parent, school_name):
 	responsible_id_sponte = None
 	name = None
 	cpf_or_cnpj_sponte = None
@@ -355,6 +356,7 @@ def create_parent_with_extracted_data(parent):
 		if mindata.tag == '{http://api.sponteeducacional.net.br/}TipoPessoa':
 			kind_of_person = mindata.text
 	if username:
+		username = school_name + '-' + username
 		if User.objects.filter(username=username).count()<1:
 			return Parent.objects.create(responsible_id_sponte=responsible_id_sponte, name=name, cpf_or_cnpj_sponte=cpf_or_cnpj_sponte, bithday_sponte=bithday_sponte, cep_sponte=cep_sponte, address_sponte=address_sponte, address_number_sponte=address_number_sponte, note_sponte=note_sponte, telephone_sponte=telephone_sponte, cell_phone_sponte=cell_phone_sponte, gender_sponte=gender_sponte,  city_sponte=city_sponte, neighborhood_sponte=neighborhood_sponte, kind_of_person=kind_of_person, profile=User.objects.create_user(username=username, first_name=name.split(' ')[0], last_name=name.split(' ')[-1], password=password, email=email))
 		else:
@@ -362,31 +364,31 @@ def create_parent_with_extracted_data(parent):
 				return Parent.objects.get(profile=User.objects.get(username=username))
 	return None
 
-def get_school_parents(sponte_client_number, token):
+def get_school_parents(sponte_client_number, token, school_name):
 	parents = []
 	e = get_parents(sponte_client_number, token, "nome=a")
 	for parent in e:
-		newparent = create_parent_with_extracted_data(parent)
+		newparent = create_parent_with_extracted_data(parent, school_name)
 		if not newparent == None and newparent not in parents:
 			parents += [(newparent)]
 	e = get_parents(sponte_client_number, token, "nome=e")
 	for parent in e:
-		newparent = create_parent_with_extracted_data(parent)
+		newparent = create_parent_with_extracted_data(parent, school_name)
 		if not newparent == None and newparent not in parents:
 			parents += [(newparent)]
 	e = get_parents(sponte_client_number, token, "nome=i")
 	for parent in e:
-		newparent = create_parent_with_extracted_data(parent)
+		newparent = create_parent_with_extracted_data(parent, school_name)
 		if not newparent == None and newparent not in parents:
 			parents += [(newparent)]
 	e = get_parents(sponte_client_number, token, "nome=o")
 	for parent in e:
-		newparent = create_parent_with_extracted_data(parent)
+		newparent = create_parent_with_extracted_data(parent, school_name)
 		if not newparent == None and newparent not in parents:
 			parents += [(newparent)]
 	e = get_parents(sponte_client_number, token, "nome=u")
 	for parent in e:
-		newparent = create_parent_with_extracted_data(parent)
+		newparent = create_parent_with_extracted_data(parent, school_name)
 		if not newparent == None and newparent not in parents:
 			parents += [(newparent)]
 	return parents
@@ -395,7 +397,7 @@ def save_parents(request, school_id=None):
 	is_superuser = request.user.is_superuser;
 	head_or_supervisor = Head.objects.filter(profile=request.user).count() >= 1 or Supervisor.objects.filter(profile=request.user).count() >= 1
 	school = School.objects.get(school_id=school_id)
-	parents = get_school_parents(school.sponte_client_number, school.sponte_token)
+	parents = get_school_parents(school.sponte_client_number, school.sponte_token, school.school_name)
 	parents_ids = []
 	for parent in parents:
 		if parent.parent_id not in parents_ids:
