@@ -1623,6 +1623,8 @@ def profile(request):
                 messages.success(request, 'Perfil alterado com sucesso')
                 return redirect('/users/profile')
         return render(request, 'school_users/profile.html', {'form':form, 'parent':parent, 'sons':sons, 'is_client':True})
+    messages.error(request, 'Você não é responsável dentro do sistema')
+    return redirect('/')
 
 @login_required
 def seesonsofparent(request, parent_id=None):
