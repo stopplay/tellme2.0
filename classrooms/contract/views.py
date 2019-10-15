@@ -893,7 +893,11 @@ def seemycontracts(request):
                         schools+=[(School.objects.get(chains__id__exact=contract.chain.id).school_id)]
             schools = School.objects.filter(school_id__in=schools)
         else:
-            return HttpResponse('Você não foi adicionado como responsável financeiro portanto não pode ver contratos')
+            if request.user.is_superuser:
+                contracts = Contract.objects.all()
+                schools = School.objects.all()
+            else:
+                return HttpResponse('Você não foi adicionado como responsável financeiro portanto não pode ver contratos')
     elif request.user.is_superuser:
         contracts = Contract.objects.all()
         schools = School.objects.all()
