@@ -52,9 +52,9 @@
                           data-baloon="Remove this item from the cart" class="text-danger">Adicionar Turma à Escola</a>
                         <a class="dropdown-item" href="{% url 'school:set_witnesses' school.school_id %}"
                           data-baloon="Remove this item from the cart" class="text-danger">Selecionar Testemunhas Para Escola</a>
-                        <a class="dropdown-item" href="{% url 'school:add_students_to_school' school.school_id %}"
+                        <!-- <a class="dropdown-item" href="{% url 'school:add_students_to_school' school.school_id %}"
                           data-baloon="Remove this item from the cart" class="text-danger">Selecionar Estudantes Para
-                          Escola</a>
+                          Escola</a> -->
                         <!-- <a class="dropdown-item"href="{% url 'school:add_teachers_to_school' school.school_id %}" data-baloon="Remove this item from the cart" class="text-danger">Selecionar Professores Para Escola</a> -->
                         <a class="dropdown-item" href="{% url 'school:update_school' school.school_id %}" data-baloon="Remove this item from the cart" class="text-danger">Atualizar Escola</a>
                         {% if request.user.is_superuser %}
@@ -77,7 +77,7 @@
                   <td>
 
                     <div class="flex-column-alignment"  style="width: 100%">
-                    {% for class in school.classes.all %}
+                    {% for class in school.classes.all|dictsort:"class_id" %}
 
                     <div class="row width-full margin-bottom-5">
                       <div class="col-md-6">
@@ -95,9 +95,9 @@
                             <a class="dropdown-item" href="{% url 'school:verifyvalidchain' class.class_id %}"
                               data-baloon="Remove this item from the cart" class="text-danger">Verificar Validade do Blockchain
                               Para a Turma</a>
-                            <a class="dropdown-item" href="{% url 'school:add_student_to_class' class.class_id %}"
+                            <!-- <a class="dropdown-item" href="{% url 'school:add_student_to_class' class.class_id %}"
                               data-baloon="Remove this item from the cart" class="text-danger">Selecionar Estudantes Para
-                              Turma</a>
+                              Turma</a> -->
                             <!-- <a class="dropdown-item" href="{% url 'school:add_teacher_to_class' class.class_id %}" data-baloon="Remove this item from the cart" class="text-danger">Selecionar Professores Para Turma</a> -->
                             <a class="dropdown-item" href="{% url 'school:update_class' class.class_id %}"
                               data-baloon="Remove this item from the cart" class="text-danger">Atualizar Turma</a>
@@ -118,7 +118,7 @@
                   {% if school.chains %}
                   <td  style="width: 100%;">
                     <div class="flex-column-alignment">
-                      {% for chain in school.chains.all %}
+                      {% for chain in school.chains.all|dictsort:"id" %}
                       <div class="row width-full margin-bottom-5">
   
                         <div class="col-md-6">
