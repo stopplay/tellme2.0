@@ -45,6 +45,9 @@
 									<button id="pull_students_button" type="submit" class="btn btn-info btn-fill w-100" style="background-color: #213f99; border-color: #213f99">
 										Obter Alunos Sponte
 									</button>
+									<button id="remove_non_active" type="submit" class="btn btn-info btn-fill w-100" style="background-color: #213f99; border-color: #213f99">
+										Remover Alunos Não Ativos
+									</button>
 								</div>
 							</div>
 						</div>
@@ -79,6 +82,39 @@
 		var pullStudentsUrl = '/schools/{{school_id}}/pull_students';
 		
 		$.getJSON(pullStudentsUrl)
+			.done(function(response) {
+				$(event.target).removeClass('spinner');
+				$(event.target).addClass('success-pull-students');
+				console.log('response', response);
+			})
+			.fail(function(error) {
+				$(event.target).removeClass('spinner');
+				$(event.target).addClass('error-pull-students');
+				console.log('error', error);
+			});
+	}
+
+	$('#remove_non_active').click(remove_non_active);
+
+	$.ajaxSetup({
+		xhrFields: {
+			withCredentials: true
+		},
+		crossDomain: true
+	});
+	
+	function remove_non_active(event) {
+		
+		event.stopPropagation();
+		event.preventDefault();
+
+		$(event.target).addClass('spinner');
+		$(event.target).removeClass('success-pull-students');
+		$(event.target).removeClass('error-pull-students');
+
+		var remove_non_active = '/schools/{{school_id}}/remove_non_active';
+		
+		$.getJSON(remove_non_active)
 			.done(function(response) {
 				$(event.target).removeClass('spinner');
 				$(event.target).addClass('success-pull-students');

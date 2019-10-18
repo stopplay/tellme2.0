@@ -49,5 +49,6 @@ urlpatterns = [
     path('delete_class/<int:class_id>', views.delete_class, name='delete_class'),
     url('create_block/', views.create_block, name='create_block'),
     path('<int:school_id>/pull_students', views.pull_students, name='pull_students'),
+    path('<int:school_id>/remove_non_active', views.remove_non_active_students, name='remove_non_active'),
 
 ]

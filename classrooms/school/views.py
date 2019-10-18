@@ -288,6 +288,7 @@ def remove_non_active_students(request, school_id=None):
 	for student in school.students.all():
 		if not student.situation_sponte == 'Ativo':
 			school.students.remove(student)
+	return JsonResponse({'success' : 'OK'}, status=HTTP_200_OK)
 
 def save_students_to_school(request, school_id=None):
 	is_superuser = request.user.is_superuser;
