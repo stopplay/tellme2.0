@@ -286,7 +286,7 @@ def get_school_students(sponte_client_number, token, school_name):
 def remove_non_active_students(request, school_id=None):
 	school = School.objects.get(school_id=school_id)
 	for student in school.students.all():
-		if not student.situation_sponte == 'Ativo':
+		if student.situation_sponte == 'Inativo':
 			school.students.remove(student)
 	return JsonResponse({'success' : 'OK'}, status=HTTP_200_OK)
 
