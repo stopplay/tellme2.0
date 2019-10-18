@@ -263,6 +263,9 @@ def create_student_with_extracted_data(aluno, school_name):
 		if mindata.tag == '{http://api.sponteeducacional.net.br/}CursoInteresse':
 			course_of_interest_sponte = mindata.text
 	if username:
+		if User.objects.filter(username=username, first_name=name.split(' ')[0], last_name=name.split(' ')[-1], email=email).count()>=1:
+			if Student.objects.filter(student_id_sponte=student_id_sponte, name=name, cpf_sponte=cpf_sponte, midia_sponte=midia_sponte, bithday_sponte=bithday_sponte, cep_sponte=cep_sponte, address_sponte=address_sponte, address_number_sponte=address_number_sponte, register_date_sponte=register_date_sponte, RA_sponte=RA_sponte, note_sponte=note_sponte, telephone_sponte=telephone_sponte, cell_phone_sponte=cell_phone_sponte, current_class_id=current_class_id, financial_responsible_id_sponte=financial_responsible_id_sponte, didatic_responsible_id_sponte=didatic_responsible_id_sponte, registration_number_sponte=registration_number_sponte, gender_sponte=gender_sponte, situation_sponte=situation_sponte, city_sponte=city_sponte, neighborhood_sponte=neighborhood_sponte, hometown_sponte=hometown_sponte, overdue_sponte=overdue_sponte, origin_sponte=origin_sponte, original_name_sponte=original_name_sponte, course_of_interest_sponte=course_of_interest_sponte, profile=User.objects.get(username=username, first_name=name.split(' ')[0], last_name=name.split(' ')[-1], email=email)).count()>=1:
+				return Student.objects.get(student_id_sponte=student_id_sponte, name=name, cpf_sponte=cpf_sponte, midia_sponte=midia_sponte, bithday_sponte=bithday_sponte, cep_sponte=cep_sponte, address_sponte=address_sponte, address_number_sponte=address_number_sponte, register_date_sponte=register_date_sponte, RA_sponte=RA_sponte, note_sponte=note_sponte, telephone_sponte=telephone_sponte, cell_phone_sponte=cell_phone_sponte, current_class_id=current_class_id, financial_responsible_id_sponte=financial_responsible_id_sponte, didatic_responsible_id_sponte=didatic_responsible_id_sponte, registration_number_sponte=registration_number_sponte, gender_sponte=gender_sponte, situation_sponte=situation_sponte, city_sponte=city_sponte, neighborhood_sponte=neighborhood_sponte, hometown_sponte=hometown_sponte, overdue_sponte=overdue_sponte, origin_sponte=origin_sponte, original_name_sponte=original_name_sponte, course_of_interest_sponte=course_of_interest_sponte, profile=User.objects.get(username=username, first_name=name.split(' ')[0], last_name=name.split(' ')[-1], email=email))
 		username = school_name + '-' + username
 		if User.objects.filter(username=username).count()<1:
 			return Student.objects.create(student_id_sponte=student_id_sponte, name=name, cpf_sponte=cpf_sponte, midia_sponte=midia_sponte, bithday_sponte=bithday_sponte, cep_sponte=cep_sponte, address_sponte=address_sponte, address_number_sponte=address_number_sponte, register_date_sponte=register_date_sponte, RA_sponte=RA_sponte, note_sponte=note_sponte, telephone_sponte=telephone_sponte, cell_phone_sponte=cell_phone_sponte, current_class_id=current_class_id, financial_responsible_id_sponte=financial_responsible_id_sponte, didatic_responsible_id_sponte=didatic_responsible_id_sponte, registration_number_sponte=registration_number_sponte, gender_sponte=gender_sponte, situation_sponte=situation_sponte, city_sponte=city_sponte, neighborhood_sponte=neighborhood_sponte, hometown_sponte=hometown_sponte, overdue_sponte=overdue_sponte, origin_sponte=origin_sponte, original_name_sponte=original_name_sponte, course_of_interest_sponte=course_of_interest_sponte, profile=User.objects.create_user(username=username, first_name=name.split(' ')[0], last_name=name.split(' ')[-1], password=password, email=email))
@@ -280,14 +283,22 @@ def get_school_students(sponte_client_number, token, school_name):
 			students += [(student)]
 	return students
 
+def remove_non_active_students(request, school_id=None):
+	school = School.objects.get(school_id=school_id)
+	for student in school.students.all():
+		if not student.situation_sponte == 'Ativo':
+			school.students.remove(student)
+
 def save_students_to_school(request, school_id=None):
 	is_superuser = request.user.is_superuser;
 	head_or_supervisor = Head.objects.filter(profile=request.user).count() >= 1 or Supervisor.objects.filter(profile=request.user).count() >= 1
+	remove_non_active_students(request, school_id)
 	school = School.objects.get(school_id=school_id)
 	students = get_school_students(school.sponte_client_number, school.sponte_token, school.school_name)
 	if is_superuser or head_or_supervisor:
 		for student in students:
-			school.students.add(student)
+			if student not in school.students.all():
+				school.students.add(student)
 		school.save()
 		return True
 	return False
@@ -356,6 +367,9 @@ def create_parent_with_extracted_data(parent, school_name):
 		if mindata.tag == '{http://api.sponteeducacional.net.br/}TipoPessoa':
 			kind_of_person = mindata.text
 	if username:
+		if User.objects.filter(username=username, first_name=name.split(' ')[0], last_name=name.split(' ')[-1], email=email).count()>=1:
+			if Parent.objects.filter(responsible_id_sponte=responsible_id_sponte, name=name, cpf_or_cnpj_sponte=cpf_or_cnpj_sponte, bithday_sponte=bithday_sponte, cep_sponte=cep_sponte, address_sponte=address_sponte, address_number_sponte=address_number_sponte, note_sponte=note_sponte, telephone_sponte=telephone_sponte, cell_phone_sponte=cell_phone_sponte, gender_sponte=gender_sponte,  city_sponte=city_sponte, neighborhood_sponte=neighborhood_sponte, kind_of_person=kind_of_person, profile=User.objects.get(username=username, first_name=name.split(' ')[0], last_name=name.split(' ')[-1], email=email)).count()>=1:
+				return Parent.objects.get(responsible_id_sponte=responsible_id_sponte, name=name, cpf_or_cnpj_sponte=cpf_or_cnpj_sponte, bithday_sponte=bithday_sponte, cep_sponte=cep_sponte, address_sponte=address_sponte, address_number_sponte=address_number_sponte, note_sponte=note_sponte, telephone_sponte=telephone_sponte, cell_phone_sponte=cell_phone_sponte, gender_sponte=gender_sponte,  city_sponte=city_sponte, neighborhood_sponte=neighborhood_sponte, kind_of_person=kind_of_person, profile=User.objects.get(username=username, first_name=name.split(' ')[0], last_name=name.split(' ')[-1], email=email))
 		username = school_name + '-' + username
 		if User.objects.filter(username=username).count()<1:
 			return Parent.objects.create(responsible_id_sponte=responsible_id_sponte, name=name, cpf_or_cnpj_sponte=cpf_or_cnpj_sponte, bithday_sponte=bithday_sponte, cep_sponte=cep_sponte, address_sponte=address_sponte, address_number_sponte=address_number_sponte, note_sponte=note_sponte, telephone_sponte=telephone_sponte, cell_phone_sponte=cell_phone_sponte, gender_sponte=gender_sponte,  city_sponte=city_sponte, neighborhood_sponte=neighborhood_sponte, kind_of_person=kind_of_person, profile=User.objects.create_user(username=username, first_name=name.split(' ')[0], last_name=name.split(' ')[-1], password=password, email=email))
