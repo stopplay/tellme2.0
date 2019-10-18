@@ -285,9 +285,10 @@ def get_school_students(sponte_client_number, token, school_name):
 
 def remove_non_active_students(request, school_id=None):
 	school = School.objects.get(school_id=school_id)
-	for student in school.students.all():
-		if not student.situation_sponte == 'Ativo':
-			school.students.remove(student)
+	# for student in school.students.all():
+	# 	if not student.situation_sponte == 'Ativo':
+	# 		school.students.remove(student)
+	school.students.clear()
 
 def save_students_to_school(request, school_id=None):
 	is_superuser = request.user.is_superuser;
