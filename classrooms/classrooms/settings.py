@@ -97,8 +97,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'dbmaster',
         'USER': 'dbmasteruser',
-        'PASSWORD': 'U!Z!R31#5.7kkI~A=M,BH19CsCF-(b~L',
-        'HOST': 'ls-0f131d099449349c28115e1cfd41639356d57bee.cztxoubiiizv.us-east-1.rds.amazonaws.com',
+        'PASSWORD': '`DsO=)P!+9e[&i`=a?W9(&36`|tKJ8k?',
+        'HOST': 'ls-dd6fedb602e2f839b3beb6c05c7a0f619ae20106.cztxoubiiizv.us-east-1.rds.amazonaws.com',
         'PORT': '5432',
     }
 
