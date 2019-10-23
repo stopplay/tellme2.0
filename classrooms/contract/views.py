@@ -1690,7 +1690,7 @@ def set_signed_rest(request, contract_id = None):
     return get_data(request, contract_rest, 'Assinado com sucesso!' , 'success')
 
 def delete_contract(request, contract_id = None):
-    if Contract.objects.filter(contract_id=contract_id).count>=1:
+    if Contract.objects.filter(contract_id=contract_id).count()>=1:
         contract_to_delete = Contract.objects.get(contract_id=contract_id)
         contract_to_delete.delete()
         messages.success(request, 'Contrato {} foi deletado com sucesso!'.format(contract_id))
