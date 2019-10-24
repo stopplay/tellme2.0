@@ -32,6 +32,7 @@
 											<option id="" value="" selected></option>
 											<option value="director">Diretor</option>
 											<option value="supervisor">Supervisor</option>
+											<option value="witness">Testemunha</option>
 											<option value="parent">Responsáveis</option>
 											<option value="student">Estudante</option>
 										</select>
@@ -102,6 +103,8 @@
 				                          		<a href="{% url 'users:reset_password_send_email' user.head_id 'head' %}" data-baloon="Remove this item from the cart" class="btn btn-primary w-100">Resetar Senha</a>
 				                          	{% elif type_of_user == 'supervisor' %}
 				                          		<a href="{% url 'users:reset_password_send_email' user.supervisor_id 'supervisor' %}" data-baloon="Remove this item from the cart" class="btn btn-primary w-100">Resetar Senha</a>
+				                          	{% elif type_of_user == 'witness' %}
+				                          		<a href="{% url 'users:reset_password_send_email' user.witness_id 'witness' %}" data-baloon="Remove this item from the cart" class="btn btn-primary w-100">Resetar Senha</a>
 				                          	{% elif type_of_user == 'parent' %}
 				                          		<a href="{% url 'users:reset_password_send_email' user.parent_id 'parent' %}" data-baloon="Remove this item from the cart" class="btn btn-primary w-100">Resetar Senha</a>
 				                          	{% elif type_of_user == 'student' %}
@@ -117,6 +120,8 @@
 				                          		<a href="{% url 'users:delete_user' user.head_id 'head' %}" data-baloon="Remove this item from the cart" class="btn btn-danger btn-block">Deletar Diretor </a>
 				                          	{% elif type_of_user == 'supervisor' %}
 				                          		<a href="{% url 'users:delete_user' user.supervisor_id 'supervisor' %}" data-baloon="Remove this item from the cart" class="btn btn-danger btn-block">Deletar Supervisor</a>
+				                          	{% elif type_of_user == 'witness' %}
+				                          		<a href="{% url 'users:delete_user' user.witness_id 'witness' %}" data-baloon="Remove this item from the cart" class="btn btn-danger btn-block">Deletar Supervisor</a>
 				                          	{% elif type_of_user == 'parent' %}
 				                          		<a href="{% url 'users:delete_user' user.parent_id 'parent' %}" data-baloon="Remove this item from the cart" class="btn btn-danger btn-block">Deletar Responsável</a>
 				                          	{% elif type_of_user == 'student' %}

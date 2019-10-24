@@ -1241,6 +1241,14 @@ def seeusersbyquery(request):
                     supervisor = Supervisor.objects.get(supervisor_id=user[0])
                     if supervisor not in school_users:
                         school_users += [(supervisor)]
+            elif type_of_user == 'witness':
+                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_witness AS school_user WHERE school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%'".format(name, name.lower(), name.upper(), name.capitalize(), name.title())
+                cursor.execute(postgreSQL_select_Query)
+                all_users = cursor.fetchall()
+                for user in all_users:
+                    witness = Witness.objects.get(witness_id=user[0])
+                    if witness not in school_users:
+                        school_users += [(witness)]
             elif type_of_user == 'parent':
                 postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_parent AS school_user WHERE school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%'".format(name, name.lower(), name.upper(), name.capitalize(), name.title())
                 cursor.execute(postgreSQL_select_Query)
@@ -1290,6 +1298,17 @@ def seeusersbyquery(request):
                     for school in schools:
                         if school.adminorsupervisor == supervisor and supervisor not in school_users:
                             school_users += [(supervisor)]
+            elif type_of_user == 'witness':
+                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_witness AS school_user WHERE school_user.name LIKE '%{}%'".format(name)
+                cursor.execute(postgreSQL_select_Query)
+                all_users = cursor.fetchall()
+                for user in all_users:
+                    witness = Witness.objects.get(witness_id=user[0])
+                    for school in schools:
+                        if school.first_witness == witness and witness not in school_users:
+                            school_users += [(witness)]
+                        if school.second_witness == witness and witness not in school_users:
+                            school_users += [(witness)]
             elif type_of_user == 'parent':
                 postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_parent AS school_user WHERE school_user.name LIKE '%{}%'".format(name)
                 cursor.execute(postgreSQL_select_Query)
@@ -1412,6 +1431,8 @@ def delete_user(request, user_id=None, type_of_user=None):
             user_to_delete = get_object_or_404(Admin, admin_id=user_id)
         if(type_of_user=='supervisor'):
             user_to_delete = get_object_or_404(Supervisor, supervisor_id=user_id)
+        if(type_of_user=='witness'):
+            user_to_delete = get_object_or_404(Witness, witness_id=user_id)
         if(type_of_user=='parent'):
             user_to_delete = get_object_or_404(Parent, parent_id=user_id)
         if(type_of_user=='student'):
@@ -1447,6 +1468,8 @@ def reset_password_send_email(request, user_id=None, type_of_user=None):
             user_to_reset_password = get_object_or_404(Admin, admin_id=user_id)
         if(type_of_user=='supervisor'):
             user_to_reset_password = get_object_or_404(Supervisor, supervisor_id=user_id)
+        if(type_of_user=='witness'):
+            user_to_reset_password = get_object_or_404(Witness, witness_id=user_id)            
         if(type_of_user=='parent'):
             user_to_reset_password = get_object_or_404(Parent, parent_id=user_id)
         if(type_of_user=='student'):
