@@ -319,7 +319,7 @@
                 <div class="form-group col-md-8 px-4">
                   <label>CONTRATO</label>
                   {% if contract.pdf %}
-                  <div><a href="{% url 'contracts:serve_protected' contract.pdf.name contract.contract_id %}">{{contract.pdf}}</a></div>
+                  <div><a href="{% url 'contracts:serve_protected' contract.pdf.name contract.contract_id 'contract' %}">{{contract.pdf}}</a></div>
                   {% else %}
                   <input type="text" class="form-control" disabled="" placeholder="" value="Sem Contrato">
                   {% endif %}
@@ -330,19 +330,19 @@
                 <div class="form-group col-md-12 px-4">
                   <label>PRIMEIRO TERMO DO CONTRATO</label>
                   {% if contract.terms_of_contract %}
-                  <div><a href="{{contract.terms_of_contract.url}}">{{contract.terms_of_contract}}</a></div>
+                  <div><a href="{% url 'contracts:serve_protected' contract.terms_of_contract.name contract.contract_id 'terms_1' %}">{{contract.terms_of_contract}}</a></div>
                   {% else %}
                   <input type="text" class="form-control" disabled="" placeholder="" value="Sem Primeiro Termo do Contrato">
                   {% endif %}
                 </div>
               </div>
               {% endif %}
-              {% if contract.terms_of_contract %}
+              {% if contract.terms_of_contract_2 %}
               <div class="row">
                 <div class="form-group col-md-12 px-4">
                   <label>SEGUNDO TERMO DO CONTRATO</label>
-                  {% if contract.terms_of_contract %}
-                  <div><a href="{{contract.terms_of_contract.url}}">{{contract.terms_of_contract}}</a></div>
+                  {% if contract.terms_of_contract_2 %}
+                  <div><a href="{% url 'contracts:serve_protected' contract.terms_of_contract_2.name contract.contract_id 'terms_2' %}">{{contract.terms_of_contract_2}}</a></div>
                   {% else %}
                   <input type="text" class="form-control" disabled="" placeholder="" value="Sem Segundo Termo do Contrato">
                   {% endif %}
