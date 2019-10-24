@@ -1712,40 +1712,75 @@ def seefinancialdetails(request, contract_id = None):
         return HttpResponse('Não é possível ver agora! Quando o contrato for assinado por todos você poderá ver os detalhes financeiros!')
 
 @login_required
-def protected_serve(request, path, contract_id=None, document_root=None):
+def protected_serve(request, path, contract_id=None, document_root=None, type_of_document=None):
     try:
         if Parent.objects.filter(profile=request.user).count()>=1:
             obj = Contract.objects.get(contract_id=contract_id)
             if Parent.objects.get(profile=request.user) == obj.first_auth_signe or Parent.objects.get(profile=request.user) == obj.second_auth_signe or Parent.objects.get(profile=request.user) == obj.third_auth_signe:
-                obj_pdf_url = obj.pdf.url
-                correct_pdf_url = obj_pdf_url.replace("/media/", "")
+                if type_of_document == 'contract':
+                    obj_pdf_url = obj.pdf.url
+                    correct_pdf_url = obj_pdf_url.replace("/media/", "")
+                elif type_of_document == 'terms_1':
+                    obj_pdf_url = obj.terms_of_contract.url
+                    correct_pdf_url = obj_pdf_url.replace("/media/", "")
+                elif type_of_document == 'terms_2':
+                    obj_pdf_url = obj.terms_of_contract_2.url
+                    correct_pdf_url = obj_pdf_url.replace("/media/", "")
             else:
                 return HttpResponse('Você não tem permissão para acessar esse arquivo')
         elif Head.objects.filter(profile=request.user).count()>=1:
             obj = Contract.objects.get(contract_id=contract_id)
             if Head.objects.get(profile=request.user) == obj.counter_signe:
-                obj_pdf_url = obj.pdf.url
-                correct_pdf_url = obj_pdf_url.replace("/media/", "")
+                if type_of_document == 'contract':
+                    obj_pdf_url = obj.pdf.url
+                    correct_pdf_url = obj_pdf_url.replace("/media/", "")
+                elif type_of_document == 'terms_1':
+                    obj_pdf_url = obj.terms_of_contract.url
+                    correct_pdf_url = obj_pdf_url.replace("/media/", "")
+                elif type_of_document == 'terms_2':
+                    obj_pdf_url = obj.terms_of_contract_2.url
+                    correct_pdf_url = obj_pdf_url.replace("/media/", "")
             else:
                 return HttpResponse('Você não tem permissão para acessar esse arquivo')
         elif Student.objects.filter(profile=request.user).count()>=1:
             obj = Contract.objects.get(contract_id=contract_id)
             if Student.objects.get(profile=request.user) == obj.student_auth_signe:
-                obj_pdf_url = obj.pdf.url
-                correct_pdf_url = obj_pdf_url.replace("/media/", "")
+                if type_of_document == 'contract':
+                    obj_pdf_url = obj.pdf.url
+                    correct_pdf_url = obj_pdf_url.replace("/media/", "")
+                elif type_of_document == 'terms_1':
+                    obj_pdf_url = obj.terms_of_contract.url
+                    correct_pdf_url = obj_pdf_url.replace("/media/", "")
+                elif type_of_document == 'terms_2':
+                    obj_pdf_url = obj.terms_of_contract_2.url
+                    correct_pdf_url = obj_pdf_url.replace("/media/", "")
             else:
                 return HttpResponse('Você não tem permissão para acessar esse arquivo')
         elif Witness.objects.filter(profile=request.user).count()>=1:
             obj = Contract.objects.get(contract_id=contract_id)
             if Witness.objects.get(profile=request.user) == obj.first_witness_signe or Witness.objects.get(profile=request.user) == obj.second_witness_signe:
-                obj_pdf_url = obj.pdf.url
-                correct_pdf_url = obj_pdf_url.replace("/media/", "")
+                if type_of_document == 'contract':
+                    obj_pdf_url = obj.pdf.url
+                    correct_pdf_url = obj_pdf_url.replace("/media/", "")
+                elif type_of_document == 'terms_1':
+                    obj_pdf_url = obj.terms_of_contract.url
+                    correct_pdf_url = obj_pdf_url.replace("/media/", "")
+                elif type_of_document == 'terms_2':
+                    obj_pdf_url = obj.terms_of_contract_2.url
+                    correct_pdf_url = obj_pdf_url.replace("/media/", "")
             else:
                 return HttpResponse('Você não tem permissão para acessar esse arquivo')
         elif request.user.is_superuser or Supervisor.objects.filter(profile=request.user).count()>=1:
             obj = Contract.objects.get(contract_id=contract_id)
-            obj_pdf_url = obj.pdf.url
-            correct_pdf_url = obj_pdf_url.replace("/media/", "")
+            if type_of_document == 'contract':
+                obj_pdf_url = obj.pdf.url
+                correct_pdf_url = obj_pdf_url.replace("/media/", "")
+            elif type_of_document == 'terms_1':
+                obj_pdf_url = obj.terms_of_contract.url
+                correct_pdf_url = obj_pdf_url.replace("/media/", "")
+            elif type_of_document == 'terms_2':
+                obj_pdf_url = obj.terms_of_contract_2.url
+                correct_pdf_url = obj_pdf_url.replace("/media/", "")
         if correct_pdf_url == path:
             return serve(request, path, document_root)
     except ObjectDoesNotExist:
