@@ -330,7 +330,7 @@ def create_user(request):
                                     'domain': current_site.domain,
                                     'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
                                     'token':account_activation_token.make_token(user),
-                                    'type_of_user':'supervisor',
+                                    'type_of_user':'aluno',
                                 })
                                 to_email = form.cleaned_data.get('email')
                                 email = EmailMessage(
@@ -641,7 +641,7 @@ def create_user(request):
                                     'domain': current_site.domain,
                                     'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
                                     'token':account_activation_token.make_token(user),
-                                    'type_of_user':'supervisor',
+                                    'type_of_user':'aluno',
                                 })
                                 to_email = form.cleaned_data.get('email')
                                 email = EmailMessage(
@@ -680,7 +680,7 @@ def do_u_need_parents(request, student_id=None, school_id=None, class_id=None):
                 'domain': current_site.domain,
                 'uid':urlsafe_base64_encode(force_bytes(student.profile.pk)).decode(),
                 'token':account_activation_token.make_token(student.profile),
-                'type_of_user':'supervisor',
+                'type_of_user':'aluno',
             })
             to_email = student.profile.email
             email = EmailMessage(
@@ -711,7 +711,7 @@ def do_u_need_parents(request, student_id=None, school_id=None, class_id=None):
                 'domain': current_site.domain,
                 'uid':urlsafe_base64_encode(force_bytes(student.profile.pk)).decode(),
                 'token':account_activation_token.make_token(student.profile),
-                'type_of_user':'supervisor',
+                'type_of_user':'aluno',
             })
             to_email = student.profile.email
             email = EmailMessage(
@@ -757,7 +757,7 @@ def create_head_to_school(request, school_id=None):
                         'domain': current_site.domain,
                         'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
                         'token':account_activation_token.make_token(user),
-                        'type_of_user':'supervisor',
+                        'type_of_user':'diretor',
                     })
                     to_email = form.cleaned_data.get('email')
                     email = EmailMessage(
@@ -948,7 +948,7 @@ def add_first_parent(request, student_id=None):
                 'domain': current_site.domain,
                 'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
                 'token':account_activation_token.make_token(user),
-                'type_of_user':'supervisor',
+                'type_of_user':'responsável',
             })
             to_email = form.cleaned_data.get('email')
             email = EmailMessage(
@@ -991,7 +991,7 @@ def add_first_parent(request, student_id=None):
                 'domain': current_site.domain,
                 'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
                 'token':account_activation_token.make_token(user),
-                'type_of_user':'supervisor',
+                'type_of_user':'responsável',
             })
             to_email = form.cleaned_data.get('email')
             email = EmailMessage(
@@ -1036,7 +1036,7 @@ def add_second_parent(request, student_id=None):
                 'domain': current_site.domain,
                 'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
                 'token':account_activation_token.make_token(user),
-                'type_of_user':'supervisor',
+                'type_of_user':'responsável',
             })
             to_email = form.cleaned_data.get('email')
             email = EmailMessage(
@@ -1079,7 +1079,7 @@ def add_second_parent(request, student_id=None):
                 'domain': current_site.domain,
                 'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
                 'token':account_activation_token.make_token(user),
-                'type_of_user':'supervisor',
+                'type_of_user':'responsável',
             })
             to_email = form.cleaned_data.get('email')
             email = EmailMessage(
@@ -1129,7 +1129,7 @@ def add_parent(request, student_id=None, type_of_user= None):
                 'domain': current_site.domain,
                 'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
                 'token':account_activation_token.make_token(user),
-                'type_of_user':'supervisor',
+                'type_of_user':'responsável',
             })
             to_email = form.cleaned_data.get('email')
             email = EmailMessage(
