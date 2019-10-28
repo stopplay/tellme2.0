@@ -54,7 +54,7 @@
                         </div>
                         <div style="margin-left: auto; margin-right: auto;">
                           <b>Contrato do bloco:</b>
-                            <a href="{% url 'contracts:serve_protected' block.contract.pdf.name block.contract.contract_id %}" data-baloon="Remove this item from the cart">
+                            <a href="{% url 'contracts:serve_protected' block.contract.pdf.name block.contract.contract_id 'contract' %}" data-baloon="Remove this item from the cart">
                                   <!-- {{ contract.pdf }} -->
                                   Link
                                 </a>
@@ -62,7 +62,7 @@
                         {% if block.contract.terms_of_contract %}
                         <div style="margin-left: auto; margin-right: auto;">
                           <b>Termos aditivos do contrato (1) do bloco:</b>
-                            <a href="{{ contract.terms_of_contract.url }}" data-baloon="Remove this item from the cart">
+                            <a href="{% url 'contracts:serve_protected' block.contract.terms_of_contract.name block.contract.contract_id 'terms_1' %}" data-baloon="Remove this item from the cart">
                                   <!-- {{ contract.pdf }} -->
                                   Link
                                 </a>
@@ -71,7 +71,7 @@
                         {% if block.contract.terms_of_contract_2 %}
                         <div style="margin-left: auto; margin-right: auto;">
                           <b>Termos aditivos do contrato (2) do bloco:</b>
-                            <a href="{{ contract.terms_of_contract_2.url }}" data-baloon="Remove this item from the cart">
+                            <a href="{% url 'contracts:serve_protected' block.contract.terms_of_contract_2.name block.contract.contract_id 'terms_2' %}" data-baloon="Remove this item from the cart">
                                   <!-- {{ contract.pdf }} -->
                                   Link
                                 </a>
