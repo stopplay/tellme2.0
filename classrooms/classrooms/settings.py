@@ -105,11 +105,11 @@ DATABASES = {
     # local config:
     # 'default': {
     #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': 'postgres',
+    #     'NAME': 'tellme_test',
     #     'USER': 'postgres',
-    #     'PASSWORD' : 'example',
-    #     'HOST': '10.0.0.11',
-    #     'PORT': '5432',
+    #     'PASSWORD' : 'postgres',
+    #     'HOST': 'localhost',
+    #     'PORT': '5433',
     # }
 }
 
