@@ -1262,9 +1262,10 @@ def seeusersbyquery(request):
                 cursor.execute(postgreSQL_select_Query)
                 all_users = cursor.fetchall()
                 for user in all_users:
-                    student = Student.objects.get(student_id=user[0])
-                    if student not in school_users:
-                        school_users += [(student)]
+                    if Student.objects.filter(student_id=user[0]):
+                        student = Student.objects.get(student_id=user[0])
+                        if student not in school_users:
+                            school_users += [(student)]
         return render(request, 'school_users/seeusersbyquery.html', {'type_of_user':type_of_user, 'school_users':school_users})
     elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
         is_supervisor = True
