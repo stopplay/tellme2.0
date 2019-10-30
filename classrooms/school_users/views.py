@@ -1454,9 +1454,9 @@ def delete_user(request, user_id=None, type_of_user=None):
             user_to_delete.profile.delete()
         user_to_delete.delete()
         messages.success(request, 'Esse usuário foi deletado com sucesso')
-        return redirect('/users/all')
+        return redirect(request.META.get('HTTP_REFERER'))
     messages.error(request, 'Você não é administrador portanto não pode deletar usuários')
-    return redired('/users/all')
+    return redirect(request.META.get('HTTP_REFERER'))
 
 @login_required
 def reset_password_send_email(request, user_id=None, type_of_user=None):
