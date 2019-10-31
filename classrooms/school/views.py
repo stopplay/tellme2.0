@@ -514,7 +514,7 @@ def delete_school(request, school_id=None):
 							if student.first_parent.profile:
 								student.first_parent.profile.delete()
 							student.first_parent.delete()
-						if student.first_parent:
+						if student.second_parent:
 							if student.second_parent.profile:
 								student.second_parent.profile.delete()
 							student.second_parent.delete()
@@ -528,7 +528,7 @@ def delete_school(request, school_id=None):
 						if student.first_parent.profile:
 							student.first_parent.profile.delete()
 						student.first_parent.delete()
-					if student.first_parent:
+					if student.second_parent:
 						if student.second_parent.profile:
 							student.second_parent.profile.delete()
 						student.second_parent.delete()
