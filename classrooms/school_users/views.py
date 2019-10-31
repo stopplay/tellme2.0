@@ -169,15 +169,15 @@ def create_user(request):
                                     if column[4]==column[5]:
                                         if column[6]:
                                             if column[8] and column[9]:
-                                                _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=school_to_add+'-'+column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[8]), second_parent=Parent.objects.get(tell_me_user_id=column[9]), tell_me_user_id=column[6])
+                                                _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=school_to_add.school_name+'-student-'+column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[8]), second_parent=Parent.objects.get(tell_me_user_id=column[9]), tell_me_user_id=column[6])
                                             else:
-                                                _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=school_to_add+'-'+column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+                                                _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=school_to_add.school_name+'-student-'+column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
                                             if school_to_add:
                                                 school_to_add.students.add(_)
                                             if class_to_add:
                                                 class_to_add.students.add(_)
                                         elif column[7]:
-                                             _, created = Parent.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=school_to_add+'-'+column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[7])
+                                             _, created = Parent.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=school_to_add.school_name+'-parent-'+column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[7])
 
                         elif ';' in data_set:
                             for column in csv.reader(io_string, delimiter=';', quotechar='|'):
@@ -185,15 +185,15 @@ def create_user(request):
                                     if column[4]==column[5]:
                                         if column[6]:
                                             if column[8] and column[9]:
-                                                _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=school_to_add+'-'+column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[8]), second_parent=Parent.objects.get(tell_me_user_id=column[9]), tell_me_user_id=column[6])
+                                                _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=school_to_add.school_name+'-student-'+column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[8]), second_parent=Parent.objects.get(tell_me_user_id=column[9]), tell_me_user_id=column[6])
                                             else:
-                                                _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=school_to_add+'-'+column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+                                                _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=school_to_add.school_name+'-student-'+column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
                                             if school_to_add:
                                                 school_to_add.students.add(_)
                                             if class_to_add:
                                                 class_to_add.students.add(_)
                                         elif column[7]:
-                                             _, created = Parent.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=school_to_add+'-'+column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[7])
+                                             _, created = Parent.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=school_to_add.school_name+'-parent-'+column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[7])
                     messages.success(request, 'Usuários criados com sucesso!')
                     return redirect('/users/create_user')
                 else:
@@ -478,15 +478,15 @@ def create_user(request):
                                     if column[4]==column[5]:
                                         if column[6]:
                                             if column[8] and column[9]:
-                                                _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=school_to_add+'-'+column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[8]), second_parent=Parent.objects.get(tell_me_user_id=column[9]), tell_me_user_id=column[6])
+                                                _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=school_to_add.school_name+'-student-'+column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[8]), second_parent=Parent.objects.get(tell_me_user_id=column[9]), tell_me_user_id=column[6])
                                             else:
-                                                _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=school_to_add+'-'+column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
+                                                _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=school_to_add.school_name+'-student-'+column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
                                             if school_to_add:
                                                 school_to_add.students.add(_)
                                             if class_to_add:
                                                 class_to_add.students.add(_)
                                         elif column[7]:
-                                             _, created = Parent.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=school_to_add+'-'+column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[7])
+                                             _, created = Parent.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=school_to_add.school_name+'-parent-'+column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[7])
 
                         elif ';' in data_set:
                             for column in csv.reader(io_string, delimiter=';', quotechar='|'):
