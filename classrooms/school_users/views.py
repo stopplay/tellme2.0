@@ -1460,7 +1460,7 @@ def delete_user(request, user_id=None, type_of_user=None):
 
 @login_required
 def reset_password_send_email(request, user_id=None, type_of_user=None):
-    if request.user.is_superuser:
+    if request.user.is_superuser or Head.objects.filter(profile=request.user).count()>=1:
         if(type_of_user=='head'):
             user_to_reset_password = get_object_or_404(Head, head_id=user_id)
         if(type_of_user=='teacher'):
