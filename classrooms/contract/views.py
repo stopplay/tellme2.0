@@ -908,8 +908,9 @@ def seemycontracts(request):
     elif Head.objects.filter(profile=request.user).count()>=1:
         is_supervisor = True
         schools = School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id)
-        for chain in school.chains.all():
-            contracts += Contract.objects.filter(chain__id__exact=chain.id)
+        for school in schools:
+            for chain in school.chains.all():
+                contracts += Contract.objects.filter(chain__id__exact=chain.id)
     elif Supervisor.objects.filter(profile=request.user).count()>=1:
         is_supervisor = True
         contracts_ids = []
