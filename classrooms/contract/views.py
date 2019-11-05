@@ -58,6 +58,7 @@ from classrooms.pagination import *
 from classrooms.ordering import *
 import json
 import urllib
+import psycopg2
 
 try:
     from StringIO import StringIO
@@ -748,6 +749,45 @@ def select_director_to_contract(request, contract_id=None):
             return redirect('/contracts/all')
         return render(request, 'contract/select_director_to_contract.html', {'directors':directors})
 
+@login_required
+def seecontractsbyquery(request):
+    selected_chain = None
+    contracts = []
+    chains_to_select = []
+    is_supervisor = False
+    if Parent.objects.filter(profile=request.user).count()>=1 or Student.objects.filter(profile=request.user).count()>=1 or Witness.objects.filter(profile=request.user).count()>=1:
+        return seemycontracts(request)
+    elif Head.objects.filter(profile=request.user).count()>=1:
+        is_supervisor = True
+        schools = School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id)
+        for school in schools:
+            for chain in school.chains.all():
+                if chain not in chains_to_select:
+                    chains_to_select += [(chain)]
+    elif Supervisor.objects.filter(profile=request.user).count()>=1:
+        is_supervisor = True
+        schools = School.objects.filter(adminorsupervisor=Supervisor.objects.get(profile=request.user))
+        for school in schools:
+            for chain in school.chains.all():
+                if chain not in chains_to_select:
+                    chains_to_select += [(chain)]
+    elif request.user.is_superuser:
+        schools = School.objects.all()
+        chains_to_select = Chain.objects.all()
+    if request.method == 'POST':
+        selected_chain = request.POST.get('selected_chain' or None)
+        search = request.POST.get('search' or None)
+        connection = psycopg2.connect(user="dbmasteruser", password="`DsO=)P!+9e[&i`=a?W9(&36`|tKJ8k?", host="ls-dd6fedb602e2f839b3beb6c05c7a0f619ae20106.cztxoubiiizv.us-east-1.rds.amazonaws.com", port="5432", database="dbmaster")
+        postgreSQL_select_Query = "SELECT DISTINCT contract.contract_id FROM contract_contract AS contract WHERE (contract.name LIKE '%{}%' OR contract.name LIKE '%{}%' OR contract.name LIKE '%{}%' OR contract.name LIKE '%{}%' OR contract.name LIKE '%{}%') AND contract.chain_id = {}".format(search, search.lower(), search.upper(), search.capitalize(), search.title(), selected_chain)
+        cursor = connection.cursor()
+        cursor.execute(postgreSQL_select_Query)
+        all_users = cursor.fetchall()
+        for user in all_users:
+            contract = Contract.objects.get(contract_id=user[0])
+            if contract not in contracts:
+                contracts += [(contract)]
+    return render(request, 'contract/seecontractsbyquery.html', {'selected_chain':selected_chain, 'chains_to_select':chains_to_select, 'contracts':contracts, 'schools':schools, 'is_supervisor':is_supervisor, 'selected_chain':selected_chain})
+
 @csrf_exempt
 def createacontract_rest(request):
     is_superuser = current_user(request).data.get("is_superuser")
@@ -984,9 +1024,10 @@ def seemycontracts_rest(request):
     is_supervisor = False
     schools = []
     if Parent.objects.filter(profile=request.user).count()>=1:
-        is_client = True
+        is_parent = True
         contracts += Contract.objects.filter(first_auth_signe=Parent.objects.get(profile=request.user))
         contracts += Contract.objects.filter(second_auth_signe=Parent.objects.get(profile=request.user))
+        contracts += Contract.objects.filter(third_auth_signe=Parent.objects.get(profile=request.user))
         for contract in contracts:
             if School.objects.filter(chains__id__exact=contract.chain.id).count()>=1:
                 if School.objects.get(chains__id__exact=contract.chain.id) not in schools:
