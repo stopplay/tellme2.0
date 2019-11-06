@@ -12,6 +12,7 @@ class School(models.Model):
 	chains = models.ManyToManyField(Chain)
 	heads = models.ManyToManyField(Head,verbose_name = 'Diretores')
 	adminorsupervisor = models.ForeignKey(Supervisor, on_delete=models.SET_NULL, verbose_name = 'Admin/Supervisor', null=True, blank=True)
+	adminorsupervisor_2 = models.ForeignKey(Supervisor, on_delete=models.SET_NULL, verbose_name = 'Admin/Supervisor_2', null=True, blank=True, related_name='adminorsupervisor_2')
 	sponte_client_number = models.IntegerField(null=True, blank=True, verbose_name = 'SPONTE ID')
 	sponte_token = models.TextField(null=True, blank=True, verbose_name = 'SPONTE Token')
 	tell_me_school_id = models.IntegerField(null=True, blank=True, verbose_name = 'TellMe ID')

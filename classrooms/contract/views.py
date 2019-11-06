@@ -59,6 +59,7 @@ from classrooms.ordering import *
 import json
 import urllib
 import psycopg2
+from django.db.models import Q
 
 try:
     from StringIO import StringIO
@@ -497,7 +498,7 @@ def createacontract(request):
                     if student in classe.students.all():
                         chains += [(classe.class_id)]
         elif Supervisor.objects.filter(profile=request.user).count()>=1:
-            for school in School.objects.filter(adminorsupervisor=Supervisor.objects.get(profile=request.user)):
+            for school in School.objects.filter(Q(adminorsupervisor=Supervisor.objects.get(profile=request.user))|Q(adminorsupervisor_2=Supervisor.objects.get(profile=request.user))):
                 for classe in school.classes.all():
                     if student in classe.students.all():
                         chains += [(classe.class_id)]
@@ -767,7 +768,7 @@ def seecontractsbyquery(request):
                     chains_to_select += [(chain)]
     elif Supervisor.objects.filter(profile=request.user).count()>=1:
         is_supervisor = True
-        schools = School.objects.filter(adminorsupervisor=Supervisor.objects.get(profile=request.user))
+        schools = School.objects.filter(Q(adminorsupervisor=Supervisor.objects.get(profile=request.user))|Q(adminorsupervisor_2=Supervisor.objects.get(profile=request.user)))
         for school in schools:
             for chain in school.chains.all():
                 if chain not in chains_to_select:
@@ -914,7 +915,7 @@ def seemycontracts(request):
     elif Supervisor.objects.filter(profile=request.user).count()>=1:
         is_supervisor = True
         contracts_ids = []
-        schools = School.objects.filter(adminorsupervisor=Supervisor.objects.get(profile=request.user))
+        schools = School.objects.filter(Q(adminorsupervisor=Supervisor.objects.get(profile=request.user))|Q(adminorsupervisor_2=Supervisor.objects.get(profile=request.user)))
         for school in schools:
             for chain in school.chains.all():
                 contracts = Contract.objects.filter(chain__id__exact=chain.id)
@@ -974,7 +975,7 @@ def select_student_to_contract(request):
                 for student in school.students.all():
                     students_ids += [(student.student_id)]
         elif Supervisor.objects.filter(profile=request.user).count()>=1:
-            for school in School.objects.filter(adminorsupervisor=Supervisor.objects.get(profile=request.user)):
+            for school in School.objects.filter(Q(adminorsupervisor=Supervisor.objects.get(profile=request.user))|Q(adminorsupervisor_2=Supervisor.objects.get(profile=request.user))):
                 for student in school.students.all():
                     students_ids += [(student.student_id)]
         students = Student.objects.filter(student_id__in=students_ids)

@@ -1591,7 +1591,7 @@ def set_parents(request, student_id=None):
         if Head.objects.filter(profile=request.user).count()>=1:
             schools = School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id)
         if Supervisor.objects.filter(profile=request.user).count()>=1:
-            schools = School.objects.filter(adminorsupervisor=Supervisor.objects.get(profile=request.user))
+            schools = School.objects.filter(Q(adminorsupervisor=Supervisor.objects.get(profile=request.user))|Q(adminorsupervisor_2=Supervisor.objects.get(profile=request.user)))
         for school in schools:
             for student in school.students.all():
                 if student.first_parent:

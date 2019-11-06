@@ -44,6 +44,7 @@ from django.contrib.auth.models import User
 from django.db import transaction
 from classrooms.pagination import *
 from classrooms.ordering import *
+from django.db.models import Q
 
 # Create your views here.
 class SchoolsViewSet(viewsets.ModelViewSet):
@@ -101,7 +102,7 @@ def seeallschools(request):
 		return render(request, 'school/seeallschools.html', {'schools':schools, 'is_supervisor':is_supervisor})
 	elif Supervisor.objects.filter(profile=request.user).count()>=1:
 		is_supervisor = True
-		schools = School.objects.filter(adminorsupervisor=Supervisor.objects.get(profile=request.user))
+		schools = School.objects.filter(Q(adminorsupervisor=Supervisor.objects.get(profile=request.user))|Q(adminorsupervisor_2=Supervisor.objects.get(profile=request.user)))
 		return render(request, 'school/seeallschools.html', {'schools':schools, 'is_supervisor':is_supervisor})
 	return redirect('/contracts/all')
 
