@@ -775,10 +775,9 @@ def seecontractsbyquery(request):
         schools = School.objects.all()
         chains_to_select = Chain.objects.all()
     if request.method == 'POST':
-        selected_chain = request.POST.get('selected_chain' or None)
         search = request.POST.get('search' or None)
         connection = psycopg2.connect(user="dbmasteruser", password="`DsO=)P!+9e[&i`=a?W9(&36`|tKJ8k?", host="ls-dd6fedb602e2f839b3beb6c05c7a0f619ae20106.cztxoubiiizv.us-east-1.rds.amazonaws.com", port="5432", database="dbmaster")
-        postgreSQL_select_Query = "SELECT DISTINCT contract.contract_id FROM contract_contract AS contract WHERE (contract.name LIKE '%{}%' OR contract.name LIKE '%{}%' OR contract.name LIKE '%{}%' OR contract.name LIKE '%{}%' OR contract.name LIKE '%{}%') AND contract.chain_id = {}".format(search, search.lower(), search.upper(), search.capitalize(), search.title(), selected_chain)
+        postgreSQL_select_Query = "SELECT DISTINCT contract.contract_id FROM contract_contract AS contract WHERE contract.name LIKE '%{}%' OR contract.name LIKE '%{}%' OR contract.name LIKE '%{}%' OR contract.name LIKE '%{}%' OR contract.name LIKE '%{}%'".format(search, search.lower(), search.upper(), search.capitalize(), search.title())
         cursor = connection.cursor()
         cursor.execute(postgreSQL_select_Query)
         all_users = cursor.fetchall()
