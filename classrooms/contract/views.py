@@ -755,6 +755,7 @@ def seecontractsbyquery(request):
     contracts = []
     chains_to_select = []
     is_supervisor = False
+    search = None
     if Parent.objects.filter(profile=request.user).count()>=1 or Student.objects.filter(profile=request.user).count()>=1 or Witness.objects.filter(profile=request.user).count()>=1:
         return seemycontracts(request)
     elif Head.objects.filter(profile=request.user).count()>=1:
