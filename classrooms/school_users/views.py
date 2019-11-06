@@ -1257,7 +1257,7 @@ def seeusersbyquery(request):
                 all_users = cursor.fetchall()
                 for user in all_users:
                     parent = Parent.objects.get(parent_id=user[0])
-                    if parent not in school_users and parent.school_set.all().count()>=1:
+                    if parent not in school_users:
                         school_users += [(parent)]
             elif type_of_user == 'student':
                 postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_student AS school_user WHERE school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%'".format(name, name.lower(), name.upper(), name.capitalize(), name.title())
@@ -1320,9 +1320,9 @@ def seeusersbyquery(request):
                     parent = Parent.objects.get(parent_id=user[0])
                     for school in schools:
                         for student in school.students.all():
-                            if student.first_parent == parent and parent not in school_users and parent.school_set.all().count()>=1:
+                            if student.first_parent == parent and parent not in school_users:
                                 school_users += [(parent)]
-                            if student.second_parent == parent and parent not in school_users and parent.school_set.all().count()>=1:
+                            if student.second_parent == parent and parent not in school_users:
                                 school_users += [(parent)]
             elif type_of_user == 'student':
                 postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_student AS school_user WHERE school_user.name LIKE '%{}%'".format(name)
