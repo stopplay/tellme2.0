@@ -783,7 +783,7 @@ def seecontractsbyquery(request):
         all_users = cursor.fetchall()
         for user in all_users:
             contract = Contract.objects.get(contract_id=user[0])
-            if contract not in contracts:
+            if contract not in contracts and contract.chain in chains_to_select:
                 contracts += [(contract)]
     return render(request, 'contract/seecontractsbyquery.html', {'selected_chain':selected_chain, 'chains_to_select':chains_to_select, 'contracts':contracts, 'schools':schools, 'is_supervisor':is_supervisor, 'selected_chain':selected_chain})
 
