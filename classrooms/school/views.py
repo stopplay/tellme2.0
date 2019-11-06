@@ -542,10 +542,15 @@ def delete_school(request, school_id=None):
 					head.profile.delete()
 				head.delete()
 		if school_to_delete.adminorsupervisor:
-			if School.objects.filter(adminorsupervisor=school_to_delete.adminorsupervisor).count()<2:
+			if School.objects.filter(Q(adminorsupervisor=school_to_delete.adminorsupervisor)|Q(adminorsupervisor_2=school_to_delete.adminorsupervisor)).count()<2:
 				if school_to_delete.adminorsupervisor.profile:
 					school_to_delete.adminorsupervisor.profile.delete()
 				school_to_delete.adminorsupervisor.delete()
+		if school_to_delete.adminorsupervisor_2:
+			if School.objects.filter(Q(adminorsupervisor=school_to_delete.adminorsupervisor_2)|Q(adminorsupervisor_2=school_to_delete.adminorsupervisor_2)).count()<2:
+				if school_to_delete.adminorsupervisor_2.profile:
+					school_to_delete.adminorsupervisor_2.profile.delete()
+				school_to_delete.adminorsupervisor_2.delete()
 		if school_to_delete.first_witness:
 			if School.objects.filter(first_witness=school_to_delete.first_witness).count()<2:
 				if school_to_delete.first_witness.profile:

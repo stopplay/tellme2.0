@@ -347,7 +347,7 @@ def create_user(request):
         if Head.objects.filter(profile=request.user).count()>=1:
             schools = School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id)
         if Supervisor.objects.filter(profile=request.user).count()>=1:
-            schools = School.objects.filter(adminorsupervisor=Supervisor.objects.get(profile=request.user))
+            schools = School.objects.filter(Q(adminorsupervisor=Supervisor.objects.get(profile=request.user))|Q(adminorsupervisor_2=Supervisor.objects.get(profile=request.user)))
         is_supervisor = True
         form = UserModelForm(request.POST or None)
         form2 = HeadModelForm(request.POST or None)
@@ -1197,7 +1197,7 @@ def seeallusers(request):
         if Head.objects.filter(profile=request.user).count()>=1:
             schools = School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id)
         elif Supervisor.objects.filter(profile=request.user).count()>=1:
-            schools = School.objects.filter(adminorsupervisor=Supervisor.objects.get(profile=request.user))
+            schools = School.objects.filter(Q(adminorsupervisor=Supervisor.objects.get(profile=request.user))|Q(adminorsupervisor_2=Supervisor.objects.get(profile=request.user)))
         is_supervisor = True
         for school in schools:
             for head in school.heads.all():
@@ -1255,6 +1255,8 @@ def seeusersbyquery(request):
                     supervisor = Supervisor.objects.get(supervisor_id=user[0])
                     if school:
                         if school.adminorsupervisor == supervisor and supervisor not in school_users:
+                            school_users += [(supervisor)]
+                        if school.adminorsupervisor_2 == supervisor and supervisor not in school_users:
                             school_users += [(supervisor)]
                     else:
                         if supervisor not in school_users:
@@ -1350,9 +1352,13 @@ def seeusersbyquery(request):
                     if school:
                         if school.adminorsupervisor == supervisor and supervisor not in school_users:
                             school_users += [(supervisor)]
+                        if school.adminorsupervisor_2 == supervisor and supervisor not in school_users:
+                            school_users += [(supervisor)]
                     else:
                         for school in schools:
                             if school.adminorsupervisor == supervisor and supervisor not in school_users:
+                                school_users += [(supervisor)]
+                            if school.adminorsupervisor_2 == supervisor and supervisor not in school_users:
                                 school_users += [(supervisor)]
             elif type_of_user == 'witness':
                 postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_witness AS school_user WHERE school_user.name LIKE '%{}%'".format(name)
