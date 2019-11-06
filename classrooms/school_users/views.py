@@ -1243,6 +1243,7 @@ def seeusersbyquery(request):
                         for head_user in school.heads.all():
                             if head_user == head and head not in school_users:
                                 school_users += [(head)]
+                                break
                     else:
                         if head not in school_users:
                             school_users += [(head)]
@@ -1267,8 +1268,10 @@ def seeusersbyquery(request):
                     if school:
                         if school.first_witness == witness and witness not in school_users:
                             school_users += [(witness)]
+                            break
                         if school.second_witness == witness and witness not in school_users:
                             school_users += [(witness)]
+                            break
                     else:
                         if witness not in school_users:
                             school_users += [(witness)]
@@ -1282,8 +1285,10 @@ def seeusersbyquery(request):
                         for student in school.students.all():
                             if student.first_parent == parent and parent not in school_users:
                                 school_users += [(parent)]
+                                break
                             if student.second_parent == parent and parent not in school_users:
                                 school_users += [(parent)]
+                                break
                     else:
                         if parent not in school_users:
                             school_users += [(parent)]
@@ -1298,6 +1303,7 @@ def seeusersbyquery(request):
                             for student_school in school.students.all():
                                 if student_school == student and student not in school_users and student.school_set.all().count()>=1:
                                     school_users += [(student)]
+                                    break
                         else:
                             if student not in school_users and student.school_set.all().count()>=1:
                                 school_users += [(student)]
@@ -1329,6 +1335,7 @@ def seeusersbyquery(request):
                         for head_user in school.heads.all():
                             if head_user == head and head not in school_users:
                                 school_users += [(head)]
+                                break
                     else:
                         for school in schools:
                             for head_user in school.heads.all():
@@ -1356,8 +1363,10 @@ def seeusersbyquery(request):
                     if school:
                         if school.first_witness == witness and witness not in school_users:
                             school_users += [(witness)]
+                            break
                         if school.second_witness == witness and witness not in school_users:
                             school_users += [(witness)]
+                            break
                     else:
                         for school in schools:
                             if school.first_witness == witness and witness not in school_users:
@@ -1374,8 +1383,10 @@ def seeusersbyquery(request):
                         for student in school.students.all():
                             if student.first_parent == parent and parent not in school_users:
                                 school_users += [(parent)]
+                                break
                             if student.second_parent == parent and parent not in school_users:
                                 school_users += [(parent)]
+                                break
                     else:
                         for school in schools:
                             for student in school.students.all():
@@ -1393,6 +1404,7 @@ def seeusersbyquery(request):
                         for student_school in school.students.all():
                             if student_school == student and student not in school_users and student.school_set.all().count()>=1:
                                 school_users += [(student)]
+                                break
                     else:
                         for school in schools:
                             for student_school in school.students.all():
