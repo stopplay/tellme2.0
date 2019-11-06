@@ -785,7 +785,7 @@ def seecontractsbyquery(request):
             contract = Contract.objects.get(contract_id=user[0])
             if contract not in contracts and contract.chain in chains_to_select:
                 contracts += [(contract)]
-    return render(request, 'contract/seecontractsbyquery.html', {'selected_chain':selected_chain, 'chains_to_select':chains_to_select, 'contracts':contracts, 'schools':schools, 'is_supervisor':is_supervisor, 'selected_chain':selected_chain})
+    return render(request, 'contract/seecontractsbyquery.html', {'search':search, 'chains_to_select':chains_to_select, 'contracts':contracts, 'schools':schools, 'is_supervisor':is_supervisor})
 
 @csrf_exempt
 def createacontract_rest(request):
