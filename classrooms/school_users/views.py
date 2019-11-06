@@ -1222,8 +1222,14 @@ def seeusersbyquery(request):
     if request.user.is_superuser:
         type_of_user = None
         school_users = []
+        selected_school = None
+        school = None
+        schools = School.objects.all()
         if request.method == 'POST':
             type_of_user = request.POST.get('type_of_user' or None)
+            selected_school = request.POST.get('selected_school' or None)
+            if School.objects.filter(school_id=selected_school).count()>=1:
+                school = School.objects.get(school_id=selected_school)
             connection = psycopg2.connect(user="dbmasteruser", password="`DsO=)P!+9e[&i`=a?W9(&36`|tKJ8k?", host="ls-dd6fedb602e2f839b3beb6c05c7a0f619ae20106.cztxoubiiizv.us-east-1.rds.amazonaws.com", port="5432", database="dbmaster")
             name = request.POST.get('name' or None)
             cursor = connection.cursor()
@@ -1233,32 +1239,54 @@ def seeusersbyquery(request):
                 all_users = cursor.fetchall()
                 for user in all_users:
                     head = Head.objects.get(head_id=user[0])
-                    if head not in school_users:
-                        school_users += [(head)]
+                    if school:
+                        for head_user in school.heads.all():
+                            if head_user == head and head not in school_users:
+                                school_users += [(head)]
+                    else:
+                        if head not in school_users:
+                            school_users += [(head)]
             elif type_of_user == 'supervisor':
                 postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_supervisor AS school_user WHERE school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%'".format(name, name.lower(), name.upper(), name.capitalize(), name.title())
                 cursor.execute(postgreSQL_select_Query)
                 all_users = cursor.fetchall()
                 for user in all_users:
                     supervisor = Supervisor.objects.get(supervisor_id=user[0])
-                    if supervisor not in school_users:
-                        school_users += [(supervisor)]
+                    if school:
+                        if school.adminorsupervisor == supervisor and supervisor not in school_users:
+                            school_users += [(supervisor)]
+                    else:
+                        if supervisor not in school_users:
+                            school_users += [(supervisor)]
             elif type_of_user == 'witness':
                 postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_witness AS school_user WHERE school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%'".format(name, name.lower(), name.upper(), name.capitalize(), name.title())
                 cursor.execute(postgreSQL_select_Query)
                 all_users = cursor.fetchall()
                 for user in all_users:
                     witness = Witness.objects.get(witness_id=user[0])
-                    if witness not in school_users:
-                        school_users += [(witness)]
+                    if school:
+                        if school.first_witness == witness and witness not in school_users:
+                            school_users += [(witness)]
+                        if school.second_witness == witness and witness not in school_users:
+                            school_users += [(witness)]
+                    else:
+                        if witness not in school_users:
+                            school_users += [(witness)]
             elif type_of_user == 'parent':
                 postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_parent AS school_user WHERE school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%'".format(name, name.lower(), name.upper(), name.capitalize(), name.title())
                 cursor.execute(postgreSQL_select_Query)
                 all_users = cursor.fetchall()
                 for user in all_users:
                     parent = Parent.objects.get(parent_id=user[0])
-                    if parent not in school_users:
-                        school_users += [(parent)]
+                    if school:
+                        for student in school.students.all():
+                            if student.first_parent == parent and parent not in school_users:
+                                school_users += [(parent)]
+                            if student.second_parent == parent and parent not in school_users:
+                                school_users += [(parent)]
+                    else:
+                        if parent not in school_users:
+                            school_users += [(parent)]
             elif type_of_user == 'student':
                 postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_student AS school_user WHERE school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%'".format(name, name.lower(), name.upper(), name.capitalize(), name.title())
                 cursor.execute(postgreSQL_select_Query)
@@ -1266,9 +1294,14 @@ def seeusersbyquery(request):
                 for user in all_users:
                     if Student.objects.filter(student_id=user[0]):
                         student = Student.objects.get(student_id=user[0])
-                        if student not in school_users and student.school_set.all().count()>=1:
-                            school_users += [(student)]
-        return render(request, 'school_users/seeusersbyquery.html', {'type_of_user':type_of_user, 'school_users':school_users})
+                        if school:
+                            for student_school in school.students.all():
+                                if student_school == student and student not in school_users and student.school_set.all().count()>=1:
+                                    school_users += [(student)]
+                        else:
+                            if student not in school_users and student.school_set.all().count()>=1:
+                                school_users += [(student)]
+        return render(request, 'school_users/seeusersbyquery.html', {'type_of_user':type_of_user, 'school_users':school_users, 'schools':schools})
     elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
         is_supervisor = True
         if Head.objects.filter(profile=request.user).count()>=1:
@@ -1276,9 +1309,13 @@ def seeusersbyquery(request):
         elif Supervisor.objects.filter(profile=request.user).count()>=1:
             schools = School.objects.filter(adminorsupervisor=Supervisor.objects.get(profile=request.user))
         type_of_user = None
+        school = None
         school_users = []
         if request.method == 'POST':
             type_of_user = request.POST.get('type_of_user' or None)
+            selected_school = request.POST.get('selected_school' or None)
+            if School.objects.filter(school_id=selected_school).count()>=1:
+                school = School.objects.get(school_id=selected_school)
             connection = psycopg2.connect(user="dbmasteruser", password="`DsO=)P!+9e[&i`=a?W9(&36`|tKJ8k?", host="ls-dd6fedb602e2f839b3beb6c05c7a0f619ae20106.cztxoubiiizv.us-east-1.rds.amazonaws.com", port="5432", database="dbmaster")
             name = request.POST.get('name' or None)
             cursor = connection.cursor()
@@ -1288,53 +1325,80 @@ def seeusersbyquery(request):
                 all_users = cursor.fetchall()
                 for user in all_users:
                     head = Head.objects.get(head_id=user[0])
-                    for school in schools:
+                    if school:
                         for head_user in school.heads.all():
                             if head_user == head and head not in school_users:
                                 school_users += [(head)]
+                    else:
+                        for school in schools:
+                            for head_user in school.heads.all():
+                                if head_user == head and head not in school_users:
+                                    school_users += [(head)]
             elif type_of_user == 'supervisor':
                 postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_supervisor AS school_user WHERE school_user.name LIKE '%{}%'".format(name)
                 cursor.execute(postgreSQL_select_Query)
                 all_users = cursor.fetchall()
                 for user in all_users:
                     supervisor = Supervisor.objects.get(supervisor_id=user[0])
-                    for school in schools:
+                    if school:
                         if school.adminorsupervisor == supervisor and supervisor not in school_users:
                             school_users += [(supervisor)]
+                    else:
+                        for school in schools:
+                            if school.adminorsupervisor == supervisor and supervisor not in school_users:
+                                school_users += [(supervisor)]
             elif type_of_user == 'witness':
                 postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_witness AS school_user WHERE school_user.name LIKE '%{}%'".format(name)
                 cursor.execute(postgreSQL_select_Query)
                 all_users = cursor.fetchall()
                 for user in all_users:
                     witness = Witness.objects.get(witness_id=user[0])
-                    for school in schools:
+                    if school:
                         if school.first_witness == witness and witness not in school_users:
                             school_users += [(witness)]
                         if school.second_witness == witness and witness not in school_users:
                             school_users += [(witness)]
+                    else:
+                        for school in schools:
+                            if school.first_witness == witness and witness not in school_users:
+                                school_users += [(witness)]
+                            if school.second_witness == witness and witness not in school_users:
+                                school_users += [(witness)]
             elif type_of_user == 'parent':
                 postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_parent AS school_user WHERE school_user.name LIKE '%{}%'".format(name)
                 cursor.execute(postgreSQL_select_Query)
                 all_users = cursor.fetchall()
                 for user in all_users:
                     parent = Parent.objects.get(parent_id=user[0])
-                    for school in schools:
+                    if school:
                         for student in school.students.all():
                             if student.first_parent == parent and parent not in school_users:
                                 school_users += [(parent)]
                             if student.second_parent == parent and parent not in school_users:
                                 school_users += [(parent)]
+                    else:
+                        for school in schools:
+                            for student in school.students.all():
+                                if student.first_parent == parent and parent not in school_users:
+                                    school_users += [(parent)]
+                                if student.second_parent == parent and parent not in school_users:
+                                    school_users += [(parent)]
             elif type_of_user == 'student':
                 postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_student AS school_user WHERE school_user.name LIKE '%{}%'".format(name)
                 cursor.execute(postgreSQL_select_Query)
                 all_users = cursor.fetchall()
                 for user in all_users:
                     student = Student.objects.get(student_id=user[0])
-                    for school in schools:
+                    if school:
                         for student_school in school.students.all():
                             if student_school == student and student not in school_users and student.school_set.all().count()>=1:
                                 school_users += [(student)]
-        return render(request, 'school_users/seeusersbyquery.html', {'type_of_user':type_of_user, 'school_users':school_users, 'is_supervisor':is_supervisor})
+                    else:
+                        for school in schools:
+                            for student_school in school.students.all():
+                                if student_school == student and student not in school_users and student.school_set.all().count()>=1:
+                                    school_users += [(student)]
+        return render(request, 'school_users/seeusersbyquery.html', {'type_of_user':type_of_user, 'school_users':school_users, 'is_supervisor':is_supervisor, 'schools':schools})
 
 def seeallusers_by_school(request, school_id=None):
     if request.user.is_superuser:
