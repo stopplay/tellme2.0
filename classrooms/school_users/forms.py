@@ -98,3 +98,9 @@ class WitnessModelForm(forms.ModelForm):
 			'rg': forms.TextInput(attrs={'class':'form-control', 'required':True, 'maxlength':255}),
 			'cpf': forms.TextInput(attrs={'class':'form-control', 'required':True, 'maxlength':255}),
 		}
+
+class EmailModelForm(forms.ModelForm):
+	"""docstring for EmailModelForm"""
+	class Meta:
+		model = User
+		fields = ['email']

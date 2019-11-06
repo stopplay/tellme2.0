@@ -34,6 +34,7 @@ from django.contrib.auth.forms import SetPasswordForm
 import psycopg2
 import json
 from django.db.models import Q
+from django.contrib.auth.models import User
 
 # Create your views here.
 @login_required
@@ -1256,7 +1257,7 @@ def seeusersbyquery(request):
                 all_users = cursor.fetchall()
                 for user in all_users:
                     parent = Parent.objects.get(parent_id=user[0])
-                    if parent not in school_users:
+                    if parent not in school_users and parent.school_set.all().count()>=1:
                         school_users += [(parent)]
             elif type_of_user == 'student':
                 postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_student AS school_user WHERE school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%'".format(name, name.lower(), name.upper(), name.capitalize(), name.title())
@@ -1265,7 +1266,7 @@ def seeusersbyquery(request):
                 for user in all_users:
                     if Student.objects.filter(student_id=user[0]):
                         student = Student.objects.get(student_id=user[0])
-                        if student not in school_users:
+                        if student not in school_users and student.school_set.all().count()>=1:
                             school_users += [(student)]
         return render(request, 'school_users/seeusersbyquery.html', {'type_of_user':type_of_user, 'school_users':school_users})
     elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
@@ -1319,9 +1320,9 @@ def seeusersbyquery(request):
                     parent = Parent.objects.get(parent_id=user[0])
                     for school in schools:
                         for student in school.students.all():
-                            if student.first_parent == parent and parent not in school_users:
+                            if student.first_parent == parent and parent not in school_users and parent.school_set.all().count()>=1:
                                 school_users += [(parent)]
-                            if student.second_parent == parent and parent not in school_users:
+                            if student.second_parent == parent and parent not in school_users and parent.school_set.all().count()>=1:
                                 school_users += [(parent)]
             elif type_of_user == 'student':
                 postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_student AS school_user WHERE school_user.name LIKE '%{}%'".format(name)
@@ -1331,7 +1332,7 @@ def seeusersbyquery(request):
                     student = Student.objects.get(student_id=user[0])
                     for school in schools:
                         for student_school in school.students.all():
-                            if student_school == student and student not in school_users:
+                            if student_school == student and student not in school_users and student.school_set.all().count()>=1:
                                 school_users += [(student)]
         return render(request, 'school_users/seeusersbyquery.html', {'type_of_user':type_of_user, 'school_users':school_users, 'is_supervisor':is_supervisor})
 
@@ -1696,3 +1697,14 @@ def update_profile(request):
         return get_data(request, student_rest, 'O email do maple bear do usuário foi alterado com sucesso!', 'success')
     user_rest = UserSerializer(user)
     return get_data(request, user_rest, 'O usuário não é responsável no sistema!', 'warning')
+
+def change_email(request, user_id):
+    user = User.objects.get(id=user_id)
+    form = EmailModelForm(request.POST or None, instance=user)
+    if request.method == 'POST':
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.save(update_fields=['email'])
+            messages.success(request, 'Email Atualizado com sucesso')
+            return redirect('users:seeallusers')
+    return render(request, 'school_users/change_email.html', {'form':form})

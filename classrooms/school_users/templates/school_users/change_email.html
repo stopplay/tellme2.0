@@ -1,0 +1,50 @@
+{% extends 'base.html'%}
+
+{% block title %} Editar Email {% endblock %}
+
+{% block content %}
+
+<div class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-9">
+        <div class="card w-50">
+          <div class="card-header">
+            <h4 class="card-title">Editar Email</h4>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-11 pr-1">
+                <div class="form-group">
+                  <form method="POST" enctype="multipart/form-data" class=""> {% csrf_token %}
+                    {{ form.as_p }}
+                    <div>
+                      <button class="btn btn-info btn-fill pull-left" type="submit"style="background-color: #213f99; border-color: #213f99">
+                        Editar Email
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<script type="text/javascript">
+  $(document).ready( function () {
+    $('#sonstable').DataTable();
+    $('#teacherstable').DataTable();
+    $('#parentstable').DataTable();
+    $('#supervisorstable').DataTable();
+    $('#headstable').DataTable();
+    $('#adminstable').DataTable();
+  } );
+</script>
+{% endblock %}

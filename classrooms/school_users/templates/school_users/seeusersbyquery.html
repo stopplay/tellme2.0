@@ -69,24 +69,34 @@
 				        	<table class="table table-hover table-striped display mb-4" id="headstable">
 				              <thead>
 				                <tr>
+					                {% if type_of_user == 'student' or type_of_user == 'parent' %}
+					                  <th>Escola</th>
+					                {% endif %}
 				                  <th >Nome</th>
 				                  <th >Nome de Usuário</th>
+				                  <th>Email</th>
 				                  {% if type_of_user == 'student' %}
 				                  	<th>Responsável Financeiro</th>
           							<th>Responsável Pedagógico</th>
 				                  {% endif %}
+				                  <th>Origem</th>
 				                  <th >Ações</th>
 				                </tr>
 				              </thead>
 				              <tbody>
 				                {% for user in school_users %}
 				                <tr>
+				                {% if type_of_user == 'student' or type_of_user == 'parent' %}
+					                 <th>{{ user.school_name }}</th>
+					            {% endif %}
 				                  <th>{{ user.name }}</th>
 				                  <td>{{ user.profile.username }}</td>
+				                  <td>{{ user.profile.email }}</td>
 				                  {% if type_of_user == 'student' %}
 					                  <td>{{ user.first_parent.name }} </td>
 	        						  <td>{{ user.second_parent.name }}</td>
         						  {% endif %}
+        						  <td>{{ user.origin }}</td>
 				                  <td class="w-100">
 				                    <div class="container" style="white-space: nowrap; text-align: center">
 				                      {% if type_of_user == 'student' %}
@@ -97,6 +107,11 @@
 							          </div>
 				                      {% endif %}
 				                      {% if user.profile %}
+				                      	<div class="row" style="margin-bottom: 10px">                      
+				                          <div class="col-md-12">
+				                          	<a href="{% url 'users:change_email' user.profile.id %}" data-baloon="Remove this item from the cart" class="btn btn-primary w-100">Atualizar Email</a>
+				                          </div>
+				                        </div>
 				                        <div class="row" style="margin-bottom: 10px">                      
 				                          <div class="col-md-12">
 				                          	{% if type_of_user == 'director' %}

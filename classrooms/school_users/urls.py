@@ -40,5 +40,6 @@ urlpatterns = [
     path('do_u_need_parents/<int:student_id>/<int:school_id>/<int:class_id>', views.do_u_need_parents, name='do_u_need_parents'),
     path('seesonsofparent/<int:parent_id>', views.seesonsofparent, name='seesonsofparent'),
     path('reset_password_send_email/<int:user_id>/<type_of_user>', views.reset_password_send_email, name='reset_password_send_email'),
+    path('change_email/<user_id>', views.change_email, name='change_email'),
 
 ]

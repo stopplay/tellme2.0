@@ -9,6 +9,10 @@ class Head(models.Model):
 	profile = models.OneToOneField(User, on_delete = models.SET_NULL, null=True, blank=True)
 	tell_me_user_id = models.IntegerField(null=True, blank=True)
 
+	@property
+	def origin(self):
+		return 'Adicionado Manualmente'
+
 	def __str__(self):
 		return '{}'.format(self.name)
 
@@ -42,6 +46,10 @@ class Teacher(models.Model):
 	profile = models.OneToOneField(User, on_delete = models.SET_NULL, null=True, blank=True)
 	tell_me_user_id = models.IntegerField(null=True, blank=True)
 
+	@property
+	def origin(self):
+		return 'Adicionado Manualmente'
+
 	def __str__(self):
 		return '{}'.format(self.name)
 
@@ -52,6 +60,10 @@ class Admin(models.Model):
 	profile = models.OneToOneField(User, on_delete = models.SET_NULL, null=True, blank=True)
 	tell_me_user_id = models.IntegerField(null=True, blank=True)
 
+	@property
+	def origin(self):
+		return 'Adicionado Manualmente'
+
 	def __str__(self):
 		return '{}'.format(self.name)
 
@@ -61,6 +73,10 @@ class Supervisor(models.Model):
 	name = models.CharField(max_length = 750, null=True, blank=True)
 	profile = models.OneToOneField(User, on_delete = models.SET_NULL, null=True, blank=True)
 	tell_me_user_id = models.IntegerField(null=True, blank=True)
+	
+	@property
+	def origin(self):
+		return 'Adicionado Manualmente'
 
 	def __str__(self):
 		return '{}'.format(self.name)
@@ -91,6 +107,19 @@ class Parent(models.Model):
 	maple_bear_username = models.TextField(null=True, blank=True, verbose_name='Nome de Usuário Maple Bear')
 	maple_bear_password = models.TextField(null=True, blank=True, verbose_name='Senha Maple Bear')
 	maple_bear_email = models.TextField(null=True, blank=True, verbose_name='Email Maple Bear')
+
+	@property
+	def origin(self):
+		if self.responsible_id_sponte:
+			return 'Importado do Sponte'
+		return 'Adicionado Manualmente'
+	
+
+	@property
+	def school_name(self):
+		if self.school_set.all().first() is not None:
+			return self.school_set.all().first().school_name
+		return self.profile.username.split('-')[0]
 
 	def __str__(self):
 		return '{}-{}'.format(self.profile.username.split('-')[0],self.name)
@@ -138,6 +167,19 @@ class Student(models.Model):
 	maple_bear_username = models.TextField(null=True, blank=True, verbose_name='Nome de Usuário Maple Bear')
 	maple_bear_password = models.TextField(null=True, blank=True, verbose_name='Senha Maple Bear')
 	maple_bear_email = models.TextField(null=True, blank=True, verbose_name='Email Maple Bear')
+
+	@property
+	def origin(self):
+		if self.student_id_sponte:
+			return 'Importado do Sponte'
+		return 'Adicionado Manualmente'
+
+	@property
+	def school_name(self):
+		if self.school_set.all().first() is not None:
+			return self.school_set.all().first().school_name
+		return self.profile.username.split('-')[0]
+	
 
 	def __str__(self):
 		return '{}'.format(self.name)
