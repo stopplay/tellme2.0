@@ -93,7 +93,7 @@ class Parent(models.Model):
 	maple_bear_email = models.TextField(null=True, blank=True, verbose_name='Email Maple Bear')
 
 	def __str__(self):
-		return '{}'.format(self.name)
+		return '{}-{}'.format(self.profile.username.split('-')[0],self.name)
 
 class Student(models.Model):
 	"""docstring for Student"""
