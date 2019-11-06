@@ -33,6 +33,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.forms import SetPasswordForm
 import psycopg2
 import json
+from django.db.models import Q
 
 # Create your views here.
 @login_required
@@ -1440,16 +1441,18 @@ def delete_user(request, user_id=None, type_of_user=None):
             user_to_delete = get_object_or_404(Student, student_id=user_id)
             if user_to_delete.first_parent and user_to_delete.second_parent:
                 if not user_to_delete.first_parent == user_to_delete.second_parent:
-                    if user_to_delete.first_parent.profile:
-                        user_to_delete.first_parent.profile.delete()
-                    user_to_delete.first_parent.delete()
-                    if user_to_delete.second_parent.profile:
-                        user_to_delete.second_parent.profile.delete()
-                    user_to_delete.second_parent.delete()
+                    if Student.objects.filter(Q(first_parent=user_to_delete.first_parent)|Q(first_parent=user_to_delete.second_parent)|Q(second_parent=user_to_delete.first_parent)|Q(second_parent=user_to_delete.second_parent)).count()<=1:
+                        if user_to_delete.first_parent.profile:
+                            user_to_delete.first_parent.profile.delete()
+                        user_to_delete.first_parent.delete()
+                        if user_to_delete.second_parent.profile:
+                            user_to_delete.second_parent.profile.delete()
+                        user_to_delete.second_parent.delete()
                 else:
-                    if user_to_delete.first_parent.profile:
-                        user_to_delete.first_parent.profile.delete()
-                    user_to_delete.first_parent.delete()
+                    if Student.objects.filter(Q(first_parent=user_to_delete.first_parent)|Q(second_parent=user_to_delete.first_parent)).count()<=1:
+                        if user_to_delete.first_parent.profile:
+                            user_to_delete.first_parent.profile.delete()
+                        user_to_delete.first_parent.delete()
         if user_to_delete.profile:
             user_to_delete.profile.delete()
         user_to_delete.delete()

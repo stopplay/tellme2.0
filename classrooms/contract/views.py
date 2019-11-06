@@ -1769,8 +1769,10 @@ def protected_serve(request, path, contract_id=None, document_root=None, type_of
             else:
                 return HttpResponse('Você não tem permissão para acessar esse arquivo')
         elif Head.objects.filter(profile=request.user).count()>=1:
+            schools = School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id)
             obj = Contract.objects.get(contract_id=contract_id)
-            if Head.objects.get(profile=request.user) == obj.counter_signe:
+            school = School.objects.get(chains__id__exact=obj.chain.id)
+            if Head.objects.get(profile=request.user) == obj.counter_signe or school in schools:
                 if type_of_document == 'contract':
                     obj_pdf_url = obj.pdf.url
                     correct_pdf_url = obj_pdf_url.replace("/media/", "")
