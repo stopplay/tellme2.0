@@ -345,7 +345,7 @@
 
                               <div class="row">
                                 <div class="col-md-12">
-                                  <a class="btn btn-danger btn-block" href="{% url 'contracts:delete_contract' contract.contract_id %}" data-baloon="Remove this item from the cart" class="text-light">
+                                  <a class="btn btn-danger btn-block" onclick="changeYesLink('{% url 'contracts:delete_contract' contract.contract_id %}')" href="#" data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal" data-target="#delete-contract-modal">
                                     Deletar Contrato
                                   </a>
                                 </div>
@@ -469,7 +469,7 @@
                                           Ações
                                         </a>
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                          <a class="dropdown-item" href="{% url 'contracts:delete_contract' contract.contract_id %}" data-baloon="Remove this item from the cart">Deletar Contrato</a>
+                                          <a class="dropdown-item" onclick="changeYesLink('{% url 'contracts:delete_contract' contract.contract_id %}')" href="#" data-baloon="Remove this item from the cart" data-toggle="modal" data-target="#delete-contract-modal">Deletar Contrato</a>
                                           <a class="dropdown-item" href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart">Ver Detalhes</a>
                     
                                         </div>
@@ -612,6 +612,9 @@
 </script>
 
 <script type="text/javascript">
+  function changeYesLink(url){
+    document.getElementById("link_to_delete").href=url;
+  }
   function signContract(url) {
 
     setTimeout(function() {
@@ -657,6 +660,26 @@
 </script>
 
 <!-- Contract Modal -->
+<div id="delete-contract-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">x</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Voce tem certeza que deseja deletar esse contrato? Essa operacao nao pode ser desfeita!</p>
+      </div>
+      <div class="modal-footer">
+        <a id="link_to_delete" class="btn btn-danger btn-block" href="">Sim</a>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 <div id="sign-contract-modal" class="modal fade" role="dialog">
   <div class="modal-dialog">
 
