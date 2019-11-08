@@ -182,7 +182,7 @@ class Student(models.Model):
 	
 
 	def __str__(self):
-		return return '{}-{}'.format(self.profile.username.split('-')[0],self.name)
+		return '{}-{}'.format(self.profile.username.split('-')[0],self.name)
 
 class Witness(models.Model):
 	"""docstring for Witness"""
