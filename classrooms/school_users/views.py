@@ -1328,7 +1328,7 @@ def seeusersbyquery(request):
             name = request.POST.get('name' or None)
             cursor = connection.cursor()
             if type_of_user == 'director':
-                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_head AS school_user WHERE school_user.name LIKE '%{}%'".format(name)
+                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_head AS school_user WHERE school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%'".format(name, name.lower(), name.upper(), name.capitalize(), name.title())
                 cursor.execute(postgreSQL_select_Query)
                 all_users = cursor.fetchall()
                 for user in all_users:
@@ -1344,7 +1344,7 @@ def seeusersbyquery(request):
                                 if head_user == head and head not in school_users:
                                     school_users += [(head)]
             elif type_of_user == 'supervisor':
-                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_supervisor AS school_user WHERE school_user.name LIKE '%{}%'".format(name)
+                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_supervisor AS school_user WHERE school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%'".format(name, name.lower(), name.upper(), name.capitalize(), name.title())
                 cursor.execute(postgreSQL_select_Query)
                 all_users = cursor.fetchall()
                 for user in all_users:
@@ -1361,7 +1361,7 @@ def seeusersbyquery(request):
                             if school.adminorsupervisor_2 == supervisor and supervisor not in school_users:
                                 school_users += [(supervisor)]
             elif type_of_user == 'witness':
-                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_witness AS school_user WHERE school_user.name LIKE '%{}%'".format(name)
+                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_witness AS school_user WHERE school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%'".format(name, name.lower(), name.upper(), name.capitalize(), name.title())
                 cursor.execute(postgreSQL_select_Query)
                 all_users = cursor.fetchall()
                 for user in all_users:
@@ -1380,7 +1380,7 @@ def seeusersbyquery(request):
                             if school.second_witness == witness and witness not in school_users:
                                 school_users += [(witness)]
             elif type_of_user == 'parent':
-                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_parent AS school_user WHERE school_user.name LIKE '%{}%'".format(name)
+                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_parent AS school_user WHERE school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%'".format(name, name.lower(), name.upper(), name.capitalize(), name.title())
                 cursor.execute(postgreSQL_select_Query)
                 all_users = cursor.fetchall()
                 for user in all_users:
@@ -1401,7 +1401,7 @@ def seeusersbyquery(request):
                                 if student.second_parent == parent and parent not in school_users:
                                     school_users += [(parent)]
             elif type_of_user == 'student':
-                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_student AS school_user WHERE school_user.name LIKE '%{}%'".format(name)
+                postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_student AS school_user WHERE school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%'".format(name, name.lower(), name.upper(), name.capitalize(), name.title())
                 cursor.execute(postgreSQL_select_Query)
                 all_users = cursor.fetchall()
                 for user in all_users:
