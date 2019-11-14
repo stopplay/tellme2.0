@@ -777,9 +777,25 @@ def seecontractsbyquery(request):
         schools = School.objects.all()
         chains_to_select = Chain.objects.all()
     if request.method == 'POST':
+        school = None
+        classe = None
+        selected_school = request.POST.get('selected_school' or None)
+        selected_class = request.POST.get('selected_class' or None)
+        if School.objects.filter(school_id=selected_school).count()>=1:
+            school = School.objects.get(school_id=selected_school)
+        if Class.objects.filter(class_id=selected_class).count()>=1:
+            classe = Class.objects.get(class_id=selected_class)
         search = request.POST.get('search' or None)
         connection = psycopg2.connect(user="dbmasteruser", password="`DsO=)P!+9e[&i`=a?W9(&36`|tKJ8k?", host="ls-dd6fedb602e2f839b3beb6c05c7a0f619ae20106.cztxoubiiizv.us-east-1.rds.amazonaws.com", port="5432", database="dbmaster")
-        postgreSQL_select_Query = "SELECT DISTINCT contract.contract_id FROM contract_contract AS contract WHERE contract.name LIKE '%{}%' OR contract.name LIKE '%{}%' OR contract.name LIKE '%{}%' OR contract.name LIKE '%{}%' OR contract.name LIKE '%{}%'".format(search, search.lower(), search.upper(), search.capitalize(), search.title())
+        if classe:
+            postgreSQL_select_Query = "SELECT DISTINCT contract.contract_id FROM contract_contract AS contract WHERE (contract.name LIKE '%{}%' OR contract.name LIKE '%{}%' OR contract.name LIKE '%{}%' OR contract.name LIKE '%{}%' OR contract.name LIKE '%{}%') AND contract.chain_id = {}".format(search, search.lower(), search.upper(), search.capitalize(), search.title(), classe.class_id)
+        elif school:
+            postgreSQL_select_Query = "SELECT DISTINCT contract.contract_id FROM contract_contract AS contract WHERE (contract.name LIKE '%{}%' OR contract.name LIKE '%{}%' OR contract.name LIKE '%{}%' OR contract.name LIKE '%{}%' OR contract.name LIKE '%{}%') AND (".format(search, search.lower(), search.upper(), search.capitalize(), search.title())
+            for min_classe in school.classes.all():
+                postgreSQL_select_Query += "contract.chain_id = {} OR ".format(min_classe.class_id)
+            postgreSQL_select_Query += "contract.chain_id = 0)"
+        else:
+            postgreSQL_select_Query = "SELECT DISTINCT contract.contract_id FROM contract_contract AS contract WHERE contract.name LIKE '%{}%' OR contract.name LIKE '%{}%' OR contract.name LIKE '%{}%' OR contract.name LIKE '%{}%' OR contract.name LIKE '%{}%'".format(search, search.lower(), search.upper(), search.capitalize(), search.title())
         cursor = connection.cursor()
         cursor.execute(postgreSQL_select_Query)
         all_users = cursor.fetchall()
@@ -887,6 +903,7 @@ def seemycontracts(request):
     contracts = []
     is_client = False
     is_supervisor = False
+    is_witness = False
     schools = []
     if Parent.objects.filter(profile=request.user).count()>=1:
         is_client = True
@@ -899,6 +916,7 @@ def seemycontracts(request):
                     schools+=[(School.objects.get(chains__id__exact=contract.chain.id).school_id)]
         schools = School.objects.filter(school_id__in=schools)
     elif Witness.objects.filter(profile=request.user).count()>=1:
+        is_witness = True
         contracts += Contract.objects.filter(first_witness_signe=Witness.objects.get(profile=request.user))
         contracts += Contract.objects.filter(second_witness_signe=Witness.objects.get(profile=request.user))
         for contract in contracts:
@@ -952,7 +970,7 @@ def seemycontracts(request):
             print('checked_contract_ids_on_form', checked_contract_ids_on_form)
             for contract_id in checked_contract_ids_on_form:
                 set_signed(request, contract_id)
-    return render(request, 'contract/seemycontracts.html', {'contracts':contracts, 'is_client':is_client, 'is_supervisor':is_supervisor, 'schools':schools})
+    return render(request, 'contract/seemycontracts.html', {'contracts':contracts, 'is_client':is_client, 'is_supervisor':is_supervisor, 'is_witness':is_witness, 'schools':schools})
 
 @login_required
 def select_student_to_contract(request):

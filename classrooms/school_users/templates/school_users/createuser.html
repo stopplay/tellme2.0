@@ -50,7 +50,7 @@
 									<div class="labelandform">
 										<p><label>Selecione a Escola:</label></p>
 										<select class="custom-select chosen-select" id="select_form_school">
-											<option id="" value="" selected>--------</option>
+											<option id="" value="0" selected>--------</option>
 											{% for school in schools %}
 											<option value="{{ school.school_id }}">{{ school.school_name }}</option>
 											{% endfor %}
@@ -62,7 +62,7 @@
 									<div class="labelandform">
 										<p><label>Selecione a Turma:</label></p>
 										<select class="custom-select" id="select_form_class">
-											<option id="" value="" selected></option>
+											<option id="" value="" selected>--------</option>
 										</select>
 									</div>
 									<input type="hidden" id="selected_class" name="selected_class" value="0">

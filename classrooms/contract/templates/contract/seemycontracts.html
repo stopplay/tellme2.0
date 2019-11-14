@@ -20,7 +20,7 @@
             </div>
 
             <form method="POST" enctype="multipart/form-data" > {% csrf_token %}
-              {% if is_supervisor %}
+              {% if is_supervisor or is_witness %}
                 <div class="col-md-12">
                   <button id="sign-multiple-id1" type="submit" class="multi-select-button btn btn-dark btn-sm btn-block sign-multiples-buttons" data-toggle="modal" data-target="#multi-sign-contract-modal">
                     Clique Aqui Para Assinar Contratos Selecionados
@@ -33,7 +33,7 @@
                 <table class="table table-hover table-striped display row-border mb-4" id="contractstable">
                   <thead>
                     <tr>
-                      {% if is_supervisor %}
+                      {% if is_supervisor or is_witness %}
                         <th>
                           <input id="check" type="checkbox" name="select_all">
                         </th>
@@ -60,6 +60,24 @@
                             <input type="checkbox" name="checks" value="{{ contract.contract_id }}">
                             {% endif %}
                           </td>
+                        {% elif is_witness %}
+                          {% if request.user == contract.first_witness_signe.profile %}
+                            <td>
+                              {% if contract.first_witness_signed %}
+                              <label><input type="checkbox" name="checks" value="{{ contract.contract_id }}" checked></label>
+                              {% else %}
+                              <input type="checkbox" name="checks" value="{{ contract.contract_id }}">
+                              {% endif %}
+                            </td>
+                          {% elif request.user == contract.second_witness_signe.profile %}
+                            <td>
+                              {% if contract.second_witness_signed %}
+                              <label><input type="checkbox" name="checks" value="{{ contract.contract_id }}" checked></label>
+                              {% else %}
+                              <input type="checkbox" name="checks" value="{{ contract.contract_id }}">
+                              {% endif %}
+                            </td>
+                          {% endif %}
                         {% endif %}
 
                         <th>
