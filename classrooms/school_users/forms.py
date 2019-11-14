@@ -58,11 +58,18 @@ class ParentModelForm(forms.ModelForm):
 			'maple_bear_email': forms.TextInput(attrs={'class':'form-control', 'required':False, 'maxlength':255}),
 		}
 
+class ParentIdTellMeModelForm(forms.ModelForm):
+	"""docstring for ParentIdTellMeModelForm"""
+	class Meta:
+		model = Parent
+		fields = ['tell_me_user_id']
+		
+
 class StudentModelForm(forms.ModelForm):
 	"""docstring for ManagerModelForm"""
 	class Meta:
 		model = Student
-		fields = ['birthday']
+		fields = ['birthday', 'tell_me_user_id', 'financial_responsible_id_sponte', 'didatic_responsible_id_sponte']
 		widgets = {
 			'birthday': forms.DateInput(attrs={'type':'date', 'class':'form-control', 'required':True, 'style':"width:100%", 'max':datetime.date.today()-datetime.timedelta(days=1)}),
 		}

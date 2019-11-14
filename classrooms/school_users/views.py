@@ -45,7 +45,7 @@ def create_user(request):
         form3 = TeacherModelForm(request.POST or None)
         form4 = AdminModelForm(request.POST or None)
         form5 = SupervisorModelForm(request.POST or None)
-        form6 = ParentModelForm(request.POST or None)
+        form6 = ParentIdTellMeModelForm(request.POST or None)
         form7 = StudentModelForm(request.POST or None)
         schools = School.objects.all()
         selected_user = request.POST.get('selected_user', 0)
@@ -316,11 +316,16 @@ def create_user(request):
                                 user_creation.profile = user_profile
                                 user_creation.name = user_profile.first_name+' '+user_profile.last_name
                                 user_creation.maple_bear_email = user_profile.email
+                                if user_creation.financial_responsible_id_sponte and user_creation.didatic_responsible_id_sponte:
+                                    if Parent.objects.filter(tell_me_user_id=user_creation.financial_responsible_id_sponte).count()>=1:
+                                        user_creation.first_parent = Parent.objects.get(tell_me_user_id=user_creation.financial_responsible_id_sponte)
+                                    if Parent.objects.filter(tell_me_user_id=user_creation.didatic_responsible_id_sponte).count()>=1:
+                                        user_creation.second_parent = Parent.objects.get(tell_me_user_id=user_creation.didatic_responsible_id_sponte)
                                 user_creation.save()
                                 student_to_add = Student.objects.get(profile=user_profile)
                                 diff = datetime.date.today() - user_creation.birthday
                                 age = diff.days//365
-                                if age >= 18:
+                                if age >= 18 and not student_to_add.first_parent and not student_to_add.second_parent:
                                     return redirect('/users/do_u_need_parents/{}/{}/{}'.format(student_to_add.student_id, school_to_add.school_id, class_to_add.class_id))
                                 school_to_add.students.add(student_to_add)
                                 class_to_add.students.add(student_to_add)
@@ -339,7 +344,8 @@ def create_user(request):
                                             mail_subject, message, to=[to_email]
                                 )
                                 email.send()
-                                return redirect('/users/add_first_parent/{}'.format(student_to_add.student_id))
+                                if not student_to_add.first_parent and not student_to_add.second_parent:
+                                    return redirect('/users/add_first_parent/{}'.format(student_to_add.student_id))
                     return redirect('/users/create_user')
         return render(request, 'school_users/createuser.html', {'user_form':form,'head_form':form2,'teacher_form':form3,'admin_form':form4,'supervisor_form':form5,'parent_form':form6,'student_form':form7, 'schools':schools})
     elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
@@ -354,7 +360,7 @@ def create_user(request):
         form3 = TeacherModelForm(request.POST or None)
         form4 = AdminModelForm(request.POST or None)
         form5 = SupervisorModelForm(request.POST or None)
-        form6 = ParentModelForm(request.POST or None)
+        form6 = ParentIdTellMeModelForm(request.POST or None)
         form7 = StudentModelForm(request.POST or None)
         selected_user = request.POST.get('selected_user', 0)
         selected_school = request.POST.get('selected_school', 0)
@@ -627,11 +633,16 @@ def create_user(request):
                                 user_creation.profile = user_profile
                                 user_creation.name = user_profile.first_name+' '+user_profile.last_name
                                 user_creation.maple_bear_email = user_profile.email
+                                if user_creation.financial_responsible_id_sponte and user_creation.didatic_responsible_id_sponte:
+                                    if Parent.objects.filter(tell_me_user_id=user_creation.financial_responsible_id_sponte).count()>=1:
+                                        user_creation.first_parent = Parent.objects.get(tell_me_user_id=user_creation.financial_responsible_id_sponte)
+                                    if Parent.objects.filter(tell_me_user_id=user_creation.didatic_responsible_id_sponte).count()>=1:
+                                        user_creation.second_parent = Parent.objects.get(tell_me_user_id=user_creation.didatic_responsible_id_sponte)
                                 user_creation.save()
                                 student_to_add = Student.objects.get(profile=user_profile)
                                 diff = datetime.date.today() - user_creation.birthday
                                 age = diff.days//365
-                                if age >= 18:
+                                if age >= 18 and not student_to_add.first_parent and not student_to_add.second_parent:
                                     return redirect('/users/do_u_need_parents/{}/{}/{}'.format(student_to_add.student_id, school_to_add.school_id, class_to_add.class_id))
                                 school_to_add.students.add(student_to_add)
                                 class_to_add.students.add(student_to_add)
@@ -650,7 +661,8 @@ def create_user(request):
                                             mail_subject, message, to=[to_email]
                                 )
                                 email.send()
-                                return redirect('/users/add_first_parent/{}'.format(student_to_add.student_id))
+                                if not student_to_add.first_parent and not student_to_add.second_parent:
+                                    return redirect('/users/add_first_parent/{}'.format(student_to_add.student_id))
                     return redirect('/users/create_user')
         return render(request, 'school_users/createuser.html', {'user_form':form,'head_form':form2,'teacher_form':form3,'admin_form':form4,'supervisor_form':form5,'parent_form':form6,'student_form':form7,'is_supervisor':is_supervisor, 'schools':schools})
     return redirect('/')
