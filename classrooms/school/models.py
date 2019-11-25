@@ -67,10 +67,13 @@ class School(models.Model):
 	@property
 	def quantity_of_parents_associated(self):
 		count = 0
+		parents = []
 		for student in self.students.all():
-			if student.first_parent:
+			if student.first_parent and student.first_parent not in parents:
+				parents += [(student.first_parent)]
 				count+=1
-			if student.second_parent:
+			if student.second_parent and student.second_parent not in parents:
+				parents += [(student.second_parent)]
 				count+=1
 		return count
 	
