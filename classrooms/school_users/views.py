@@ -1350,7 +1350,7 @@ def seeusersbyquery(request):
         if Head.objects.filter(profile=request.user).count()>=1:
             schools = School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id)
         elif Supervisor.objects.filter(profile=request.user).count()>=1:
-            schools = School.objects.filter(adminorsupervisor=Supervisor.objects.get(profile=request.user))
+            schools = School.objects.filter(Q(adminorsupervisor=Supervisor.objects.get(profile=request.user))|Q(adminorsupervisor_2=Supervisor.objects.get(profile=request.user)))
         type_of_user = None
         school = None
         school_users = []
@@ -1519,7 +1519,7 @@ def seeallusers_by_school(request, school_id=None):
             if Head.objects.filter(profile=request.user).count()>=1:
                 schools = School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id)
             elif Supervisor.objects.filter(profile=request.user).count()>=1:
-                schools = School.objects.filter(adminorsupervisor=Supervisor.objects.get(profile=request.user))
+                schools = School.objects.filter(Q(adminorsupervisor=Supervisor.objects.get(profile=request.user))|Q(adminorsupervisor_2=Supervisor.objects.get(profile=request.user)))
             for school in schools:
                 if school.heads.all().count()>=1:
                     for head in school.heads.all():
