@@ -1641,6 +1641,8 @@ def set_witnesses(request, school_id=None):
         schools = None
         if Head.objects.filter(profile=request.user).count()>=1:
             schools = School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id)
+        if Supervisor.objects.filter(profile=request.user).count()>=1:
+        	schools = School.objects.filter(Q(adminorsupervisor=Supervisor.objects.get(profile=request.user))|Q(adminorsupervisor_2=Supervisor.objects.get(profile=request.user)))
         for school in schools:
         	if school.first_witness:
         		witnesses_ids += [(school.first_witness.witness_id)]
