@@ -404,8 +404,9 @@ def createacontract(request):
                 contract.slm = classe.slm
                 contract.name = student.name+' - '+contract.chain.name
                 contract.counter_signe = head
-                if school.first_witness and school.second_witness:
+                if school.first_witness:
                     contract.first_witness_signe = school.first_witness
+                if school.second_witness:
                     contract.second_witness_signe = school.second_witness
                 if student.needs_parent:
                     if student.first_parent and student.second_parent:
