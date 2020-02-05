@@ -697,6 +697,7 @@
       allCheckboxes.forEach(function(checkbox) {
         hasAtLeastOneChecked = hasAtLeastOneChecked || checkbox.checked;
       });
+      console.log(hasAtLeastOneChecked)
       
       if (!hasAtLeastOneChecked) {
         event.preventDefault();
@@ -710,7 +711,10 @@
             allCheckboxes.forEach(function(checkbox){
               var myInit = {credentials:'SAME-ORIGIN',
                             cache: 'default'};
-              fetch(`/contracts/set_signed/${checkbox.value}`, myInit)
+              if (checkbox.checked){
+                console.log(checkbox.value)
+               fetch(`/contracts/set_signed/${checkbox.value}`, myInit)
+              }
             });
           }, 100);
         }, 2000);
