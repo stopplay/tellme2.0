@@ -705,9 +705,6 @@
 
         setTimeout(function() {
           $('#multi-sign-contract-modal').modal("hide");
-          allCheckboxes.forEach(function(checkbox){
-            signContract(`{% url 'contracts:set_signed' ${checkbox.value} %}`)
-          })
           setTimeout(function() {
             $('#multi-sign-contract-modal-message').text('Por favor, espere um pouco. Estamos criptografando seus contratos!');
           }, 100);
