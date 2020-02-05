@@ -714,10 +714,10 @@
               var myInit = {credentials:'same-origin',
                             cache: 'default'};
               if (checkbox.checked){
+                console.log(checkbox.value)
                fetch(`/contracts/set_signed/${checkbox.value}`, myInit)
               }
-            }
-            window.location.url('/contracts/all/'));
+            });
           }, 100);
         }, 2000);
       }
