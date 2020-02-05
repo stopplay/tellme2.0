@@ -704,6 +704,7 @@
         $('#multi-sign-contract-modal').modal();
         $('#multi-sign-contract-modal-message').text('Por favor, selecione um contrato!');
       }else{
+        event.preventDefault();
         setTimeout(function() {
           console.log('Entrou Aqui')
           $('#multi-sign-contract-modal').modal("hide");
