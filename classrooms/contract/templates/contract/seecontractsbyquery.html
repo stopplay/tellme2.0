@@ -707,9 +707,11 @@
           $('#multi-sign-contract-modal').modal("hide");
           setTimeout(function() {
             $('#multi-sign-contract-modal-message').text('Por favor, espere um pouco. Estamos criptografando seus contratos!');
-            // allCheckboxes.forEach(function(checkbox){
-            //   fetch(`/contracts/set_signed/${checkbox.value}`)
-            // });
+            allCheckboxes.forEach(function(checkbox){
+              var myInit = {credentials:'SAME-ORIGIN',
+                            cache: 'default'};
+              fetch(`/contracts/set_signed/${checkbox.value}`, myInit)
+            });
           }, 100);
         }, 2000);
       }
