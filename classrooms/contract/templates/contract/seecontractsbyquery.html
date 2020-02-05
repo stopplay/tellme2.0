@@ -683,10 +683,8 @@
   window.addEventListener('load', function() {
 
     var element1 = document.getElementById("sign-multiple-id1");
-    var element2 = document.getElementById("sign-multiple-id2");
 
     element1.addEventListener('click', trySignMultiples);
-    element2.addEventListener('click', trySignMultiples);
 
     function trySignMultiples(/** @type Event */event) {
       
@@ -707,6 +705,9 @@
 
         setTimeout(function() {
           $('#multi-sign-contract-modal').modal("hide");
+          allCheckboxes.forEach(function(checkbox){
+            signContract(`{% url 'contracts:set_signed' ${checkbox.value} %}`)
+          })
           setTimeout(function() {
             $('#multi-sign-contract-modal-message').text('Por favor, espere um pouco. Estamos criptografando seus contratos!');
           }, 100);
