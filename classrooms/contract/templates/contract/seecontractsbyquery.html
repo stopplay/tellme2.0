@@ -702,15 +702,15 @@
         event.preventDefault();
         $('#multi-sign-contract-modal').modal();
         $('#multi-sign-contract-modal-message').text('Por favor, selecione um contrato!');
-
+      
         setTimeout(function() {
           $('#multi-sign-contract-modal').modal("hide");
-          allCheckboxes.forEach(function(checkbox){
-            console.log(checkbox.value)
-            fetch(`/contracts/set_signed/${checkbox.value}`)
-          })
           setTimeout(function() {
             $('#multi-sign-contract-modal-message').text('Por favor, espere um pouco. Estamos criptografando seus contratos!');
+            allCheckboxes.forEach(function(checkbox){
+              console.log(checkbox.value)
+              fetch(`/contracts/set_signed/${checkbox.value}`)
+            });
           }, 100);
         }, 2000);
       }
