@@ -695,7 +695,6 @@
       
       var hasAtLeastOneChecked = false;
       allCheckboxes.forEach(function(checkbox) {
-        console.log(checkbox.value)
         hasAtLeastOneChecked = hasAtLeastOneChecked || checkbox.checked;
       });
       
@@ -703,10 +702,11 @@
         event.preventDefault();
         $('#multi-sign-contract-modal').modal();
         $('#multi-sign-contract-modal-message').text('Por favor, selecione um contrato!');
-      }else{
+
         setTimeout(function() {
           $('#multi-sign-contract-modal').modal("hide");
           allCheckboxes.forEach(function(checkbox){
+            console.log(checkbox.value)
             fetch(`/contracts/set_signed/${checkbox.value}`)
           })
           setTimeout(function() {
