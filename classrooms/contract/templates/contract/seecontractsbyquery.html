@@ -716,9 +716,8 @@
               if (checkbox.checked){
                fetch(`/contracts/set_signed/${checkbox.value}`, myInit)
               }
-            }
+            });
             window.location.url('/contracts/all/')
-            );
           }, 100);
         }, 2000);
       }
