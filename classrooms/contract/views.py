@@ -65,6 +65,18 @@ try:
     from StringIO import StringIO
 except ImportError:
     from io import BytesIO as StringIO
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
+def send_data(request, data_serialized):
+    room_group_name = 'notifications'
+    layer = get_channel_layer()
+    async_to_sync(layer.group_send)(
+        room_group_name,
+        {
+            'type': 'chat_message',
+            'message': data_serialized.data
+        }
+    )
 
 # Create your views here.
 class ContractsViewSet(viewsets.ModelViewSet):
@@ -417,6 +429,8 @@ def createacontract(request):
                         if wish == 'sim':
                             if wish_today == 'sim':
                                 contract.save()
+                                contract_rest = ContractSerializer(contract)
+                                send_data(request, contract_rest)
                                 tasks.schedule_email(contract, 'normal', 'admin', current_site.domain)
                             elif wish_today == 'não':
                                 date = request.POST.get('date' or None)
@@ -425,6 +439,7 @@ def createacontract(request):
                                     contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
                                     contract.save()
                                     contract_rest = ContractSerializer(contract)
+                                    send_data(request, contract_rest)
                                     tasks.schedule_email.apply_async((contract_rest.data, 'json', 'admin'), eta=contract.sent_date)
                                 else:
                                     messages.error(request, 'Você não informou a data em que o contrato será enviado!')
@@ -432,6 +447,8 @@ def createacontract(request):
                         else:
                             if wish_today == 'sim':
                                 contract.save()
+                                contract_rest = ContractSerializer(contract)
+                                send_data(request, contract_rest)
                                 tasks.schedule_email_without_attachment(contract,'normal', 'admin', current_site.domain)
                             elif wish_today == 'não':
                                 date = request.POST.get('date' or None)
@@ -440,6 +457,7 @@ def createacontract(request):
                                     contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
                                     contract.save()
                                     contract_rest = ContractSerializer(contract)
+                                    send_data(request, contract_rest)
                                     tasks.schedule_email.apply_async((contract_rest.data, 'json', 'admin'), eta=contract.sent_date)
                                 else:
                                     messages.error(request, 'Você não informou a data em que o contrato será enviado!')
@@ -451,6 +469,9 @@ def createacontract(request):
                     contract.student_name = student.name
                     if wish == 'sim':
                         if wish_today == 'sim':
+                            contract.save()
+                            contract_rest = ContractSerializer(contract)
+                            send_data(request, contract_rest)
                             tasks.schedule_email(contract, 'normal', 'admin', current_site.domain)
                         elif wish_today == 'não':
                             date = request.POST.get('date' or None)
@@ -459,6 +480,7 @@ def createacontract(request):
                                 contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
                                 contract.save()
                                 contract_rest = ContractSerializer(contract)
+                                send_data(request, contract_rest)
                                 tasks.schedule_email.apply_async((contract_rest.data, 'json', 'admin'), eta=contract.sent_date)
                             else:
                                 messages.error(request, 'Você não informou a data em que o contrato será enviado!')
@@ -466,6 +488,8 @@ def createacontract(request):
                     else:
                         if wish_today == 'sim':
                             contract.save()
+                            contract_rest = ContractSerializer(contract)
+                            send_data(request, contract_rest)
                             tasks.schedule_email_without_attachment(contract,'normal', 'admin', current_site.domain)
                         elif wish_today == 'não':
                             date = request.POST.get('date' or None)
@@ -474,6 +498,7 @@ def createacontract(request):
                                 contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
                                 contract.save()
                                 contract_rest = ContractSerializer(contract)
+                                send_data(request, contract_rest)
                                 tasks.schedule_email.apply_async((contract_rest.data, 'json', 'admin'), eta=contract.sent_date)
                             else:
                                 messages.error(request, 'Você não informou a data em que o contrato será enviado!')
@@ -553,6 +578,8 @@ def createacontract(request):
                         if wish == 'sim':
                             if wish_today == 'sim':
                                 contract.save()
+                                contract_rest = ContractSerializer(contract)
+                                send_data(request, contract_rest)
                                 tasks.schedule_email(contract, 'normal', 'director', current_site.domain)
                             elif wish_today == 'não':
                                 date = request.POST.get('date' or None)
@@ -561,6 +588,7 @@ def createacontract(request):
                                     contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
                                     contract.save()
                                     contract_rest = ContractSerializer(contract)
+                                    send_data(request, contract_rest)
                                     tasks.schedule_email.apply_async((contract_rest.data, 'json', 'director'), eta=contract.sent_date)
                                 else:
                                     messages.error(request, 'Você não informou a data em que o contrato será enviado!')
@@ -568,6 +596,8 @@ def createacontract(request):
                         else:
                             if wish_today == 'sim':
                                 contract.save()
+                                contract_rest = ContractSerializer(contract)
+                                send_data(request, contract_rest)
                                 tasks.schedule_email_without_attachment(contract,'normal', 'director', current_site.domain)
                             elif wish_today == 'não':
                                 date = request.POST.get('date' or None)
@@ -576,6 +606,7 @@ def createacontract(request):
                                     contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
                                     contract.save()
                                     contract_rest = ContractSerializer(contract)
+                                    send_data(request, contract_rest)
                                     tasks.schedule_email.apply_async((contract_rest.data, 'json', 'director'), eta=contract.sent_date)
                                 else:
                                     messages.error(request, 'Você não informou a data em que o contrato será enviado!')
@@ -588,6 +619,8 @@ def createacontract(request):
                     if wish == 'sim':
                         if wish_today == 'sim':
                             contract.save()
+                            contract_rest = ContractSerializer(contract)
+                            send_data(request, contract_rest)
                             tasks.schedule_email(contract, 'normal', 'director', current_site.domain)
                         elif wish_today == 'não':
                             date = request.POST.get('date' or None)
@@ -596,6 +629,7 @@ def createacontract(request):
                                 contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
                                 contract.save()
                                 contract_rest = ContractSerializer(contract)
+                                send_data(request, contract_rest)
                                 tasks.schedule_email.apply_async((contract_rest.data, 'json', 'director'), eta=contract.sent_date)
                             else:
                                 messages.error(request, 'Você não informou a data em que o contrato será enviado!')
@@ -603,6 +637,8 @@ def createacontract(request):
                     else:
                         if wish_today == 'sim':
                             contract.save()
+                            contract_rest = ContractSerializer(contract)
+                            send_data(request, contract_rest)
                             tasks.schedule_email_without_attachment(contract,'normal', 'director', current_site.domain)
                         elif wish_today == 'não':
                             date = request.POST.get('date' or None)
@@ -611,6 +647,7 @@ def createacontract(request):
                                 contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
                                 contract.save()
                                 contract_rest = ContractSerializer(contract)
+                                send_data(request, contract_rest)
                                 tasks.schedule_email.apply_async((contract_rest.data, 'json', 'director'), eta=contract.sent_date)
                             else:
                                 messages.error(request, 'Você não informou a data em que o contrato será enviado!')
