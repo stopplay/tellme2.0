@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['52.212.87.244', '127.0.0.1', '34.245.178.93', '18.228.172.18',
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'jet.dashboard',
     'jet',
     'django.contrib.admin',
