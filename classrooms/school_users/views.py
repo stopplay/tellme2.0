@@ -32,6 +32,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.forms import SetPasswordForm
 import psycopg2
+from django.utils.safestring import mark_safe
 import json
 from django.db.models import Q
 from django.contrib.auth.models import User
