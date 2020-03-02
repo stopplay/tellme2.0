@@ -804,6 +804,9 @@ def seecontractsbyquery(request):
             contract = Contract.objects.get(contract_id=user[0])
             if contract not in contracts and contract.chain in chains_to_select:
                 contracts += [(contract)]
+        if not schools:
+            messages.error(request, 'O tipo de usuário que está tentando acessar estes dados não se encaixa em nenhum dos tipos propostos pelo sistema.')
+            return seemycontracts(request)
     return render(request, 'contract/seecontractsbyquery.html', {'search':search, 'chains_to_select':chains_to_select, 'contracts':contracts, 'schools':schools, 'is_supervisor':is_supervisor})
 
 @csrf_exempt
