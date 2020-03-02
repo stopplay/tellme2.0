@@ -210,7 +210,7 @@ CORS_ALLOW_HEADERS = default_headers + ('access-control-allow-origin',)
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 
-ASGI_APPLICATION = "classrooms.routing"
+ASGI_APPLICATION = "classrooms.routing.application"
 
 CHANNEL_LAYERS = {
     'default': {
