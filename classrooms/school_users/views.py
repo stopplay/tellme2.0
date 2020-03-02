@@ -1825,3 +1825,8 @@ def change_email(request, user_id):
             messages.success(request, 'Email Atualizado com sucesso')
             return redirect('users:seeallusers')
     return render(request, 'school_users/change_email.html', {'form':form})
+
+def room(request, room_name):
+    return render(request, 'school_users/room.html', {
+        'room_name_json': mark_safe(json.dumps(room_name))
+    })
