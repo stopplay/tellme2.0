@@ -122,7 +122,9 @@ class Parent(models.Model):
 		return self.profile.username.split('-')[0]
 
 	def __str__(self):
-		return '{}-{}'.format(self.profile.username.split('-')[0],self.name)
+		if self.profile:
+			return '{}-{}'.format(self.profile.username.split('-')[0],self.name)
+		return '{}'.format(self.name)
 
 class Student(models.Model):
 	"""docstring for Student"""
