@@ -1346,8 +1346,7 @@ def seeusersbyquery(request):
                                 school_users += [(parent)]
                                 break
                     else:
-                        if parent not in school_users:
-                            school_users += [(parent)]
+                        school_users += [(parent)]
             elif type_of_user == 'student':
                 postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_student AS school_user WHERE school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%'".format(name, name.lower(), name.upper(), name.capitalize(), name.title())
                 cursor.execute(postgreSQL_select_Query)
