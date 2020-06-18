@@ -47,23 +47,25 @@
 									<input type="hidden" id="selected_user" name="selected_user" value="0">
 									<div class="clearfix"></div>
 									<div class="clearfix"></div>
-									<div class="labelandform">
-										<p><label>Selecione a Escola:</label></p>
-										<select class="custom-select chosen-select" id="select_form_school">
-											<option id="" value="0" selected>--------</option>
-											{% for school in schools %}
-											<option value="{{ school.school_id }}">{{ school.school_name }}</option>
-											{% endfor %}
-										</select>
-									</div>
-									<input type="hidden" id="selected_school" name="selected_school" value="0">
-									<div class="clearfix"></div>
-									<div class="clearfix"></div>
-									<div class="labelandform">
-										<p><label>Selecione a Turma:</label></p>
-										<select class="custom-select" id="select_form_class">
-											<option id="" value="" selected>--------</option>
-										</select>
+									<div id = "to_hide">
+										<div class="labelandform">
+											<p><label>Selecione a Escola:</label></p>
+											<select class="custom-select chosen-select" id="select_form_school">
+												<option id="" value="0" selected>--------</option>
+												{% for school in schools %}
+												<option value="{{ school.school_id }}">{{ school.school_name }}</option>
+												{% endfor %}
+											</select>
+										</div>
+										<input type="hidden" id="selected_school" name="selected_school" value="0">
+										<div class="clearfix"></div>
+										<div class="clearfix"></div>
+										<div class="labelandform">
+											<p><label>Selecione a Turma:</label></p>
+											<select class="custom-select" id="select_form_class">
+												<option id="" value="" selected>--------</option>
+											</select>
+										</div>
 									</div>
 									<input type="hidden" id="selected_class" name="selected_class" value="0">
 									<div class="clearfix"></div>
@@ -174,6 +176,7 @@
 						$('#pai').children('div').remove();
 						$('#first_selection').show()
 						$('#child').children('div').remove();
+						$('#to_hide').show();
 						$('#pai').append('<div id="não"><p><div class="form-group"><label>Nome: </label><div class="">{{ user_form.first_name }}</div></div><div class="form-group"><label>Sobrenome: </label><div class="">{{ user_form.last_name }}</div></div><div class="form-group"><label>Email: </label><div class="">{{ user_form.email }}</div></div><div class="form-group"><label>Senha (auto gerada): </label><div class="">{{ user_form.password1 }}</div></div><div class="form-group"><label>Confirmação de Senha (auto gerada): </label><div class="">{{ user_form.password2 }}</div></div><div><button class="btn btn-info btn-fill pull-left" type="submit" style="background-color: #213f99; border-color: #213f99">Criar Usuário</button><!--<button class="btn btn-info btn-fill pull-right" id="generate_password" style="background-color: #213f99; border-color: #213f99" onclick="generate_password()">Gerar Senha</button>--></div></div></p>')
 						document.getElementById('sim/não').value = 'não'
 					}
@@ -182,6 +185,7 @@
 						$('#pai').children('div').remove();
 						$('#first_selection').show()
 						$('#child').children('div').remove();
+						$('#to_hide').show();
 						$('#pai').append('<div id="não"><p><div class="form-group"><label>Nome: </label><div class="">{{ user_form.first_name }}</div></div><div class="form-group"><label>Sobrenome: </label><div class="">{{ user_form.last_name }}</div></div><div class="form-group"><label>Email: </label><div class="">{{ user_form.email }}</div></div><div class="form-group"><label>Senha (auto gerada): </label><div class="">{{ user_form.password1 }}</div></div><div class="form-group"><label>Confirmação de Senha (auto gerada): </label><div class="">{{ user_form.password2 }}</div>{{ director_form.as_p }}</div><div><button class="btn btn-info btn-fill pull-left" type="submit" style="background-color: #213f99; border-color: #213f99">Criar Usuário</button><!--<button class="btn btn-info btn-fill pull-right" id="generate_password" style="background-color: #213f99; border-color: #213f99" onclick="generate_password()">Gerar Senha</button>--></div></p>')
 						document.getElementById('sim/não').value = 'não'
 					}
@@ -190,6 +194,7 @@
 						$('#pai').children('div').remove();
 						$('#first_selection').show()
 						$('#child').children('div').remove();
+						$('#to_hide').show();
 						$('#pai').append('<div id="não"><p><div class="form-group"><label>Nome: </label><div class="">{{ user_form.first_name }}</div></div><div class="form-group"><label>Sobrenome: </label><div class="">{{ user_form.last_name }}</div></div><div class="form-group"><label>Email: </label><div class="">{{ user_form.email }}</div></div><div class="form-group"><label>Senha (auto gerada): </label><div class="">{{ user_form.password1 }}</div></div><div class="form-group"><label>Confirmação de Senha (auto gerada): </label><div class="">{{ user_form.password2 }}</div>{{ teacher_form.as_p }}</div><div><button class="btn btn-info btn-fill pull-left" type="submit" style="background-color: #213f99; border-color: #213f99">Criar Usuário</button><!--<button class="btn btn-info btn-fill pull-right" id="generate_password" style="background-color: #213f99; border-color: #213f99" onclick="generate_password()">Gerar Senha</button>--></div></p>')
 						document.getElementById('sim/não').value = 'não'
 					}
@@ -198,6 +203,7 @@
 						$('#pai').children('div').remove();
 						$('#first_selection').show()
 						$('#child').children('div').remove();
+						$('#to_hide').show();
 						$('#pai').append('<div id="não"><p><div class="form-group"><label>Nome: </label><div class="">{{ user_form.first_name }}</div></div><div class="form-group"><label>Sobrenome: </label><div class="">{{ user_form.last_name }}</div></div><div class="form-group"><label>Email: </label><div class="">{{ user_form.email }}</div></div><div class="form-group"><label>Senha (auto gerada): </label><div class="">{{ user_form.password1 }}</div></div><div class="form-group"><label>Confirmação de Senha (auto gerada): </label><div class="">{{ user_form.password2 }}</div></div><div><button class="btn btn-info btn-fill pull-left" type="submit" style="background-color: #213f99; border-color: #213f99">Criar Usuário</button><!--<button class="btn btn-info btn-fill pull-right" id="generate_password" style="background-color: #213f99; border-color: #213f99" onclick="generate_password()">Gerar Senha</button>--></div></p>')
 						document.getElementById('sim/não').value = 'não'
 					}
@@ -206,6 +212,7 @@
 						$('#pai').children('div').remove();
 						$('#first_selection').show()
 						$('#child').children('div').remove();
+						$('#to_hide').show();
 						$('#pai').append('<div id="não"><p><div class="form-group"><label>Nome: </label><div class="">{{ user_form.first_name }}</div></div><div class="form-group"><label>Sobrenome: </label><div class="">{{ user_form.last_name }}</div></div><div class="form-group"><label>Email: </label><div class="">{{ user_form.email }}</div></div><div class="form-group"><label>Senha (auto gerada): </label><div class="">{{ user_form.password1 }}</div></div><div class="form-group"><label>Confirmação de Senha (auto gerada): </label><div class="">{{ user_form.password2 }}</div></div><div><button class="btn btn-info btn-fill pull-left" type="submit" style="background-color: #213f99; border-color: #213f99">Criar Usuário</button><!--<button class="btn btn-info btn-fill pull-right" id="generate_password" style="background-color: #213f99; border-color: #213f99" onclick="generate_password()">Gerar Senha</button>--></div></p>')
 						document.getElementById('sim/não').value = 'não'
 					}
@@ -214,6 +221,7 @@
 						$('#pai').children('div').remove();
 						$('#first_selection').show()
 						$('#child').children('div').remove();
+						$('#to_hide').hide();
 						$('#pai').append('<div id="não"><p><div class="form-group"><label>Nome: </label><div class="">{{ user_form.first_name }}</div></div><div class="form-group"><label>Sobrenome: </label><div class="">{{ user_form.last_name }}</div></div><div class="form-group"><label>Email: </label><div class="">{{ user_form.email }}</div></div>{{ parent_form.as_p }}<div class="form-group"><label>Senha (auto gerada): </label><div class="">{{ user_form.password1 }}</div></div><div class="form-group"><label>Confirmação de Senha (auto gerada): </label><div class="">{{ user_form.password2 }}</div></div><div><button class="btn btn-info btn-fill pull-left" type="submit" style="background-color: #213f99; border-color: #213f99">Criar Usuário</button><!--<button class="btn btn-info btn-fill pull-right" id="generate_password" style="background-color: #213f99; border-color: #213f99" onclick="generate_password()">Gerar Senha</button>--></div></p>')
 						document.getElementById('sim/não').value = 'não'
 					}
@@ -222,6 +230,7 @@
 						$('#pai').children('div').remove();
 						$('#first_selection').show()
 						$('#child').children('div').remove();
+						$('#to_hide').show();
 						$('#pai').append('<div id="não"><p><div class="form-group"><label>Nome: </label><div class="">{{ user_form.first_name }}</div></div><div class="form-group"><label>Sobrenome: </label><div class="">{{ user_form.last_name }}</div></div><div class="form-group"><label>Email: </label><div class="">{{ user_form.email }}</div></div><div class="form-group"><label for="id_birthday">{{ student_form.birthday.label }}</label><div class="">{{ student_form.birthday }}</div></div><div class="form-group"><label for="id_tell_me_user_id">{{ student_form.tell_me_user_id.label }}</label><div class="">{{ student_form.tell_me_user_id }}</div></div><div class="form-group"><label for="id_financial_responsible_id_sponte">{{ student_form.financial_responsible_id_sponte.label }}</label><div class="">{{ student_form.financial_responsible_id_sponte }}</div></div><div class="form-group"><label for="id_didatic_responsible_id_sponte">{{ student_form.didatic_responsible_id_sponte.label }}</label><div class="">{{ student_form.didatic_responsible_id_sponte }}</div></div><div class="form-group"><label>Senha (auto gerada): </label><div class="">{{ user_form.password1 }}</div></div><div class="form-group"><label>Confirmação de Senha (auto gerada): </label><div class="">{{ user_form.password2 }}</div></div><div><button class="btn btn-info btn-fill pull-left" type="submit" style="background-color: #213f99; border-color: #213f99">Criar Usuário</button><!--<button class="btn btn-info btn-fill pull-right" id="generate_password" style="background-color: #213f99; border-color: #213f99" onclick="generate_password()">Gerar Senha</button>--></div></p>')
 						document.getElementById('sim/não').value = 'não'
 					}
@@ -229,6 +238,7 @@
 						document.getElementById('selected_user').value = '7'
 						$('#first_selection').hide()
 						$('#pai').children('#não').remove();
+						$('#to_hide').show();
 						$('#pai').append('<div id="sim"><p><div class="form-group"><input type="file" name="file"><br><a href="https://drive.google.com/uc?export=download&id=1G82cuzqaz73uUXlvKN5sL5GKhrlIvej5">Baixe o exemplo</a></div><div><button class="btn btn-info btn-fill pull-left" type="submit" style="background-color: #213f99; border-color: #213f99">Salvar Usuários</button></div></p></div>');
 						document.getElementById('sim/não').value = 'sim'
 					}

@@ -327,9 +327,10 @@ def create_user(request):
                                 user_creation.profile = user_profile
                                 user_creation.name = user_profile.first_name+' '+user_profile.last_name
                                 user_creation.maple_bear_email = user_profile.email
-                                if user_creation.financial_responsible_id_sponte and user_creation.didatic_responsible_id_sponte:
+                                if user_creation.financial_responsible_id_sponte:
                                     if Parent.objects.filter(tell_me_user_id=user_creation.financial_responsible_id_sponte).count()>=1:
                                         user_creation.first_parent = Parent.objects.get(tell_me_user_id=user_creation.financial_responsible_id_sponte)
+                                if user_creation.didatic_responsible_id_sponte:
                                     if Parent.objects.filter(tell_me_user_id=user_creation.didatic_responsible_id_sponte).count()>=1:
                                         user_creation.second_parent = Parent.objects.get(tell_me_user_id=user_creation.didatic_responsible_id_sponte)
                                 user_creation.save()
@@ -341,6 +342,14 @@ def create_user(request):
                                 school_to_add.students.add(student_to_add)
                                 class_to_add.students.add(student_to_add)
                                 messages.success(request, 'Usuário criado com sucesso!')
+                                if student_to_add.first_parent and student_to_add.second_parent:
+                                    pass
+                                elif student_to_add.first_parent:
+                                    messages.success(request, 'Você selecionou apenas o Responsável Financeiro!')
+                                    messages.success(request, 'Por favor selecione o Responsável Pedagógico na aba de usuários!')
+                                elif student_to_add.second_parent:
+                                    messages.success(request, 'Você selecionou apenas o Responsável Pedagógico!')
+                                    messages.success(request, 'Por favor selecione o Responsável Financeiro na aba de usuários!')
                                 current_site = get_current_site(request)
                                 mail_subject = 'Login de acesso ao módulo de Contratos - Tellme School.'
                                 message = render_to_string('school_users/user_login.html', {
@@ -654,9 +663,10 @@ def create_user(request):
                                 user_creation.profile = user_profile
                                 user_creation.name = user_profile.first_name+' '+user_profile.last_name
                                 user_creation.maple_bear_email = user_profile.email
-                                if user_creation.financial_responsible_id_sponte and user_creation.didatic_responsible_id_sponte:
+                                if user_creation.financial_responsible_id_sponte:
                                     if Parent.objects.filter(tell_me_user_id=user_creation.financial_responsible_id_sponte).count()>=1:
                                         user_creation.first_parent = Parent.objects.get(tell_me_user_id=user_creation.financial_responsible_id_sponte)
+                                if user_creation.didatic_responsible_id_sponte:
                                     if Parent.objects.filter(tell_me_user_id=user_creation.didatic_responsible_id_sponte).count()>=1:
                                         user_creation.second_parent = Parent.objects.get(tell_me_user_id=user_creation.didatic_responsible_id_sponte)
                                 user_creation.save()
@@ -668,6 +678,14 @@ def create_user(request):
                                 school_to_add.students.add(student_to_add)
                                 class_to_add.students.add(student_to_add)
                                 messages.success(request, 'Usuário criado com sucesso!')
+                                if student_to_add.first_parent and student_to_add.second_parent:
+                                    pass
+                                elif student_to_add.first_parent:
+                                    messages.success(request, 'Você selecionou apenas o Responsável Financeiro!')
+                                    messages.success(request, 'Por favor selecione o Responsável Pedagógico na aba de usuários!')
+                                elif student_to_add.second_parent:
+                                    messages.success(request, 'Você selecionou apenas o Responsável Pedagógico!')
+                                    messages.success(request, 'Por favor selecione o Responsável Financeiro na aba de usuários!')
                                 current_site = get_current_site(request)
                                 mail_subject = 'Login de acesso ao módulo de Contratos - Tellme School.'
                                 message = render_to_string('school_users/user_login.html', {
