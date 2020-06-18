@@ -1338,15 +1338,14 @@ def seeusersbyquery(request):
                 for user in all_users:
                     parent = Parent.objects.get(parent_id=user[0])
                     if school:
-                        for student in school.students.all():
-                            if student.first_parent == parent and parent not in school_users:
-                                school_users += [(parent)]
-                                break
-                            if student.second_parent == parent and parent not in school_users:
+                        students = Student.objects.filter(Q(first_parent = parent) | Q(second_parent = parent))
+                        for student in students:
+                            if student in school.students.all():
                                 school_users += [(parent)]
                                 break
                     else:
-                        school_users += [(parent)]
+                        if parent not in school_users:
+                            school_users += [(parent)]
             elif type_of_user == 'student':
                 postgreSQL_select_Query = "SELECT DISTINCT * FROM school_users_student AS school_user WHERE school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%' OR school_user.name LIKE '%{}%'".format(name, name.lower(), name.upper(), name.capitalize(), name.title())
                 cursor.execute(postgreSQL_select_Query)
