@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 import datetime
 from corsheaders.defaults import *
+from django.utils import timezone
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -221,7 +222,7 @@ CHANNEL_LAYERS = {
     },
 }
 
-from django.utils import timezone
+
 
 LOGGING = {
     'version': 1,
