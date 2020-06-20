@@ -19,6 +19,7 @@ from django.urls import include, path, re_path
 from django.conf.urls.static import static
 from classrooms import settings
 from school.views import seeallschools
+from django.views.static import serve 
 
 urlpatterns = [
     path('datawizard/', include('data_wizard.urls')),
@@ -31,5 +32,9 @@ urlpatterns = [
     url('schools/', include('school.urls')),
     url('users/', include('school_users.urls')),
 ]
-if settings.DEBUG:
-        urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# if settings.DEBUG:
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += url(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}), 
+
+handler404 = 'school_users.views.handler404'
+handler500 = 'school_users.views.handler500'

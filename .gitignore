@@ -3,3 +3,4 @@
 classrooms/celerybeat-schedule
 media_cdn/*
 classrooms/media_cdn/*
+*.log

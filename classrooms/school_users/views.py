@@ -36,6 +36,9 @@ from django.utils.safestring import mark_safe
 import json
 from django.db.models import Q
 from django.contrib.auth.models import User
+from django.shortcuts import render_to_response
+from django.template import RequestContext
+
 
 # Create your views here.
 @login_required
@@ -1724,3 +1727,14 @@ def room(request, room_name):
     return render(request, 'school_users/room.html', {
         'room_name_json': mark_safe(json.dumps(room_name))
     })
+
+def handler404(request, *args, **argv):
+    response = render_to_response('school_users/errorpage.html')
+    response.status_code = 404
+    return response
+
+
+def handler500(request, *args, **argv):
+    response = render_to_response('school_users/errorpage.html')
+    response.status_code = 500
+    return response

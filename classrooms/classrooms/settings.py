@@ -25,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'z8^yw$9(6#o@o#p@qy%=nb^qxg0ebribt7ngud#+x0n^d-#md7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['52.212.87.244', '127.0.0.1', '34.245.178.93', '18.228.172.18', '52.3.226.200', 'www.tellme.school', 'matricula.tellme.school', 'tellme.school']
 
@@ -220,3 +220,33 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+from django.utils import timezone
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', f'{timezone.now().date()}.log'),
+        },
+    },
+    'root': {
+        'handlers': ['console', 'file'],
+        'level': 'WARNING',
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['file'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+    }
+}
+
+REQUEST_LOGGING_ENABLE_COLORIZE = False
