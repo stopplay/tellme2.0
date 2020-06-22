@@ -1278,6 +1278,7 @@ def seeallusers(request):
 def seeusersbyquery(request):
     head = request.user.head if hasattr(request.user, 'head') else None
     supervisor = request.user.supervisor if hasattr(request.user, 'supervisor') else None
+    is_supervisor = False
     schools = []  
     
     if request.user.is_superuser:
@@ -1345,10 +1346,10 @@ def seeusersbyquery(request):
                     school_users = TYPE[type_of_user].objects.all()
             
         
-        return render(request, 'school_users/seeusersbyquery.html', {'type_of_user':type_of_user, 'school_users':school_users, 'schools':schools})
+        return render(request, 'school_users/seeusersbyquery.html', {'type_of_user':type_of_user, 'school_users':school_users, 'schools':schools, 'is_supervisor': is_supervisor})
 
             
-    return render(request, 'school_users/seeusersbyquery.html', {'schools':schools})
+    return render(request, 'school_users/seeusersbyquery.html', {'schools':schools, 'is_supervisor': is_supervisor})
 
 def seeallusers_by_school(request, school_id=None):
     if request.user.is_superuser:
