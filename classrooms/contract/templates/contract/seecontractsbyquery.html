@@ -692,6 +692,7 @@
       
       /** @type NodeList*/
       var allCheckboxes = document.getElementsByName('checks');
+      var selectall = document.getElementById('selectall');
       
       var hasAtLeastOneChecked = false;
       allCheckboxes.forEach(function(checkbox) {
@@ -699,7 +700,7 @@
       });
       console.log(hasAtLeastOneChecked)
       
-      if (!hasAtLeastOneChecked) {
+      if (!hasAtLeastOneChecked && !selectall.checked) {
         event.preventDefault();
         $('#multi-sign-contract-modal').modal();
         $('#multi-sign-contract-modal-message').text('Por favor, selecione um contrato!');
@@ -713,7 +714,7 @@
             allCheckboxes.forEach(function(checkbox){
               var myInit = {credentials:'same-origin',
                             cache: 'default'};
-              if (checkbox.checked){
+              if (checkbox.checked || selectall.checked){
                fetch(`/contracts/set_signed/${checkbox.value}`, myInit)
               }
             });
