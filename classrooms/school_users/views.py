@@ -332,10 +332,10 @@ def create_user(request):
                                 user_creation.maple_bear_email = user_profile.email
                                 if user_creation.financial_responsible_id_sponte:
                                     if Parent.objects.filter(tell_me_user_id=user_creation.financial_responsible_id_sponte).count()>=1:
-                                        user_creation.first_parent = Parent.objects.get(tell_me_user_id=user_creation.financial_responsible_id_sponte)
+                                        user_creation.first_parent = Parent.objects.filter(tell_me_user_id=user_creation.financial_responsible_id_sponte).last()
                                 if user_creation.didatic_responsible_id_sponte:
                                     if Parent.objects.filter(tell_me_user_id=user_creation.didatic_responsible_id_sponte).count()>=1:
-                                        user_creation.second_parent = Parent.objects.get(tell_me_user_id=user_creation.didatic_responsible_id_sponte)
+                                        user_creation.second_parent = Parent.objects.filter(tell_me_user_id=user_creation.didatic_responsible_id_sponte).last()
                                 user_creation.save()
                                 student_to_add = Student.objects.get(profile=user_profile)
                                 diff = datetime.date.today() - user_creation.birthday
@@ -668,10 +668,10 @@ def create_user(request):
                                 user_creation.maple_bear_email = user_profile.email
                                 if user_creation.financial_responsible_id_sponte:
                                     if Parent.objects.filter(tell_me_user_id=user_creation.financial_responsible_id_sponte).count()>=1:
-                                        user_creation.first_parent = Parent.objects.get(tell_me_user_id=user_creation.financial_responsible_id_sponte)
+                                        user_creation.first_parent = Parent.objects.filter(tell_me_user_id=user_creation.financial_responsible_id_sponte).last()
                                 if user_creation.didatic_responsible_id_sponte:
                                     if Parent.objects.filter(tell_me_user_id=user_creation.didatic_responsible_id_sponte).count()>=1:
-                                        user_creation.second_parent = Parent.objects.get(tell_me_user_id=user_creation.didatic_responsible_id_sponte)
+                                        user_creation.second_parent = Parent.objects.filter(tell_me_user_id=user_creation.didatic_responsible_id_sponte).last()
                                 user_creation.save()
                                 student_to_add = Student.objects.get(profile=user_profile)
                                 diff = datetime.date.today() - user_creation.birthday
