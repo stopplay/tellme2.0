@@ -586,6 +586,9 @@ def create_user(request):
                                 email = EmailMessage(
                                             mail_subject, message, to=[to_email]
                                 )
+                                if school_to_add:
+                                    head_to_add = Head.objects.get(profile=user_profile)
+                                    school_to_add.heads.add(head_to_add)
                                 email.send()
                         elif selected_user == '2':
                             if form3.is_valid():
