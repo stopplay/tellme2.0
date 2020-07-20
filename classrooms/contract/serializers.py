@@ -10,7 +10,7 @@ class ContractSerializer(serializers.ModelSerializer):
     student_auth_signe = StudentSerializer(required=False)
     first_witness_signe = WitnessSerializer(required=False)
     second_witness_signe = WitnessSerializer(required=False)
-    counter_signe = SupervisorSerializer(required=False)
+    counter_signe = HeadSerializer(required=False)
     chain = ChainSerializer()
     class Meta:
         model = Contract
