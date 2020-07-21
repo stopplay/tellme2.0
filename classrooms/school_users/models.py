@@ -117,8 +117,8 @@ class Parent(models.Model):
 
 	@property
 	def school_name(self):
-		if self.school_set.all().first() is not None:
-			return self.school_set.all().first().school_name
+		if self.school.all().first() is not None:
+			return self.school.all().first().school_name
 		return self.profile.username.split('-')[0]
 
 	def __str__(self):
