@@ -55,8 +55,22 @@
             <li class="nav-item item-centering list-item-size list-item-hover-background">
                 <p class="text-top-bar-nav">
                     <i class="fas fa-user"></i>
-                    <a style="color:#FFFFFF;" href="{% url 'users:seeallusers' %}">
+                    <a style="color:#FFFFFF;" href="{% url 'users:all_administration' %}">
                         Usuário(s) 
+                    </a>
+                </p>
+
+
+                <a class="box-rounded flex-div coloring-link" href="{% url 'users:create_user' %}">
+                    <p class="fas fa-plus centralize-margin font-size-plus"></p>
+                </a>
+            </li>
+
+            <li class="nav-item item-centering list-item-size list-item-hover-background">
+                <p class="text-top-bar-nav">
+                    <i class="fas fa-user"></i>
+                    <a style="color:#FFFFFF;" href="{% url 'users:all_signes' %}">
+                        Assinante(s) 
                     </a>
                 </p>
 

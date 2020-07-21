@@ -1278,7 +1278,7 @@ def seeallusers(request):
     return redirect('/')
 
 @login_required
-def seeusersbyquery(request):
+def seeusersbyquery_administration(request):
     head = request.user.head if hasattr(request.user, 'head') else None
     supervisor = request.user.supervisor if hasattr(request.user, 'supervisor') else None
     is_supervisor = False
@@ -1349,10 +1349,87 @@ def seeusersbyquery(request):
                     school_users = TYPE[type_of_user].objects.all()
             
         
-        return render(request, 'school_users/seeusersbyquery.html', {'type_of_user':type_of_user, 'school_users':school_users, 'schools':schools, 'is_supervisor': is_supervisor})
+        return render(request, 'school_users/seeusersbyquery_administration.html', {'type_of_user':type_of_user, 'school_users':school_users, 'schools':schools, 'is_supervisor': is_supervisor})
 
             
-    return render(request, 'school_users/seeusersbyquery.html', {'schools':schools, 'is_supervisor': is_supervisor})
+    return render(request, 'school_users/seeusersbyquery_administration.html', {'schools':schools, 'is_supervisor': is_supervisor})
+
+@login_required
+def seeusersbyquery_signes(request):
+    head = request.user.head if hasattr(request.user, 'head') else None
+    supervisor = request.user.supervisor if hasattr(request.user, 'supervisor') else None
+    is_supervisor = False
+    schools = []  
+    
+    if request.user.is_superuser:
+        schools = School.objects.all()
+    elif head or supervisor:
+        is_supervisor = True
+        if head:
+            schools = School.objects.filter(heads__head_id__exact=head.head_id)
+        elif supervisor:
+            schools = School.objects.filter(Q(adminorsupervisor=supervisor)|Q(adminorsupervisor_2=supervisor))
+
+    
+    if request.method == 'POST':
+        fetched = False
+        type_of_user = request.POST.get('type_of_user', None)
+        selected_school = request.POST.get('selected_school', 0)
+        name = request.POST.get('name' or None)
+        school_users = []
+
+        try:
+            school = schools.get(school_id=selected_school)
+        except School.DoesNotExist:
+            school = None
+
+        if type_of_user:
+
+            TYPE = {
+                'director': Head,
+                'supervisor': Supervisor,
+                'witness': Witness,
+                'parent': Parent,
+                'student': Student
+            }
+            
+            if type_of_user != 'parent':
+                
+                if school:
+                    school_users = TYPE[type_of_user].objects.filter(school=school)
+                    fetched = True
+                    
+                if name:
+                    if fetched:
+                        school_users = school_users.filter(name__icontains=name)
+                    else:
+                        school_users = TYPE[type_of_user].objects.filter(name__icontains=name)
+                        fetched = True
+
+                if not fetched:
+                    school_users = TYPE[type_of_user].objects.all()
+
+            else:
+
+                if school:
+                    school_users = TYPE[type_of_user].objects.filter(Q(first_parent__school=school) | Q(second_parent__school=school) | Q(third_parent__school=school))
+                    fetched = True
+                    
+                if name:
+                    if fetched:
+                        school_users = school_users.filter(name__icontains=name)
+                    else:
+                        school_users = TYPE[type_of_user].objects.filter(name__icontains=name)
+                        fetched = True
+
+                if not fetched:
+                    school_users = TYPE[type_of_user].objects.all()
+            
+        
+        return render(request, 'school_users/seeusersbyquery_signes.html', {'type_of_user':type_of_user, 'school_users':school_users, 'schools':schools, 'is_supervisor': is_supervisor})
+
+            
+    return render(request, 'school_users/seeusersbyquery_signes.html', {'schools':schools, 'is_supervisor': is_supervisor})
 
 def seeallusers_by_school(request, school_id=None):
     if request.user.is_superuser:
