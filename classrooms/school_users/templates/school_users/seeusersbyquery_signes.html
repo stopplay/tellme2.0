@@ -80,7 +80,7 @@
 					                  <th>Escola</th>
 					                {% endif %}
 				                  <th >Nome</th>
-				                  <th >Nome de Usuário</th>
+				                  <th >Sponte Id</th>
 				                  <th>Email</th>
 				                  {% if type_of_user == 'student' %}
 				                  	<th>Responsável Financeiro</th>
@@ -97,7 +97,11 @@
 					                 <th>{{ user.school_name }}</th>
 					            {% endif %}
 				                  <th>{{ user.name }}</th>
-				                  <td>{{ user.profile.username }}</td>
+				                  {% if type_of_user == 'student' %}
+				                  	<td>{{ user.student_id_sponte }}</td>
+				                  {% elif type_of_user == 'parent' %}
+				                  	<td>{{ user.responsible_id_sponte }}</td>
+				                  {% endif %}
 				                  <td>{{ user.profile.email }}</td>
 				                  {% if type_of_user == 'student' %}
 					                  <td>{{ user.first_parent.name }} </td>
