@@ -70,13 +70,22 @@ from channels.layers import get_channel_layer
 def send_data(request, data_serialized):
     room_group_name = 'notifications'
     layer = get_channel_layer()
-    async_to_sync(layer.group_send)(
-        room_group_name,
-        {
-            'type': 'chat_message',
-            'message': data_serialized.data
-        }
-    )
+    try:
+        async_to_sync(layer.group_send)(
+            room_group_name,
+            {
+                'type': 'chat_message',
+                'message': data_serialized.data
+            }
+        )
+    except Exception as e:
+        async_to_sync(layer.group_send)(
+            room_group_name,
+            {
+                'type': 'chat_message',
+                'message': {'contract_id':data_serialized}
+            }
+        )
 
 # Create your views here.
 class ContractsViewSet(viewsets.ModelViewSet):
@@ -1776,6 +1785,7 @@ def delete_contract(request, contract_id = None):
         contract_to_delete = Contract.objects.get(contract_id=contract_id)
         contract_to_delete.delete()
         messages.success(request, 'Contrato {} foi deletado com sucesso!'.format(contract_id))
+        send_data(request, contract_id)
         return redirect('/contracts/all')
     messages.success(request, 'Contrato {} já foi deletado anteriormente!'.format(contract_id))
     return redirect('/contracts/all')
