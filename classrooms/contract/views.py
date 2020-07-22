@@ -114,11 +114,11 @@ def extract_text_to_write_and_coords(contract=None, whosigned=None, school=None)
             time += str(contract.first_auth_signed_timestamp.time().second)
         if contract.first_witness_signe and contract.second_witness_signe:
             if contract.third_auth_signe:
-                return { 'x' : 45, 'y' : 80, 'text' : "1. Responsável Financeiro: {} Hash: {}, em {} às {}".format(contract.first_auth_signe.name, contract.first_auth_hash, date, time) }
-            return { 'x' : 45, 'y' : 70, 'text' : "1. Responsável Financeiro: {} Hash: {}, em {} às {}".format(contract.first_auth_signe.name, contract.first_auth_hash, date, time) }
+                return { 'x' : 45, 'y' : 80, 'text' : "1. Assinante: {} Hash: {}, em {} às {}".format(contract.first_auth_signe.name, contract.first_auth_hash, date, time) }
+            return { 'x' : 45, 'y' : 70, 'text' : "1. Assinante: {} Hash: {}, em {} às {}".format(contract.first_auth_signe.name, contract.first_auth_hash, date, time) }
         if contract.third_auth_signe:
-            return { 'x' : 45, 'y' : 40, 'text' : "1. Responsável Financeiro: {} Hash: {}, em {} às {}".format(contract.first_auth_signe.name, contract.first_auth_hash, date, time) }
-        return { 'x' : 45, 'y' : 30, 'text' : "1. Responsável Financeiro: {} Hash: {}, em {} às {}".format(contract.first_auth_signe.name, contract.first_auth_hash, date, time) }
+            return { 'x' : 45, 'y' : 40, 'text' : "1. Assinante: {} Hash: {}, em {} às {}".format(contract.first_auth_signe.name, contract.first_auth_hash, date, time) }
+        return { 'x' : 45, 'y' : 30, 'text' : "1. Assinante: {} Hash: {}, em {} às {}".format(contract.first_auth_signe.name, contract.first_auth_hash, date, time) }
     elif whosigned == 'second_auth':
         date = str(contract.second_auth_signed_timestamp.date().day)+'/'+str(contract.second_auth_signed_timestamp.date().month)+'/'+str(contract.second_auth_signed_timestamp.date().year)
         if contract.second_auth_signed_timestamp.time().hour<10:
@@ -135,11 +135,11 @@ def extract_text_to_write_and_coords(contract=None, whosigned=None, school=None)
             time += str(contract.second_auth_signed_timestamp.time().second)
         if contract.first_witness_signe and contract.second_witness_signe:
             if contract.third_auth_signe:
-                return { 'x' : 45, 'y' : 70, 'text' : "2. Responsável Didático: {} Hash: {}, em {} às {}".format(contract.second_auth_signe.name, contract.second_auth_hash, date, time) }
-            return { 'x' : 45, 'y' : 60, 'text' : "2. Responsável Didático: {} Hash: {}, em {} às {}".format(contract.second_auth_signe.name, contract.second_auth_hash, date, time) }
+                return { 'x' : 45, 'y' : 70, 'text' : "2. Assinante: {} Hash: {}, em {} às {}".format(contract.second_auth_signe.name, contract.second_auth_hash, date, time) }
+            return { 'x' : 45, 'y' : 60, 'text' : "2. Assinante: {} Hash: {}, em {} às {}".format(contract.second_auth_signe.name, contract.second_auth_hash, date, time) }
         if contract.third_auth_signe:
-            return { 'x' : 45, 'y' : 30, 'text' : "2. Responsável Didático: {} Hash: {}, em {} às {}".format(contract.second_auth_signe.name, contract.second_auth_hash, date, time) }
-        return { 'x' : 45, 'y' : 20, 'text' : "2. Responsável Didático: {} Hash: {}, em {} às {}".format(contract.second_auth_signe.name, contract.second_auth_hash, date, time) }
+            return { 'x' : 45, 'y' : 30, 'text' : "2. Assinante: {} Hash: {}, em {} às {}".format(contract.second_auth_signe.name, contract.second_auth_hash, date, time) }
+        return { 'x' : 45, 'y' : 20, 'text' : "2. Assinante: {} Hash: {}, em {} às {}".format(contract.second_auth_signe.name, contract.second_auth_hash, date, time) }
     elif whosigned == 'third_auth':
         date = str(contract.third_auth_signed_timestamp.date().day)+'/'+str(contract.third_auth_signed_timestamp.date().month)+'/'+str(contract.third_auth_signed_timestamp.date().year)
         if contract.third_auth_signed_timestamp.time().hour<10:
@@ -155,8 +155,8 @@ def extract_text_to_write_and_coords(contract=None, whosigned=None, school=None)
         else:
             time += str(contract.third_auth_signed_timestamp.time().second)
         if contract.first_witness_signe and contract.second_witness_signe:
-            return { 'x' : 45, 'y' : 60, 'text' : "3. Terceiro Responsável: {} Hash: {}, em {} às {}".format(contract.third_auth_signe.name, contract.third_auth_hash, date, time) }
-        return { 'x' : 45, 'y' : 20, 'text' : "3. Terceiro Responsável: {} Hash: {}, em {} às {}".format(contract.third_auth_signe.name, contract.third_auth_hash, date, time) }
+            return { 'x' : 45, 'y' : 60, 'text' : "3. Assinante: {} Hash: {}, em {} às {}".format(contract.third_auth_signe.name, contract.third_auth_hash, date, time) }
+        return { 'x' : 45, 'y' : 20, 'text' : "3. Assinante: {} Hash: {}, em {} às {}".format(contract.third_auth_signe.name, contract.third_auth_hash, date, time) }
     elif whosigned == 'student_auth':
         date = str(contract.student_auth_signed_timestamp.date().day)+'/'+str(contract.student_auth_signed_timestamp.date().month)+'/'+str(contract.student_auth_signed_timestamp.date().year)
         if contract.student_auth_signed_timestamp.time().hour<10:
@@ -172,8 +172,8 @@ def extract_text_to_write_and_coords(contract=None, whosigned=None, school=None)
         else:
             time += str(contract.student_auth_signed_timestamp.time().second)
         if contract.first_witness_signe and contract.second_witness_signe:
-            return { 'x' : 45, 'y' : 60, 'text' : "1. Responsável Financeiro: {} Hash: {}, em {} às {}".format(contract.student_auth_signe.name, contract.student_auth_hash, date, time) }
-        return { 'x' : 45, 'y' : 20, 'text' : "1. Responsável Financeiro: {} Hash: {}, em {} às {}".format(contract.student_auth_signe.name, contract.student_auth_hash, date, time) }
+            return { 'x' : 45, 'y' : 60, 'text' : "1. Assinante: {} Hash: {}, em {} às {}".format(contract.student_auth_signe.name, contract.student_auth_hash, date, time) }
+        return { 'x' : 45, 'y' : 20, 'text' : "1. Assinante: {} Hash: {}, em {} às {}".format(contract.student_auth_signe.name, contract.student_auth_hash, date, time) }
     elif whosigned == 'first_witness':
         date = str(contract.first_witness_signed_timestamp.date().day)+'/'+str(contract.first_witness_signed_timestamp.date().month)+'/'+str(contract.first_witness_signed_timestamp.date().year)
         if contract.first_witness_signed_timestamp.time().hour<10:
