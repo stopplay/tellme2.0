@@ -1415,6 +1415,8 @@ def set_signed(request, contract_id = None):
                     write_pdf(request, contract, 'all_signed')
                     messages.success(request, 'Todos os responsáveis desse contrato assinaram!')
                     contract.save(update_fields=['all_signed'])
+                    contract_rest = ContractSerializer(contract)
+                    send_data(request, contract_rest)
                     return redirect('/contracts/all')
             else:
                     if (contract.first_auth_signed and contract.second_auth_signed and contract.counter_signed and contract.all_witness_signed) or (contract.student_auth_signed and contract.counter_signed and contract.all_witness_signed):
@@ -1422,6 +1424,8 @@ def set_signed(request, contract_id = None):
                         write_pdf(request, contract, 'all_signed')
                         messages.success(request, 'Todos os responsáveis desse contrato assinaram!')
                         contract.save(update_fields=['all_signed'])
+                        contract_rest = ContractSerializer(contract)
+                        send_data(request, contract_rest)
                         return redirect('/contracts/all')
         else:
             if contract.third_auth_signe:
@@ -1430,6 +1434,8 @@ def set_signed(request, contract_id = None):
                     write_pdf(request, contract, 'all_signed')
                     messages.success(request, 'Todos os responsáveis desse contrato assinaram!')
                     contract.save(update_fields=['all_signed'])
+                    contract_rest = ContractSerializer(contract)
+                    send_data(request, contract_rest)
                     return redirect('/contracts/all')
             else:
                 if (contract.first_auth_signed and contract.second_auth_signed and contract.counter_signed) or (contract.student_auth_signed and contract.counter_signed):
@@ -1437,10 +1443,14 @@ def set_signed(request, contract_id = None):
                     write_pdf(request, contract, 'all_signed')
                     messages.success(request, 'Todos os responsáveis desse contrato assinaram!')
                     contract.save(update_fields=['all_signed'])
+                    contract_rest = ContractSerializer(contract)
+                    send_data(request, contract_rest)
                     return redirect('/contracts/all')
 
     else:
         messages.warning(request, 'Você não é diretor nem pai do estudante deste contrato!')
+    contract_rest = ContractSerializer(contract)
+    send_data(request, contract_rest)
     return redirect('/contracts/all')
 
 
