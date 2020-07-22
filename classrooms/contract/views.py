@@ -83,7 +83,7 @@ def send_data(request, data_serialized):
             room_group_name,
             {
                 'type': 'chat_message',
-                'message': {'contract_id':data_serialized}
+                'message': {'contract_id':data_serialized, 'status':'deleted'}
             }
         )
 
