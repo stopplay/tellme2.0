@@ -509,8 +509,23 @@ def delete_school(request, school_id=None):
 			classe.delete()
 		for student in school_to_delete.students.all():
 			if School.objects.filter(students__student_id__exact=student.student_id).count()<2:
-				if student.first_parent and student.second_parent:
-					if not student.first_parent == student.second_parent:
+				try:
+					if student.first_parent and student.second_parent:
+						if not student.first_parent == student.second_parent:
+							if student.first_parent:
+								if student.first_parent.profile:
+									student.first_parent.profile.delete()
+								student.first_parent.delete()
+							if student.second_parent:
+								if student.second_parent.profile:
+									student.second_parent.profile.delete()
+								student.second_parent.delete()
+						else:
+							if student.first_parent:
+								if student.first_parent.profile:
+									student.first_parent.profile.delete()
+								student.first_parent.delete()
+					else:
 						if student.first_parent:
 							if student.first_parent.profile:
 								student.first_parent.profile.delete()
@@ -519,20 +534,9 @@ def delete_school(request, school_id=None):
 							if student.second_parent.profile:
 								student.second_parent.profile.delete()
 							student.second_parent.delete()
-					else:
-						if student.first_parent:
-							if student.first_parent.profile:
-								student.first_parent.profile.delete()
-							student.first_parent.delete()
-				else:
-					if student.first_parent:
-						if student.first_parent.profile:
-							student.first_parent.profile.delete()
-						student.first_parent.delete()
-					if student.second_parent:
-						if student.second_parent.profile:
-							student.second_parent.profile.delete()
-						student.second_parent.delete()
+				except Exception as e:
+					print (str(e))
+					pass
 				if student.profile:
 					student.profile.delete()
 				student.delete()
