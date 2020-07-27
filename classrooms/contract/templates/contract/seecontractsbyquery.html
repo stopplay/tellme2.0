@@ -103,7 +103,6 @@
                       <th>Escola</th>
                       <th>Turma</th>
                       <th>Nome do Estudante</th>
-                      <th>Email Enviado</th>
                       <th>Assinaturas</th>
                       <th >Ações</th>
                     </tr>
@@ -144,7 +143,7 @@
                             {% endif %}
 
                             {% for classe in school.classes.all %}
-                              {% if contract.chain.id == classe.class_id %}
+                              {% if classe.class_name in contract.chain.name %}
                                 <td>
                                   {{ classe.class_name }}
                                 </td>
@@ -165,16 +164,6 @@
                         {% else %}
                           <td></td>
                         {% endif %}
-
-                        <td>
-                          <label>
-                            {% if contract.email_sent %} 
-                              Enviado 
-                            {% else %} 
-                            
-                            {% if contract.sent_date %} Email Agendado Para {{ contract.sent_date.day }}/{{ contract.sent_date.month }}/{{ contract.sent_date.year }} às {{ contract.sent_date.hour }}:{% if contract.sent_date.minute < 10 %}0{{ contract.sent_date.minute }}{% else %}{{ contract.sent_date.minute }}{% endif %}{% else %}-{% endif %}{% endif %}
-                          </label>
-                        </td>
 
                         <td>
                           <!--sign-->
