@@ -693,7 +693,7 @@ def update_class(request, class_id=None):
 	if request.user.is_superuser:
 		class_to_update = Class.objects.get(class_id=class_id)
 		school_to_update_class = School.objects.get(classes__class_id__exact=class_to_update.class_id)
-		chain_to_be_updated = Chain.objects.get(id=class_id)
+		chain_to_be_updated = Chain.objects.get(name="{0}-{1}-{2}-{3}".format(school_to_update_class.school_name, class_to_update.enrollment_class_year, class_to_update.class_unit, class_to_update.class_name))
 		form = ClassModelForm(request.POST or None, instance=class_to_update)
 		form.fields['students'].queryset = school_to_update_class.students.all()
 		if form.is_valid():
@@ -715,7 +715,7 @@ def update_class(request, class_id=None):
 		is_supervisor = True
 		class_to_update = Class.objects.get(class_id=class_id)
 		school_to_update_class = School.objects.get(classes__class_id__exact=class_to_update.class_id)
-		chain_to_be_updated = Chain.objects.get(id=class_id)
+		chain_to_be_updated = Chain.objects.get(name="{0}-{1}-{2}-{3}".format(school_to_update_class.school_name, class_to_update.enrollment_class_year, class_to_update.class_unit, class_to_update.class_name))
 		form = ClassModelForm(request.POST or None, instance=class_to_update)
 		form.fields['students'].queryset = school_to_update_class.students.all()
 		if form.is_valid():
