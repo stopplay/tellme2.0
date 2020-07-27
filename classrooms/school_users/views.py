@@ -1317,20 +1317,34 @@ def seeusersbyquery_administration(request):
             }
             
             if type_of_user != 'parent':
-                
-                if school:
-                    school_users = TYPE[type_of_user].objects.filter(school=school)
-                    fetched = True
-                    
-                if name:
-                    if fetched:
-                        school_users = school_users.filter(name__icontains=name)
-                    else:
-                        school_users = TYPE[type_of_user].objects.filter(name__icontains=name)
+                if type_of_user == 'witness':
+                    if school:
+                        school_users = TYPE[type_of_user].objects.filter(Q(first_witness_school=school) | Q(second_witness_school=school))
                         fetched = True
+                        
+                    if name:
+                        if fetched:
+                            school_users = school_users.filter(name__icontains=name)
+                        else:
+                            school_users = TYPE[type_of_user].objects.filter(name__icontains=name)
+                            fetched = True
 
-                if not fetched:
-                    school_users = TYPE[type_of_user].objects.all()
+                    if not fetched:
+                        school_users = TYPE[type_of_user].objects.all()
+                else:
+                    if school:
+                        school_users = TYPE[type_of_user].objects.filter(school=school)
+                        fetched = True
+                        
+                    if name:
+                        if fetched:
+                            school_users = school_users.filter(name__icontains=name)
+                        else:
+                            school_users = TYPE[type_of_user].objects.filter(name__icontains=name)
+                            fetched = True
+
+                    if not fetched:
+                        school_users = TYPE[type_of_user].objects.all()
 
             else:
 
