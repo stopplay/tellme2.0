@@ -833,23 +833,15 @@ def seecontractsbyquery(request):
         if Class.objects.filter(class_id=selected_class).count()>=1:
             classe = Class.objects.get(class_id=selected_class)
         search = request.POST.get('search' or None)
-        connection = psycopg2.connect(user="dbmasteruser", password="`DsO=)P!+9e[&i`=a?W9(&36`|tKJ8k?", host="ls-dd6fedb602e2f839b3beb6c05c7a0f619ae20106.cztxoubiiizv.us-east-1.rds.amazonaws.com", port="5432", database="dbmaster")
         if classe:
-            postgreSQL_select_Query = "SELECT DISTINCT contract.contract_id FROM contract_contract AS contract WHERE (contract.name LIKE '%{}%' OR contract.name LIKE '%{}%' OR contract.name LIKE '%{}%' OR contract.name LIKE '%{}%' OR contract.name LIKE '%{}%') AND contract.chain_id = {}".format(search, search.lower(), search.upper(), search.capitalize(), search.title(), classe.class_id)
+            contracts = Contract.objects.filter(chain__name__icontains=classe.class_name)
         elif school:
-            postgreSQL_select_Query = "SELECT DISTINCT contract.contract_id FROM contract_contract AS contract WHERE (contract.name LIKE '%{}%' OR contract.name LIKE '%{}%' OR contract.name LIKE '%{}%' OR contract.name LIKE '%{}%' OR contract.name LIKE '%{}%') AND (".format(search, search.lower(), search.upper(), search.capitalize(), search.title())
-            for min_classe in school.classes.all():
-                postgreSQL_select_Query += "contract.chain_id = {} OR ".format(min_classe.class_id)
-            postgreSQL_select_Query += "contract.chain_id = 0)"
+            contracts = Contract.objects.filter(chain__name__icontains=school.school_name)
         else:
-            postgreSQL_select_Query = "SELECT DISTINCT contract.contract_id FROM contract_contract AS contract WHERE contract.name LIKE '%{}%' OR contract.name LIKE '%{}%' OR contract.name LIKE '%{}%' OR contract.name LIKE '%{}%' OR contract.name LIKE '%{}%'".format(search, search.lower(), search.upper(), search.capitalize(), search.title())
-        cursor = connection.cursor()
-        cursor.execute(postgreSQL_select_Query)
-        all_users = cursor.fetchall()
-        for user in all_users:
-            contract = Contract.objects.get(contract_id=user[0])
-            if contract not in contracts and contract.chain in chains_to_select:
-                contracts += [(contract)]
+            contracts = Contract.objects.filter(chain__in=chains_to_select)
+
+        if search:
+            contracts = contracts.filter(name__icontains=search)
         if not schools:
             messages.error(request, 'O tipo de usuário que está tentando acessar estes dados não se encaixa em nenhum dos tipos propostos pelo sistema.')
             return seemycontracts(request)
