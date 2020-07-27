@@ -1697,7 +1697,7 @@ def add_witness(request, school_id=None, type_of_user= None):
 	                mail_subject, message, to=[to_email]
 	            )
 	            email.send()
-	            if type_of_user == 'first_wintess':
+	            if type_of_user == 'first_witness':
 	                school.first_witness = Witness.objects.get(profile=user_profile)
 	            elif type_of_user == 'second_witness':
 	                school.second_witness = Witness.objects.get(profile=user_profile)
@@ -1740,7 +1740,7 @@ def add_witness(request, school_id=None, type_of_user= None):
 	                mail_subject, message, to=[to_email]
 	            )
 	            email.send()
-	            if type_of_user == 'first_wintess':
+	            if type_of_user == 'first_witness':
 	                school.first_witness = Witness.objects.get(profile=user_profile)
 	            elif type_of_user == 'second_witness':
 	                school.second_witness = Witness.objects.get(profile=user_profile)
