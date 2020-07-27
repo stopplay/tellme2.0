@@ -2,6 +2,11 @@ from django.contrib import admin
 from .models import *
 
 # Register your models here.
+class UserAdmin(admin.ModelAdmin):
+	list_display = ['id', 'username']
+
+admin.site.register(User, UserAdmin)
+
 class HeadAdmin(admin.ModelAdmin):
 	list_display = ['head_id','name', 'profile']
 
