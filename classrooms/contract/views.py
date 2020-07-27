@@ -421,7 +421,7 @@ def createacontract(request):
                     messages.error(request, 'O arquivo de contrato foi enviado com algum dos seguintes caracteres no nome em maiúsculo ou minúsculo: ã, á, à, â, é, è, ê, í, ì, î, õ, ó, ò, ô, ú, ù, û, ç. Remova esses caracteres e envie novamente o arquivo.')
                     return redirect('/contracts/createacontract')
                 school = School.objects.get(chains__id__exact=contract.chain.id)
-                classe = school.classes.get(class_name__in=contract.chain.name, class_unit__in=contract.chain.name, enrollment_class_year__in=contract.chain.name)
+                classe = school.classes.get(class_name__in=contract.chain.name, class_unit__in=contract.chain.name)
                 contract.slm = classe.slm
                 contract.name = student.name+' - '+contract.chain.name
                 contract.counter_signe = head
@@ -570,7 +570,7 @@ def createacontract(request):
                     messages.error(request, 'Por favor insira o arquivo de contrato no tipo correto que é PDF')
                     return redirect('/contracts/createacontract')
                 school = School.objects.get(chains__id__exact=contract.chain.id)
-                classe = school.classes.get(class_name__in=contract.chain.name, class_unit__in=contract.chain.name, enrollment_class_year__in=contract.chain.name)
+                classe = school.classes.get(class_name__in=contract.chain.name, class_unit__in=contract.chain.name)
                 contract.slm = classe.slm
                 contract.name = student.name+' - '+contract.chain.name
                 contract.counter_signe = head
