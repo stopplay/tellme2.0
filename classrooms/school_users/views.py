@@ -1602,7 +1602,7 @@ def reset_password_send_email(request, user_id=None, type_of_user=None):
         )
         email.send()
         messages.success(request, 'O usuário {} recebeu no email cadastrado um email para resetar a senha'.format(user_to_reset_password.name))
-        return redirect('/users/all')
+        return redirect(request.META.get('HTTP_REFERER'))
 
 @login_required
 def set_parents(request, student_id=None):
