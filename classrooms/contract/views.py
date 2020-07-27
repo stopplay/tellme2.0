@@ -530,7 +530,7 @@ def createacontract(request):
             for school in School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id):
                 for classe in school.classes.all():
                     if student in classe.students.all():
-                        chains += [(classe.class_id)]
+                        chains += [(Chain.objects.get(name="{0}-{1}-{2}-{3}".format(school.school_name, classe.enrollment_class_year, classe.class_unit, classe.class_name)).id)]
         elif Supervisor.objects.filter(profile=request.user).count()>=1:
             for school in School.objects.filter(Q(adminorsupervisor=Supervisor.objects.get(profile=request.user))|Q(adminorsupervisor_2=Supervisor.objects.get(profile=request.user))):
                 for classe in school.classes.all():
