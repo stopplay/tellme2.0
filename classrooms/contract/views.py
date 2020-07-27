@@ -377,8 +377,8 @@ def createacontract(request):
         for school in School.objects.all():
             for classe in school.classes.all():
                 if student in classe.students.all():
-                    chains += [(classe.class_id)]
-        form.fields["chain"].queryset = Chain.objects.filter(id__in=chains)
+                    chains += [("{0}-{1}-{2}-{3}".format(school.school_name, classe.enrollment_class_year, classe.class_unit, classe.class_name))]
+        form.fields["chain"].queryset = Chain.objects.filter(name__in=chains)
         if request.method == 'POST':
             if form.is_valid():
                 wish = request.POST.get('wish' or None)
