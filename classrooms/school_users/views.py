@@ -1815,7 +1815,7 @@ def change_email(request, user_id):
             user = form.save(commit=False)
             user.save(update_fields=['email'])
             messages.success(request, 'Email Atualizado com sucesso')
-            return redirect('users:seeallusers')
+            return redirect(request.META.get('HTTP_REFERER'))
     return render(request, 'school_users/change_email.html', {'form':form})
 
 def room(request, room_name):
