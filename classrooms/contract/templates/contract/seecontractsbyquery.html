@@ -129,7 +129,7 @@
                         </th>
                         
                         <td>
-                          {{ contract.date }}
+                          {% if contract.date.day < 10 %}0{{ contract.date.day }}{% else %}{{ contract.date.day }}{% endif %}/{% if contract.date.month < 10 %}0{{ contract.date.month }}{% else %}{{ contract.date.month }}{% endif %}/{{ contract.date.year }}
                         </td>
                         
                         {% if contract.chain.name %}
