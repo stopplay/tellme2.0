@@ -1285,13 +1285,13 @@ def seeusersbyquery_administration(request):
     schools = []  
     
     if request.user.is_superuser:
-        schools = School.objects.all()
+        schools = School.objects.all().order_by('school_name')
     elif head or supervisor:
         is_supervisor = True
         if head:
-            schools = School.objects.filter(heads__head_id__exact=head.head_id)
+            schools = School.objects.filter(heads__head_id__exact=head.head_id).order_by('school_name')
         elif supervisor:
-            schools = School.objects.filter(Q(adminorsupervisor=supervisor)|Q(adminorsupervisor_2=supervisor))
+            schools = School.objects.filter(Q(adminorsupervisor=supervisor)|Q(adminorsupervisor_2=supervisor)).order_by('school_name')
 
     
     if request.method == 'POST':
@@ -1376,13 +1376,13 @@ def seeusersbyquery_signes(request):
     schools = []  
     
     if request.user.is_superuser:
-        schools = School.objects.all()
+        schools = School.objects.all().order_by('school_name')
     elif head or supervisor:
         is_supervisor = True
         if head:
-            schools = School.objects.filter(heads__head_id__exact=head.head_id)
+            schools = School.objects.filter(heads__head_id__exact=head.head_id).order_by('school_name')
         elif supervisor:
-            schools = School.objects.filter(Q(adminorsupervisor=supervisor)|Q(adminorsupervisor_2=supervisor))
+            schools = School.objects.filter(Q(adminorsupervisor=supervisor)|Q(adminorsupervisor_2=supervisor)).order_by('school_name')
 
     
     if request.method == 'POST':

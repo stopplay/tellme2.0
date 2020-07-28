@@ -98,12 +98,12 @@
                         </th>
                       {% endif %}
                       <th>Id do Contrato</th>
-                      <th>Nome do Contrato</th>
-                      <th>Data do Contrato</th>
                       <th>Escola</th>
                       <th>Turma</th>
                       <th>Nome do Estudante</th>
-                      <th>Assinaturas</th>
+                      <th>Assinante da Escola</th>
+                      <th>Data do Contrato</th>
+                      <th>Processo do Contrato</th>
                       <th >Ações</th>
                     </tr>
                   </thead>
@@ -123,14 +123,6 @@
                         <th>
                           {{contract.contract_id}}
                         </th>
-                        
-                        <th>
-                          {{ contract.name }}
-                        </th>
-                        
-                        <td>
-                          {% if contract.date.day < 10 %}0{{ contract.date.day }}{% else %}{{ contract.date.day }}{% endif %}/{% if contract.date.month < 10 %}0{{ contract.date.month }}{% else %}{{ contract.date.month }}{% endif %}/{{ contract.date.year }}
-                        </td>
                         
                         {% if contract.chain.name %}
                           
@@ -164,6 +156,16 @@
                         {% else %}
                           <td></td>
                         {% endif %}
+                        {% if contract.counter_signe.name %}
+                          <td>
+                            {{ contract.counter_signe.name }}
+                          </td>
+                        {% else %}
+                          <td></td>
+                        {% endif %}
+                        <td>
+                          {% if contract.date.day < 10 %}0{{ contract.date.day }}{% else %}{{ contract.date.day }}{% endif %}/{% if contract.date.month < 10 %}0{{ contract.date.month }}{% else %}{{ contract.date.month }}{% endif %}/{{ contract.date.year }}
+                        </td>
 
                         <td>
                           <!--sign-->

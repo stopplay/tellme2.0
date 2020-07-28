@@ -808,20 +808,20 @@ def seecontractsbyquery(request):
         return seemycontracts(request)
     elif Head.objects.filter(profile=request.user).count()>=1:
         is_supervisor = True
-        schools = School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id)
+        schools = School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id).order_by('school_name')
         for school in schools:
             for chain in school.chains.all():
                 if chain not in chains_to_select:
                     chains_to_select += [(chain)]
     elif Supervisor.objects.filter(profile=request.user).count()>=1:
         is_supervisor = True
-        schools = School.objects.filter(Q(adminorsupervisor=Supervisor.objects.get(profile=request.user))|Q(adminorsupervisor_2=Supervisor.objects.get(profile=request.user)))
+        schools = School.objects.filter(Q(adminorsupervisor=Supervisor.objects.get(profile=request.user))|Q(adminorsupervisor_2=Supervisor.objects.get(profile=request.user))).order_by('school_name')
         for school in schools:
             for chain in school.chains.all():
                 if chain not in chains_to_select:
                     chains_to_select += [(chain)]
     elif request.user.is_superuser:
-        schools = School.objects.all()
+        schools = School.objects.all().order_by('school_name')
         chains_to_select = Chain.objects.all()
     if request.method == 'POST':
         school = None
