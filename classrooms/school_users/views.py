@@ -1330,7 +1330,7 @@ def seeusersbyquery_administration(request):
                             fetched = True
 
                     if not fetched:
-                        school_users = TYPE[type_of_user].objects.all()
+                        school_users = TYPE[type_of_user].objects.filter(Q(first_witness_school__in=schools) | Q(second_witness_school__in=schools))
                 else:
                     if school:
                         school_users = TYPE[type_of_user].objects.filter(school=school)
@@ -1344,7 +1344,7 @@ def seeusersbyquery_administration(request):
                             fetched = True
 
                     if not fetched:
-                        school_users = TYPE[type_of_user].objects.all()
+                        school_users = TYPE[type_of_user].objects.filter(school__in=schools)
 
             else:
 
@@ -1360,7 +1360,7 @@ def seeusersbyquery_administration(request):
                         fetched = True
 
                 if not fetched:
-                    school_users = TYPE[type_of_user].objects.all()
+                    school_users = TYPE[type_of_user].objects.filter(Q(first_parent__school__in=schools) | Q(second_parent__school__in=schools) | Q(third_parent__school__in=schools))
             
         
         return render(request, 'school_users/seeusersbyquery_administration.html', {'type_of_user':type_of_user, 'school_users':school_users, 'schools':schools, 'is_supervisor': is_supervisor})
@@ -1421,7 +1421,7 @@ def seeusersbyquery_signes(request):
                         fetched = True
 
                 if not fetched:
-                    school_users = TYPE[type_of_user].objects.all()
+                    school_users = TYPE[type_of_user].objects.filter(school__in=schools)
 
             else:
 
@@ -1437,7 +1437,7 @@ def seeusersbyquery_signes(request):
                         fetched = True
 
                 if not fetched:
-                    school_users = TYPE[type_of_user].objects.all()
+                    school_users = TYPE[type_of_user].objects.filter(Q(first_parent__school__in=schools) | Q(second_parent__school__in=schools) | Q(third_parent__school__in=schools))
             
         
         return render(request, 'school_users/seeusersbyquery_signes.html', {'type_of_user':type_of_user, 'school_users':school_users, 'schools':schools, 'is_supervisor': is_supervisor})
@@ -1641,7 +1641,7 @@ def set_parents(request, student_id=None):
         return render(request, 'school_users/set_parents.html', {'form':form, 'student_id':student_id, 'is_supervisor':is_supervisor})
 
 
-
+@csrf_exempt
 def do_login(request):
     if request.method == 'POST':
         username = request.POST['username'].lower()
