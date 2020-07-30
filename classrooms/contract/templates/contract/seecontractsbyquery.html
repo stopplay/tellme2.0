@@ -656,6 +656,9 @@
       initComplete: function() {
         $('#contractstablebutton').removeClass('non-interactable');
       }
+    })
+    $(window).on('resize', function () {
+      $('#contractstable').DataTable();
     });
   } );
 </script>
