@@ -1833,3 +1833,36 @@ def handler500(request, *args, **argv):
     response = render_to_response('school_users/errorpage.html')
     response.status_code = 500
     return response
+
+def forgot_password(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        selected_user = request.POST.get('selected_user')
+        TYPE = {
+                'director': Head,
+                'supervisor': Supervisor,
+                'witness': Witness,
+                'parent': Parent,
+                'student': Student
+            }
+        try:
+            users_to_reset_password = TYPE[selected_user].objects.filter(profile__email=email)
+            for user_to_reset_password in users_to_reset_password:
+                current_site = get_current_site(request)
+                mail_subject = 'Login de acesso ao módulo de Contratos - Tellme School.'
+                message = render_to_string('school_users/user_login.html', {
+                    'user': user_to_reset_password,
+                    'domain': current_site.domain,
+                    'uid':urlsafe_base64_encode(force_bytes(user_to_reset_password.profile.pk)).decode(),
+                    'token':account_activation_token.make_token(user_to_reset_password.profile),
+                })
+                to_email = user_to_reset_password.profile.email
+                email = EmailMessage(
+                    mail_subject, message, to=[to_email]
+                )
+                email.send()
+                messages.success(request, 'O usuário {} recebeu no email cadastrado um email para resetar a senha'.format(user_to_reset_password.name))
+        except Exception as e:
+            messages.error(request, str(e))
+        return redirect(request.META.get('HTTP_REFERER'))
+    return render(request, 'school_users/forgot_password.html')
