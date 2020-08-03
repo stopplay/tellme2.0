@@ -1319,55 +1319,58 @@ def seeusersbyquery_administration(request):
             }
             
             if type_of_user != 'parent':
-
-                school_users = school_users.objects.filter(school__in=schools)
-                
                 if type_of_user == 'witness':
+
+                    school_users = TYPE[type_of_user].objects.filter(Q(first_witness_school=school) | Q(second_witness_school=school))
+
                     if school:
-                        school_users = school_users.objects.filter(Q(first_witness_school=school) | Q(second_witness_school=school))
+                        school_users = school_users.filter(Q(first_witness_school=school) | Q(second_witness_school=school))
                         fetched = True
                         
                     if name:
                         if fetched:
                             school_users = school_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
                         else:
-                            school_users = school_users.objects.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
+                            school_users = school_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
                             fetched = True
 
                     if not fetched:
-                        school_users = school_users.objects.filter(Q(first_witness_school__in=schools) | Q(second_witness_school__in=schools))
+                        school_users = school_users.filter(Q(first_witness_school__in=schools) | Q(second_witness_school__in=schools))
                 else:
+
+                    school_users = TYPE[type_of_user].objects.filter(school__in=schools)
+
                     if school:
-                        school_users = school_users.objects.filter(school=school)
+                        school_users = school_users.filter(school=school)
                         fetched = True
                         
                     if name:
                         if fetched:
                             school_users = school_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
                         else:
-                            school_users = school_users.objects.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
+                            school_users = school_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
                             fetched = True
 
                     if not fetched:
-                        school_users = school_users.objects.filter(school__in=schools)
+                        school_users = school_users.filter(school__in=schools)
 
             else:
 
                 school_users = TYPE[type_of_user].objects.filter(Q(first_parent__school__in=schools) | Q(second_parent__school__in=schools) | Q(third_parent__school__in=schools))
 
                 if school:
-                    school_users = school_users.objects.filter(Q(first_parent__school=school) | Q(second_parent__school=school) | Q(third_parent__school=school))
+                    school_users = school_users.filter(Q(first_parent__school=school) | Q(second_parent__school=school) | Q(third_parent__school=school))
                     fetched = True
                     
                 if name:
                     if fetched:
                         school_users = school_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
                     else:
-                        school_users = school_users.objects.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
+                        school_users = school_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
                         fetched = True
 
                 if not fetched:
-                    school_users = school_users.objects.filter(Q(first_parent__school__in=schools) | Q(second_parent__school__in=schools) | Q(third_parent__school__in=schools))
+                    school_users = school_users.filter(Q(first_parent__school__in=schools) | Q(second_parent__school__in=schools) | Q(third_parent__school__in=schools))
             
         
         return render(request, 'school_users/seeusersbyquery_administration.html', {'type_of_user':type_of_user, 'school_users':school_users, 'schools':schools, 'is_supervisor': is_supervisor})
@@ -1416,39 +1419,39 @@ def seeusersbyquery_signes(request):
             
             if type_of_user != 'parent':
 
-                school_users = school_users.objects.filter(school__in=schools)
+                school_users = TYPE[type_of_user].objects.filter(school__in=schools)
 
                 if school:
-                    school_users = school_users.objects.filter(school=school)
+                    school_users = school_users.filter(school=school)
                     fetched = True
                     
                 if name:
                     if fetched:
                         school_users = school_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
                     else:
-                        school_users = school_users.objects.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
+                        school_users = school_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
                         fetched = True
 
                 if not fetched:
-                    school_users = school_users.objects.filter(school__in=schools)
+                    school_users = school_users.filter(school__in=schools)
 
             else:
 
                 school_users = TYPE[type_of_user].objects.filter(Q(first_parent__school__in=schools) | Q(second_parent__school__in=schools) | Q(third_parent__school__in=schools))
 
                 if school:
-                    school_users = school_users.objects.filter(Q(first_parent__school=school) | Q(second_parent__school=school) | Q(third_parent__school=school))
+                    school_users = school_users.filter(Q(first_parent__school=school) | Q(second_parent__school=school) | Q(third_parent__school=school))
                     fetched = True
                     
                 if name:
                     if fetched:
                         school_users = school_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
                     else:
-                        school_users = school_users.objects.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
+                        school_users = school_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
                         fetched = True
 
                 if not fetched:
-                    school_users = school_users.objects.filter(Q(first_parent__school__in=schools) | Q(second_parent__school__in=schools) | Q(third_parent__school__in=schools))
+                    school_users = school_users.filter(Q(first_parent__school__in=schools) | Q(second_parent__school__in=schools) | Q(third_parent__school__in=schools))
             
         
         return render(request, 'school_users/seeusersbyquery_signes.html', {'type_of_user':type_of_user, 'school_users':school_users, 'schools':schools, 'is_supervisor': is_supervisor})
