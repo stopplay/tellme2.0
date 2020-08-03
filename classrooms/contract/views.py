@@ -60,6 +60,8 @@ import json
 import urllib
 import psycopg2
 from django.db.models import Q
+import operator
+from functools import reduce
 
 try:
     from StringIO import StringIO
@@ -841,7 +843,7 @@ def seecontractsbyquery(request):
             contracts = Contract.objects.filter(chain__in=chains_to_select)
 
         if search:
-            contracts = contracts.filter(name__icontains=search)
+            contracts = contracts.filter(reduce(operator.and_, (Q(name__icontains=x) for x in search.split(" "))))
         if not schools:
             messages.error(request, 'O tipo de usuário que está tentando acessar estes dados não se encaixa em nenhum dos tipos propostos pelo sistema.')
             return seemycontracts(request)

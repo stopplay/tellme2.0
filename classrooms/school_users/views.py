@@ -34,6 +34,8 @@ from django.contrib.auth.forms import SetPasswordForm
 import psycopg2
 from django.utils.safestring import mark_safe
 import json
+import operator
+from functools import reduce
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.shortcuts import render_to_response
@@ -1324,9 +1326,9 @@ def seeusersbyquery_administration(request):
                         
                     if name:
                         if fetched:
-                            school_users = school_users.filter(name__icontains=name)
+                            school_users = school_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
                         else:
-                            school_users = TYPE[type_of_user].objects.filter(name__icontains=name)
+                            school_users = TYPE[type_of_user].objects.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
                             fetched = True
 
                     if not fetched:
@@ -1338,9 +1340,9 @@ def seeusersbyquery_administration(request):
                         
                     if name:
                         if fetched:
-                            school_users = school_users.filter(name__icontains=name)
+                            school_users = school_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
                         else:
-                            school_users = TYPE[type_of_user].objects.filter(name__icontains=name)
+                            school_users = TYPE[type_of_user].objects.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
                             fetched = True
 
                     if not fetched:
@@ -1354,9 +1356,9 @@ def seeusersbyquery_administration(request):
                     
                 if name:
                     if fetched:
-                        school_users = school_users.filter(name__icontains=name)
+                        school_users = school_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
                     else:
-                        school_users = TYPE[type_of_user].objects.filter(name__icontains=name)
+                        school_users = TYPE[type_of_user].objects.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
                         fetched = True
 
                 if not fetched:
@@ -1415,9 +1417,9 @@ def seeusersbyquery_signes(request):
                     
                 if name:
                     if fetched:
-                        school_users = school_users.filter(name__icontains=name)
+                        school_users = school_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
                     else:
-                        school_users = TYPE[type_of_user].objects.filter(name__icontains=name)
+                        school_users = TYPE[type_of_user].objects.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
                         fetched = True
 
                 if not fetched:
@@ -1431,9 +1433,9 @@ def seeusersbyquery_signes(request):
                     
                 if name:
                     if fetched:
-                        school_users = school_users.filter(name__icontains=name)
+                        school_users = school_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
                     else:
-                        school_users = TYPE[type_of_user].objects.filter(name__icontains=name)
+                        school_users = TYPE[type_of_user].objects.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
                         fetched = True
 
                 if not fetched:
