@@ -24,7 +24,7 @@ from block.utils import SymmetricEncryption, JsonApi, EncryptionApi
 from block.models import *
 from block.forms import *
 from school_users.models import *
-from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.http import HttpResponse, Http404, HttpResponseRedirect, JsonResponse
 from PyPDF2 import PdfFileMerger, PdfFileWriter, PdfFileReader
 import urllib
 import io
@@ -1879,3 +1879,33 @@ def directors_choices_ajax(request):
     school = School.objects.get(chains__id__exact=chain_id)
     context = {'directors':school.heads.all()}
     return render(request, 'contract/directors_choices.html', context)
+
+@csrf_exempt
+def receive_maple_result(request):
+    try:
+        received_json_data=json.loads(request.body)
+        school = received_json_data.get('school')
+        sku = received_json_data.get('sku')
+        student = received_json_data.get('student')
+        try:
+            school = School.objects.get(sponte_client_number = school)
+        except Exception as e:
+            return JsonResponse({'message': 'School not Found'}, status=400)
+        try:
+            student = school.students.get(student_id_sponte = student)
+        except Exception as e:
+            return JsonResponse({'message': 'Student not Found'}, status=400)
+        try:
+            classe = school.classes.get(sku = sku, students__student_id__exact=student.student_id)
+        except Exception as e:
+            return JsonResponse({'message': 'Classroom not Found'}, status=400)
+        contract = Contract.objects.filter(purchased_slm = False, chain = Chain.objects.get(name="{0}-{1}-{2}-{3}".format(school.school_name, classe.enrollment_class_year, classe.class_unit, classe.class_name))).last()
+        if contract:
+            contract.purchased_slm = True
+            contract.save()
+            contract_rest = ContractSerializer(contract)
+            # send_data(request, contract_rest)
+            return JsonResponse(contract_rest.data, status=200)
+        return JsonResponse({'message': 'Contract not Found'}, status=400)
+    except Exception as e:
+        return JsonResponse({'message': "Don't received any data"}, status=400)

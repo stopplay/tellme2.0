@@ -136,9 +136,11 @@
 
                             {% for classe in school.classes.all %}
                               {% if classe.class_name in contract.chain.name %}
-                                <td>
-                                  {{ classe.class_name }}
-                                </td>
+                                {% if classe.class_unit in contract.chain.name %}
+                                  <td>
+                                    {{ classe.class_name }}
+                                  </td>
+                                {% endif %}
                               {% endif %}
                             {% endfor %}
 

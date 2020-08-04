@@ -30,4 +30,5 @@ urlpatterns = [
     path(r'serve_protected/{}<path>/<int:contract_id>/<type_of_document>'.format(settings.MEDIA_URL[1:]), views.protected_serve, {'document_root': settings.MEDIA_ROOT}, name='serve_protected'),
     path('set_contract_paid/<int:contract_id>', views.set_contract_paid, name='set_contract_paid'),
     path('directors/ajax', views.directors_choices_ajax, name='directors_choices_ajax'),
+    path('receive_maple_result/', views.receive_maple_result, name='receive_maple_result'),
 ]
