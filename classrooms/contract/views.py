@@ -1904,7 +1904,7 @@ def receive_maple_result(request):
             contract.purchased_slm = True
             contract.save()
             contract_rest = ContractSerializer(contract)
-            # send_data(request, contract_rest)
+            send_data(request, contract_rest)
             return JsonResponse(contract_rest.data, status=200)
         return JsonResponse({'message': 'Contract not Found'}, status=400)
     except Exception as e:
