@@ -60,10 +60,11 @@
                     </a>
                 </p>
 
-
-                <a class="box-rounded flex-div coloring-link" href="{% url 'users:create_user' %}">
-                    <p class="fas fa-plus centralize-margin font-size-plus"></p>
-                </a>
+                {% if request.user.is_superuser %}
+                    <a class="box-rounded flex-div coloring-link" href="{% url 'users:create_user' %}">
+                        <p class="fas fa-plus centralize-margin font-size-plus"></p>
+                    </a>
+                {% endif %}
             </li>
 
             <li class="nav-item item-centering list-item-size list-item-hover-background">
