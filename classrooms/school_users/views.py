@@ -240,6 +240,9 @@ def create_user(request):
                                 user_creation.profile = user_profile
                                 user_creation.name = user_profile.first_name+' '+user_profile.last_name
                                 user_creation.save()
+                                if school_to_add:
+                                    head_to_add = Head.objects.get(profile=user_profile)
+                                    school_to_add.heads.add(head_to_add)
                                 messages.success(request, 'Usuário Criado com sucesso!')
                                 current_site = get_current_site(request)
                                 mail_subject = 'Login de acesso ao módulo de Contratos - Tellme School.'
