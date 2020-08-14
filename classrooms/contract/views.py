@@ -1895,11 +1895,7 @@ def receive_maple_result(request):
             student = school.students.get(student_id_sponte = student)
         except Exception as e:
             return JsonResponse({'message': 'Student not Found'}, status=400)
-        try:
-            classe = school.classes.get(sku = sku, students__student_id__exact=student.student_id)
-        except Exception as e:
-            return JsonResponse({'message': 'Classroom not Found'}, status=400)
-        contract = Contract.objects.filter(name__icontains = student.name, purchased_slm = False, chain = Chain.objects.get(name="{0}-{1}-{2}-{3}".format(school.school_name, classe.enrollment_class_year, classe.class_unit, classe.class_name))).last()
+        contract = Contract.objects.filter(reduce(operator.and_, (Q(name__icontains=x) for x in [student.name, school.school_name]))).last()
         if contract:
             contract.purchased_slm = True
             contract.save()
