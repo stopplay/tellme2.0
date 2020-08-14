@@ -1345,7 +1345,7 @@ def seeusersbyquery_administration(request):
                         else:
                             school_users = TYPE[type_of_user].objects.filter(Q(first_witness_school=school) | Q(second_witness_school=school))
                 else:
-                    if request.user.is_supseruser:
+                    if request.user.is_superuser:
                         school_users = TYPE[type_of_user].objects.all()
                     else:
                         school_users = TYPE[type_of_user].objects.filter(school__in=schools)
@@ -1362,7 +1362,7 @@ def seeusersbyquery_administration(request):
                             fetched = True
 
                     if not fetched:
-                        if request.user.is_supseruser:
+                        if request.user.is_superuser:
                             school_users = TYPE[type_of_user].objects.all()
                         else:
                             school_users = TYPE[type_of_user].objects.filter(school__in=schools)
@@ -1459,7 +1459,7 @@ def seeusersbyquery_signes(request):
                         else:
                             school_users = TYPE[type_of_user].objects.filter(Q(first_witness_school=school) | Q(second_witness_school=school))
                 else:
-                    if request.user.is_supseruser:
+                    if request.user.is_superuser:
                         school_users = TYPE[type_of_user].objects.all()
                     else:
                         school_users = TYPE[type_of_user].objects.filter(school__in=schools)
@@ -1476,7 +1476,7 @@ def seeusersbyquery_signes(request):
                             fetched = True
 
                     if not fetched:
-                        if request.user.is_supseruser:
+                        if request.user.is_superuser:
                             school_users = TYPE[type_of_user].objects.all()
                         else:
                             school_users = TYPE[type_of_user].objects.filter(school__in=schools)
