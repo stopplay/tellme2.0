@@ -136,7 +136,7 @@
 				                          </div>
 				                        </div>
 				                      {% endif %}
-				                      {% if request.user.is_superuser %}
+				                      {% if request.user.is_superuser or is_supervisor %}
 				                        <div class="row">                      
 				                          <div class="col-md-12">
 				                          	{% if type_of_user == 'director' %}
