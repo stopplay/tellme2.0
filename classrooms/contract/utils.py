@@ -1,5 +1,7 @@
 import zeep
 import requests
+import json
+import pdb
 
 class MagentoSoap():
 
@@ -93,4 +95,4 @@ def generate_slm_link(school, student):
         'password': "6k&epw$iyX!8",
     }
     response = requests.request("GET", url, headers=headers, params=querystring)
-    return response.text
+    return json.loads(response.text)
