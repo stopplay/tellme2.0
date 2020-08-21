@@ -426,7 +426,7 @@ def createacontract(request):
                 try:
                     classe = school.classes.get(class_name__icontains=contract.chain.name.split('-')[3], enrollment_class_year=contract.chain.name.split('-')[2])
                 except Exception as e:
-                    classe = school.classes.get(class_name__icontains=contract.chain.name.split('-')[4], enrollment_class_year=contract.chain.name.split('-')[3])
+                    classe = school.classes.get(class_name__icontains=contract.chain.name.split('-')[4], class_unit=contract.chain.name.split('-')[3])
                 contract.slm = classe.slm
                 contract.name = student.name+' - '+contract.chain.name
                 contract.counter_signe = head
