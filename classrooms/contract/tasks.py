@@ -157,7 +157,10 @@ def schedule_email(contract, typeof=None, whosend=None, domain=None):
     attachment = (contract.pdf.name, content, 'application/pdf')
     attachments.append(attachment)
     school = School.objects.get(chains__id__exact = contract.chain.id)
-    classe = school.classes.get(class_name__icontains=contract.chain.name.split('-')[3])
+    try:
+        classe = school.classes.get(Q(class_name__icontains=contract.chain.name.split('-')[-1]) & Q(class_name__icontains=contract.chain.name.split('-')[-2]), class_unit=contract.chain.name.split('-')[-3], enrollment_class_year=contract.chain.name.split('-')[-4])
+    except Exception as e:
+        classe = school.classes.get(class_name__icontains=contract.chain.name.split('-')[-1])
     if contract.first_auth_signe:
         mail_subject = 'Contrato a ser assinado'
         message = render_to_string('contract/sendcontract.html', {
@@ -275,7 +278,10 @@ def schedule_email_without_attachment(contract, typeof=None, whosend=None, domai
         contract.pdf.name = contract.pdf.name.split('/')[1]
         contract.pdf.name = os.path.join(os.path.dirname(settings.BASE_DIR),'media_cdn', contract.pdf.name)
     school = School.objects.get(chains__id__exact = contract.chain.id)
-    classe = school.classes.get(class_name__icontains=contract.chain.name.split('-')[3])
+    try:
+        classe = school.classes.get(Q(class_name__icontains=contract.chain.name.split('-')[-1]) & Q(class_name__icontains=contract.chain.name.split('-')[-2]), class_unit=contract.chain.name.split('-')[-3], enrollment_class_year=contract.chain.name.split('-')[-4])
+    except Exception as e:
+        classe = school.classes.get(class_name__icontains=contract.chain.name.split('-')[-1])
     if contract.first_auth_signe:
         mail_subject = 'Contrato a ser assinado'
         message = render_to_string('contract/sendcontract.html', {

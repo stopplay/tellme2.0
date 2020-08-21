@@ -575,7 +575,10 @@ def createacontract(request):
                     messages.error(request, 'Por favor insira o arquivo de contrato no tipo correto que é PDF')
                     return redirect('/contracts/createacontract')
                 school = School.objects.get(chains__id__exact=contract.chain.id)
-                classe = school.classes.get(class_name__icontains=contract.chain.name.split('-')[3])
+                try:
+                    classe = school.classes.get(Q(class_name__icontains=contract.chain.name.split('-')[-1]) & Q(class_name__icontains=contract.chain.name.split('-')[-2]), class_unit=contract.chain.name.split('-')[-3], enrollment_class_year=contract.chain.name.split('-')[-4])
+                except Exception as e:
+                    classe = school.classes.get(class_name__icontains=contract.chain.name.split('-')[-1])
                 contract.slm = classe.slm
                 contract.name = student.name+' - '+contract.chain.name
                 contract.counter_signe = head
