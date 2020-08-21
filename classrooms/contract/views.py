@@ -1925,4 +1925,3 @@ def redirect_to_slm_link(request, contract_id):
     student = school.students.get(name=contract.student_name)
     url = generate_slm_link(school, student)['url']
     return redirect(url)
-    pass
