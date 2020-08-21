@@ -1,4 +1,5 @@
 import zeep
+import requests
 
 class MagentoSoap():
 
@@ -83,3 +84,13 @@ class MagentoSoap():
             ]
         }
         return self.client.service.salesOrderList(sessionId=self.session_id, filters=filters)
+
+def generate_slm_link(school, student):
+    url = "https://maplebear.loja.biz/schools/api/createtoken"
+    querystring = {"id":student.student_id_sponte,"school":school.sponte_client_number}
+    headers = {
+        'user': "tellme",
+        'password': "6k&epw$iyX!8",
+    }
+    response = requests.request("GET", url, headers=headers, params=querystring)
+    return response.text

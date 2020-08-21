@@ -62,6 +62,7 @@ import psycopg2
 from django.db.models import Q
 import operator
 from functools import reduce
+from .utils import *
 
 try:
     from StringIO import StringIO
@@ -427,7 +428,10 @@ def createacontract(request):
                     classe = school.classes.get(Q(class_name__icontains=contract.chain.name.split('-')[-1]) & Q(class_name__icontains=contract.chain.name.split('-')[-2]), class_unit=contract.chain.name.split('-')[-3], enrollment_class_year=contract.chain.name.split('-')[-4])
                 except Exception as e:
                     classe = school.classes.get(class_name__icontains=contract.chain.name.split('-')[-1])
-                contract.slm = classe.slm
+                try:
+                    contract.slm = generate_slm_link(school, student)['url']
+                except Exception as e:
+                    contract.slm = classe.slm
                 contract.name = student.name+' - '+contract.chain.name
                 contract.counter_signe = head
                 if school.first_witness and school.second_witness:
@@ -579,7 +583,10 @@ def createacontract(request):
                     classe = school.classes.get(Q(class_name__icontains=contract.chain.name.split('-')[-1]) & Q(class_name__icontains=contract.chain.name.split('-')[-2]), class_unit=contract.chain.name.split('-')[-3], enrollment_class_year=contract.chain.name.split('-')[-4])
                 except Exception as e:
                     classe = school.classes.get(class_name__icontains=contract.chain.name.split('-')[-1])
-                contract.slm = classe.slm
+                try:
+                    contract.slm = generate_slm_link(school, student)['url']
+                except Exception as e:
+                    contract.slm = classe.slm
                 contract.name = student.name+' - '+contract.chain.name
                 contract.counter_signe = head
                 if school.first_witness and school.second_witness:
