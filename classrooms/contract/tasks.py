@@ -15,6 +15,7 @@ from school.models import *
 from contract.models import *
 from school.utils import get_sku_by_slm_url
 from contract.utils import MagentoSoap
+from django.db.models import Q
 
 wsdl = 'http://maplebearmkt2.widehomolog.biz/api/v2_soap?wsdl=1'
 username = 'tell-me'
