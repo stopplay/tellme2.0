@@ -1918,3 +1918,11 @@ def receive_maple_result(request):
         return JsonResponse({'message': 'Contract not Found'}, status=400)
     except Exception as e:
         return JsonResponse({'message': "Don't received any data"}, status=400)
+
+def redirect_to_slm_link(request, contract_id):
+    contract = Contract.objects.get(contract_id=contract_id)
+    school = School.objects.get(chains__id__exact=contract.chain.id)
+    student = school.students.get(name=contract.student_name)
+    url = generate_slm_link(school, student)['url']
+    return redirect(url)
+    pass

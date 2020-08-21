@@ -24,6 +24,7 @@ urlpatterns = [
     path('set_signed_rest/<int:contract_id>', views.set_signed_rest, name='set_signed_rest'),
     path('updatecontract/<int:contract_id>', views.updatecontract, name='updatecontract'),
     path('delete_contract/<int:contract_id>', views.delete_contract, name='delete_contract'),
+    path('redirect_to_slm_link/<int:contract_id>', views.redirect_to_slm_link, name='redirect_to_slm_link'),
     path('seefinancialdetails/', views.seefinancialdetails, name='seefinancialdetails'),
     url('select_student_to_contract/', views.select_student_to_contract, name='select_student_to_contract'),
     path('select_student_to_contract_update/<int:contract_id>', views.select_student_to_contract_update, name='select_student_to_contract_update'),

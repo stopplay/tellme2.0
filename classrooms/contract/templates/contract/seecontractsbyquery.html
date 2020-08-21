@@ -544,7 +544,7 @@
                                   {% else %}
                                   <div class="row">                      
                                     <div class="col-md-12">
-                                      <a class="btn btn-primary w-100" href="{{ contract.slm }}">
+                                      <a class="btn btn-primary w-100" href="{% url 'contracts:redirect_to_slm_link' contract.contract_id %}">
                                         Ir para o site de compras de material
                                       </a>
                                     </div>
