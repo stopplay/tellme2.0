@@ -423,10 +423,7 @@ def createacontract(request):
                     messages.error(request, 'O arquivo de contrato foi enviado com algum dos seguintes caracteres no nome em maiúsculo ou minúsculo: ã, á, à, â, é, è, ê, í, ì, î, õ, ó, ò, ô, ú, ù, û, ç. Remova esses caracteres e envie novamente o arquivo.')
                     return redirect('/contracts/createacontract')
                 school = School.objects.get(chains__id__exact=contract.chain.id)
-                try:
-                    classe = school.classes.get(class_name__icontains=contract.chain.name.split('-')[3], class_unit=contract.chain.name.split('-')[3], enrollment_class_year=contract.chain.name.split('-')[1])
-                except Exception as e:
-                    classe = school.classes.get(class_name__icontains=contract.chain.name.split('-')[4], class_unit=contract.chain.name.split('-')[3], enrollment_class_year=contract.chain.name.split('-')[2])
+                classe = school.classes.get(class_name__icontains=contract.chain.name.split('-')[-1], class_unit=contract.chain.name.split('-')[-2], enrollment_class_year=contract.chain.name.split('-')[-3])
                 contract.slm = classe.slm
                 contract.name = student.name+' - '+contract.chain.name
                 contract.counter_signe = head
