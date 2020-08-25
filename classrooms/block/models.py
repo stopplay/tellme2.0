@@ -35,7 +35,7 @@ class Block(models.Model):
 	previous_hash = models.CharField(max_length=255)
 	chain = models.ForeignKey(to='Chain', on_delete=models.CASCADE)
 	nonce = models.CharField(max_length=255, default=0, blank=True)
-	contract = models.ForeignKey(Contract, on_delete=models.CASCADE, blank=True, null=True)
+	contract = models.ForeignKey(Contract, on_delete=models.SET_NULL, blank=True, null=True)
 	
 	def __str__(self):
 		return "Block " + str(self.index) + " on " + self.chain.name
