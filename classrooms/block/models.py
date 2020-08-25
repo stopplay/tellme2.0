@@ -40,16 +40,16 @@ class Block(models.Model):
 	def __str__(self):
 		return "Block " + str(self.index) + " on " + self.chain.name
 	
-	def __repr__(self):
-		return '{}: {}'.format(self.index, str(self.hash)[:6])
+	# def __repr__(self):
+	# 	return '{}: {}'.format(self.index, str(self.hash)[:6])
 	
-	def __hash__(self):
-		return sha256(
-			u'{}{}{}{}'.format(
-				self.index,
-				self.data,
-				self.previous_hash,
-				self.nonce).encode('utf-8')).hexdigest()
+	# def __hash__(self):
+	# 	return sha256(
+	# 		u'{}{}{}{}'.format(
+	# 			self.index,
+	# 			self.data,
+	# 			self.previous_hash,
+	# 			self.nonce).encode('utf-8')).hexdigest()
 
 	@staticmethod
 	def generate_next(latest_block, data):
