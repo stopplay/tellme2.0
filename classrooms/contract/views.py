@@ -1932,5 +1932,8 @@ def redirect_to_slm_link(request, contract_id):
     try:
         url = generate_slm_link(school, student)['url']
     except Exception as e:
-        return HttpResponse('Não foi encontrada url' + json.dumps(generate_slm_link(school, student)))
+        if contract.slm:
+            url = contract.slm
+        else:
+            return HttpResponse('Não foi encontrada url' + json.dumps(generate_slm_link(school, student)))
     return redirect(url)
