@@ -164,7 +164,10 @@ def schedule_email(contract, typeof=None, whosend=None, domain=None):
         try:
             classe = school.classes.get(Q(class_name__icontains=contract.chain.name.split('-')[-1]) & Q(class_name__icontains=contract.chain.name.split('-')[-2]))
         except Exception as e:
-            classe = school.classes.get(class_name__icontains=contract.chain.name.split('-')[-1])
+            try:
+                classe = school.classes.get(class_name=contract.chain.name.split('-')[-1])
+            except Exception as e:
+                classe = school.classes.get(class_name__icontains=contract.chain.name.split('-')[-1])
     if contract.first_auth_signe:
         mail_subject = 'Contrato a ser assinado'
         message = render_to_string('contract/sendcontract.html', {
@@ -288,7 +291,10 @@ def schedule_email_without_attachment(contract, typeof=None, whosend=None, domai
         try:
             classe = school.classes.get(Q(class_name__icontains=contract.chain.name.split('-')[-1]) & Q(class_name__icontains=contract.chain.name.split('-')[-2]))
         except Exception as e:
-            classe = school.classes.get(class_name__icontains=contract.chain.name.split('-')[-1])
+            try:
+                classe = school.classes.get(class_name=contract.chain.name.split('-')[-1])
+            except Exception as e:
+                classe = school.classes.get(class_name__icontains=contract.chain.name.split('-')[-1])
     if contract.first_auth_signe:
         mail_subject = 'Contrato a ser assinado'
         message = render_to_string('contract/sendcontract.html', {
