@@ -433,7 +433,10 @@ def createacontract(request):
                         try:
                             classe = school.classes.get(class_name=contract.chain.name.split('-')[-1])
                         except Exception as e:
-                            classe = school.classes.get(class_name__icontains=contract.chain.name.split('-')[-1])
+                            try:
+                                classe = school.classes.get(class_name__icontains=contract.chain.name.split('-')[-1])
+                            except Exception as e:
+                                classe = school.classes.get(students__student_id__exact=student.student_id)
                 try:
                     contract.slm = generate_slm_link(school, student)['url']
                 except Exception as e:
@@ -450,6 +453,7 @@ def createacontract(request):
                         if student.third_parent:
                             contract.third_auth_signe = student.third_parent
                         contract.student_name = student.name
+                        contract.student_id = student.student_id
                         if wish == 'sim':
                             if wish_today == 'sim':
                                 contract.save()
@@ -491,6 +495,7 @@ def createacontract(request):
                 else:
                     contract.student_auth_signe = student
                     contract.student_name = student.name
+                    contract.student_id = student.student_id
                     if wish == 'sim':
                         if wish_today == 'sim':
                             contract.save()
@@ -594,7 +599,10 @@ def createacontract(request):
                         try:
                             classe = school.classes.get(class_name=contract.chain.name.split('-')[-1])
                         except Exception as e:
-                            classe = school.classes.get(class_name__icontains=contract.chain.name.split('-')[-1])
+                            try:
+                                classe = school.classes.get(class_name__icontains=contract.chain.name.split('-')[-1])
+                            except Exception as e:
+                                classe = school.classes.get(students__student_id__exact=student.student_id)
                 try:
                     contract.slm = generate_slm_link(school, student)['url']
                 except Exception as e:
@@ -611,6 +619,7 @@ def createacontract(request):
                         if student.third_parent:
                             contract.third_auth_signe = student.third_parent
                         contract.student_name = student.name
+                        contract.student_id = student.student_id
                         if wish == 'sim':
                             if wish_today == 'sim':
                                 contract.save()
@@ -652,6 +661,7 @@ def createacontract(request):
                 else:
                     contract.student_auth_signe = student
                     contract.student_name = student.name
+                    contract.student_id = student.student_id
                     if wish == 'sim':
                         if wish_today == 'sim':
                             contract.save()
