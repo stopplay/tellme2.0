@@ -130,264 +130,270 @@ def update_material_orders_from_maple_bear():
 
 @app.task #1
 def schedule_email(contract, typeof=None, whosend=None, domain=None):
-    if typeof == 'json':
-        if contract['first_auth_signe']:
-            first_parent_id = list(contract['first_auth_signe'].values())[0]
-            contract['first_auth_signe'] = Parent.objects.get(parent_id=first_parent_id)
-        if contract['second_auth_signe']:
-            second_parent_id = list(contract['second_auth_signe'].values())[0]
-            contract['second_auth_signe'] = Parent.objects.get(parent_id=first_parent_id)
-        if contract['student_auth_signe']:
-            student_id = list(contract['student_auth_signe'].values())[0]
-            contract['student_auth_signe'] = Student.objects.get(student_id=student_id)
-        if contract['first_witness_signe']:
-            first_witness_id = list(contract['first_witness_signe'].values())[0]
-            contract['first_witness_signe'] = Witness.objects.get(witness_id=first_witness_id)
-        if contract['second_witness_signe']:
-            second_witness_id = list(contract['second_witness_signe'].values())[0]
-            contract['second_witness_signe'] = Witness.objects.get(witness_id=second_witness_id)
-        counter_signe_id = list(list(contract['counter_signe'].values())[0].values())[0]
-        contract['counter_signe'] = Head.objects.get(profile=User.objects.get(id=counter_signe_id))
-        chain_id = list(contract['chain'].values())[0]
-        contract['chain'] = Chain.objects.get(id=chain_id)
-        contract = Contract(**contract)
-        contract.pdf.name = contract.pdf.name.split('/')[1]
-        contract.pdf.name = os.path.join(os.path.dirname(settings.BASE_DIR),'media_cdn', contract.pdf.name)
-    attachments = []
-    content = contract.pdf.read()
-    attachment = (contract.pdf.name, content, 'application/pdf')
-    attachments.append(attachment)
-    school = School.objects.get(chains__id__exact = contract.chain.id)
     try:
-        classe = school.classes.get(Q(class_name__icontains=contract.chain.name.split('-')[-1]) & Q(class_name__icontains=contract.chain.name.split('-')[-2]), class_unit=contract.chain.name.split('-')[-3], enrollment_class_year=contract.chain.name.split('-')[-4])
-    except Exception as e:
+        if typeof == 'json':
+            if contract['first_auth_signe']:
+                first_parent_id = list(contract['first_auth_signe'].values())[0]
+                contract['first_auth_signe'] = Parent.objects.get(parent_id=first_parent_id)
+            if contract['second_auth_signe']:
+                second_parent_id = list(contract['second_auth_signe'].values())[0]
+                contract['second_auth_signe'] = Parent.objects.get(parent_id=first_parent_id)
+            if contract['student_auth_signe']:
+                student_id = list(contract['student_auth_signe'].values())[0]
+                contract['student_auth_signe'] = Student.objects.get(student_id=student_id)
+            if contract['first_witness_signe']:
+                first_witness_id = list(contract['first_witness_signe'].values())[0]
+                contract['first_witness_signe'] = Witness.objects.get(witness_id=first_witness_id)
+            if contract['second_witness_signe']:
+                second_witness_id = list(contract['second_witness_signe'].values())[0]
+                contract['second_witness_signe'] = Witness.objects.get(witness_id=second_witness_id)
+            counter_signe_id = list(list(contract['counter_signe'].values())[0].values())[0]
+            contract['counter_signe'] = Head.objects.get(profile=User.objects.get(id=counter_signe_id))
+            chain_id = list(contract['chain'].values())[0]
+            contract['chain'] = Chain.objects.get(id=chain_id)
+            contract = Contract(**contract)
+            contract.pdf.name = contract.pdf.name.split('/')[1]
+            contract.pdf.name = os.path.join(os.path.dirname(settings.BASE_DIR),'media_cdn', contract.pdf.name)
+        attachments = []
+        content = contract.pdf.read()
+        attachment = (contract.pdf.name, content, 'application/pdf')
+        attachments.append(attachment)
+        school = School.objects.get(chains__id__exact = contract.chain.id)
         try:
-            classe = school.classes.get(Q(class_name__icontains=contract.chain.name.split('-')[-1]) & Q(class_name__icontains=contract.chain.name.split('-')[-2]))
+            classe = school.classes.get(Q(class_name__icontains=contract.chain.name.split('-')[-1]) & Q(class_name__icontains=contract.chain.name.split('-')[-2]), class_unit=contract.chain.name.split('-')[-3], enrollment_class_year=contract.chain.name.split('-')[-4])
         except Exception as e:
             try:
-                classe = school.classes.get(class_name=contract.chain.name.split('-')[-1])
+                classe = school.classes.get(Q(class_name__icontains=contract.chain.name.split('-')[-1]) & Q(class_name__icontains=contract.chain.name.split('-')[-2]))
             except Exception as e:
                 try:
-                    classe = school.classes.get(class_name__icontains=contract.chain.name.split('-')[-1])
+                    classe = school.classes.get(class_name=contract.chain.name.split('-')[-1])
                 except Exception as e:
-                    classe = school.classes.get(students__student_id__exact=contract.student_id)
-    if contract.first_auth_signe:
-        mail_subject = 'Contrato a ser assinado'
-        message = render_to_string('contract/sendcontract.html', {
-            'user': contract.first_auth_signe,
-            'contract': contract,
-            'school': school,
-            'class': classe,
-            'domain':domain,
-        })
-        to_email = contract.first_auth_signe.profile.email
-        email = EmailMessage(
-            mail_subject, message, to=[to_email], attachments=attachments
-        )
-        email.send()
-    if contract.second_auth_signe:
-        mail_subject = 'Contrato a ser assinado'
-        message = render_to_string('contract/sendcontract.html', {
-            'user': contract.second_auth_signe,
-            'contract': contract,
-            'school': school,
-            'class': classe,
-            'domain':domain,
-        })
-        to_email = contract.second_auth_signe.profile.email
-        email = EmailMessage(
-            mail_subject, message, to=[to_email], attachments=attachments
-        )
-        email.send()
-    if contract.student_auth_signe:
-        mail_subject = 'Contrato a ser assinado'
-        message = render_to_string('contract/sendcontract.html', {
-            'user': contract.student_auth_signe,
-            'contract': contract,
-            'school': school,
-            'class': classe,
-            'domain':domain,
-        })
-        to_email = contract.student_auth_signe.profile.email
-        email = EmailMessage(
-            mail_subject, message, to=[to_email], attachments=attachments
-        )
-        email.send()
-    if contract.first_witness_signe:
-        mail_subject = 'Contrato a ser assinado'
-        message = render_to_string('contract/sendcontract.html', {
-            'user': contract.first_witness_signe,
-            'contract': contract,
-            'school': school,
-            'class': classe,
-            'domain':domain,
-        })
-        to_email = contract.first_witness_signe.profile.email
-        email = EmailMessage(
-            mail_subject, message, to=[to_email], attachments=attachments
-        )
-        email.send()
-    if contract.second_witness_signe:
-        mail_subject = 'Contrato a ser assinado'
-        message = render_to_string('contract/sendcontract.html', {
-            'user': contract.second_witness_signe,
-            'contract': contract,
-            'school': school,
-            'class': classe,
-            'domain':domain,
-        })
-        to_email = contract.second_witness_signe.profile.email
-        email = EmailMessage(
-            mail_subject, message, to=[to_email], attachments=attachments
-        )
-        email.send()
-    if whosend == 'admin':
-        if contract.counter_signe:
+                    try:
+                        classe = school.classes.get(class_name__icontains=contract.chain.name.split('-')[-1])
+                    except Exception as e:
+                        classe = school.classes.get(students__student_id__exact=contract.student_id)
+        if contract.first_auth_signe:
             mail_subject = 'Contrato a ser assinado'
             message = render_to_string('contract/sendcontract.html', {
-                'user': contract.counter_signe,
+                'user': contract.first_auth_signe,
                 'contract': contract,
                 'school': school,
                 'class': classe,
                 'domain':domain,
             })
-            to_email = contract.counter_signe.profile.email
+            to_email = contract.first_auth_signe.profile.email
             email = EmailMessage(
                 mail_subject, message, to=[to_email], attachments=attachments
             )
             email.send()
-    contract.email_sent = True
-    if typeof == 'json':
-        contract.save(update_fields=['email_sent'])
-    elif typeof == 'normal':
-        contract.save()
+        if contract.second_auth_signe:
+            mail_subject = 'Contrato a ser assinado'
+            message = render_to_string('contract/sendcontract.html', {
+                'user': contract.second_auth_signe,
+                'contract': contract,
+                'school': school,
+                'class': classe,
+                'domain':domain,
+            })
+            to_email = contract.second_auth_signe.profile.email
+            email = EmailMessage(
+                mail_subject, message, to=[to_email], attachments=attachments
+            )
+            email.send()
+        if contract.student_auth_signe:
+            mail_subject = 'Contrato a ser assinado'
+            message = render_to_string('contract/sendcontract.html', {
+                'user': contract.student_auth_signe,
+                'contract': contract,
+                'school': school,
+                'class': classe,
+                'domain':domain,
+            })
+            to_email = contract.student_auth_signe.profile.email
+            email = EmailMessage(
+                mail_subject, message, to=[to_email], attachments=attachments
+            )
+            email.send()
+        if contract.first_witness_signe:
+            mail_subject = 'Contrato a ser assinado'
+            message = render_to_string('contract/sendcontract.html', {
+                'user': contract.first_witness_signe,
+                'contract': contract,
+                'school': school,
+                'class': classe,
+                'domain':domain,
+            })
+            to_email = contract.first_witness_signe.profile.email
+            email = EmailMessage(
+                mail_subject, message, to=[to_email], attachments=attachments
+            )
+            email.send()
+        if contract.second_witness_signe:
+            mail_subject = 'Contrato a ser assinado'
+            message = render_to_string('contract/sendcontract.html', {
+                'user': contract.second_witness_signe,
+                'contract': contract,
+                'school': school,
+                'class': classe,
+                'domain':domain,
+            })
+            to_email = contract.second_witness_signe.profile.email
+            email = EmailMessage(
+                mail_subject, message, to=[to_email], attachments=attachments
+            )
+            email.send()
+        if whosend == 'admin':
+            if contract.counter_signe:
+                mail_subject = 'Contrato a ser assinado'
+                message = render_to_string('contract/sendcontract.html', {
+                    'user': contract.counter_signe,
+                    'contract': contract,
+                    'school': school,
+                    'class': classe,
+                    'domain':domain,
+                })
+                to_email = contract.counter_signe.profile.email
+                email = EmailMessage(
+                    mail_subject, message, to=[to_email], attachments=attachments
+                )
+                email.send()
+        contract.email_sent = True
+        if typeof == 'json':
+            contract.save(update_fields=['email_sent'])
+        elif typeof == 'normal':
+            contract.save()
+    except Exception as e:
+        return str(e)
 
 @app.task #1
 def schedule_email_without_attachment(contract, typeof=None, whosend=None, domain=None):
-    if typeof == 'json':
-        if contract['first_auth_signe']:
-            first_parent_id = list(contract['first_auth_signe'].values())[0]
-            contract['first_auth_signe'] = Parent.objects.get(parent_id=first_parent_id)
-        if contract['second_auth_signe']:
-            second_parent_id = list(contract['second_auth_signe'].values())[0]
-            contract['second_auth_signe'] = Parent.objects.get(parent_id=first_parent_id)
-        if contract['student_auth_signe']:
-            student_id = list(contract['student_auth_signe'].values())[0]
-            contract['student_auth_signe'] = Student.objects.get(student_id=student_id)
-        if contract['first_witness_signe']:
-            first_witness_id = list(contract['first_witness_signe'].values())[0]
-            contract['first_witness_signe'] = Witness.objects.get(witness_id=first_witness_id)
-        if contract['second_witness_signe']:
-            second_witness_id = list(contract['second_witness_signe'].values())[0]
-            contract['second_witness_signe'] = Witness.objects.get(witness_id=second_witness_id)
-        counter_signe_id = list(list(contract['counter_signe'].values())[0].values())[0]
-        contract['counter_signe'] = Head.objects.get(profile=User.objects.get(id=counter_signe_id))
-        chain_id = list(contract['chain'].values())[0]
-        contract['chain'] = Chain.objects.get(id=chain_id)
-        contract = Contract(**contract)
-        contract.pdf.name = contract.pdf.name.split('/')[1]
-        contract.pdf.name = os.path.join(os.path.dirname(settings.BASE_DIR),'media_cdn', contract.pdf.name)
-    school = School.objects.get(chains__id__exact = contract.chain.id)
     try:
-        classe = school.classes.get(Q(class_name__icontains=contract.chain.name.split('-')[-1]) & Q(class_name__icontains=contract.chain.name.split('-')[-2]), class_unit=contract.chain.name.split('-')[-3], enrollment_class_year=contract.chain.name.split('-')[-4])
-    except Exception as e:
+        if typeof == 'json':
+            if contract['first_auth_signe']:
+                first_parent_id = list(contract['first_auth_signe'].values())[0]
+                contract['first_auth_signe'] = Parent.objects.get(parent_id=first_parent_id)
+            if contract['second_auth_signe']:
+                second_parent_id = list(contract['second_auth_signe'].values())[0]
+                contract['second_auth_signe'] = Parent.objects.get(parent_id=first_parent_id)
+            if contract['student_auth_signe']:
+                student_id = list(contract['student_auth_signe'].values())[0]
+                contract['student_auth_signe'] = Student.objects.get(student_id=student_id)
+            if contract['first_witness_signe']:
+                first_witness_id = list(contract['first_witness_signe'].values())[0]
+                contract['first_witness_signe'] = Witness.objects.get(witness_id=first_witness_id)
+            if contract['second_witness_signe']:
+                second_witness_id = list(contract['second_witness_signe'].values())[0]
+                contract['second_witness_signe'] = Witness.objects.get(witness_id=second_witness_id)
+            counter_signe_id = list(list(contract['counter_signe'].values())[0].values())[0]
+            contract['counter_signe'] = Head.objects.get(profile=User.objects.get(id=counter_signe_id))
+            chain_id = list(contract['chain'].values())[0]
+            contract['chain'] = Chain.objects.get(id=chain_id)
+            contract = Contract(**contract)
+            contract.pdf.name = contract.pdf.name.split('/')[1]
+            contract.pdf.name = os.path.join(os.path.dirname(settings.BASE_DIR),'media_cdn', contract.pdf.name)
+        school = School.objects.get(chains__id__exact = contract.chain.id)
         try:
-            classe = school.classes.get(Q(class_name__icontains=contract.chain.name.split('-')[-1]) & Q(class_name__icontains=contract.chain.name.split('-')[-2]))
+            classe = school.classes.get(Q(class_name__icontains=contract.chain.name.split('-')[-1]) & Q(class_name__icontains=contract.chain.name.split('-')[-2]), class_unit=contract.chain.name.split('-')[-3], enrollment_class_year=contract.chain.name.split('-')[-4])
         except Exception as e:
             try:
-                classe = school.classes.get(class_name=contract.chain.name.split('-')[-1])
+                classe = school.classes.get(Q(class_name__icontains=contract.chain.name.split('-')[-1]) & Q(class_name__icontains=contract.chain.name.split('-')[-2]))
             except Exception as e:
                 try:
-                    classe = school.classes.get(class_name__icontains=contract.chain.name.split('-')[-1])
+                    classe = school.classes.get(class_name=contract.chain.name.split('-')[-1])
                 except Exception as e:
-                    classe = school.classes.get(students__student_id__exact=contract.student_id)
-    if contract.first_auth_signe:
-        mail_subject = 'Contrato a ser assinado'
-        message = render_to_string('contract/sendcontract.html', {
-            'user': contract.first_auth_signe,
-            'contract': contract,
-            'school': school,
-            'class':classe,
-            'domain':domain,
-        })
-        to_email = contract.first_auth_signe.profile.email
-        email = EmailMessage(
-            mail_subject, message, to=[to_email]
-        )
-        email.send()
-    if contract.second_auth_signe:
-        mail_subject = 'Contrato a ser assinado'
-        message = render_to_string('contract/sendcontract.html', {
-            'user': contract.second_auth_signe,
-            'contract': contract,
-            'school': school,
-            'class':classe,
-            'domain':domain,
-        })
-        to_email = contract.second_auth_signe.profile.email
-        email = EmailMessage(
-            mail_subject, message, to=[to_email]
-        )
-        email.send()
-    if contract.student_auth_signe:
-        mail_subject = 'Contrato a ser assinado'
-        message = render_to_string('contract/sendcontract.html', {
-            'user': contract.student_auth_signe,
-            'contract': contract,
-            'school': school,
-            'class':classe,
-            'domain':domain,
-        })
-        to_email = contract.student_auth_signe.profile.email
-        email = EmailMessage(
-            mail_subject, message, to=[to_email]
-        )
-        email.send()
-    if contract.first_witness_signe:
-        mail_subject = 'Contrato a ser assinado'
-        message = render_to_string('contract/sendcontract.html', {
-            'user': contract.first_witness_signe,
-            'contract': contract,
-            'school': school,
-            'class':classe,
-            'domain':domain,
-        })
-        to_email = contract.first_witness_signe.profile.email
-        email = EmailMessage(
-            mail_subject, message, to=[to_email]
-        )
-        email.send()
-    if contract.second_witness_signe:
-        mail_subject = 'Contrato a ser assinado'
-        message = render_to_string('contract/sendcontract.html', {
-            'user': contract.second_witness_signe,
-            'contract': contract,
-            'school': school,
-            'class':classe,
-            'domain':domain,
-        })
-        to_email = contract.second_witness_signe.profile.email
-        email = EmailMessage(
-            mail_subject, message, to=[to_email]
-        )
-        email.send()
-    if whosend == 'admin':
-        if contract.counter_signe:
+                    try:
+                        classe = school.classes.get(class_name__icontains=contract.chain.name.split('-')[-1])
+                    except Exception as e:
+                        classe = school.classes.get(students__student_id__exact=contract.student_id)
+        if contract.first_auth_signe:
             mail_subject = 'Contrato a ser assinado'
             message = render_to_string('contract/sendcontract.html', {
-                'user': contract.counter_signe,
+                'user': contract.first_auth_signe,
                 'contract': contract,
                 'school': school,
                 'class':classe,
                 'domain':domain,
             })
-            to_email = contract.counter_signe.profile.email
+            to_email = contract.first_auth_signe.profile.email
             email = EmailMessage(
                 mail_subject, message, to=[to_email]
             )
             email.send()
-    contract.email_sent = True
-    if typeof == 'json':
-        contract.save(update_fields=['email_sent'])
-    elif typeof == 'normal':
-        contract.save()
+        if contract.second_auth_signe:
+            mail_subject = 'Contrato a ser assinado'
+            message = render_to_string('contract/sendcontract.html', {
+                'user': contract.second_auth_signe,
+                'contract': contract,
+                'school': school,
+                'class':classe,
+                'domain':domain,
+            })
+            to_email = contract.second_auth_signe.profile.email
+            email = EmailMessage(
+                mail_subject, message, to=[to_email]
+            )
+            email.send()
+        if contract.student_auth_signe:
+            mail_subject = 'Contrato a ser assinado'
+            message = render_to_string('contract/sendcontract.html', {
+                'user': contract.student_auth_signe,
+                'contract': contract,
+                'school': school,
+                'class':classe,
+                'domain':domain,
+            })
+            to_email = contract.student_auth_signe.profile.email
+            email = EmailMessage(
+                mail_subject, message, to=[to_email]
+            )
+            email.send()
+        if contract.first_witness_signe:
+            mail_subject = 'Contrato a ser assinado'
+            message = render_to_string('contract/sendcontract.html', {
+                'user': contract.first_witness_signe,
+                'contract': contract,
+                'school': school,
+                'class':classe,
+                'domain':domain,
+            })
+            to_email = contract.first_witness_signe.profile.email
+            email = EmailMessage(
+                mail_subject, message, to=[to_email]
+            )
+            email.send()
+        if contract.second_witness_signe:
+            mail_subject = 'Contrato a ser assinado'
+            message = render_to_string('contract/sendcontract.html', {
+                'user': contract.second_witness_signe,
+                'contract': contract,
+                'school': school,
+                'class':classe,
+                'domain':domain,
+            })
+            to_email = contract.second_witness_signe.profile.email
+            email = EmailMessage(
+                mail_subject, message, to=[to_email]
+            )
+            email.send()
+        if whosend == 'admin':
+            if contract.counter_signe:
+                mail_subject = 'Contrato a ser assinado'
+                message = render_to_string('contract/sendcontract.html', {
+                    'user': contract.counter_signe,
+                    'contract': contract,
+                    'school': school,
+                    'class':classe,
+                    'domain':domain,
+                })
+                to_email = contract.counter_signe.profile.email
+                email = EmailMessage(
+                    mail_subject, message, to=[to_email]
+                )
+                email.send()
+        contract.email_sent = True
+        if typeof == 'json':
+            contract.save(update_fields=['email_sent'])
+        elif typeof == 'normal':
+            contract.save()
+    except Exception as e:
+        return str(e)
