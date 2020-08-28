@@ -132,20 +132,19 @@
                               <td>
                                 {{ school.school_name }}
                               </td>
-                            
+                            {% endif %}
 
-                              {% for classe in school.classes.all %}
-                                {% if classe.class_name in contract.chain.name %}
-                                  {% if classe.class_unit in contract.chain.name %}
-                                    <td>
-                                      {{ classe.class_name }}
-                                    </td>
-                                  {% endif %}
+                            {% for classe in school.classes.all %}
+                              {% if classe.class_name in contract.chain.name %}
+                                {% if classe.class_unit in contract.chain.name %}
+                                  <td>
+                                    {{ classe.class_name }}
+                                  </td>
                                 {% endif %}
-                              {% endfor %}
-
+                              {% endif %}
                             {% endfor %}
-                          {% endif %}
+
+                          {% endfor %}
                         
                         {% else %}
                           <td></td>
