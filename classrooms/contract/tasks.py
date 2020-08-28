@@ -263,7 +263,7 @@ def schedule_email(contract, typeof=None, whosend=None, domain=None):
         elif typeof == 'normal':
             contract.save()
     except Exception as e:
-        return str(e)
+        print(str(e))
 
 @app.task #1
 def schedule_email_without_attachment(contract, typeof=None, whosend=None, domain=None):
@@ -396,4 +396,4 @@ def schedule_email_without_attachment(contract, typeof=None, whosend=None, domai
         elif typeof == 'normal':
             contract.save()
     except Exception as e:
-        return str(e)
+        print(str(e))
