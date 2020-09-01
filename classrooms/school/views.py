@@ -738,7 +738,8 @@ def update_class(request, class_id=None):
 def delete_class(request, class_id=None):
 	if request.user.is_superuser or Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
 		class_to_delete = Class.objects.get(class_id=class_id)
-		chain_to_delete = Chain.objects.get(id=class_id)
+		school = School.objects.get(classes__class_id__exact=class_id)
+		Chain.objects.get(name="{0}-{1}-{2}-{3}".format(school.school_name, class_to_delete.enrollment_class_year, class_to_delete.class_unit, class_to_delete.class_name))
 		chain_to_delete.delete()
 		class_to_delete.delete()
 		messages.success(request, 'Esta classe foi deletada corretamente e o blockchain referente a ela também!')
