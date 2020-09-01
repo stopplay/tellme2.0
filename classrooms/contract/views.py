@@ -999,7 +999,7 @@ def seemycontracts(request):
         contracts += Contract.objects.filter(first_witness_signe=Witness.objects.get(profile=request.user))
         contracts += Contract.objects.filter(second_witness_signe=Witness.objects.get(profile=request.user))
         for contract in contracts:
-            if School.objects.filter(chains__id__exact=contract.chain.id).count()>=1:
+            if contract.chain and School.objects.filter(chains__id__exact=contract.chain.id).count()>=1:
                 if School.objects.get(chains__id__exact=contract.chain.id) not in schools:
                     schools+=[(School.objects.get(chains__id__exact=contract.chain.id).school_id)]
         schools = School.objects.filter(school_id__in=schools)
