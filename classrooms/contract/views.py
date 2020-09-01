@@ -1107,7 +1107,10 @@ def seecontractdetails(request, contract_id=None):
         is_supervisor = True
     contract = Contract.objects.get(contract_id=contract_id)
     if contract.chain:
-        classe = Class.objects.get(class_id=contract.chain.id)
+        try:
+            classe = Class.objects.get(students__student_id__exact=contract.student_id)
+        except Exception as e:
+            classe = Class.objects.get(class_id=contract.chain.id)
         school = School.objects.get(classes__class_id__exact=classe.class_id)
     return render(request,'contract/seecontractdetails.html',{'contract':contract, 'is_supervisor':is_supervisor, 'class':classe, 'school':school})
 

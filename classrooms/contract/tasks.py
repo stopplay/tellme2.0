@@ -54,8 +54,12 @@ def update_material_orders_from_maple_bear():
             counter += 1
             if contract_not_purchased_slm.chain != None:
                 
+                contract_student_id = contract_not_purchased_slm.student_id
                 contract_chain_id = contract_not_purchased_slm.chain.id
-                class_linked_to_contract = Class.objects.get(class_id=contract_chain_id)
+                try:
+                    class_linked_to_contract = Class.objects.get(students__student_id__exact=contract_student_id)
+                except Exception as e:
+                    class_linked_to_contract = Class.objects.get(class_id=contract_chain_id)
     
                 if class_linked_to_contract == None: 
                     continue
