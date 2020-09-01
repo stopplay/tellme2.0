@@ -1237,6 +1237,20 @@ def add_parent(request, student_id=None, type_of_user= None):
                 student.third_parent = parent
             student.save(update_fields=['first_parent','second_parent', 'third_parent'])
             messages.success(request, 'Responsável adicionado com sucesso!')
+            current_site = get_current_site(request)
+            mail_subject = 'Login de acesso ao módulo de Contratos - Tellme School.'
+            message = render_to_string('school_users/user_login.html', {
+                'user': user_creation,
+                'domain': current_site.domain,
+                'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                'token':account_activation_token.make_token(user),
+                'type_of_user':'responsável',
+            })
+            to_email = form.cleaned_data.get('email')
+            email = EmailMessage(
+                mail_subject, message, to=[to_email]
+            )
+            email.send()
             return redirect('/users/set_parents/{}'.format(student_id))
         return render(request, 'school_users/add_parent.html', {'form':form, 'form2':form2, 'is_supervisor':is_supervisor})
 
