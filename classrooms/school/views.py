@@ -592,6 +592,7 @@ def add_class(request, school_id=None):
 					if sku: classroom.sku = sku
 					print('slm', classroom.slm)
 					print('sku', classroom.sku)
+				form.save_m2m()
 				classroom.save()
 				
 				newclassroom = Class.objects.get(class_id=classroom.class_id)
@@ -616,6 +617,7 @@ def add_class(request, school_id=None):
 					if sku: classroom.sku = sku
 					print('slm', classroom.slm)
 					print('sku', classroom.sku)
+				form.save_m2m()
 				classroom.save()
 				
 				newclassroom = Class.objects.get(class_id=classroom.class_id)
@@ -642,6 +644,7 @@ def add_another_class(request, school_id=None):
 					if sku: classroom.sku = sku
 					print('slm', classroom.slm)
 					print('sku', classroom.sku)
+				form.save_m2m()
 				classroom.save()
 				
 				newclassroom = Class.objects.get(class_id=classroom.class_id)
@@ -666,6 +669,7 @@ def add_another_class(request, school_id=None):
 					if sku: classroom.sku = sku
 					print('slm', classroom.slm)
 					print('sku', classroom.sku)
+				form.save_m2m()
 				classroom.save()
 				
 				newclassroom = Class.objects.get(class_id=classroom.class_id)
