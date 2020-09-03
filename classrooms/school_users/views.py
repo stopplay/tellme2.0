@@ -1730,7 +1730,7 @@ def do_login(request):
             nextpage = request.GET.get('next','/')
             return redirect(nextpage)
         else:
-            user = authenticate(username=request.POST['username'], password, request.POST['password'])
+            user = authenticate(username=request.POST['username'], password=request.POST['password'])
             if user is not None:
                 login(request, user)
                 nextpage = request.GET.get('next','/')
