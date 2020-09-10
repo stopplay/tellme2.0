@@ -1340,7 +1340,7 @@ def seeusersbyquery_administration(request):
                     if request.user.is_superuser:
                         school_users = TYPE[type_of_user].objects.all()
                     else:
-                        school_users = TYPE[type_of_user].objects.filter(Q(first_witness_school=school) | Q(second_witness_school=school))
+                        school_users = TYPE[type_of_user].objects.filter(Q(first_witness_school__in=schools) | Q(second_witness_school__in=schools))
 
                     if school:
                         school_users = school_users.filter(Q(first_witness_school=school) | Q(second_witness_school=school))
@@ -1357,7 +1357,29 @@ def seeusersbyquery_administration(request):
                         if request.user.is_superuser:
                             school_users = TYPE[type_of_user].objects.all()
                         else:
-                            school_users = TYPE[type_of_user].objects.filter(Q(first_witness_school=school) | Q(second_witness_school=school))
+                            school_users = TYPE[type_of_user].objects.filter(Q(first_witness_school__in=school) | Q(second_witness_school__in=school))
+                elif type_of_user == 'supervisor':
+                    if request.user.is_superuser:
+                        school_users = TYPE[type_of_user].objects.all()
+                    else:
+                        school_users = TYPE[type_of_user].objects.filter(Q(school_in=school) | Q(adminorsupervisor_2__in=school))
+
+                    if school:
+                        school_users = school_users.filter(Q(school=school) | Q(adminorsupervisor_2=school))
+                        fetched = True
+                        
+                    if name:
+                        if fetched:
+                            school_users = school_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
+                        else:
+                            school_users = school_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
+                            fetched = True
+
+                    if not fetched:
+                        if request.user.is_superuser:
+                            school_users = TYPE[type_of_user].objects.all()
+                        else:
+                            school_users = TYPE[type_of_user].objects.filter(Q(school__in=school) | Q(adminorsupervisor_2__in=school))
                 else:
                     if request.user.is_superuser:
                         school_users = TYPE[type_of_user].objects.all()
