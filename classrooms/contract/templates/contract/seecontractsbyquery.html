@@ -143,6 +143,7 @@
                                         <td>
                                           {{ classe.class_name }}
                                         </td>
+                                        {{ "<!--" }}
                                       {% endif %}
                                     {% endif %}
                                   {% endfor %}
@@ -151,6 +152,7 @@
                             {% endfor %}
 
                           {% endfor %}
+                        {{ "-->" }}
                         
                         {% else %}
                           <td></td>

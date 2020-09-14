@@ -184,7 +184,9 @@ class Student(models.Model):
 	def school_name(self):
 		if self.school_set.all().first() is not None:
 			return self.school_set.all().first().school_name
-		return self.profile.username.split('-')[0]
+		if self.profile:
+			return self.profile.username.split('-')[0]
+		return ""
 	
 
 	def __str__(self):
