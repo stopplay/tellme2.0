@@ -63,6 +63,7 @@ from django.db.models import Q
 import operator
 from functools import reduce
 from .utils import *
+import pdb
 
 try:
     from StringIO import StringIO
@@ -372,11 +373,23 @@ def createacontract(request):
         students = Student.objects.all().order_by('name')
         chains = []
         selected_user = request.session['selected_user']
-        if Student.objects.filter(student_id = selected_user).count()>=1:
-            student = Student.objects.get(student_id = selected_user)
+        if 'chain' in request.session:
+            chains+=[request.session['chain']]
+        student = None
+        students = []
+        if ',' not in selected_user:
+            if Student.objects.filter(student_id = selected_user).count()>=1:
+                student = Student.objects.get(student_id = selected_user)
+            else:
+                messages.warning(request, 'Por favor selecione um estudante')
+                return redirect('/contracts/select_student_to_contract')
         else:
-            messages.warning(request, 'Por favor selecione um estudante')
-            return redirect('/contracts/select_student_to_contract')
+            for id in selected_user.split(','):
+                if Student.objects.filter(student_id = id).count()>=1:
+                    students.append(Student.objects.get(student_id = id))
+                else:
+                    messages.warning(request, 'Por favor selecione um estudante')
+                    return redirect('/contracts/select_student_to_contract')
         for school in School.objects.all():
             for classe in school.classes.all():
                 if student in classe.students.all():
@@ -386,72 +399,122 @@ def createacontract(request):
             if form.is_valid():
                 wish = request.POST.get('wish' or None)
                 wish_today = request.POST.get('wish_today' or None)
-                selected_user = request.POST.get('selected_user' or None)
-                head = None
-                if Head.objects.filter(head_id = selected_user).count()>=1:
-                    head = Head.objects.get(head_id = selected_user)
+                selected_user_head = request.POST.get('selected_user' or None)
+                date = request.POST.get('date' or None)
+                time = request.POST.get('time' or None)
+                if students:
+                    for student in students:
+                        result = tasks.create_contract.delay(form.cleaned_data, wish, wish_today, student.student_id, selected_user_head, date, time, current_site.domain, 'admin')
+                    messages.success(request, 'Contrato criado com sucesso!')
+                    return redirect('/contracts/all/')
                 else:
-                    messages.warning(request, 'Você não selecionou nenhum diretor')
-                    return redirect('/contracts/createacontract')
-                contract = form.save(commit=False)
-                if contract.pdf.size > 2097152:
-                    messages.error(request, 'Por favor mantenha o tamanho do arquivo de contrato enviado abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.pdf.size)))
-                    return redirect('/contracts/createacontract')
-                if contract.terms_of_contract:
-                    if contract.terms_of_contract.size > 2097152:
-                        messages.error(request, 'Por favor mantenha o tamanho do arquivo de termos aditivos de contrato (1) abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.terms_of_contract.size)))
+                    head = None
+                    if Head.objects.filter(head_id = selected_user_head).count()>=1:
+                        head = Head.objects.get(head_id = selected_user_head)
+                    else:
+                        messages.warning(request, 'Você não selecionou nenhum diretor')
                         return redirect('/contracts/createacontract')
-                    if not contract.terms_of_contract.name.endswith('.pdf'):
-                        messages.error(request, 'Por favor insira o arquivo de termos aditivos de contrato (1) no tipo correto que é PDF')
+                    contract = form.save(commit=False)
+                    if contract.pdf.size > 2097152:
+                        messages.error(request, 'Por favor mantenha o tamanho do arquivo de contrato enviado abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.pdf.size)))
                         return redirect('/contracts/createacontract')
-                    if 'í' in contract.terms_of_contract.name or 'Í' in contract.terms_of_contract.name or 'ì' in contract.terms_of_contract.name or 'Ì' in contract.terms_of_contract.name or 'î' in contract.terms_of_contract.name or 'Î' in contract.terms_of_contract.name or 'ú' in contract.terms_of_contract.name or 'Ú' in contract.terms_of_contract.name or 'ù' in contract.terms_of_contract.name or 'Ù' in contract.terms_of_contract.name or 'û' in contract.terms_of_contract.name or 'Û' in contract.terms_of_contract.name or 'ó' in contract.terms_of_contract.name or 'Ó' in contract.terms_of_contract.name or 'ò' in contract.terms_of_contract.name or 'Ò' in contract.terms_of_contract.name or 'ô' in contract.terms_of_contract.name or 'Ô' in contract.terms_of_contract.name or 'õ' in contract.terms_of_contract.name or 'Õ' in contract.terms_of_contract.name or 'é' in contract.terms_of_contract.name or 'É' in contract.terms_of_contract.name or 'è' in contract.terms_of_contract.name or 'È' in contract.terms_of_contract.name or 'ê' in contract.terms_of_contract.name or 'Ê' in contract.terms_of_contract.name or 'á' in contract.terms_of_contract.name or 'Á' in contract.terms_of_contract.name or 'à' in contract.terms_of_contract.name or 'À' in contract.terms_of_contract.name or 'ã' in contract.terms_of_contract.name or 'Ã' in contract.terms_of_contract.name or 'â' in contract.terms_of_contract.name or 'Â' in contract.terms_of_contract.name or 'ç' in contract.terms_of_contract.name or 'Ç' in contract.terms_of_contract.name:
-                        messages.error(request, 'O arquivo de termos aditivos de contrato (1) foi enviado com algum dos seguintes caracteres no nome em maiúsculo ou minúsculo: ã, á, à, â, é, è, ê, í, ì, î, õ, ó, ò, ô, ú, ù, û, ç. Remova esses caracteres e envie novamente o arquivo.')
+                    if contract.terms_of_contract:
+                        if contract.terms_of_contract.size > 2097152:
+                            messages.error(request, 'Por favor mantenha o tamanho do arquivo de termos aditivos de contrato (1) abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.terms_of_contract.size)))
+                            return redirect('/contracts/createacontract')
+                        if not contract.terms_of_contract.name.endswith('.pdf'):
+                            messages.error(request, 'Por favor insira o arquivo de termos aditivos de contrato (1) no tipo correto que é PDF')
+                            return redirect('/contracts/createacontract')
+                        if 'í' in contract.terms_of_contract.name or 'Í' in contract.terms_of_contract.name or 'ì' in contract.terms_of_contract.name or 'Ì' in contract.terms_of_contract.name or 'î' in contract.terms_of_contract.name or 'Î' in contract.terms_of_contract.name or 'ú' in contract.terms_of_contract.name or 'Ú' in contract.terms_of_contract.name or 'ù' in contract.terms_of_contract.name or 'Ù' in contract.terms_of_contract.name or 'û' in contract.terms_of_contract.name or 'Û' in contract.terms_of_contract.name or 'ó' in contract.terms_of_contract.name or 'Ó' in contract.terms_of_contract.name or 'ò' in contract.terms_of_contract.name or 'Ò' in contract.terms_of_contract.name or 'ô' in contract.terms_of_contract.name or 'Ô' in contract.terms_of_contract.name or 'õ' in contract.terms_of_contract.name or 'Õ' in contract.terms_of_contract.name or 'é' in contract.terms_of_contract.name or 'É' in contract.terms_of_contract.name or 'è' in contract.terms_of_contract.name or 'È' in contract.terms_of_contract.name or 'ê' in contract.terms_of_contract.name or 'Ê' in contract.terms_of_contract.name or 'á' in contract.terms_of_contract.name or 'Á' in contract.terms_of_contract.name or 'à' in contract.terms_of_contract.name or 'À' in contract.terms_of_contract.name or 'ã' in contract.terms_of_contract.name or 'Ã' in contract.terms_of_contract.name or 'â' in contract.terms_of_contract.name or 'Â' in contract.terms_of_contract.name or 'ç' in contract.terms_of_contract.name or 'Ç' in contract.terms_of_contract.name:
+                            messages.error(request, 'O arquivo de termos aditivos de contrato (1) foi enviado com algum dos seguintes caracteres no nome em maiúsculo ou minúsculo: ã, á, à, â, é, è, ê, í, ì, î, õ, ó, ò, ô, ú, ù, û, ç. Remova esses caracteres e envie novamente o arquivo.')
+                            return redirect('/contracts/createacontract')
+                    if contract.terms_of_contract_2:
+                        if contract.terms_of_contract_2.size > 2097152:
+                            messages.error(request, 'Por favor mantenha o tamanho do arquivo de termos aditivos de contrato (2) abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.terms_of_contract_2.size)))
+                            return redirect('/contracts/createacontract')
+                        if not contract.terms_of_contract_2.name.endswith('.pdf'):
+                            messages.error(request, 'Por favor insira o arquivo de termos aditivos de contrato (2) no tipo correto que é PDF')
+                            return redirect('/contracts/createacontract')
+                        if 'í' in contract.terms_of_contract_2.name or 'Í' in contract.terms_of_contract_2.name or 'ì' in contract.terms_of_contract_2.name or 'Ì' in contract.terms_of_contract_2.name or 'î' in contract.terms_of_contract_2.name or 'Î' in contract.terms_of_contract_2.name or 'ú' in contract.terms_of_contract_2.name or 'Ú' in contract.terms_of_contract_2.name or 'ù' in contract.terms_of_contract_2.name or 'Ù' in contract.terms_of_contract_2.name or 'û' in contract.terms_of_contract_2.name or 'Û' in contract.terms_of_contract_2.name or 'ó' in contract.terms_of_contract_2.name or 'Ó' in contract.terms_of_contract_2.name or 'ò' in contract.terms_of_contract_2.name or 'Ò' in contract.terms_of_contract_2.name or 'ô' in contract.terms_of_contract_2.name or 'Ô' in contract.terms_of_contract_2.name or 'õ' in contract.terms_of_contract_2.name or 'Õ' in contract.terms_of_contract_2.name or 'é' in contract.terms_of_contract_2.name or 'É' in contract.terms_of_contract_2.name or 'è' in contract.terms_of_contract_2.name or 'È' in contract.terms_of_contract_2.name or 'ê' in contract.terms_of_contract_2.name or 'Ê' in contract.terms_of_contract_2.name or 'á' in contract.terms_of_contract_2.name or 'Á' in contract.terms_of_contract_2.name or 'à' in contract.terms_of_contract_2.name or 'À' in contract.terms_of_contract_2.name or 'ã' in contract.terms_of_contract_2.name or 'Ã' in contract.terms_of_contract_2.name or 'â' in contract.terms_of_contract_2.name or 'Â' in contract.terms_of_contract_2.name or 'ç' in contract.terms_of_contract_2.name or 'Ç' in contract.terms_of_contract_2.name:
+                            messages.error(request, 'O arquivo de termos aditivos de contrato (2) foi enviado com algum dos seguintes caracteres no nome em maiúsculo ou minúsculo: ã, á, à, â, é, è, ê, í, ì, î, õ, ó, ò, ô, ú, ù, û, ç. Remova esses caracteres e envie novamente o arquivo.')
+                            return redirect('/contracts/createacontract')
+                    if not contract.pdf.name.endswith('.pdf'):
+                        messages.error(request, 'Por favor insira o arquivo de contrato no tipo correto que é PDF')
                         return redirect('/contracts/createacontract')
-                if contract.terms_of_contract_2:
-                    if contract.terms_of_contract_2.size > 2097152:
-                        messages.error(request, 'Por favor mantenha o tamanho do arquivo de termos aditivos de contrato (2) abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.terms_of_contract_2.size)))
+                    if 'í' in contract.pdf.name or 'Í' in contract.pdf.name or 'ì' in contract.pdf.name or 'Ì' in contract.pdf.name or 'î' in contract.pdf.name or 'Î' in contract.pdf.name or 'ú' in contract.pdf.name or 'Ú' in contract.pdf.name or 'ù' in contract.pdf.name or 'Ù' in contract.pdf.name or 'û' in contract.pdf.name or 'Û' in contract.pdf.name or 'ó' in contract.pdf.name or 'Ó' in contract.pdf.name or 'ò' in contract.pdf.name or 'Ò' in contract.pdf.name or 'ô' in contract.pdf.name or 'Ô' in contract.pdf.name or 'õ' in contract.pdf.name or 'Õ' in contract.pdf.name or 'é' in contract.pdf.name or 'É' in contract.pdf.name or 'è' in contract.pdf.name or 'È' in contract.pdf.name or 'ê' in contract.pdf.name or 'Ê' in contract.pdf.name or 'á' in contract.pdf.name or 'Á' in contract.pdf.name or 'à' in contract.pdf.name or 'À' in contract.pdf.name or 'ã' in contract.pdf.name or 'Ã' in contract.pdf.name or 'â' in contract.pdf.name or 'Â' in contract.pdf.name or 'ç' in contract.pdf.name or 'Ç' in contract.pdf.name:
+                        messages.error(request, 'O arquivo de contrato foi enviado com algum dos seguintes caracteres no nome em maiúsculo ou minúsculo: ã, á, à, â, é, è, ê, í, ì, î, õ, ó, ò, ô, ú, ù, û, ç. Remova esses caracteres e envie novamente o arquivo.')
                         return redirect('/contracts/createacontract')
-                    if not contract.terms_of_contract_2.name.endswith('.pdf'):
-                        messages.error(request, 'Por favor insira o arquivo de termos aditivos de contrato (2) no tipo correto que é PDF')
-                        return redirect('/contracts/createacontract')
-                    if 'í' in contract.terms_of_contract_2.name or 'Í' in contract.terms_of_contract_2.name or 'ì' in contract.terms_of_contract_2.name or 'Ì' in contract.terms_of_contract_2.name or 'î' in contract.terms_of_contract_2.name or 'Î' in contract.terms_of_contract_2.name or 'ú' in contract.terms_of_contract_2.name or 'Ú' in contract.terms_of_contract_2.name or 'ù' in contract.terms_of_contract_2.name or 'Ù' in contract.terms_of_contract_2.name or 'û' in contract.terms_of_contract_2.name or 'Û' in contract.terms_of_contract_2.name or 'ó' in contract.terms_of_contract_2.name or 'Ó' in contract.terms_of_contract_2.name or 'ò' in contract.terms_of_contract_2.name or 'Ò' in contract.terms_of_contract_2.name or 'ô' in contract.terms_of_contract_2.name or 'Ô' in contract.terms_of_contract_2.name or 'õ' in contract.terms_of_contract_2.name or 'Õ' in contract.terms_of_contract_2.name or 'é' in contract.terms_of_contract_2.name or 'É' in contract.terms_of_contract_2.name or 'è' in contract.terms_of_contract_2.name or 'È' in contract.terms_of_contract_2.name or 'ê' in contract.terms_of_contract_2.name or 'Ê' in contract.terms_of_contract_2.name or 'á' in contract.terms_of_contract_2.name or 'Á' in contract.terms_of_contract_2.name or 'à' in contract.terms_of_contract_2.name or 'À' in contract.terms_of_contract_2.name or 'ã' in contract.terms_of_contract_2.name or 'Ã' in contract.terms_of_contract_2.name or 'â' in contract.terms_of_contract_2.name or 'Â' in contract.terms_of_contract_2.name or 'ç' in contract.terms_of_contract_2.name or 'Ç' in contract.terms_of_contract_2.name:
-                        messages.error(request, 'O arquivo de termos aditivos de contrato (2) foi enviado com algum dos seguintes caracteres no nome em maiúsculo ou minúsculo: ã, á, à, â, é, è, ê, í, ì, î, õ, ó, ò, ô, ú, ù, û, ç. Remova esses caracteres e envie novamente o arquivo.')
-                        return redirect('/contracts/createacontract')
-                if not contract.pdf.name.endswith('.pdf'):
-                    messages.error(request, 'Por favor insira o arquivo de contrato no tipo correto que é PDF')
-                    return redirect('/contracts/createacontract')
-                if 'í' in contract.pdf.name or 'Í' in contract.pdf.name or 'ì' in contract.pdf.name or 'Ì' in contract.pdf.name or 'î' in contract.pdf.name or 'Î' in contract.pdf.name or 'ú' in contract.pdf.name or 'Ú' in contract.pdf.name or 'ù' in contract.pdf.name or 'Ù' in contract.pdf.name or 'û' in contract.pdf.name or 'Û' in contract.pdf.name or 'ó' in contract.pdf.name or 'Ó' in contract.pdf.name or 'ò' in contract.pdf.name or 'Ò' in contract.pdf.name or 'ô' in contract.pdf.name or 'Ô' in contract.pdf.name or 'õ' in contract.pdf.name or 'Õ' in contract.pdf.name or 'é' in contract.pdf.name or 'É' in contract.pdf.name or 'è' in contract.pdf.name or 'È' in contract.pdf.name or 'ê' in contract.pdf.name or 'Ê' in contract.pdf.name or 'á' in contract.pdf.name or 'Á' in contract.pdf.name or 'à' in contract.pdf.name or 'À' in contract.pdf.name or 'ã' in contract.pdf.name or 'Ã' in contract.pdf.name or 'â' in contract.pdf.name or 'Â' in contract.pdf.name or 'ç' in contract.pdf.name or 'Ç' in contract.pdf.name:
-                    messages.error(request, 'O arquivo de contrato foi enviado com algum dos seguintes caracteres no nome em maiúsculo ou minúsculo: ã, á, à, â, é, è, ê, í, ì, î, õ, ó, ò, ô, ú, ù, û, ç. Remova esses caracteres e envie novamente o arquivo.')
-                    return redirect('/contracts/createacontract')
-                school = School.objects.get(chains__id__exact=contract.chain.id)
-                try:
-                    classe = school.classes.get(Q(class_name__icontains=contract.chain.name.split('-')[-1]) & Q(class_name__icontains=contract.chain.name.split('-')[-2]), class_unit=contract.chain.name.split('-')[-3], enrollment_class_year=contract.chain.name.split('-')[-4])
-                except Exception as e:
+                    school = School.objects.get(chains__id__exact=contract.chain.id)
                     try:
-                        classe = school.classes.get(Q(class_name__icontains=contract.chain.name.split('-')[-1]) & Q(class_name__icontains=contract.chain.name.split('-')[-2]))
+                        classe = school.classes.get(Q(class_name__icontains=contract.chain.name.split('-')[-1]) & Q(class_name__icontains=contract.chain.name.split('-')[-2]), class_unit=contract.chain.name.split('-')[-3], enrollment_class_year=contract.chain.name.split('-')[-4])
                     except Exception as e:
                         try:
-                            classe = school.classes.get(class_name=contract.chain.name.split('-')[-1])
+                            classe = school.classes.get(Q(class_name__icontains=contract.chain.name.split('-')[-1]) & Q(class_name__icontains=contract.chain.name.split('-')[-2]))
                         except Exception as e:
                             try:
-                                classe = school.classes.get(class_name__icontains=contract.chain.name.split('-')[-1])
+                                classe = school.classes.get(class_name=contract.chain.name.split('-')[-1])
                             except Exception as e:
-                                classe = school.classes.get(students__student_id__exact=student.student_id)
-                try:
-                    contract.slm = generate_slm_link(school, student)['url']
-                except Exception as e:
-                    contract.slm = classe.slm
-                contract.name = student.name+' - '+contract.chain.name
-                contract.counter_signe = head
-                if school.first_witness and school.second_witness:
-                    contract.first_witness_signe = school.first_witness
-                    contract.second_witness_signe = school.second_witness
-                if student.needs_parent:
-                    if student.first_parent and student.second_parent:
-                        contract.first_auth_signe = student.first_parent
-                        contract.second_auth_signe = student.second_parent
-                        if student.third_parent:
-                            contract.third_auth_signe = student.third_parent
+                                try:
+                                    classe = school.classes.get(class_name__icontains=contract.chain.name.split('-')[-1])
+                                except Exception as e:
+                                    classe = school.classes.get(students__student_id__exact=student.student_id)
+                    try:
+                        contract.slm = generate_slm_link(school, student)['url']
+                    except Exception as e:
+                        contract.slm = classe.slm
+                    contract.name = student.name+' - '+contract.chain.name
+                    contract.counter_signe = head
+                    if school.first_witness and school.second_witness:
+                        contract.first_witness_signe = school.first_witness
+                        contract.second_witness_signe = school.second_witness
+                    if student.needs_parent:
+                        if student.first_parent and student.second_parent:
+                            contract.first_auth_signe = student.first_parent
+                            contract.second_auth_signe = student.second_parent
+                            if student.third_parent:
+                                contract.third_auth_signe = student.third_parent
+                            contract.student_name = student.name
+                            contract.student_id = student.student_id
+                            if wish == 'sim':
+                                if wish_today == 'sim':
+                                    contract.save()
+                                    contract_rest = ContractSerializer(contract)
+                                    send_data(request, contract_rest)
+                                    tasks.schedule_email(contract, 'normal', 'admin', current_site.domain)
+                                elif wish_today == 'não':
+                                    date = request.POST.get('date' or None)
+                                    time = request.POST.get('time' or None)
+                                    if date and time:
+                                        contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
+                                        contract.save()
+                                        contract_rest = ContractSerializer(contract)
+                                        send_data(request, contract_rest)
+                                        # tasks.schedule_email.apply_async((contract_rest.data, 'json', 'admin'), eta=contract.sent_date)
+                                    else:
+                                        messages.error(request, 'Você não informou a data em que o contrato será enviado!')
+                                        return redirect('/contracts/createacontract')
+                            else:
+                                if wish_today == 'sim':
+                                    contract.save()
+                                    contract_rest = ContractSerializer(contract)
+                                    send_data(request, contract_rest)
+                                    # tasks.schedule_email_without_attachment(contract,'normal', 'admin', current_site.domain)
+                                elif wish_today == 'não':
+                                    date = request.POST.get('date' or None)
+                                    time = request.POST.get('time' or None)
+                                    if date and time:
+                                        contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
+                                        contract.save()
+                                        contract_rest = ContractSerializer(contract)
+                                        send_data(request, contract_rest)
+                                        # tasks.schedule_email.apply_async((contract_rest.data, 'json', 'admin'), eta=contract.sent_date)
+                                    else:
+                                        messages.error(request, 'Você não informou a data em que o contrato será enviado!')
+                                        return redirect('/contracts/createacontract')
+                            messages.success(request, 'Contrato criado com sucesso!')
+                            return redirect('/contracts/all/'.format(contract.contract_id))
+                    else:
+                        contract.student_auth_signe = student
                         contract.student_name = student.name
                         contract.student_id = student.student_id
                         if wish == 'sim':
@@ -468,7 +531,7 @@ def createacontract(request):
                                     contract.save()
                                     contract_rest = ContractSerializer(contract)
                                     send_data(request, contract_rest)
-                                    tasks.schedule_email.apply_async((contract_rest.data, 'json', 'admin'), eta=contract.sent_date)
+                                    # tasks.schedule_email.apply_async((contract_rest.data, 'json', 'admin'), eta=contract.sent_date)
                                 else:
                                     messages.error(request, 'Você não informou a data em que o contrato será enviado!')
                                     return redirect('/contracts/createacontract')
@@ -477,7 +540,7 @@ def createacontract(request):
                                 contract.save()
                                 contract_rest = ContractSerializer(contract)
                                 send_data(request, contract_rest)
-                                tasks.schedule_email_without_attachment(contract,'normal', 'admin', current_site.domain)
+                                # tasks.schedule_email_without_attachment(contract,'normal', 'admin', current_site.domain)
                             elif wish_today == 'não':
                                 date = request.POST.get('date' or None)
                                 time = request.POST.get('time' or None)
@@ -486,66 +549,36 @@ def createacontract(request):
                                     contract.save()
                                     contract_rest = ContractSerializer(contract)
                                     send_data(request, contract_rest)
-                                    tasks.schedule_email.apply_async((contract_rest.data, 'json', 'admin'), eta=contract.sent_date)
+                                    # tasks.schedule_email.apply_async((contract_rest.data, 'json', 'admin'), eta=contract.sent_date)
                                 else:
                                     messages.error(request, 'Você não informou a data em que o contrato será enviado!')
                                     return redirect('/contracts/createacontract')
                         messages.success(request, 'Contrato criado com sucesso!')
                         return redirect('/contracts/all/'.format(contract.contract_id))
-                else:
-                    contract.student_auth_signe = student
-                    contract.student_name = student.name
-                    contract.student_id = student.student_id
-                    if wish == 'sim':
-                        if wish_today == 'sim':
-                            contract.save()
-                            contract_rest = ContractSerializer(contract)
-                            send_data(request, contract_rest)
-                            tasks.schedule_email(contract, 'normal', 'admin', current_site.domain)
-                        elif wish_today == 'não':
-                            date = request.POST.get('date' or None)
-                            time = request.POST.get('time' or None)
-                            if date and time:
-                                contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
-                                contract.save()
-                                contract_rest = ContractSerializer(contract)
-                                send_data(request, contract_rest)
-                                tasks.schedule_email.apply_async((contract_rest.data, 'json', 'admin'), eta=contract.sent_date)
-                            else:
-                                messages.error(request, 'Você não informou a data em que o contrato será enviado!')
-                                return redirect('/contracts/createacontract')
-                    else:
-                        if wish_today == 'sim':
-                            contract.save()
-                            contract_rest = ContractSerializer(contract)
-                            send_data(request, contract_rest)
-                            tasks.schedule_email_without_attachment(contract,'normal', 'admin', current_site.domain)
-                        elif wish_today == 'não':
-                            date = request.POST.get('date' or None)
-                            time = request.POST.get('time' or None)
-                            if date and time:
-                                contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
-                                contract.save()
-                                contract_rest = ContractSerializer(contract)
-                                send_data(request, contract_rest)
-                                tasks.schedule_email.apply_async((contract_rest.data, 'json', 'admin'), eta=contract.sent_date)
-                            else:
-                                messages.error(request, 'Você não informou a data em que o contrato será enviado!')
-                                return redirect('/contracts/createacontract')
-                    messages.success(request, 'Contrato criado com sucesso!')
-                    return redirect('/contracts/all/'.format(contract.contract_id))
-        return render(request, 'contract/createacontract.html', {'form':form, 'student':student, 'tomorrow':tomorrow})
+        return render(request, 'contract/createacontract.html', {'form':form, 'student':student, 'students':students, 'tomorrow':tomorrow})
     elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
         is_supervisor = True
         form = ContractModelFormWithoutSponte(request.POST or None, request.FILES)
         chains = []
         students_ids = []
         selected_user = request.session['selected_user']
-        if Student.objects.filter(student_id = selected_user).count()>=1:
-            student = Student.objects.get(student_id = selected_user)
+        if 'chain' in request.session:
+            chains+=[request.session['chain']]
+        student = None
+        students = []
+        if ',' not in selected_user:
+            if Student.objects.filter(student_id = selected_user).count()>=1:
+                student = Student.objects.get(student_id = selected_user)
+            else:
+                messages.warning(request, 'Por favor selecione um estudante')
+                return redirect('/contracts/select_student_to_contract')
         else:
-            messages.warning(request, 'Por favor selecione um estudante')
-            return redirect('/contracts/select_student_to_contract')
+            for id in selected_user.split(','):
+                if Student.objects.filter(student_id = id).count()>=1:
+                    students.append(Student.objects.get(student_id = id))
+                else:
+                    messages.warning(request, 'Por favor selecione um estudante')
+                    return redirect('/contracts/select_student_to_contract')
         if Head.objects.filter(profile=request.user).count()>=1:
             for school in School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id):
                 for classe in school.classes.all():
@@ -561,63 +594,113 @@ def createacontract(request):
             if form.is_valid():
                 wish = request.POST.get('wish' or None)
                 wish_today = request.POST.get('wish_today' or None)
-                selected_user = request.POST.get('selected_user' or None)
-                head = None
-                if Head.objects.filter(head_id = selected_user).count()>=1:
-                    head = Head.objects.get(head_id = selected_user)
+                selected_user_head = request.POST.get('selected_user' or None)
+                date = request.POST.get('date' or None)
+                time = request.POST.get('time' or None)
+                if students:
+                    for student in students:
+                        result = tasks.create_contract.delay(form.cleaned_data, wish, wish_today, student.student_id, selected_user_head, date, time, current_site.domain, 'head')
+                    messages.success(request, 'Contrato criado com sucesso!')
+                    return redirect('/contracts/all/')
                 else:
-                    messages.warning(request, 'Você não selecionou nenhum diretor')
-                    return redirect('/contracts/createacontract')
-                contract = form.save(commit=False)
-                if contract.pdf.size > 2097152:
-                    messages.error(request, 'Por favor mantenha o tamanho do arquivo de contrato enviado abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.pdf.size)))
-                    return redirect('/contracts/createacontract')
-                if contract.terms_of_contract:
-                    if contract.terms_of_contract.size > 2097152:
-                        messages.error(request, 'Por favor mantenha o tamanho do arquivo de termos aditivos de contrato (1) abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.terms_of_contract.size)))
+                    head = None
+                    if Head.objects.filter(head_id = selected_user_head).count()>=1:
+                        head = Head.objects.get(head_id = selected_user_head)
+                    else:
+                        messages.warning(request, 'Você não selecionou nenhum diretor')
                         return redirect('/contracts/createacontract')
-                    if not contract.terms_of_contract.name.endswith('.pdf'):
-                        messages.error(request, 'Por favor insira o arquivo de termos aditivos de contrato (1) no tipo correto que é PDF')
+                    contract = form.save(commit=False)
+                    if contract.pdf.size > 2097152:
+                        messages.error(request, 'Por favor mantenha o tamanho do arquivo de contrato enviado abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.pdf.size)))
                         return redirect('/contracts/createacontract')
-                if contract.terms_of_contract_2:
-                    if contract.terms_of_contract_2.size > 2097152:
-                        messages.error(request, 'Por favor mantenha o tamanho do arquivo de termos aditivos de contrato (2) abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.terms_of_contract_2.size)))
+                    if contract.terms_of_contract:
+                        if contract.terms_of_contract.size > 2097152:
+                            messages.error(request, 'Por favor mantenha o tamanho do arquivo de termos aditivos de contrato (1) abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.terms_of_contract.size)))
+                            return redirect('/contracts/createacontract')
+                        if not contract.terms_of_contract.name.endswith('.pdf'):
+                            messages.error(request, 'Por favor insira o arquivo de termos aditivos de contrato (1) no tipo correto que é PDF')
+                            return redirect('/contracts/createacontract')
+                    if contract.terms_of_contract_2:
+                        if contract.terms_of_contract_2.size > 2097152:
+                            messages.error(request, 'Por favor mantenha o tamanho do arquivo de termos aditivos de contrato (2) abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.terms_of_contract_2.size)))
+                            return redirect('/contracts/createacontract')
+                        if not contract.terms_of_contract_2.name.endswith('.pdf'):
+                            messages.error(request, 'Por favor insira o arquivo de termos aditivos de contrato (2) no tipo correto que é PDF')
+                            return redirect('/contracts/createacontract')
+                    if not contract.pdf.name.endswith('.pdf'):
+                        messages.error(request, 'Por favor insira o arquivo de contrato no tipo correto que é PDF')
                         return redirect('/contracts/createacontract')
-                    if not contract.terms_of_contract_2.name.endswith('.pdf'):
-                        messages.error(request, 'Por favor insira o arquivo de termos aditivos de contrato (2) no tipo correto que é PDF')
-                        return redirect('/contracts/createacontract')
-                if not contract.pdf.name.endswith('.pdf'):
-                    messages.error(request, 'Por favor insira o arquivo de contrato no tipo correto que é PDF')
-                    return redirect('/contracts/createacontract')
-                school = School.objects.get(chains__id__exact=contract.chain.id)
-                try:
-                    classe = school.classes.get(Q(class_name__icontains=contract.chain.name.split('-')[-1]) & Q(class_name__icontains=contract.chain.name.split('-')[-2]), class_unit=contract.chain.name.split('-')[-3], enrollment_class_year=contract.chain.name.split('-')[-4])
-                except Exception as e:
+                    school = School.objects.get(chains__id__exact=contract.chain.id)
                     try:
-                        classe = school.classes.get(Q(class_name__icontains=contract.chain.name.split('-')[-1]) & Q(class_name__icontains=contract.chain.name.split('-')[-2]))
+                        classe = school.classes.get(Q(class_name__icontains=contract.chain.name.split('-')[-1]) & Q(class_name__icontains=contract.chain.name.split('-')[-2]), class_unit=contract.chain.name.split('-')[-3], enrollment_class_year=contract.chain.name.split('-')[-4])
                     except Exception as e:
                         try:
-                            classe = school.classes.get(class_name=contract.chain.name.split('-')[-1])
+                            classe = school.classes.get(Q(class_name__icontains=contract.chain.name.split('-')[-1]) & Q(class_name__icontains=contract.chain.name.split('-')[-2]))
                         except Exception as e:
                             try:
-                                classe = school.classes.get(class_name__icontains=contract.chain.name.split('-')[-1])
+                                classe = school.classes.get(class_name=contract.chain.name.split('-')[-1])
                             except Exception as e:
-                                classe = school.classes.get(students__student_id__exact=student.student_id)
-                try:
-                    contract.slm = generate_slm_link(school, student)['url']
-                except Exception as e:
-                    contract.slm = classe.slm
-                contract.name = student.name+' - '+contract.chain.name
-                contract.counter_signe = head
-                if school.first_witness and school.second_witness:
-                    contract.first_witness_signe = school.first_witness
-                    contract.second_witness_signe = school.second_witness
-                if student.needs_parent:
-                    if student.first_parent and student.second_parent:
-                        contract.first_auth_signe = student.first_parent
-                        contract.second_auth_signe = student.second_parent
-                        if student.third_parent:
-                            contract.third_auth_signe = student.third_parent
+                                try:
+                                    classe = school.classes.get(class_name__icontains=contract.chain.name.split('-')[-1])
+                                except Exception as e:
+                                    classe = school.classes.get(students__student_id__exact=student.student_id)
+                    try:
+                        contract.slm = generate_slm_link(school, student)['url']
+                    except Exception as e:
+                        contract.slm = classe.slm
+                    contract.name = student.name+' - '+contract.chain.name
+                    contract.counter_signe = head
+                    if school.first_witness and school.second_witness:
+                        contract.first_witness_signe = school.first_witness
+                        contract.second_witness_signe = school.second_witness
+                    if student.needs_parent:
+                        if student.first_parent and student.second_parent:
+                            contract.first_auth_signe = student.first_parent
+                            contract.second_auth_signe = student.second_parent
+                            if student.third_parent:
+                                contract.third_auth_signe = student.third_parent
+                            contract.student_name = student.name
+                            contract.student_id = student.student_id
+                            if wish == 'sim':
+                                if wish_today == 'sim':
+                                    contract.save()
+                                    contract_rest = ContractSerializer(contract)
+                                    send_data(request, contract_rest)
+                                    tasks.schedule_email(contract, 'normal', 'director', current_site.domain)
+                                elif wish_today == 'não':
+                                    date = request.POST.get('date' or None)
+                                    time = request.POST.get('time' or None)
+                                    if date and time:
+                                        contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
+                                        contract.save()
+                                        contract_rest = ContractSerializer(contract)
+                                        send_data(request, contract_rest)
+                                        tasks.schedule_email.apply_async((contract_rest.data, 'json', 'director'), eta=contract.sent_date)
+                                    else:
+                                        messages.error(request, 'Você não informou a data em que o contrato será enviado!')
+                                        return redirect('/contracts/createacontract')
+                            else:
+                                if wish_today == 'sim':
+                                    contract.save()
+                                    contract_rest = ContractSerializer(contract)
+                                    send_data(request, contract_rest)
+                                    tasks.schedule_email_without_attachment(contract,'normal', 'director', current_site.domain)
+                                elif wish_today == 'não':
+                                    date = request.POST.get('date' or None)
+                                    time = request.POST.get('time' or None)
+                                    if date and time:
+                                        contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
+                                        contract.save()
+                                        contract_rest = ContractSerializer(contract)
+                                        send_data(request, contract_rest)
+                                        tasks.schedule_email.apply_async((contract_rest.data, 'json', 'director'), eta=contract.sent_date)
+                                    else:
+                                        messages.error(request, 'Você não informou a data em que o contrato será enviado!')
+                                        return redirect('/contracts/createacontract')
+                            messages.success(request, 'Contrato criado com sucesso!')
+                            return redirect('/contracts/all/'.format(contract.contract_id))
+                    else:
+                        contract.student_auth_signe = student
                         contract.student_name = student.name
                         contract.student_id = student.student_id
                         if wish == 'sim':
@@ -658,49 +741,7 @@ def createacontract(request):
                                     return redirect('/contracts/createacontract')
                         messages.success(request, 'Contrato criado com sucesso!')
                         return redirect('/contracts/all/'.format(contract.contract_id))
-                else:
-                    contract.student_auth_signe = student
-                    contract.student_name = student.name
-                    contract.student_id = student.student_id
-                    if wish == 'sim':
-                        if wish_today == 'sim':
-                            contract.save()
-                            contract_rest = ContractSerializer(contract)
-                            send_data(request, contract_rest)
-                            tasks.schedule_email(contract, 'normal', 'director', current_site.domain)
-                        elif wish_today == 'não':
-                            date = request.POST.get('date' or None)
-                            time = request.POST.get('time' or None)
-                            if date and time:
-                                contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
-                                contract.save()
-                                contract_rest = ContractSerializer(contract)
-                                send_data(request, contract_rest)
-                                tasks.schedule_email.apply_async((contract_rest.data, 'json', 'director'), eta=contract.sent_date)
-                            else:
-                                messages.error(request, 'Você não informou a data em que o contrato será enviado!')
-                                return redirect('/contracts/createacontract')
-                    else:
-                        if wish_today == 'sim':
-                            contract.save()
-                            contract_rest = ContractSerializer(contract)
-                            send_data(request, contract_rest)
-                            tasks.schedule_email_without_attachment(contract,'normal', 'director', current_site.domain)
-                        elif wish_today == 'não':
-                            date = request.POST.get('date' or None)
-                            time = request.POST.get('time' or None)
-                            if date and time:
-                                contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
-                                contract.save()
-                                contract_rest = ContractSerializer(contract)
-                                send_data(request, contract_rest)
-                                tasks.schedule_email.apply_async((contract_rest.data, 'json', 'director'), eta=contract.sent_date)
-                            else:
-                                messages.error(request, 'Você não informou a data em que o contrato será enviado!')
-                                return redirect('/contracts/createacontract')
-                    messages.success(request, 'Contrato criado com sucesso!')
-                    return redirect('/contracts/all/'.format(contract.contract_id))
-        return render(request, 'contract/createacontract.html', {'form':form, 'is_supervisor':is_supervisor, 'student':student, 'tomorrow':tomorrow})
+        return render(request, 'contract/createacontract.html', {'form':form, 'is_supervisor':is_supervisor, 'student':student, 'students':students, 'tomorrow':tomorrow})
     return redirect('/')
 
 @login_required
@@ -1055,23 +1096,40 @@ def seemycontracts(request):
 def select_student_to_contract(request):
     if request.user.is_superuser:
         students = Student.objects.all()
+        schools = School.objects.all()
         if request.method == 'POST':
+            selected_school = request.POST.get('selected_school' or None)
+            selected_class = request.POST.get('selected_class' or None)
+            school = School.objects.get(school_id=selected_school)
+            classe = Class.objects.get(class_id=selected_class)
+            chain = Chain.objects.get(name="{0}-{1}-{2}-{3}".format(school.school_name, classe.enrollment_class_year, classe.class_unit, classe.class_name)).id
+            request.session['chain'] = chain
             selected_user = request.POST.get('selected_user' or None)
             request.session['selected_user'] = selected_user
-            student = Student.objects.get(student_id=selected_user)
-            if student.needs_parent:
-                if not student.first_parent or not student.second_parent:
-                    messages.warning(request, 'O estudante não tem pelo menos um dos responsáveis necessários associados a ele!')
-                    return redirect('/contracts/select_student_to_contract')
+            if ',' not in selected_user:
+                student = Student.objects.get(student_id=selected_user)
+                if student.needs_parent:
+                    if not student.first_parent or not student.second_parent:
+                        messages.warning(request, 'O estudante não tem pelo menos um dos responsáveis necessários associados a ele!')
+                        return redirect('/contracts/select_student_to_contract')
+            else:
+                for student_id in selected_user.split(','):
+                    student = Student.objects.get(student_id=student_id)
+                    if student.needs_parent:
+                        if not student.first_parent or not student.second_parent:
+                            messages.warning(request, 'Um dos estudantes selecionados não tem pelo menos um des responsáveis necessários associados a ele!')
+                            return redirect('/contracts/select_student_to_contract')
             return redirect('/contracts/createacontract')
-        return render(request, 'contract/select_student_to_contract.html', {'students':students})
+        return render(request, 'contract/select_student_to_contract.html', {'students':students, 'schools': schools})
     elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
         students_ids = []
         if Head.objects.filter(profile=request.user).count()>=1:
+            schools = School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id)
             for school in School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id):
                 for student in school.students.all():
                     students_ids += [(student.student_id)]
         elif Supervisor.objects.filter(profile=request.user).count()>=1:
+            schools = Q(adminorsupervisor=Supervisor.objects.get(profile=request.user))|Q(adminorsupervisor_2=Supervisor.objects.get(profile=request.user))
             for school in School.objects.filter(Q(adminorsupervisor=Supervisor.objects.get(profile=request.user))|Q(adminorsupervisor_2=Supervisor.objects.get(profile=request.user))):
                 for student in school.students.all():
                     students_ids += [(student.student_id)]
@@ -1085,7 +1143,7 @@ def select_student_to_contract(request):
                     messages.warning(request, 'O estudante não tem pelo menos um dos responsáveis necessários associados a ele!')
                     return redirect('/contracts/select_student_to_contract')
             return redirect('/contracts/createacontract')
-        return render(request, 'contract/select_student_to_contract.html', {'students':students, 'is_supervisor':True})
+        return render(request, 'contract/select_student_to_contract.html', {'students':students, 'schools': schools, 'is_supervisor':True})
 
 @login_required
 def select_student_to_contract_update(request, contract_id=None):

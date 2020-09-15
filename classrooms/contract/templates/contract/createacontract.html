@@ -17,7 +17,7 @@
 			<div class="col-md-9">
 				<div class="card w-50">
 					<div class="card-header">
-						<h4 class="card-title" align="left">Criar um Novo Contrato Para o Aluno {{ student.name }}</h4>
+						<h4 class="card-title" align="left">{% if student %}Criar um Novo Contrato Para o Aluno {{ student.name }}{% elif students %}Criar um Novo Contrato Para Múltiplos Alunos{% endif %}</h4>
 					</div>
 					<div class="card-body">
 						<div class="row">
@@ -144,6 +144,9 @@
 							$('#second_checkbox').attr('checked')
 						}
 					}
+					$(document).on("change", "#id_date", function () {
+						document.getElementById("id_end_date").min = this.value
+					});
 				</script>
 				<script>(function(e,t,n){var r=e.querySelectorAll("html")[0];r.className=r.className.replace(/(^|\s)no-js(\s|$)/,"$1js$2")})(document,window,0);</script>
 

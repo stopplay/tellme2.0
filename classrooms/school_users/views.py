@@ -852,6 +852,15 @@ def classes_choices_ajax(request):
         context = {}
     return render(request, 'school_users/classes_choices.html', context)
 
+def students_choices_ajax(request):
+    class_id = request.GET.get('id')
+    if Class.objects.filter(class_id=class_id).count()>=1:
+        classe = Class.objects.get(class_id=class_id)
+        context = {'students':classe.students.all().order_by('name')}
+    else:
+        context = {}
+    return render(request, 'school_users/students_choices.html', context)
+
 def reset_password(request, token=None, uidb64=None):
     try:
         uid = force_text(urlsafe_base64_decode(uidb64))

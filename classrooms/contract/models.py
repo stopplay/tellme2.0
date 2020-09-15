@@ -30,7 +30,8 @@ class Contract(models.Model):
     # Basic data of the contract #
     contract_id = models.AutoField(primary_key=True)
     name = models.TextField(null=True, blank=True, verbose_name = 'Nome do Contrato')
-    date = models.DateField(null=True, blank=True, verbose_name = 'Data do Contrato')
+    date = models.DateField(null=True, blank=True, verbose_name = 'Data Inicial do Contrato')
+    end_date = models.DateField(default="2020-12-31",verbose_name = 'Data Final do Contrato')
     first_auth_signed = models.BooleanField(default=False)
     second_auth_signed = models.BooleanField(default=False)
     third_auth_signed = models.BooleanField(default=False)

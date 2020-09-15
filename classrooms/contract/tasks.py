@@ -5,6 +5,7 @@ from celery import shared_task
 from classrooms.celery import app
 from django.core.mail import EmailMessage
 from .models import *
+from .serializers import ContractSerializer
 import json
 from school_users.models import *
 from block.models import *
@@ -14,8 +15,11 @@ from django.template.loader import render_to_string
 from school.models import *
 from contract.models import *
 from school.utils import get_sku_by_slm_url
-from contract.utils import MagentoSoap
+from contract.utils import MagentoSoap, generate_slm_link
 from django.db.models import Q
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
+import pdb
 
 wsdl = 'http://maplebearmkt2.widehomolog.biz/api/v2_soap?wsdl=1'
 username = 'tell-me'
@@ -401,3 +405,154 @@ def schedule_email_without_attachment(contract, typeof=None, whosend=None, domai
             contract.save()
     except Exception as e:
         print(str(e))
+
+def send_data(data_serialized):
+    room_group_name = 'notifications'
+    layer = get_channel_layer()
+    try:
+        async_to_sync(layer.group_send)(
+            room_group_name,
+            {
+                'type': 'chat_message',
+                'message': data_serialized.data
+            }
+        )
+    except Exception as e:
+        async_to_sync(layer.group_send)(
+            room_group_name,
+            {
+                'type': 'chat_message',
+                'message': {'contract_id':data_serialized, 'status':'deleted'}
+            }
+        )
+
+@app.task #1
+def create_contract(contract, wish, wish_today, student_id, head_id, sent_date, sent_time, domain, who_sent):
+    pdb.set_trace()
+    contract = Contract(**contract)
+    try:
+        student = Student.objects.get(student_id=student_id)
+    except:
+        return 'Estudante não enviado'
+    head = None
+    if Head.objects.filter(head_id = head_id).count()>=1:
+        head = Head.objects.get(head_id = head_id)
+    else:
+        return 'Você não selecionou nenhum diretor'
+    if contract.pdf.size > 2097152:
+        return 'Por favor mantenha o tamanho do arquivo de contrato enviado abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.pdf.size))
+    if contract.terms_of_contract:
+        if contract.terms_of_contract.size > 2097152:
+            return 'Por favor mantenha o tamanho do arquivo de termos aditivos de contrato (1) abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.terms_of_contract.size))
+        if not contract.terms_of_contract.name.endswith('.pdf'):
+            return 'Por favor insira o arquivo de termos aditivos de contrato (1) no tipo correto que é PDF'
+        if 'í' in contract.terms_of_contract.name or 'Í' in contract.terms_of_contract.name or 'ì' in contract.terms_of_contract.name or 'Ì' in contract.terms_of_contract.name or 'î' in contract.terms_of_contract.name or 'Î' in contract.terms_of_contract.name or 'ú' in contract.terms_of_contract.name or 'Ú' in contract.terms_of_contract.name or 'ù' in contract.terms_of_contract.name or 'Ù' in contract.terms_of_contract.name or 'û' in contract.terms_of_contract.name or 'Û' in contract.terms_of_contract.name or 'ó' in contract.terms_of_contract.name or 'Ó' in contract.terms_of_contract.name or 'ò' in contract.terms_of_contract.name or 'Ò' in contract.terms_of_contract.name or 'ô' in contract.terms_of_contract.name or 'Ô' in contract.terms_of_contract.name or 'õ' in contract.terms_of_contract.name or 'Õ' in contract.terms_of_contract.name or 'é' in contract.terms_of_contract.name or 'É' in contract.terms_of_contract.name or 'è' in contract.terms_of_contract.name or 'È' in contract.terms_of_contract.name or 'ê' in contract.terms_of_contract.name or 'Ê' in contract.terms_of_contract.name or 'á' in contract.terms_of_contract.name or 'Á' in contract.terms_of_contract.name or 'à' in contract.terms_of_contract.name or 'À' in contract.terms_of_contract.name or 'ã' in contract.terms_of_contract.name or 'Ã' in contract.terms_of_contract.name or 'â' in contract.terms_of_contract.name or 'Â' in contract.terms_of_contract.name or 'ç' in contract.terms_of_contract.name or 'Ç' in contract.terms_of_contract.name:
+            return 'O arquivo de termos aditivos de contrato (1) foi enviado com algum dos seguintes caracteres no nome em maiúsculo ou minúsculo: ã, á, à, â, é, è, ê, í, ì, î, õ, ó, ò, ô, ú, ù, û, ç. Remova esses caracteres e envie novamente o arquivo.'
+    if contract.terms_of_contract_2:
+        if contract.terms_of_contract_2.size > 2097152:
+            return 'Por favor mantenha o tamanho do arquivo de termos aditivos de contrato (2) abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.terms_of_contract_2.size))
+        if not contract.terms_of_contract_2.name.endswith('.pdf'):
+            return 'Por favor insira o arquivo de termos aditivos de contrato (2) no tipo correto que é PDF'
+        if 'í' in contract.terms_of_contract_2.name or 'Í' in contract.terms_of_contract_2.name or 'ì' in contract.terms_of_contract_2.name or 'Ì' in contract.terms_of_contract_2.name or 'î' in contract.terms_of_contract_2.name or 'Î' in contract.terms_of_contract_2.name or 'ú' in contract.terms_of_contract_2.name or 'Ú' in contract.terms_of_contract_2.name or 'ù' in contract.terms_of_contract_2.name or 'Ù' in contract.terms_of_contract_2.name or 'û' in contract.terms_of_contract_2.name or 'Û' in contract.terms_of_contract_2.name or 'ó' in contract.terms_of_contract_2.name or 'Ó' in contract.terms_of_contract_2.name or 'ò' in contract.terms_of_contract_2.name or 'Ò' in contract.terms_of_contract_2.name or 'ô' in contract.terms_of_contract_2.name or 'Ô' in contract.terms_of_contract_2.name or 'õ' in contract.terms_of_contract_2.name or 'Õ' in contract.terms_of_contract_2.name or 'é' in contract.terms_of_contract_2.name or 'É' in contract.terms_of_contract_2.name or 'è' in contract.terms_of_contract_2.name or 'È' in contract.terms_of_contract_2.name or 'ê' in contract.terms_of_contract_2.name or 'Ê' in contract.terms_of_contract_2.name or 'á' in contract.terms_of_contract_2.name or 'Á' in contract.terms_of_contract_2.name or 'à' in contract.terms_of_contract_2.name or 'À' in contract.terms_of_contract_2.name or 'ã' in contract.terms_of_contract_2.name or 'Ã' in contract.terms_of_contract_2.name or 'â' in contract.terms_of_contract_2.name or 'Â' in contract.terms_of_contract_2.name or 'ç' in contract.terms_of_contract_2.name or 'Ç' in contract.terms_of_contract_2.name:
+            return 'O arquivo de termos aditivos de contrato (2) foi enviado com algum dos seguintes caracteres no nome em maiúsculo ou minúsculo: ã, á, à, â, é, è, ê, í, ì, î, õ, ó, ò, ô, ú, ù, û, ç. Remova esses caracteres e envie novamente o arquivo.'
+        if not contract.pdf.name.endswith('.pdf'):
+            return 'Por favor insira o arquivo de contrato no tipo correto que é PDF'
+        if 'í' in contract.pdf.name or 'Í' in contract.pdf.name or 'ì' in contract.pdf.name or 'Ì' in contract.pdf.name or 'î' in contract.pdf.name or 'Î' in contract.pdf.name or 'ú' in contract.pdf.name or 'Ú' in contract.pdf.name or 'ù' in contract.pdf.name or 'Ù' in contract.pdf.name or 'û' in contract.pdf.name or 'Û' in contract.pdf.name or 'ó' in contract.pdf.name or 'Ó' in contract.pdf.name or 'ò' in contract.pdf.name or 'Ò' in contract.pdf.name or 'ô' in contract.pdf.name or 'Ô' in contract.pdf.name or 'õ' in contract.pdf.name or 'Õ' in contract.pdf.name or 'é' in contract.pdf.name or 'É' in contract.pdf.name or 'è' in contract.pdf.name or 'È' in contract.pdf.name or 'ê' in contract.pdf.name or 'Ê' in contract.pdf.name or 'á' in contract.pdf.name or 'Á' in contract.pdf.name or 'à' in contract.pdf.name or 'À' in contract.pdf.name or 'ã' in contract.pdf.name or 'Ã' in contract.pdf.name or 'â' in contract.pdf.name or 'Â' in contract.pdf.name or 'ç' in contract.pdf.name or 'Ç' in contract.pdf.name:
+            return 'O arquivo de contrato foi enviado com algum dos seguintes caracteres no nome em maiúsculo ou minúsculo: ã, á, à, â, é, è, ê, í, ì, î, õ, ó, ò, ô, ú, ù, û, ç. Remova esses caracteres e envie novamente o arquivo.'
+    school = School.objects.get(chains__id__exact=contract.chain.id)
+    try:
+        classe = school.classes.get(Q(class_name__icontains=contract.chain.name.split('-')[-1]) & Q(class_name__icontains=contract.chain.name.split('-')[-2]), class_unit=contract.chain.name.split('-')[-3], enrollment_class_year=contract.chain.name.split('-')[-4])
+    except Exception as e:
+        try:
+            classe = school.classes.get(Q(class_name__icontains=contract.chain.name.split('-')[-1]) & Q(class_name__icontains=contract.chain.name.split('-')[-2]))
+        except Exception as e:
+            try:
+                classe = school.classes.get(class_name=contract.chain.name.split('-')[-1])
+            except Exception as e:
+                try:
+                    classe = school.classes.get(class_name__icontains=contract.chain.name.split('-')[-1])
+                except Exception as e:
+                    classe = school.classes.get(students__student_id__exact=student.student_id)
+    try:
+        contract.slm = generate_slm_link(school, student)['url']
+    except Exception as e:
+        contract.slm = classe.slm
+    contract.name = student.name+' - '+contract.chain.name
+    contract.counter_signe = head
+    if school.first_witness and school.second_witness:
+        contract.first_witness_signe = school.first_witness
+        contract.second_witness_signe = school.second_witness
+    if student.needs_parent:
+        if student.first_parent and student.second_parent:
+            contract.first_auth_signe = student.first_parent
+            contract.second_auth_signe = student.second_parent
+            if student.third_parent:
+                contract.third_auth_signe = student.third_parent
+            contract.student_name = student.name
+            contract.student_id = student.student_id
+            if wish == 'sim':
+                if wish_today == 'sim':
+                    contract.save()
+                    contract_rest = ContractSerializer(contract)
+                    send_data(contract_rest)
+                    # schedule_email(contract, 'normal', who_sent, domain)
+                elif wish_today == 'não':
+                    if sent_date and sent_time:
+                        contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
+                        contract.save()
+                        contract_rest = ContractSerializer(contract)
+                        send_data(contract_rest)
+                        # schedule_email.apply_async((contract_rest.data, 'json', 'who_sent, domain), eta=contract.sent_date)
+                    else:
+                        return 'Você não informou a data em que o contrato será enviado!'
+            else:
+                if wish_today == 'sim':
+                    contract.save()
+                    contract_rest = ContractSerializer(contract)
+                    send_data(contract_rest)
+                    # schedule_email_without_attachment(contract,'normal', who_sent, domain)
+                elif wish_today == 'não':
+                    if sent_date and sent_time:
+                        contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
+                        contract.save()
+                        contract_rest = ContractSerializer(contract)
+                        send_data(contract_rest)
+                        # schedule_email.apply_async((contract_rest.data, 'json', who_sent, domain), eta=contract.sent_date)
+                    else:
+                        return 'Você não informou a data em que o contrato será enviado!'
+            return 'Contrato criado com sucesso!'
+    else:
+        contract.student_auth_signe = student
+        contract.student_name = student.name
+        contract.student_id = student.student_id
+        if wish == 'sim':
+            if wish_today == 'sim':
+                contract.save()
+                contract_rest = ContractSerializer(contract)
+                send_data(contract_rest)
+                # schedule_email(contract, 'normal', 'admin', domain)
+            elif wish_today == 'não':
+                if sent_date and sent_time:
+                    contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
+                    contract.save()
+                    contract_rest = ContractSerializer(contract)
+                    send_data(contract_rest)
+                    # schedule_email.apply_async((contract_rest.data, 'json', who_sent, domain), eta=contract.sent_date)
+                else:
+                    return 'Você não informou a data em que o contrato será enviado!'
+        else:
+            if wish_today == 'sim':
+                contract.save()
+                contract_rest = ContractSerializer(contract)
+                send_data(contract_rest)
+                # schedule_email_without_attachment(contract,'normal', who_sent, domain)
+            elif wish_today == 'não':
+                if sent_date and sent_time:
+                    contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
+                    contract.save()
+                    contract_rest = ContractSerializer(contract)
+                    send_data(contract_rest)
+                    # schedule_email.apply_async((contract_rest.data, 'json', who_sent, domain), eta=contract.sent_date)
+                else:
+                    return 'Você não informou a data em que o contrato será enviado!'
+        return 'Contrato criado com sucesso!'

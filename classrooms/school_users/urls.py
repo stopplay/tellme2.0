@@ -25,6 +25,7 @@ urlpatterns = [
     path('add_first_parent/<int:student_id>', views.add_first_parent, name='add_first_parent'),
     path('add_second_parent/<int:student_id>', views.add_second_parent, name='add_second_parent'),
     path('classes/ajax', views.classes_choices_ajax, name='classes_choices_ajax'),
+    path('students/ajax', views.students_choices_ajax, name='students_choices_ajax'),
     url('add_student/', views.add_student, name='add_student'),
     url('login/', views.do_login, name='login'),
     path('login_from_other_system/<username>', views.login_from_other_system, name='login_from_other_system'),
