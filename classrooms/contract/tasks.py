@@ -427,7 +427,7 @@ def send_data(data_serialized):
         )
 
 @app.task #1
-def create_contract(chain_id, date, end_date, pdf, terms_of_contract, terms_of_contract_2, wish, wish_today, student_id, head_id, sent_date, sent_time, domain):
+def create_contract(chain_id, date, end_date, pdf, terms_of_contract, terms_of_contract_2, wish, wish_today, student_id, head_id, sent_date, sent_time, domain, who_sent):
     chain = Chain.objects.get(id=chain_id)
     contract = Contract(chain=chain, date=date, end_date=end_date, pdf=pdf, terms_of_contract=terms_of_contract, terms_of_contract_2=terms_of_contract_2)
     try:
