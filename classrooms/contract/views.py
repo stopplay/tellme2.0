@@ -404,7 +404,7 @@ def createacontract(request):
                 time = request.POST.get('time' or None)
                 if students:
                     for student in students:
-                        result = tasks.create_contract.delay(ContractSerializer(data=form.cleaned_data), wish, wish_today, student.student_id, selected_user_head, date, time, current_site.domain, 'admin')
+                        result = tasks.create_contract.delay(ContractSerializer(data=form.cleaned_data).data, wish, wish_today, student.student_id, selected_user_head, date, time, current_site.domain, 'admin')
                     messages.success(request, 'Contrato criado com sucesso!')
                     return redirect('/contracts/all/')
                 else:
@@ -599,7 +599,7 @@ def createacontract(request):
                 time = request.POST.get('time' or None)
                 if students:
                     for student in students:
-                        result = tasks.create_contract.delay(ContractSerializer(data=form.cleaned_data), wish, wish_today, student.student_id, selected_user_head, date, time, current_site.domain, 'head')
+                        result = tasks.create_contract.delay(ContractSerializer(data=form.cleaned_data).data, wish, wish_today, student.student_id, selected_user_head, date, time, current_site.domain, 'head')
                     messages.success(request, 'Contrato criado com sucesso!')
                     return redirect('/contracts/all/')
                 else:
