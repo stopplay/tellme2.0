@@ -411,7 +411,7 @@ def createacontract(request):
                 output.removeImages(False)
                 for i in range(0, existing_pdf.getNumPages()):
                     page = existing_pdf.getPage(i)
-                    outuput.addPage(page)
+                    output.addPage(page)
                 outputStream = open(settings.MEDIA_ROOT+'/test_pdf_{}.pdf'.format(selected_user), "wb")
                 pdf_url = settings.MEDIA_ROOT+'/test_pdf_{}.pdf'.format(selected_user)
                 output.write(outputStream)
