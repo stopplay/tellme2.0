@@ -437,8 +437,8 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
         chain = Chain.objects.get(id=chain_id)
         pdf_file = open(pdf_url, "rb")
         contract = Contract(**contract, chain=chain)
-        contract.date = datetime.strptime(contract.date.split('T')[0], '%Y-%m-%d').date
-        contract.end_date = datetime.strptime(contract.end_date.split('T')[0], '%Y-%m-%d').date
+        contract.date = datetime.strptime(contract.date.split('T')[0], '%Y-%m-%d').date()
+        contract.end_date = datetime.strptime(contract.end_date.split('T')[0], '%Y-%m-%d').date()
         try:
             student = Student.objects.get(student_id=student_id)
         except:
