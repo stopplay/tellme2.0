@@ -401,11 +401,24 @@ def createacontract(request):
                 selected_user_head = request.POST.get('selected_user' or None)
                 date = request.POST.get('date' or None)
                 time = request.POST.get('time' or None)
+                chain = form.cleaned_data.pop('chain')
+                chain_id = chain.id
+                pdf = form.cleaned_data.pop('pdf', None)
+                new_pdf = PdfFileReader(pdf)
+                # read your existing PDF
+                existing_pdf = PdfFileReader(pdf, 'rb')
+                output = PdfFileWriter()
+                output.removeImages(False)
+                for i in range(0, existing_pdf.getNumPages()):
+                    page = existing_pdf.getPage(i)
+                    outuput.addPage(page)
+                outputStream = open(settings.MEDIA_ROOT+'/test_pdf_{}.pdf'.format(selected_user), "wb")
+                pdf_url = settings.MEDIA_ROOT+'/test_pdf_{}.pdf'.format(selected_user)
+                output.write(outputStream)
+                outputStream.close()
                 if students:
                     for student in students:
-                        chain = form.cleaned_data.pop('chain')
-                        chain_id = chain.id
-                        result = tasks.create_contract.delay(form.cleaned_data, chain_id, wish, wish_today, student.student_id, selected_user_head, date, time, current_site.domain, 'admin')
+                        result = tasks.create_contract.delay(form.cleaned_data, chain_id, wish, wish_today, student.student_id, selected_user_head, date, time, current_site.domain, 'admin', pdf_url)
                     messages.success(request, 'Contrato criado com sucesso!')
                     return redirect('/contracts/all/')
                 else:
@@ -598,10 +611,12 @@ def createacontract(request):
                 selected_user_head = request.POST.get('selected_user' or None)
                 date = request.POST.get('date' or None)
                 time = request.POST.get('time' or None)
+                chain = form.cleaned_data.pop('chain')
+                chain_id = chain.id
+                pdf = form.cleaned_data.pop('pdf', None)
+                terms_of_contract = form.cleaned_data.pop('terms_of_contract', None)
                 if students:
                     for student in students:
-                        chain = form.cleaned_data.pop('chain')
-                        chain_id = chain.id
                         result = tasks.create_contract.delay(form.cleaned_data, chain_id, wish, wish_today, student.student_id, selected_user_head, date, time, current_site.domain, 'head')
                     messages.success(request, 'Contrato criado com sucesso!')
                     return redirect('/contracts/all/')

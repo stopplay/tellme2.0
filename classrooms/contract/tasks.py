@@ -20,6 +20,7 @@ from django.db.models import Q
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 import pdb
+from django.core.files.base import ContentFile, File
 
 wsdl = 'http://maplebearmkt2.widehomolog.biz/api/v2_soap?wsdl=1'
 username = 'tell-me'
@@ -427,8 +428,9 @@ def send_data(data_serialized):
         )
 
 @app.task #1
-def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, sent_date, sent_time, domain, who_sent):
+def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, sent_date, sent_time, domain, who_sent, pdf_url):
     chain = Chain.objects.get(id=chain_id)
+    pdf_file = open(pdf_url, "rb")
     contract = Contract(**contract, chain=chain)
     try:
         student = Student.objects.get(student_id=student_id)
@@ -500,6 +502,7 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
                     if sent_date and sent_time:
                         contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
                         contract.save()
+                        contract.pdf.save('{}-{}.pdf'.format(contract.name, contract.contract_id), File(pdf_file))
                         contract_rest = ContractSerializer(contract)
                         send_data(contract_rest)
                         # schedule_email.apply_async((contract_rest.data, 'json', 'who_sent, domain), eta=contract.sent_date)
@@ -515,6 +518,7 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
                     if sent_date and sent_time:
                         contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
                         contract.save()
+                        contract.pdf.save('{}-{}.pdf'.format(contract.name, contract.contract_id), File(pdf_file))
                         contract_rest = ContractSerializer(contract)
                         send_data(contract_rest)
                         # schedule_email.apply_async((contract_rest.data, 'json', who_sent, domain), eta=contract.sent_date)
@@ -528,6 +532,7 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
         if wish == 'sim':
             if wish_today == 'sim':
                 contract.save()
+                contract.pdf.save('{}-{}.pdf'.format(contract.name, contract.contract_id), File(pdf_file))
                 contract_rest = ContractSerializer(contract)
                 send_data(contract_rest)
                 # schedule_email(contract, 'normal', 'admin', domain)
@@ -535,6 +540,7 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
                 if sent_date and sent_time:
                     contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
                     contract.save()
+                    contract.pdf.save('{}-{}.pdf'.format(contract.name, contract.contract_id), File(pdf_file))
                     contract_rest = ContractSerializer(contract)
                     send_data(contract_rest)
                     # schedule_email.apply_async((contract_rest.data, 'json', who_sent, domain), eta=contract.sent_date)
@@ -543,6 +549,7 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
         else:
             if wish_today == 'sim':
                 contract.save()
+                contract.pdf.save('{}-{}.pdf'.format(contract.name, contract.contract_id), File(pdf_file))
                 contract_rest = ContractSerializer(contract)
                 send_data(contract_rest)
                 # schedule_email_without_attachment(contract,'normal', who_sent, domain)
@@ -550,6 +557,7 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
                 if sent_date and sent_time:
                     contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
                     contract.save()
+                    contract.pdf.save('{}-{}.pdf'.format(contract.name, contract.contract_id), File(pdf_file))
                     contract_rest = ContractSerializer(contract)
                     send_data(contract_rest)
                     # schedule_email.apply_async((contract_rest.data, 'json', who_sent, domain), eta=contract.sent_date)
