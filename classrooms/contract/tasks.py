@@ -412,8 +412,8 @@ def send_data(data_serialized):
     layer = get_channel_layer()
     try:
         print (data_serialized.data)
-    except:
-        print (data_serialized)
+    except Exception as e:
+        print (str(e))
     try:
         async_to_sync(layer.group_send)(
             room_group_name,
