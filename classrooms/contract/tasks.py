@@ -500,7 +500,7 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
                     if wish_today == 'sim':
                         contract.save()
                         contract.pdf.save('{}-{}.pdf'.format(contract.name, contract.contract_id), File(pdf_file))
-                        contract_rest = ContractSerializer(contract)
+                        contract_rest = contract
                         send_data(contract_rest)
                         # schedule_email(contract, 'normal', who_sent, domain)
                     elif wish_today == 'não':
@@ -508,7 +508,7 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
                             contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
                             contract.save()
                             contract.pdf.save('{}-{}.pdf'.format(contract.name, contract.contract_id), File(pdf_file))
-                            contract_rest = ContractSerializer(contract)
+                            contract_rest = contract
                             send_data(contract_rest)
                             # schedule_email.apply_async((contract_rest.data, 'json', 'who_sent, domain), eta=contract.sent_date)
                         else:
@@ -517,8 +517,8 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
                     if wish_today == 'sim':
                         print ('Cheguei aqui: {}-{}'.format(contract.date, contract.end_date))
                         contract.save()
-                        print ('Cheguei aqui 2'+ type(contract))
-                        contract_rest = ContractSerializer(contract)
+                        print ('Cheguei aqui 2')
+                        contract_rest = contract
                         print ('Cheguei aqui 3')
                         send_data(contract_rest)
                         # schedule_email_without_attachment(contract,'normal', who_sent, domain)
@@ -527,7 +527,7 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
                             contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
                             contract.save()
                             contract.pdf.save('{}-{}.pdf'.format(contract.name, contract.contract_id), File(pdf_file))
-                            contract_rest = ContractSerializer(contract)
+                            contract_rest = contract
                             send_data(contract_rest)
                             # schedule_email.apply_async((contract_rest.data, 'json', who_sent, domain), eta=contract.sent_date)
                         else:
@@ -539,42 +539,34 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
             contract.student_id = student.student_id
             if wish == 'sim':
                 if wish_today == 'sim':
-                    print ('Cheguei aqui: {}-{}'.format(contract.date, contract.end_date))
                     contract.save()
-                    print ('Cheguei aqui 2')
                     contract.pdf.save('{}-{}.pdf'.format(contract.name, contract.contract_id), File(pdf_file))
-                    contract_rest = ContractSerializer(contract)
+                    contract_rest = contract
                     send_data(contract_rest)
                     # schedule_email(contract, 'normal', 'admin', domain)
                 elif wish_today == 'não':
                     if sent_date and sent_time:
                         contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
-                        print ('Cheguei aqui: {}-{}'.format(contract.date, contract.end_date))
                         contract.save()
-                        print ('Cheguei aqui 2')
                         contract.pdf.save('{}-{}.pdf'.format(contract.name, contract.contract_id), File(pdf_file))
-                        contract_rest = ContractSerializer(contract)
+                        contract_rest = contract
                         send_data(contract_rest)
                         # schedule_email.apply_async((contract_rest.data, 'json', who_sent, domain), eta=contract.sent_date)
                     else:
                         return 'Você não informou a data em que o contrato será enviado!'
             else:
                 if wish_today == 'sim':
-                    print ('Cheguei aqui: {}-{}'.format(contract.date, contract.end_date))
                     contract.save()
-                    print ('Cheguei aqui 2')
                     contract.pdf.save('{}-{}.pdf'.format(contract.name, contract.contract_id), File(pdf_file))
-                    contract_rest = ContractSerializer(contract)
+                    contract_rest = contract
                     send_data(contract_rest)
                     # schedule_email_without_attachment(contract,'normal', who_sent, domain)
                 elif wish_today == 'não':
                     if sent_date and sent_time:
                         contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
-                        print ('Cheguei aqui: {}-{}'.format(contract.date, contract.end_date))
                         contract.save()
-                        print ('Cheguei aqui 2')
                         contract.pdf.save('{}-{}.pdf'.format(contract.name, contract.contract_id), File(pdf_file))
-                        contract_rest = ContractSerializer(contract)
+                        contract_rest = contract
                         send_data(contract_rest)
                         # schedule_email.apply_async((contract_rest.data, 'json', who_sent, domain), eta=contract.sent_date)
                     else:
