@@ -503,6 +503,7 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
                         print ('Cheguei aqui 2')
                         contract.pdf.save('{}-{}.pdf'.format(contract.name, contract.contract_id), File(pdf_file))
                         contract_rest = ContractSerializer(contract)
+                        print ('Cheguei aqui 3')
                         send_data(contract_rest)
                         # schedule_email(contract, 'normal', who_sent, domain)
                     elif wish_today == 'não':
@@ -511,6 +512,7 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
                             contract.save()
                             contract.pdf.save('{}-{}.pdf'.format(contract.name, contract.contract_id), File(pdf_file))
                             contract_rest = ContractSerializer(contract)
+                            print ('Cheguei aqui 3')
                             send_data(contract_rest)
                             # schedule_email.apply_async((contract_rest.data, 'json', 'who_sent, domain), eta=contract.sent_date)
                         else:
@@ -522,6 +524,7 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
                         print ('Cheguei aqui 2')
                         contract.pdf.save('{}-{}.pdf'.format(contract.name, contract.contract_id), File(pdf_file))
                         contract_rest = ContractSerializer(contract)
+                        print ('Cheguei aqui 3')
                         send_data(contract_rest)
                         # schedule_email_without_attachment(contract,'normal', who_sent, domain)
                     elif wish_today == 'não':
@@ -532,6 +535,7 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
                             print ('Cheguei aqui 2')
                             contract.pdf.save('{}-{}.pdf'.format(contract.name, contract.contract_id), File(pdf_file))
                             contract_rest = ContractSerializer(contract)
+                            print ('Cheguei aqui 3')
                             send_data(contract_rest)
                             # schedule_email.apply_async((contract_rest.data, 'json', who_sent, domain), eta=contract.sent_date)
                         else:
@@ -548,6 +552,7 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
                     print ('Cheguei aqui 2')
                     contract.pdf.save('{}-{}.pdf'.format(contract.name, contract.contract_id), File(pdf_file))
                     contract_rest = ContractSerializer(contract)
+                    print ('Cheguei aqui 3')
                     send_data(contract_rest)
                     # schedule_email(contract, 'normal', 'admin', domain)
                 elif wish_today == 'não':
@@ -558,6 +563,7 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
                         print ('Cheguei aqui 2')
                         contract.pdf.save('{}-{}.pdf'.format(contract.name, contract.contract_id), File(pdf_file))
                         contract_rest = ContractSerializer(contract)
+                        print ('Cheguei aqui 3')
                         send_data(contract_rest)
                         # schedule_email.apply_async((contract_rest.data, 'json', who_sent, domain), eta=contract.sent_date)
                     else:
@@ -569,6 +575,7 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
                     print ('Cheguei aqui 2')
                     contract.pdf.save('{}-{}.pdf'.format(contract.name, contract.contract_id), File(pdf_file))
                     contract_rest = ContractSerializer(contract)
+                    print ('Cheguei aqui 3')
                     send_data(contract_rest)
                     # schedule_email_without_attachment(contract,'normal', who_sent, domain)
                 elif wish_today == 'não':
@@ -579,6 +586,7 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
                         print ('Cheguei aqui 2')
                         contract.pdf.save('{}-{}.pdf'.format(contract.name, contract.contract_id), File(pdf_file))
                         contract_rest = ContractSerializer(contract)
+                        print ('Cheguei aqui 3')
                         send_data(contract_rest)
                         # schedule_email.apply_async((contract_rest.data, 'json', who_sent, domain), eta=contract.sent_date)
                     else:
