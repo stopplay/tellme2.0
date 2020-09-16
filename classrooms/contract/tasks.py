@@ -441,8 +441,9 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
         head = Head.objects.get(head_id = head_id)
     else:
         return 'Você não selecionou nenhum diretor'
-    if contract.pdf.size > 2097152:
-        return 'Por favor mantenha o tamanho do arquivo de contrato enviado abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.pdf.size))
+    if contract.pdf:
+        if contract.pdf.size > 2097152:
+            return 'Por favor mantenha o tamanho do arquivo de contrato enviado abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.pdf.size))
     if contract.terms_of_contract:
         if contract.terms_of_contract.size > 2097152:
             return 'Por favor mantenha o tamanho do arquivo de termos aditivos de contrato (1) abaixo de {}. Tamanho atual {}.'.format(filesizeformat(2097152), filesizeformat(contract.terms_of_contract.size))
