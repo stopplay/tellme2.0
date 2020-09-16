@@ -431,9 +431,7 @@ def send_data(data_serialized):
 def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, sent_date, sent_time, domain, who_sent, pdf_url):
     chain = Chain.objects.get(id=chain_id)
     pdf_file = open(pdf_url, "rb")
-    print ('Cheguei aqui')
     contract = Contract(**contract, chain=chain)
-    print ('Cheguei aqui 2')
     try:
         student = Student.objects.get(student_id=student_id)
     except:
@@ -497,7 +495,9 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
             contract.student_id = student.student_id
             if wish == 'sim':
                 if wish_today == 'sim':
+                    print ('Cheguei aqui')
                     contract.save()
+                    print ('Cheguei aqui 2')
                     contract.pdf.save('{}-{}.pdf'.format(contract.name, contract.contract_id), File(pdf_file))
                     contract_rest = ContractSerializer(contract)
                     send_data(contract_rest)
@@ -514,14 +514,18 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
                         return 'Você não informou a data em que o contrato será enviado!'
             else:
                 if wish_today == 'sim':
+                    print ('Cheguei aqui')
                     contract.save()
+                    print ('Cheguei aqui 2')
                     contract_rest = ContractSerializer(contract)
                     send_data(contract_rest)
                     # schedule_email_without_attachment(contract,'normal', who_sent, domain)
                 elif wish_today == 'não':
                     if sent_date and sent_time:
                         contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
+                        print ('Cheguei aqui')
                         contract.save()
+                        print ('Cheguei aqui 2')
                         contract.pdf.save('{}-{}.pdf'.format(contract.name, contract.contract_id), File(pdf_file))
                         contract_rest = ContractSerializer(contract)
                         send_data(contract_rest)
@@ -535,7 +539,9 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
         contract.student_id = student.student_id
         if wish == 'sim':
             if wish_today == 'sim':
+                print ('Cheguei aqui')
                 contract.save()
+                print ('Cheguei aqui 2')
                 contract.pdf.save('{}-{}.pdf'.format(contract.name, contract.contract_id), File(pdf_file))
                 contract_rest = ContractSerializer(contract)
                 send_data(contract_rest)
@@ -543,7 +549,9 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
             elif wish_today == 'não':
                 if sent_date and sent_time:
                     contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
+                    print ('Cheguei aqui')
                     contract.save()
+                    print ('Cheguei aqui 2')
                     contract.pdf.save('{}-{}.pdf'.format(contract.name, contract.contract_id), File(pdf_file))
                     contract_rest = ContractSerializer(contract)
                     send_data(contract_rest)
@@ -552,7 +560,9 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
                     return 'Você não informou a data em que o contrato será enviado!'
         else:
             if wish_today == 'sim':
+                print ('Cheguei aqui')
                 contract.save()
+                print ('Cheguei aqui 2')
                 contract.pdf.save('{}-{}.pdf'.format(contract.name, contract.contract_id), File(pdf_file))
                 contract_rest = ContractSerializer(contract)
                 send_data(contract_rest)
@@ -560,7 +570,9 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
             elif wish_today == 'não':
                 if sent_date and sent_time:
                     contract.sent_date = datetime.datetime(int(date.split('-')[0]), int(date.split('-')[1]), int(date.split('-')[2]), int(time.split(':')[0]), int(time.split(':')[1]), 00)
+                    print ('Cheguei aqui')
                     contract.save()
+                    print ('Cheguei aqui 2')
                     contract.pdf.save('{}-{}.pdf'.format(contract.name, contract.contract_id), File(pdf_file))
                     contract_rest = ContractSerializer(contract)
                     send_data(contract_rest)
