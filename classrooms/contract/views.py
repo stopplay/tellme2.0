@@ -418,6 +418,7 @@ def createacontract(request):
                 outputStream.close()
                 if students:
                     for student in students:
+                        print (form.cleaned_data)
                         result = tasks.create_contract.delay(form.cleaned_data, chain_id, wish, wish_today, student.student_id, selected_user_head, date, time, current_site.domain, 'admin', pdf_url)
                     messages.success(request, 'Contrato criado com sucesso!')
                     return redirect('/contracts/all/')
