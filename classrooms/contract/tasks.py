@@ -411,6 +411,10 @@ def send_data(data_serialized):
     room_group_name = 'notifications'
     layer = get_channel_layer()
     try:
+        print (data_serialized.data)
+    except:
+        print (data_serialized)
+    try:
         async_to_sync(layer.group_send)(
             room_group_name,
             {
