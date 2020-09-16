@@ -433,6 +433,7 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
         chain = Chain.objects.get(id=chain_id)
         pdf_file = open(pdf_url, "rb")
         contract = Contract(**contract, chain=chain)
+        print (contract.date, contract.end_date)
         contract.date = datetime.strptime(contract.date, '%Y-%m-%d')
         contract.end_date = datetime.strptime(contract.end_date, '%Y-%m-%d')
         try:
