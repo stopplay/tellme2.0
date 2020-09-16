@@ -431,7 +431,9 @@ def send_data(data_serialized):
 def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, sent_date, sent_time, domain, who_sent, pdf_url):
     chain = Chain.objects.get(id=chain_id)
     pdf_file = open(pdf_url, "rb")
+    print ('Cheguei aqui')
     contract = Contract(**contract, chain=chain)
+    print ('Cheguei aqui 2')
     try:
         student = Student.objects.get(student_id=student_id)
     except:
@@ -496,6 +498,7 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
             if wish == 'sim':
                 if wish_today == 'sim':
                     contract.save()
+                    contract.pdf.save('{}-{}.pdf'.format(contract.name, contract.contract_id), File(pdf_file))
                     contract_rest = ContractSerializer(contract)
                     send_data(contract_rest)
                     # schedule_email(contract, 'normal', who_sent, domain)
