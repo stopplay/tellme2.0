@@ -417,9 +417,41 @@ def createacontract(request):
                     pdf_url = settings.MEDIA_ROOT+'/test_pdf_{}.pdf'.format(selected_user)
                     output.write(outputStream)
                     outputStream.close()
+                    try:
+                        terms_and_conditions = form.cleaned_data.pop('terms_and_conditions', None)
+                        new_pdf = PdfFileReader(terms_and_conditions)
+                        # read your existing PDF
+                        existing_pdf = PdfFileReader(terms_and_conditions, 'rb')
+                        output = PdfFileWriter()
+                        output.removeImages(False)
+                        for i in range(0, existing_pdf.getNumPages()):
+                            page = existing_pdf.getPage(i)
+                            output.addPage(page)
+                        outputStream = open(settings.MEDIA_ROOT+'/test_terms_and_conditions_{}.pdf'.format(selected_user), "wb")
+                        terms_and_conditions_url = settings.MEDIA_ROOT+'/test_terms_and_contitions_{}.pdf'.format(selected_user)
+                        output.write(outputStream)
+                        outputStream.close()
+                    except Exception as e:
+                        terms_and_conditions_url = None
+                    try:
+                        terms_and_conditions_2 = form.cleaned_data.pop('terms_and_conditions_2', None)
+                        new_pdf = PdfFileReader(terms_and_conditions_2)
+                        # read your existing PDF
+                        existing_pdf = PdfFileReader(terms_and_conditions_2, 'rb')
+                        output = PdfFileWriter()
+                        output.removeImages(False)
+                        for i in range(0, existing_pdf.getNumPages()):
+                            page = existing_pdf.getPage(i)
+                            output.addPage(page)
+                        outputStream = open(settings.MEDIA_ROOT+'/test_terms_and_conditions_2_{}.pdf'.format(selected_user), "wb")
+                        terms_and_conditions_url_2 = settings.MEDIA_ROOT+'/test_terms_and_contitions_2_{}.pdf'.format(selected_user)
+                        output.write(outputStream)
+                        outputStream.close()
+                    except Exception as e:
+                        terms_and_conditions_url_2 = None
                     for student in students:
                         print (form.cleaned_data)
-                        result = tasks.create_contract.delay(form.cleaned_data, chain_id, wish, wish_today, student.student_id, selected_user_head, date, time, current_site.domain, 'admin', pdf_url)
+                        result = tasks.create_contract.delay(form.cleaned_data, chain_id, wish, wish_today, student.student_id, selected_user_head, date, time, current_site.domain, 'admin', pdf_url, terms_and_conditions_url, terms_and_conditions_url_2)
                     messages.success(request, 'Contrato criado com sucesso!')
                     return redirect('/contracts/all/')
                 else:
@@ -617,8 +649,55 @@ def createacontract(request):
                 pdf = form.cleaned_data.pop('pdf', None)
                 terms_of_contract = form.cleaned_data.pop('terms_of_contract', None)
                 if students:
+                    chain = form.cleaned_data.pop('chain')
+                    chain_id = chain.id
+                    pdf = form.cleaned_data.pop('pdf', None)
+                    new_pdf = PdfFileReader(pdf)
+                    # read your existing PDF
+                    existing_pdf = PdfFileReader(pdf, 'rb')
+                    output = PdfFileWriter()
+                    output.removeImages(False)
+                    for i in range(0, existing_pdf.getNumPages()):
+                        page = existing_pdf.getPage(i)
+                        output.addPage(page)
+                    outputStream = open(settings.MEDIA_ROOT+'/test_pdf_{}.pdf'.format(selected_user), "wb")
+                    pdf_url = settings.MEDIA_ROOT+'/test_pdf_{}.pdf'.format(selected_user)
+                    output.write(outputStream)
+                    outputStream.close()
+                    try:
+                        terms_and_conditions = form.cleaned_data.pop('terms_and_conditions', None)
+                        new_pdf = PdfFileReader(terms_and_conditions)
+                        # read your existing PDF
+                        existing_pdf = PdfFileReader(terms_and_conditions, 'rb')
+                        output = PdfFileWriter()
+                        output.removeImages(False)
+                        for i in range(0, existing_pdf.getNumPages()):
+                            page = existing_pdf.getPage(i)
+                            output.addPage(page)
+                        outputStream = open(settings.MEDIA_ROOT+'/test_terms_and_conditions_{}.pdf'.format(selected_user), "wb")
+                        terms_and_conditions_url = settings.MEDIA_ROOT+'/test_terms_and_contitions_{}.pdf'.format(selected_user)
+                        output.write(outputStream)
+                        outputStream.close()
+                    except Exception as e:
+                        terms_and_conditions_url = None
+                    try:
+                        terms_and_conditions_2 = form.cleaned_data.pop('terms_and_conditions_2', None)
+                        new_pdf = PdfFileReader(terms_and_conditions_2)
+                        # read your existing PDF
+                        existing_pdf = PdfFileReader(terms_and_conditions_2, 'rb')
+                        output = PdfFileWriter()
+                        output.removeImages(False)
+                        for i in range(0, existing_pdf.getNumPages()):
+                            page = existing_pdf.getPage(i)
+                            output.addPage(page)
+                        outputStream = open(settings.MEDIA_ROOT+'/test_terms_and_conditions_2_{}.pdf'.format(selected_user), "wb")
+                        terms_and_conditions_url_2 = settings.MEDIA_ROOT+'/test_terms_and_contitions_2_{}.pdf'.format(selected_user)
+                        output.write(outputStream)
+                        outputStream.close()
+                    except Exception as e:
+                        terms_and_conditions_url_2 = None
                     for student in students:
-                        result = tasks.create_contract.delay(form.cleaned_data, chain_id, wish, wish_today, student.student_id, selected_user_head, date, time, current_site.domain, 'head')
+                        result = tasks.create_contract.delay(form.cleaned_data, chain_id, wish, wish_today, student.student_id, selected_user_head, date, time, current_site.domain, 'head', pdf_url, terms_and_conditions_url, terms_and_conditions_url_2)
                     messages.success(request, 'Contrato criado com sucesso!')
                     return redirect('/contracts/all/')
                 else:
