@@ -1233,13 +1233,27 @@ def select_student_to_contract(request):
                     students_ids += [(student.student_id)]
         students = Student.objects.filter(student_id__in=students_ids)
         if request.method == 'POST':
+            selected_school = request.POST.get('selected_school' or None)
+            selected_class = request.POST.get('selected_class' or None)
+            school = School.objects.get(school_id=selected_school)
+            classe = Class.objects.get(class_id=selected_class)
+            chain = Chain.objects.get(name="{0}-{1}-{2}-{3}".format(school.school_name, classe.enrollment_class_year, classe.class_unit, classe.class_name)).id
+            request.session['chain'] = chain
             selected_user = request.POST.get('selected_user' or None)
             request.session['selected_user'] = selected_user
-            student = Student.objects.get(student_id=selected_user)
-            if student.needs_parent:
-                if not student.first_parent or not student.second_parent:
-                    messages.warning(request, 'O estudante não tem pelo menos um dos responsáveis necessários associados a ele!')
-                    return redirect('/contracts/select_student_to_contract')
+            if ',' not in selected_user:
+                student = Student.objects.get(student_id=selected_user)
+                if student.needs_parent:
+                    if not student.first_parent or not student.second_parent:
+                        messages.warning(request, 'O estudante não tem pelo menos um dos responsáveis necessários associados a ele!')
+                        return redirect('/contracts/select_student_to_contract')
+            else:
+                for student_id in selected_user.split(','):
+                    student = Student.objects.get(student_id=student_id)
+                    if student.needs_parent:
+                        if not student.first_parent or not student.second_parent:
+                            messages.warning(request, 'Um dos estudantes selecionados não tem pelo menos um des responsáveis necessários associados a ele!')
+                            return redirect('/contracts/select_student_to_contract')
             return redirect('/contracts/createacontract')
         return render(request, 'contract/select_student_to_contract.html', {'students':students, 'schools': schools, 'is_supervisor':True})
 
