@@ -1377,7 +1377,7 @@ def set_signed(request, contract_id = None):
             email = EmailMessage(
                 mail_subject, message, to=[to_email], attachments=attachments
             )
-            email.send()
+            # email.send()
             messages.success(request, 'Assinado com sucesso!')
         elif Parent.objects.filter(profile=request.user).count()>=1:
             form = BlockModelFormByContract()
@@ -1428,7 +1428,7 @@ def set_signed(request, contract_id = None):
                 email = EmailMessage(
                     mail_subject, message, to=[to_email], attachments=attachments
                 )
-                email.send()
+                # email.send()
                 messages.success(request, 'Assinado com sucesso!')
             if contract.second_auth_signe == parent:
                 contract.second_auth_signed = True
@@ -1451,7 +1451,7 @@ def set_signed(request, contract_id = None):
                 email = EmailMessage(
                     mail_subject, message, to=[to_email], attachments=attachments
                 )
-                email.send()
+                # email.send()
                 messages.success(request, 'Assinado com sucesso!')
             if contract.third_auth_signe == parent:
                 contract.third_auth_signed = True
@@ -1474,7 +1474,7 @@ def set_signed(request, contract_id = None):
                 email = EmailMessage(
                     mail_subject, message, to=[to_email], attachments=attachments
                 )
-                email.send()
+                # email.send()
                 messages.success(request, 'Assinado com sucesso!')
         elif Witness.objects.filter(profile=request.user).count()>=1:
             form = BlockModelFormByContract()
@@ -1525,7 +1525,7 @@ def set_signed(request, contract_id = None):
                 email = EmailMessage(
                     mail_subject, message, to=[to_email], attachments=attachments
                 )
-                email.send()
+                # email.send()
                 messages.success(request, 'Assinado com sucesso!')
             if contract.second_witness_signe == witness:
                 contract.second_witness_signed = True
@@ -1548,7 +1548,7 @@ def set_signed(request, contract_id = None):
                 email = EmailMessage(
                     mail_subject, message, to=[to_email], attachments=attachments
                 )
-                email.send()
+                # email.send()
                 messages.success(request, 'Assinado com sucesso!')
         elif Student.objects.filter(profile=request.user).count()>=1:
             form = BlockModelFormByContract()
@@ -1597,7 +1597,7 @@ def set_signed(request, contract_id = None):
             email = EmailMessage(
                 mail_subject, message, to=[to_email], attachments=attachments
             )
-            email.send()
+            # email.send()
             messages.success(request, 'Assinado com sucesso!')
         contract = Contract.objects.get(contract_id=contract_id)
         if contract.first_witness_signe and contract.first_witness_signe:
@@ -1614,7 +1614,7 @@ def set_signed(request, contract_id = None):
                     contract.save(update_fields=['all_signed'])
                     contract_rest = ContractSerializer(contract)
                     send_data(request, contract_rest)
-                    return redirect('/contracts/all')
+                    return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
             else:
                     if (contract.first_auth_signed and contract.second_auth_signed and contract.counter_signed and contract.all_witness_signed) or (contract.student_auth_signed and contract.counter_signed and contract.all_witness_signed):
                         contract.all_signed = True
@@ -1623,7 +1623,7 @@ def set_signed(request, contract_id = None):
                         contract.save(update_fields=['all_signed'])
                         contract_rest = ContractSerializer(contract)
                         send_data(request, contract_rest)
-                        return redirect('/contracts/all')
+                        return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
         else:
             if contract.third_auth_signe:
                 if (contract.first_auth_signed and contract.second_auth_signed and contract.third_auth_signe and contract.counter_signed) or (contract.student_auth_signed and contract.third_auth_signe and contract.counter_signed):
@@ -1633,7 +1633,7 @@ def set_signed(request, contract_id = None):
                     contract.save(update_fields=['all_signed'])
                     contract_rest = ContractSerializer(contract)
                     send_data(request, contract_rest)
-                    return redirect('/contracts/all')
+                    return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
             else:
                 if (contract.first_auth_signed and contract.second_auth_signed and contract.counter_signed) or (contract.student_auth_signed and contract.counter_signed):
                     contract.all_signed = True
@@ -1642,13 +1642,13 @@ def set_signed(request, contract_id = None):
                     contract.save(update_fields=['all_signed'])
                     contract_rest = ContractSerializer(contract)
                     send_data(request, contract_rest)
-                    return redirect('/contracts/all')
+                    return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
 
     else:
         messages.warning(request, 'Você não é diretor nem pai do estudante deste contrato!')
     contract_rest = ContractSerializer(contract)
     send_data(request, contract_rest)
-    return redirect('/contracts/all')
+    return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
 
 
 @csrf_exempt

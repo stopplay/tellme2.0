@@ -204,11 +204,11 @@
                               <div class="col-md-2">
                                 {% if contract.student_auth_signed %}
                                   <div class="margin-5">
-                                    <span class="badge badge-pill badge-success text-success float-right" >.</span>
+                                    <span id="{{ contract.contract_id }}_student_auth_signed" class="badge badge-pill badge-success text-success float-right" >.</span>
                                   </div>
                                 {% else %}
                                   <div class="margin-5">
-                                    <span class="badge badge-pill badge-danger text-danger float-right" >.</span>
+                                    <span id="{{ contract.contract_id }}_student_auth_signed" class="badge badge-pill badge-danger text-danger float-right" >.</span>
                                   </div>
                                 {% endif %}
                               </div>
@@ -224,11 +224,11 @@
                               <div class="col-md-2">
                                 {% if contract.first_auth_signed %}
                                 <div class="margin-5">
-                                  <span class="badge badge-pill badge-success text-success float-right" >.</span>
+                                  <span id="{{ contract.contract_id }}_first_auth_signed" class="badge badge-pill badge-success text-success float-right" >.</span>
                                 </div>
                                 {% else %}
                                 <div class="margin-5">
-                                  <span class="badge badge-pill badge-danger text-danger float-right" >.</span>
+                                  <span id="{{ contract.contract_id }}_first_auth_signed" class="badge badge-pill badge-danger text-danger float-right" >.</span>
                                 </div>
                                 {% endif %}
                               </div>
@@ -244,11 +244,11 @@
                               <div class="col-md-2">
                                 {% if contract.second_auth_signed %}
                                 <div class="margin-5">
-                                  <span class="badge badge-pill badge-success text-success float-right" >.</span>
+                                  <span id="{{ contract.contract_id }}_second_auth_signed" class="badge badge-pill badge-success text-success float-right" >.</span>
                                 </div>
                                 {% else %}
                                 <div class="margin-5">
-                                  <span class="badge badge-pill badge-danger text-danger float-right" >.</span>
+                                  <span id="{{ contract.contract_id }}_second_auth_signed" class="badge badge-pill badge-danger text-danger float-right" >.</span>
                                 </div>
                                 {% endif %}
                               </div>
@@ -263,11 +263,11 @@
                               <div class="col-md-2">
                                 {% if contract.third_auth_signed %}
                                 <div class="margin-5">
-                                  <span class="badge badge-pill badge-success text-success float-right" >.</span>
+                                  <span id="{{ contract.contract_id }}_third_auth_signed" class="badge badge-pill badge-success text-success float-right" >.</span>
                                 </div>
                                 {% else %}
                                 <div class="margin-5">
-                                  <span class="badge badge-pill badge-danger text-danger float-right" >.</span>
+                                  <span id="{{ contract.contract_id }}_third_auth_signed" class="badge badge-pill badge-danger text-danger float-right" >.</span>
                                 </div>
                                 {% endif %}
                               </div>
@@ -283,11 +283,11 @@
                               <div class="col-md-2">
                                 {% if contract.all_witness_signed %}
                                   <div class="margin-5">
-                                    <span class="badge badge-pill badge-success text-success float-right" >.</span>
+                                    <span id="{{ contract.contract_id }}_all_witness_signed" class="badge badge-pill badge-success text-success float-right" >.</span>
                                   </div>
                                 {% else %}
                                   <div class="margin-5">
-                                    <span class="badge badge-pill badge-danger text-danger float-right" >.</span>
+                                    <span id="{{ contract.contract_id }}_all_witness_signed" class="badge badge-pill badge-danger text-danger float-right" >.</span>
                                   </div>
                                 {% endif %}
                               </div>
@@ -328,11 +328,11 @@
                             <div class="col-md-2">
                               {% if contract.counter_signed %}
                                 <div class="margin-5">
-                                  <span class="badge badge-pill badge-success text-success float-right" >.</span>
+                                  <span id="{{ contract.contract_id }}_counter_signed" class="badge badge-pill badge-success text-success float-right" >.</span>
                                 </div>
                               {% else %}
                                 <div class="margin-5">
-                                  <span class="badge badge-pill badge-danger text-danger  float-right" >.</span>
+                                  <span id="{{ contract.contract_id }}_counter_signed" class="badge badge-pill badge-danger text-danger  float-right" >.</span>
                                 </div>
                               {% endif %}
                             </div>
@@ -615,6 +615,49 @@
 			  {% endif %}
 			{% endif %}
 <script type="text/javascript">
+  function signContract(url) {
+      setTimeout(function () {
+        // window.location.assign(url);
+        $.get(url)
+          .done(function (response) {
+            var contract = response['contract'];
+            if (contract['client_responsible_signed'] == true) {
+              document.getElementById(`${contract['contract_id']}_client_responsible_signed`).className = 'badge badge-pill badge-success text-success float-right';
+            }
+            if (contract['counter_signed'] == true) {
+              document.getElementById(`${contract['contract_id']}_counter_signed`).className = 'badge badge-pill badge-success text-success float-right';
+            }
+            if (contract['first_responsible_signed'] == true) {
+              document.getElementById(`${contract['contract_id']}_first_responsible_signed`).className = 'badge badge-pill badge-success text-success float-right';
+            }
+            if (contract['second_responsible_signed'] == true) {
+              document.getElementById(`${contract['contract_id']}_second_responsible_signed`).className = 'badge badge-pill badge-success text-success float-right';
+            }
+            if (contract['first_auth_signed'] == true) {
+              document.getElementById(`${contract['contract_id']}_first_auth_signed`).className = 'badge badge-pill badge-success text-success float-right';
+            }
+            if (contract['second_auth_signed'] == true) {
+              document.getElementById(`${contract['contract_id']}_second_auth_signed`).className = 'badge badge-pill badge-success text-success float-right';
+            }
+            if (contract['third_auth_signed'] == true) {
+              document.getElementById(`${contract['contract_id']}_third_auth_signed`).className = 'badge badge-pill badge-success text-success float-right';
+            }
+            if (contract['first_witness_signed'] == true) {
+              document.getElementById(`${contract['contract_id']}_first_witness_signed`).className = 'badge badge-pill badge-success text-success float-right';
+            }
+            if (contract['second_witness_signed'] == true) {
+              document.getElementById(`${contract['contract_id']}_second_witness_signed`).className = 'badge badge-pill badge-success text-success float-right';
+            }
+            if (contract['all_signiture_signed'] == true) {
+              document.getElementById(`${contract['contract_id']}_all_signe_signed`).className = 'badge badge-pill badge-success text-success float-right';
+            }
+            if (contract['all_signed'] == true) {
+              document.getElementById(`${contract['contract_id']}_all_signed`).className = 'badge badge-pill badge-success text-success float-right';
+            }
+            $("#sign-contract-modal").modal('hide');
+          });
+      }, 1);
+    }
   $(document).ready(function () {
         $('#select_form_school').on('change', function () {
           let urlClasses = $('#myForm').data('urlclasses')
