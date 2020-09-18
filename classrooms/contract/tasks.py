@@ -641,6 +641,7 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
         return str(e)
 
 today = lambda: timezone.now().date()
+
 @app.task
 def set_expired_daily():
     Contract.objects.filter(is_expired=False, expiration__lt=today()).update(is_expired=True)
