@@ -32,7 +32,7 @@ class Contract(models.Model):
     name = models.TextField(null=True, blank=True, verbose_name = 'Nome do Contrato')
     date = models.DateField(null=True, blank=True, verbose_name = 'Data Inicial do Contrato')
     end = models.DateField(null=True, blank=True, default="2020-12-31",verbose_name = 'Data Final do Contrato')
-    expiration = models.DateField(null=True, blank=True, default="2020-12-31",verbose_name = 'Data Expiração do Contrato')
+    expiration = models.DateField(null=True, blank=True, default="2020-12-31",verbose_name = 'Data de Expiração de Assinatura do Contrato')
     first_auth_signed = models.BooleanField(default=False)
     second_auth_signed = models.BooleanField(default=False)
     third_auth_signed = models.BooleanField(default=False)
