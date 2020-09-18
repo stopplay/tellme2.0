@@ -447,7 +447,8 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
             terms_file_2 = None
         contract = Contract(**contract, chain=chain)
         contract.date = datetime.strptime(contract.date.split('T')[0], '%Y-%m-%d').date()
-        contract.end_date = datetime.strptime(contract.end_date.split('T')[0], '%Y-%m-%d').date()
+        contract.end = datetime.strptime(contract.end.split('T')[0], '%Y-%m-%d').date()
+        contract.expiration = datetime.strptime(contract.expiration.split('T')[0], '%Y-%m-%d').date()
         try:
             student = Student.objects.get(student_id=student_id)
         except:
