@@ -21,6 +21,7 @@ from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 import pdb
 from django.core.files.base import ContentFile, File
+from django.utils import timezone
 
 wsdl = 'http://maplebearmkt2.widehomolog.biz/api/v2_soap?wsdl=1'
 username = 'tell-me'
@@ -638,3 +639,13 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
             return 'Contrato criado com sucesso!'
     except Exception as e:
         return str(e)
+
+@app.task
+def set_expired_daily():
+    today = timezone.now().date()
+    Contract.objects.filter(is_expired=False, expiration__lt=today).update(is_expired=True)
+
+@app.task
+def set_active_daily():
+    today = timezone.now().date()
+    Contract.objects.filter(is_active=True, end__lt=today).update(is_active=False)
