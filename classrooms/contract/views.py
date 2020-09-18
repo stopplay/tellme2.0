@@ -1195,10 +1195,13 @@ def select_student_to_contract(request):
         if request.method == 'POST':
             selected_school = request.POST.get('selected_school' or None)
             selected_class = request.POST.get('selected_class' or None)
-            school = School.objects.get(school_id=selected_school)
-            classe = Class.objects.get(class_id=selected_class)
-            chain = Chain.objects.get(name="{0}-{1}-{2}-{3}".format(school.school_name, classe.enrollment_class_year, classe.class_unit, classe.class_name)).id
-            request.session['chain'] = chain
+            try:
+                school = School.objects.get(school_id=selected_school)
+                classe = Class.objects.get(class_id=selected_class)
+                chain = Chain.objects.get(name="{0}-{1}-{2}-{3}".format(school.school_name, classe.enrollment_class_year, classe.class_unit, classe.class_name)).id
+                request.session['chain'] = chain
+            except:
+                pass
             selected_user = request.POST.get('selected_user' or None)
             request.session['selected_user'] = selected_user
             if ',' not in selected_user:
@@ -1232,10 +1235,13 @@ def select_student_to_contract(request):
         if request.method == 'POST':
             selected_school = request.POST.get('selected_school' or None)
             selected_class = request.POST.get('selected_class' or None)
-            school = School.objects.get(school_id=selected_school)
-            classe = Class.objects.get(class_id=selected_class)
-            chain = Chain.objects.get(name="{0}-{1}-{2}-{3}".format(school.school_name, classe.enrollment_class_year, classe.class_unit, classe.class_name)).id
-            request.session['chain'] = chain
+            try:
+                school = School.objects.get(school_id=selected_school)
+                classe = Class.objects.get(class_id=selected_class)
+                chain = Chain.objects.get(name="{0}-{1}-{2}-{3}".format(school.school_name, classe.enrollment_class_year, classe.class_unit, classe.class_name)).id
+                request.session['chain'] = chain
+            except:
+                pass
             selected_user = request.POST.get('selected_user' or None)
             request.session['selected_user'] = selected_user
             if ',' not in selected_user:
