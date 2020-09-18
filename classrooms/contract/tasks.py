@@ -515,9 +515,9 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
                         print ('Cheguei aqui 2')
                         contract.pdf.save('{}-{}.pdf'.format(contract.name, contract.contract_id), File(pdf_file))
                         if terms_file:
-                            contract.terms_and_conditions.save('{}-{}_term_1.pdf'.format(contract.name, contract.contract_id), File(terms_file))
+                            contract.terms_of_contract.save('{}-{}_term_1.pdf'.format(contract.name, contract.contract_id), File(terms_file))
                         if terms_file_2:
-                            contract.terms_and_conditions_2.save('{}-{}_term_2.pdf'.format(contract.name, contract.contract_id), File(terms_file_2))
+                            contract.terms_of_contract_2.save('{}-{}_term_2.pdf'.format(contract.name, contract.contract_id), File(terms_file_2))
                         contract_rest = ContractSerializer(contract)
                         print ('Cheguei aqui 3')
                         send_data(contract_rest)
@@ -528,9 +528,9 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
                             contract.save()
                             contract.pdf.save('{}-{}.pdf'.format(contract.name, contract.contract_id), File(pdf_file))
                             if terms_file:
-                                contract.terms_and_conditions.save('{}-{}_term_1.pdf'.format(contract.name, contract.contract_id), File(terms_file))
+                                contract.terms_of_contract.save('{}-{}_term_1.pdf'.format(contract.name, contract.contract_id), File(terms_file))
                             if terms_file_2:
-                                contract.terms_and_conditions_2.save('{}-{}_term_2.pdf'.format(contract.name, contract.contract_id), File(terms_file_2))
+                                contract.terms_of_contract_2.save('{}-{}_term_2.pdf'.format(contract.name, contract.contract_id), File(terms_file_2))
                             contract_rest = ContractSerializer(contract)
                             print ('Cheguei aqui 3')
                             send_data(contract_rest)
@@ -544,9 +544,9 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
                         print ('Cheguei aqui 2')
                         contract.pdf.save('{}-{}.pdf'.format(contract.name, contract.contract_id), File(pdf_file))
                         if terms_file:
-                            contract.terms_and_conditions.save('{}-{}_term_1.pdf'.format(contract.name, contract.contract_id), File(terms_file))
+                            contract.terms_of_contract.save('{}-{}_term_1.pdf'.format(contract.name, contract.contract_id), File(terms_file))
                         if terms_file_2:
-                            contract.terms_and_conditions_2.save('{}-{}_term_2.pdf'.format(contract.name, contract.contract_id), File(terms_file_2))
+                            contract.terms_of_contract_2.save('{}-{}_term_2.pdf'.format(contract.name, contract.contract_id), File(terms_file_2))
                         contract_rest = ContractSerializer(contract)
                         print ('Cheguei aqui 3')
                         send_data(contract_rest)
@@ -559,9 +559,9 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
                             print ('Cheguei aqui 2')
                             contract.pdf.save('{}-{}.pdf'.format(contract.name, contract.contract_id), File(pdf_file))
                             if terms_file:
-                                contract.terms_and_conditions.save('{}-{}_term_1.pdf'.format(contract.name, contract.contract_id), File(terms_file))
+                                contract.terms_of_contract.save('{}-{}_term_1.pdf'.format(contract.name, contract.contract_id), File(terms_file))
                             if terms_file_2:
-                                contract.terms_and_conditions_2.save('{}-{}_term_2.pdf'.format(contract.name, contract.contract_id), File(terms_file_2))
+                                contract.terms_of_contract_2.save('{}-{}_term_2.pdf'.format(contract.name, contract.contract_id), File(terms_file_2))
                             contract_rest = ContractSerializer(contract)
                             print ('Cheguei aqui 3')
                             send_data(contract_rest)
@@ -580,9 +580,9 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
                     print ('Cheguei aqui 2')
                     contract.pdf.save('{}-{}.pdf'.format(contract.name, contract.contract_id), File(pdf_file))
                     if terms_file:
-                        contract.terms_and_conditions.save('{}-{}_term_1.pdf'.format(contract.name, contract.contract_id), File(terms_file))
+                        contract.terms_of_contract.save('{}-{}_term_1.pdf'.format(contract.name, contract.contract_id), File(terms_file))
                     if terms_file_2:
-                        contract.terms_and_conditions_2.save('{}-{}_term_2.pdf'.format(contract.name, contract.contract_id), File(terms_file_2))
+                        contract.terms_of_contract_2.save('{}-{}_term_2.pdf'.format(contract.name, contract.contract_id), File(terms_file_2))
                     contract_rest = ContractSerializer(contract)
                     print ('Cheguei aqui 3')
                     send_data(contract_rest)
@@ -595,9 +595,9 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
                         print ('Cheguei aqui 2')
                         contract.pdf.save('{}-{}.pdf'.format(contract.name, contract.contract_id), File(pdf_file))
                         if terms_file:
-                            contract.terms_and_conditions.save('{}-{}_term_1.pdf'.format(contract.name, contract.contract_id), File(terms_file))
+                            contract.terms_of_contract.save('{}-{}_term_1.pdf'.format(contract.name, contract.contract_id), File(terms_file))
                         if terms_file_2:
-                            contract.terms_and_conditions_2.save('{}-{}_term_2.pdf'.format(contract.name, contract.contract_id), File(terms_file_2))
+                            contract.terms_of_contract_2.save('{}-{}_term_2.pdf'.format(contract.name, contract.contract_id), File(terms_file_2))
                         contract_rest = ContractSerializer(contract)
                         print ('Cheguei aqui 3')
                         send_data(contract_rest)
@@ -611,9 +611,9 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
                     print ('Cheguei aqui 2')
                     contract.pdf.save('{}-{}.pdf'.format(contract.name, contract.contract_id), File(pdf_file))
                     if terms_file:
-                        contract.terms_and_conditions.save('{}-{}_term_1.pdf'.format(contract.name, contract.contract_id), File(terms_file))
+                        contract.terms_of_contract.save('{}-{}_term_1.pdf'.format(contract.name, contract.contract_id), File(terms_file))
                     if terms_file_2:
-                        contract.terms_and_conditions_2.save('{}-{}_term_2.pdf'.format(contract.name, contract.contract_id), File(terms_file_2))
+                        contract.terms_of_contract_2.save('{}-{}_term_2.pdf'.format(contract.name, contract.contract_id), File(terms_file_2))
                     contract_rest = ContractSerializer(contract)
                     print ('Cheguei aqui 3')
                     send_data(contract_rest)
@@ -626,9 +626,9 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
                         print ('Cheguei aqui 2')
                         contract.pdf.save('{}-{}.pdf'.format(contract.name, contract.contract_id), File(pdf_file))
                         if terms_file:
-                            contract.terms_and_conditions.save('{}-{}_term_1.pdf'.format(contract.name, contract.contract_id), File(terms_file))
+                            contract.terms_of_contract.save('{}-{}_term_1.pdf'.format(contract.name, contract.contract_id), File(terms_file))
                         if terms_file_2:
-                            contract.terms_and_conditions_2.save('{}-{}_term_2.pdf'.format(contract.name, contract.contract_id), File(terms_file_2))
+                            contract.terms_of_contract_2.save('{}-{}_term_2.pdf'.format(contract.name, contract.contract_id), File(terms_file_2))
                         contract_rest = ContractSerializer(contract)
                         print ('Cheguei aqui 3')
                         send_data(contract_rest)
