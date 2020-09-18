@@ -644,10 +644,6 @@ def createacontract(request):
                 selected_user_head = request.POST.get('selected_user' or None)
                 date = request.POST.get('date' or None)
                 time = request.POST.get('time' or None)
-                chain = form.cleaned_data.pop('chain')
-                chain_id = chain.id
-                pdf = form.cleaned_data.pop('pdf', None)
-                terms_of_contract = form.cleaned_data.pop('terms_of_contract', None)
                 if students:
                     chain = form.cleaned_data.pop('chain')
                     chain_id = chain.id
