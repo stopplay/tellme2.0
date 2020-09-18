@@ -1394,7 +1394,7 @@ def set_signed(request, contract_id = None):
             email = EmailMessage(
                 mail_subject, message, to=[to_email], attachments=attachments
             )
-            # email.send()
+            email.send()
             messages.success(request, 'Assinado com sucesso!')
         elif Parent.objects.filter(profile=request.user).count()>=1:
             form = BlockModelFormByContract()
@@ -1445,7 +1445,7 @@ def set_signed(request, contract_id = None):
                 email = EmailMessage(
                     mail_subject, message, to=[to_email], attachments=attachments
                 )
-                # email.send()
+                email.send()
                 messages.success(request, 'Assinado com sucesso!')
             if contract.second_auth_signe == parent:
                 contract.second_auth_signed = True
@@ -1468,7 +1468,7 @@ def set_signed(request, contract_id = None):
                 email = EmailMessage(
                     mail_subject, message, to=[to_email], attachments=attachments
                 )
-                # email.send()
+                email.send()
                 messages.success(request, 'Assinado com sucesso!')
             if contract.third_auth_signe == parent:
                 contract.third_auth_signed = True
@@ -1491,7 +1491,7 @@ def set_signed(request, contract_id = None):
                 email = EmailMessage(
                     mail_subject, message, to=[to_email], attachments=attachments
                 )
-                # email.send()
+                email.send()
                 messages.success(request, 'Assinado com sucesso!')
         elif Witness.objects.filter(profile=request.user).count()>=1:
             form = BlockModelFormByContract()
@@ -1542,7 +1542,7 @@ def set_signed(request, contract_id = None):
                 email = EmailMessage(
                     mail_subject, message, to=[to_email], attachments=attachments
                 )
-                # email.send()
+                email.send()
                 messages.success(request, 'Assinado com sucesso!')
             if contract.second_witness_signe == witness:
                 contract.second_witness_signed = True
@@ -1565,7 +1565,7 @@ def set_signed(request, contract_id = None):
                 email = EmailMessage(
                     mail_subject, message, to=[to_email], attachments=attachments
                 )
-                # email.send()
+                email.send()
                 messages.success(request, 'Assinado com sucesso!')
         elif Student.objects.filter(profile=request.user).count()>=1:
             form = BlockModelFormByContract()
@@ -1614,7 +1614,7 @@ def set_signed(request, contract_id = None):
             email = EmailMessage(
                 mail_subject, message, to=[to_email], attachments=attachments
             )
-            # email.send()
+            email.send()
             messages.success(request, 'Assinado com sucesso!')
         contract = Contract.objects.get(contract_id=contract_id)
         if contract.first_witness_signe and contract.first_witness_signe:
