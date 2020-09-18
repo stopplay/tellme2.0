@@ -39,13 +39,14 @@
                         </th>
                       {% endif %}
                       <th>Id do Contrato</th>
-                      <th>Nome do Contrato</th>
-                      <th>Data do Contrato</th>
                       <th>Escola</th>
                       <th>Turma</th>
                       <th>Nome do Estudante</th>
-                      <th>Email Enviado</th>
-                      <th>Assinaturas</th>
+                      <th>Assinante da Escola</th>
+                      <th>Data Inicial do Contrato</th>
+                      <th>Data Final do Contrato</th>
+                      <th>Data de Expiração de Assinatura do Contrato</th>
+                      <th>Processo do Contrato</th>
                       <th >Ações</th>
                     </tr>
                   </thead>
@@ -60,37 +61,11 @@
                             <input type="checkbox" name="checks" value="{{ contract.contract_id }}">
                             {% endif %}
                           </td>
-                        {% elif is_witness %}
-                          {% if request.user == contract.first_witness_signe.profile %}
-                            <td>
-                              {% if contract.first_witness_signed %}
-                              <label><input type="checkbox" name="checks" value="{{ contract.contract_id }}" checked></label>
-                              {% else %}
-                              <input type="checkbox" name="checks" value="{{ contract.contract_id }}">
-                              {% endif %}
-                            </td>
-                          {% elif request.user == contract.second_witness_signe.profile %}
-                            <td>
-                              {% if contract.second_witness_signed %}
-                              <label><input type="checkbox" name="checks" value="{{ contract.contract_id }}" checked></label>
-                              {% else %}
-                              <input type="checkbox" name="checks" value="{{ contract.contract_id }}">
-                              {% endif %}
-                            </td>
-                          {% endif %}
                         {% endif %}
 
                         <th>
                           {{contract.contract_id}}
                         </th>
-                        
-                        <th>
-                          {{ contract.name }}
-                        </th>
-                        
-                        <td>
-                          {{ contract.date }}
-                        </td>
                         
                         {% if contract.chain.name %}
                           
@@ -103,14 +78,24 @@
                             {% endif %}
 
                             {% for classe in school.classes.all %}
-                              {% if contract.chain.id == classe.class_id %}
-                                <td>
-                                  {{ classe.class_name }}
-                                </td>
+                              {% if classe.class_name in contract.chain.name %}
+                                {% if classe.class_unit in contract.chain.name %}
+                                  {% for student in contract.first_auth_signe.first_parent.all %}
+                                    {% if student.name == contract.student_name %}
+                                      {% if student in classe.students.all %}
+                                        <td>
+                                          {{ classe.class_name }}
+                                        </td>
+                                        {{ "<!--" }}
+                                      {% endif %}
+                                    {% endif %}
+                                  {% endfor %}
+                                {% endif %}
                               {% endif %}
                             {% endfor %}
 
                           {% endfor %}
+                        {{ "-->" }}
                         
                         {% else %}
                           <td></td>
@@ -124,15 +109,21 @@
                         {% else %}
                           <td></td>
                         {% endif %}
-
+                        {% if contract.counter_signe.name %}
+                          <td>
+                            {{ contract.counter_signe.name }}
+                          </td>
+                        {% else %}
+                          <td></td>
+                        {% endif %}
                         <td>
-                          <label>
-                            {% if contract.email_sent %} 
-                              Enviado 
-                            {% else %} 
-                            
-                            {% if contract.sent_date %} Email Agendado Para {{ contract.sent_date.day }}/{{ contract.sent_date.month }}/{{ contract.sent_date.year }} às {{ contract.sent_date.hour }}:{% if contract.sent_date.minute < 10 %}0{{ contract.sent_date.minute }}{% else %}{{ contract.sent_date.minute }}{% endif %}{% else %}-{% endif %}{% endif %}
-                          </label>
+                          {% if contract.date.day < 10 %}0{{ contract.date.day }}{% else %}{{ contract.date.day }}{% endif %}/{% if contract.date.month < 10 %}0{{ contract.date.month }}{% else %}{{ contract.date.month }}{% endif %}/{{ contract.date.year }}
+                        </td>
+                        <td>
+                          {% if contract.end.day < 10 %}0{{ contract.end.day }}{% else %}{{ contract.end.day }}{% endif %}/{% if contract.end.month < 10 %}0{{ contract.end.month }}{% else %}{{ contract.end.month }}{% endif %}/{{ contract.end.year }}
+                        </td>
+                        <td>
+                          {% if contract.expiration.day < 10 %}0{{ contract.expiration.day }}{% else %}{{ contract.expiration.day }}{% endif %}/{% if contract.expiration.month < 10 %}0{{ contract.expiration.month }}{% else %}{{ contract.expiration.month }}{% endif %}/{{ contract.expiration.year }}
                         </td>
 
                         <td>
@@ -296,14 +287,14 @@
                             </div>
 
                             <div class="col-md-10">
-                              <label class="label-to-the-middle">ESCOLA RESPONSÁVEL ASSINADO</label>
+                              <label class="label-to-the-middle">DIRETOR RESPONSÁVEL ASSINADO</label>
                             </div>
                           </div>
 
                         </td>
 
                         <td class="w-100">
-                          <div class="container" style="white-space: nowrap; text-align: center">
+                          <div class="container" style="white-space: nowrap; text-align: center; width: 92%">
 
                             {% if request.user.is_superuser %}
                             
@@ -399,12 +390,12 @@
                                   <div class="col-md-12">
                                     {% if contract.student_auth_signed %}
                                       <!--verde-->
-                                      <button type="button" class="btn btn-success btn-block w-100" style="cursor: not-allowed;">
+                                      <button id="{{ contract.contract_id }}_student_auth_signed_button" type="button" class="btn btn-success btn-block w-100" style="cursor: not-allowed;">
                                         Assinado
                                       </button>
                                     {% else %}
                                       <!--Vermelho-->
-                                      <a id="{{ contract.contract_id }}_student_auth_signed_button" class="btn btn-primary btn-danger btn-block w-100" onclick="signContract('{% url 'contracts:set_signed' contract.contract_id %}');" href="#" data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal" data-target="#sign-contract-modal">
+                                      <a class="btn btn-primary btn-danger btn-block w-100" onclick="signContract('{% url 'contracts:set_signed' contract.contract_id %}');" href="#" data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal" data-target="#sign-contract-modal">
                                         Assinar Contrato
                                       </a>
                                     {% endif %}                                  
@@ -510,7 +501,7 @@
                                   {% else %}
                                   <div class="row">                      
                                     <div class="col-md-12">
-                                      <a class="btn btn-primary w-100" href="{{ contract.slm }}">
+                                      <a class="btn btn-primary w-100" href="{% url 'contracts:redirect_to_slm_link' contract.contract_id %}">
                                         Ir para o site de compras de material
                                       </a>
                                     </div>
