@@ -104,6 +104,7 @@
                       <th>Assinante da Escola</th>
                       <th>Data Inicial do Contrato</th>
                       <th>Data Final do Contrato</th>
+                      <th>Data de Expiração do Contrato</th>
                       <th>Processo do Contrato</th>
                       <th >Ações</th>
                     </tr>
@@ -178,7 +179,10 @@
                           {% if contract.date.day < 10 %}0{{ contract.date.day }}{% else %}{{ contract.date.day }}{% endif %}/{% if contract.date.month < 10 %}0{{ contract.date.month }}{% else %}{{ contract.date.month }}{% endif %}/{{ contract.date.year }}
                         </td>
                         <td>
-                          {% if contract.end_date.day < 10 %}0{{ contract.end_date.day }}{% else %}{{ contract.end_date.day }}{% endif %}/{% if contract.end_date.month < 10 %}0{{ contract.end_date.month }}{% else %}{{ contract.end_date.month }}{% endif %}/{{ contract.end_date.year }}
+                          {% if contract.end.day < 10 %}0{{ contract.end.day }}{% else %}{{ contract.end.day }}{% endif %}/{% if contract.end.month < 10 %}0{{ contract.end.month }}{% else %}{{ contract.end.month }}{% endif %}/{{ contract.end.year }}
+                        </td>
+                        <td>
+                          {% if contract.expiration.day < 10 %}0{{ contract.expiration.day }}{% else %}{{ contract.expiration.day }}{% endif %}/{% if contract.expiration.month < 10 %}0{{ contract.expiration.month }}{% else %}{{ contract.expiration.month }}{% endif %}/{{ contract.expiration.year }}
                         </td>
 
                         <td>

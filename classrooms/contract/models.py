@@ -31,7 +31,8 @@ class Contract(models.Model):
     contract_id = models.AutoField(primary_key=True)
     name = models.TextField(null=True, blank=True, verbose_name = 'Nome do Contrato')
     date = models.DateField(null=True, blank=True, verbose_name = 'Data Inicial do Contrato')
-    end_date = models.DateField(default="2020-12-31",verbose_name = 'Data Final do Contrato')
+    end = models.DateField(null=True, blank=True, default="2020-12-31",verbose_name = 'Data Final do Contrato')
+    expiration = models.DateField(null=True, blank=True, default="2020-12-31",verbose_name = 'Data Expiração do Contrato')
     first_auth_signed = models.BooleanField(default=False)
     second_auth_signed = models.BooleanField(default=False)
     third_auth_signed = models.BooleanField(default=False)
@@ -75,6 +76,8 @@ class Contract(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_paid = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    is_expired = models.BooleanField(default=False)
     
     # end of Basic data of the contract #
 
