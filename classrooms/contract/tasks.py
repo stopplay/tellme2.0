@@ -640,12 +640,11 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
     except Exception as e:
         return str(e)
 
+today = lambda: timezone.now().date()
 @app.task
 def set_expired_daily():
-    today = timezone.now().date()
-    Contract.objects.filter(is_expired=False, expiration__lt=today).update(is_expired=True)
+    Contract.objects.filter(is_expired=False, expiration__lt=today()).update(is_expired=True)
 
 @app.task
 def set_active_daily():
-    today = timezone.now().date()
-    Contract.objects.filter(is_active=True, end__lt=today).update(is_active=False)
+    Contract.objects.filter(is_active=True, end__lt=today()).update(is_active=False)
