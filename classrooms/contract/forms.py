@@ -44,7 +44,7 @@ class ContractModelFormWithoutSponte(forms.ModelForm):
 		widgets = {
 			'date': forms.DateInput(attrs={'type':'date', 'class':'form-control', 'required':True, 'style' : "width: 100%" }),
 			'end': forms.DateInput(attrs={'type':'date', 'class':'form-control', 'required':True, 'style':"width:100%"}),
-			'expiration': forms.DateInput(attrs={'type':'date', 'class':'labelandform', 'required':True, 'style':"width:120%"}),
+			'expiration': forms.DateInput(attrs={'type':'date', 'class':'labelandform', 'required':True, 'style':"width:100%"}),
 			'chain': forms.Select(attrs={'class':'form-control', 'style' : "width: 100%", 'required':True}),
 			'pdf': forms.FileInput(attrs={'required':True, 'style' : "width: 100%", 'class':'form-control'}),
 			'terms_of_contract': forms.FileInput(attrs={'required':False, 'style' : "width: 100%", 'class':'form-control'}),
