@@ -535,7 +535,7 @@ def create_contract(contract, chain_id, wish, wish_today, student_id, head_id, s
                             contract_rest = ContractSerializer(contract)
                             print ('Cheguei aqui 3')
                             send_data(contract_rest)
-                            schedule_email.apply_async((contract_rest.data, 'json', 'who_sent, domain), eta=contract.sent_date)
+                            schedule_email.apply_async((contract_rest.data, 'json', who_sent, domain), eta=contract.sent_date)
                         else:
                             return 'Você não informou a data em que o contrato será enviado!'
                 else:
