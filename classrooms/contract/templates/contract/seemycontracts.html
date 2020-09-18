@@ -291,6 +291,43 @@
                             </div>
                           </div>
 
+                          <div class="row">
+                            <div class="col-md-2">
+                              {% if contract.is_expired %}
+                                <div class="margin-5">
+                                  <span class="badge badge-pill badge-success text-success float-right" >.</span>
+                                </div>
+                              {% else %}
+                                <div class="margin-5">
+                                  <span class="badge badge-pill badge-danger text-danger  float-right" >.</span>
+                                </div>
+                              {% endif %}
+                            </div>
+
+                            <div class="col-md-10">
+                              <label class="label-to-the-middle">CONTRATO EXPIRADO</label>
+                            </div>
+                          </div>
+
+                          <div class="row">
+                            <div class="col-md-2">
+                              {% if contract.is_active %}
+                                <div class="margin-5">
+                                  <span class="badge badge-pill badge-success text-success float-right" >.</span>
+                                </div>
+                              {% else %}
+                                <div class="margin-5">
+                                  <span class="badge badge-pill badge-danger text-danger  float-right" >.</span>
+                                </div>
+                              {% endif %}
+                            </div>
+
+                            <div class="col-md-10">
+                              <label class="label-to-the-middle">CONTRATO ATIVO</label>
+                            </div>
+                          </div>
+
+
                         </td>
 
                         <td class="w-100">
