@@ -1311,6 +1311,12 @@ def seemycontracts_rest(request):
 @login_required
 def set_signed(request, contract_id = None):
     contract = Contract.objects.get(contract_id=contract_id)
+    if not contract.is_active:
+        messages.warning(request, 'Este contrato está inativo!')
+        return redirect('/contracts/all')
+    if contract.is_expired:
+        messages.warning(request, 'Este contrato está expirado!')
+        return redirect('/contracts/all')
     if Head.objects.filter(profile=request.user).count()>=1:
         if contract.counter_signed:
             messages.warning(request, 'O diretor já assinou este contrato!')
@@ -1666,6 +1672,12 @@ def set_signed(request, contract_id = None):
 def set_signed_rest(request, contract_id = None):
     user = User.objects.get(id=current_user(request).data.get("id"))
     contract = Contract.objects.get(contract_id=contract_id)
+    if not contract.is_active:
+        contract_rest = ContractSerializer(contract)
+        return get_data(request, contract_rest, 'Este contrato está inativo!', 'warning')
+    if contract.is_expired:
+        contract_rest = ContractSerializer(contract)
+        return get_data(request, contract_rest, 'Este contrato está expirado!', 'warning')
     if Head.objects.filter(profile=user).count()>=1:
         if contract.counter_signed:
             contract_rest = ContractSerializer(contract)
