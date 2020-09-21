@@ -581,7 +581,7 @@ def add_class(request, school_id=None):
 	if request.user.is_superuser:
 		school_to_add_class = School.objects.get(school_id=school_id)
 		form = ClassModelForm(request.POST or None)
-		form.fields['students'].queryset = school_to_update_class.students.all()
+		form.fields['students'].queryset = school_to_add_class.students.all()
 		if request.method == 'POST':
 			yesorno = request.POST.get('sim/não' or None)
 			if form.is_valid():
@@ -607,7 +607,7 @@ def add_class(request, school_id=None):
 		is_supervisor = True
 		school_to_add_class = School.objects.get(school_id=school_id)
 		form = ClassModelForm(request.POST or None)
-		form.fields['students'].queryset = school_to_update_class.students.all()
+		form.fields['students'].queryset = school_to_add_class.students.all()
 		if request.method == 'POST':
 			yesorno = request.POST.get('sim/não' or None)
 			if form.is_valid():
@@ -635,7 +635,7 @@ def add_another_class(request, school_id=None):
 	if request.user.is_superuser:
 		school_to_add_class = School.objects.get(school_id=school_id)
 		form = ClassModelForm(request.POST or None)
-		form.fields['students'].queryset = school_to_update_class.students.all()
+		form.fields['students'].queryset = school_to_add_class.students.all()
 		if request.method == 'POST':
 			yesorno = request.POST.get('sim/não' or None)
 			if form.is_valid():
@@ -661,7 +661,7 @@ def add_another_class(request, school_id=None):
 		is_supervisor = True
 		school_to_add_class = School.objects.get(school_id=school_id)
 		form = ClassModelForm(request.POST or None)
-		form.fields['students'].queryset = school_to_update_class.students.all()
+		form.fields['students'].queryset = school_to_add_class.students.all()
 		if request.method == 'POST':
 			yesorno = request.POST.get('sim/não' or None)
 			if form.is_valid():
