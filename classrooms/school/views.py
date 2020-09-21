@@ -278,6 +278,10 @@ def create_student_with_extracted_data(aluno, school_name):
 			return Student.objects.create(student_id_sponte=student_id_sponte, name=name, cpf_sponte=cpf_sponte, midia_sponte=midia_sponte, bithday_sponte=bithday_sponte, cep_sponte=cep_sponte, address_sponte=address_sponte, address_number_sponte=address_number_sponte, register_date_sponte=register_date_sponte, RA_sponte=RA_sponte, note_sponte=note_sponte, telephone_sponte=telephone_sponte, cell_phone_sponte=cell_phone_sponte, current_class_id=current_class_id, financial_responsible_id_sponte=financial_responsible_id_sponte, didatic_responsible_id_sponte=didatic_responsible_id_sponte, registration_number_sponte=registration_number_sponte, gender_sponte=gender_sponte, situation_sponte=situation_sponte, city_sponte=city_sponte, neighborhood_sponte=neighborhood_sponte, hometown_sponte=hometown_sponte, overdue_sponte=overdue_sponte, origin_sponte=origin_sponte, original_name_sponte=original_name_sponte, course_of_interest_sponte=course_of_interest_sponte, profile=User.objects.create_user(username=username, first_name=name.split(' ')[0], last_name=name.split(' ')[-1], password=password, email=email))
 		else:
 			if Student.objects.filter(profile=User.objects.get(username=username)).count()>=1:
+				student = Student.objects.get(profile=User.objects.get(username=username))
+				student.financial_responsible_id_sponte=financial_responsible_id_sponte
+				student.didatic_responsible_id_sponte=didatic_responsible_id_sponte
+				student.save()
 				return Student.objects.get(profile=User.objects.get(username=username))
 	return None
 
