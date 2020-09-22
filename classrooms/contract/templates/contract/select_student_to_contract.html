@@ -26,7 +26,7 @@
 									<form id="myForm" method="POST" class="" enctype="multipart/form-data"
 										data-urlclasses="{% url 'users:classes_choices_ajax' %}" data-urlstudents="{% url 'users:students_choices_ajax' %}"> {% csrf_token %}
 										<div class="labelandform">
-											<p><label>Selecione a escola que você deseja pesquisar:</label></p>
+											<p><label>Selecione a escola que você deseja criar contrato:</label></p>
 											<select class="custom-select chosen-select" id="select_form_school">
 												<option id="" value="0" selected>--------</option>
 												{% for school in schools %}
@@ -42,7 +42,7 @@
 										</div>
 										<input type="hidden" id="selected_school" name="selected_school">
 										<input type="hidden" id="selected_class" name="selected_class">
-										<p>Selecione um Estudante</p>
+										<p>Selecione o(s) Estudante(s)</p>
 										<select id="select_form" class="form-control chosen-select" multiple>
 											{% for student in students %}
 											<option value="{{ student.student_id }}">{{ student.name }}</option>
