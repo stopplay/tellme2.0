@@ -557,7 +557,7 @@
                               {% if contract.pdf %}
                                 <div class="row" >                        
                                   <div class="col-md-12">
-                                    <a  class="btn btn-primary btn-block w-100" href="contract.pdf.url" data-baloon="Remove this item from the cart">
+                                    <a  class="btn btn-primary btn-block w-100" href="{{contract.pdf.url}}" data-baloon="Remove this item from the cart">
                                       Ver Contrato
                                     </a>
                                   </div>
@@ -567,7 +567,7 @@
                               {% if contract.terms_of_contract %}
                                 <div class="row">
                                   <div class="col-md-12">
-                                    <a class="btn btn-primary w-100" href="contract.terms_of_contract.url">
+                                    <a class="btn btn-primary w-100" href="{{contract.terms_of_contract.url}}">
                                       Termos Ad. do Contrato (1)
                                     </a>
                                   </div>
@@ -577,7 +577,7 @@
                               {% if contract.terms_of_contract_2 %}
                                 <div class="row">                      
                                   <div class="col-md-12">
-                                    <a class="btn btn-primary w-100" href="contract.terms_of_contract_2.url">
+                                    <a class="btn btn-primary w-100" href="{{contract.terms_of_contract_2.url}}">
                                         Termos Ad. do Contrato (2)
                                     </a>
                                   </div>
