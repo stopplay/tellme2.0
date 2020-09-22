@@ -1222,7 +1222,7 @@ def select_student_to_contract(request):
                         student = Student.objects.get(student_id=student_id)
                         if student.needs_parent:
                             if not student.first_parent or not student.second_parent:
-                                messages.warning(request, 'Um dos estudantes selecionados não tem pelo menos um des responsáveis necessários associados a ele!')
+                                messages.warning(request, 'Um dos estudantes selecionados não tem pelo menos um dos responsáveis necessários associados a ele!')
                                 return redirect('/contracts/select_student_to_contract')
                 return redirect('/contracts/createacontract')
             elif classe:
@@ -1230,7 +1230,7 @@ def select_student_to_contract(request):
                 for student in classe.students.all():
                     if student.needs_parent:
                         if not student.first_parent or not student.second_parent:
-                            messages.warning(request, 'Um dos estudantes da turma não tem pelo menos um des responsáveis necessários associados a ele!')
+                            messages.warning(request, 'Um dos estudantes da turma não tem pelo menos um dos responsáveis necessários associados a ele!')
                             return redirect('/contracts/select_student_to_contract')
                     values.append(student.student_id)
                 selected_user = str(values).strip('[]')
@@ -1284,7 +1284,7 @@ def select_student_to_contract(request):
                         student = Student.objects.get(student_id=student_id)
                         if student.needs_parent:
                             if not student.first_parent or not student.second_parent:
-                                messages.warning(request, 'Um dos estudantes selecionados não tem pelo menos um des responsáveis necessários associados a ele!')
+                                messages.warning(request, 'Um dos estudantes selecionados não tem pelo menos um dos responsáveis necessários associados a ele!')
                                 return redirect('/contracts/select_student_to_contract')
                 return redirect('/contracts/createacontract')
             elif classe:
@@ -1292,7 +1292,7 @@ def select_student_to_contract(request):
                 for student in classe.students.all():
                     if student.needs_parent:
                         if not student.first_parent or not student.second_parent:
-                            messages.warning(request, 'Um dos estudantes da turma não tem pelo menos um des responsáveis necessários associados a ele!')
+                            messages.warning(request, 'Um dos estudantes da turma não tem pelo menos um dos responsáveis necessários associados a ele!')
                             return redirect('/contracts/select_student_to_contract')
                     values.append(student.student_id)
                 selected_user = str(values).strip('[]')
