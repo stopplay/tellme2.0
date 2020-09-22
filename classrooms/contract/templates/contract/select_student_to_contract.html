@@ -55,7 +55,7 @@
 										</div>
 										<div id="to_hide_students" style="display: none;">
 											<p>Selecione o(s) Estudante(s)</p>
-											<select id="select_form" class="form-control chosen-select" multiple>
+											<select id="select_form" class="form-control chosen-select">
 												{% for student in students %}
 												<option value="{{ student.student_id }}">{{ student.name }}</option>
 												{% endfor %}
