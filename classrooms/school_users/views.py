@@ -181,13 +181,21 @@ def create_user(request):
                                                 if User.objects.filter(username=school_to_add.school_name+'-student-'+column[0]).count()<1:
                                                     _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=school_to_add.school_name+'-student-'+column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[8]), second_parent=Parent.objects.get(tell_me_user_id=column[9]), tell_me_user_id=column[6])
                                                 else:
-                                                    _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.get(username=school_to_add.school_name+'-student-'+column[0]), first_parent=Parent.objects.get(tell_me_user_id=column[8]), second_parent=Parent.objects.get(tell_me_user_id=column[9]), tell_me_user_id=column[6])
+                                                    _ = Student.objects.get(profile = User.objects.get(username=school_to_add.school_name+'-student-'+column[0]))
+                                                    _.first_parent=Parent.objects.get(tell_me_user_id=column[8])
+                                                    _.second_parent=Parent.objects.get(tell_me_user_id=column[9])
+                                                    _.save()
+                                                    _ = Student.objects.get(profile = User.objects.get(username=school_to_add.school_name+'-student-'+column[0]))
                                             else:
                                                 _ = None
                                                 if User.objects.filter(username=school_to_add.school_name+'-student-'+column[0]).count()<1:
                                                     _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=school_to_add.school_name+'-student-'+column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
                                                 else:
-                                                    _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.get(username=school_to_add.school_name+'-student-'+column[0]), tell_me_user_id=column[6])
+                                                    _ = Student.objects.get(profile = User.objects.get(username=school_to_add.school_name+'-student-'+column[0]))
+                                                    _.first_parent=Parent.objects.get(tell_me_user_id=column[8])
+                                                    _.second_parent=Parent.objects.get(tell_me_user_id=column[9])
+                                                    _.save()
+                                                    _ = Student.objects.get(profile = User.objects.get(username=school_to_add.school_name+'-student-'+column[0]))
                                             if school_to_add and _:
                                                 school_to_add.students.add(_)
                                             if class_to_add and _:
@@ -209,11 +217,19 @@ def create_user(request):
                                                     _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=school_to_add.school_name+'-student-'+column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[8]), second_parent=Parent.objects.get(tell_me_user_id=column[9]), tell_me_user_id=column[6])
                                                 else:
                                                     _ = Student.objects.get(profile = User.objects.get(username=school_to_add.school_name+'-student-'+column[0]))
+                                                    _.first_parent=Parent.objects.get(tell_me_user_id=column[8])
+                                                    _.second_parent=Parent.objects.get(tell_me_user_id=column[9])
+                                                    _.save()
+                                                    _ = Student.objects.get(profile = User.objects.get(username=school_to_add.school_name+'-student-'+column[0]))
                                             else:
                                                 _ = None
                                                 if User.objects.filter(username=school_to_add.school_name+'-student-'+column[0]).count()<1:
                                                     _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=school_to_add.school_name+'-student-'+column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
                                                 else:
+                                                    _ = Student.objects.get(profile = User.objects.get(username=school_to_add.school_name+'-student-'+column[0]))
+                                                    _.first_parent=Parent.objects.get(tell_me_user_id=column[8])
+                                                    _.second_parent=Parent.objects.get(tell_me_user_id=column[9])
+                                                    _.save()
                                                     _ = Student.objects.get(profile = User.objects.get(username=school_to_add.school_name+'-student-'+column[0]))
                                             if school_to_add and _:
                                                 school_to_add.students.add(_)
@@ -530,13 +546,21 @@ def create_user(request):
                                                 if User.objects.filter(username=school_to_add.school_name+'-student-'+column[0]).count()<1:
                                                     _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=school_to_add.school_name+'-student-'+column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[8]), second_parent=Parent.objects.get(tell_me_user_id=column[9]), tell_me_user_id=column[6])
                                                 else:
-                                                    _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.get(username=school_to_add.school_name+'-student-'+column[0]), first_parent=Parent.objects.get(tell_me_user_id=column[8]), second_parent=Parent.objects.get(tell_me_user_id=column[9]), tell_me_user_id=column[6])
+                                                    _ = Student.objects.get(profile = User.objects.get(username=school_to_add.school_name+'-student-'+column[0]))
+                                                    _.first_parent=Parent.objects.get(tell_me_user_id=column[8])
+                                                    _.second_parent=Parent.objects.get(tell_me_user_id=column[9])
+                                                    _.save()
+                                                    _ = Student.objects.get(profile = User.objects.get(username=school_to_add.school_name+'-student-'+column[0]))
                                             else:
                                                 _ = None
                                                 if User.objects.filter(username=school_to_add.school_name+'-student-'+column[0]).count()<1:
                                                     _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=school_to_add.school_name+'-student-'+column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
                                                 else:
-                                                    _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.get(username=school_to_add.school_name+'-student-'+column[0]), tell_me_user_id=column[6])
+                                                    _ = Student.objects.get(profile = User.objects.get(username=school_to_add.school_name+'-student-'+column[0]))
+                                                    _.first_parent=Parent.objects.get(tell_me_user_id=column[8])
+                                                    _.second_parent=Parent.objects.get(tell_me_user_id=column[9])
+                                                    _.save()
+                                                    _ = Student.objects.get(profile = User.objects.get(username=school_to_add.school_name+'-student-'+column[0]))
                                             if school_to_add and _:
                                                 school_to_add.students.add(_)
                                             if class_to_add and _:
@@ -558,11 +582,19 @@ def create_user(request):
                                                     _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=school_to_add.school_name+'-student-'+column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[8]), second_parent=Parent.objects.get(tell_me_user_id=column[9]), tell_me_user_id=column[6])
                                                 else:
                                                     _ = Student.objects.get(profile = User.objects.get(username=school_to_add.school_name+'-student-'+column[0]))
+                                                    _.first_parent=Parent.objects.get(tell_me_user_id=column[8])
+                                                    _.second_parent=Parent.objects.get(tell_me_user_id=column[9])
+                                                    _.save()
+                                                    _ = Student.objects.get(profile = User.objects.get(username=school_to_add.school_name+'-student-'+column[0]))
                                             else:
                                                 _ = None
                                                 if User.objects.filter(username=school_to_add.school_name+'-student-'+column[0]).count()<1:
                                                     _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=school_to_add.school_name+'-student-'+column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[6])
                                                 else:
+                                                    _ = Student.objects.get(profile = User.objects.get(username=school_to_add.school_name+'-student-'+column[0]))
+                                                    _.first_parent=Parent.objects.get(tell_me_user_id=column[8])
+                                                    _.second_parent=Parent.objects.get(tell_me_user_id=column[9])
+                                                    _.save()
                                                     _ = Student.objects.get(profile = User.objects.get(username=school_to_add.school_name+'-student-'+column[0]))
                                             if school_to_add and _:
                                                 school_to_add.students.add(_)
