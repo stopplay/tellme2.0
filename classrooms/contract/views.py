@@ -1233,9 +1233,13 @@ def select_student_to_contract(request):
                             messages.warning(request, 'Um dos estudantes da turma não tem pelo menos um dos responsáveis necessários associados a ele!')
                             return redirect('/contracts/select_student_to_contract')
                     values.append(student.student_id)
-                selected_user = str(values).strip('[]')
-                selected_user = selected_user.replace(' ', '')
-                request.session['selected_user'] = selected_user
+                if values:
+                    selected_user = str(values).strip('[]')
+                    selected_user = selected_user.replace(' ', '')
+                    request.session['selected_user'] = selected_user
+                else:
+                    messages.warning(request, 'Esta turma não tem nenhum aluno associado')
+                    return redirect('/contracts/select_student_to_contract')
                 return redirect('/contracts/createacontract')
             else:
                 messages.warning(request, 'Você selecionou a escola mas não selecionou a turma')
@@ -1295,9 +1299,13 @@ def select_student_to_contract(request):
                             messages.warning(request, 'Um dos estudantes da turma não tem pelo menos um dos responsáveis necessários associados a ele!')
                             return redirect('/contracts/select_student_to_contract')
                     values.append(student.student_id)
-                selected_user = str(values).strip('[]')
-                selected_user = selected_user.replace(' ', '')
-                request.session['selected_user'] = selected_user
+                if values:
+                    selected_user = str(values).strip('[]')
+                    selected_user = selected_user.replace(' ', '')
+                    request.session['selected_user'] = selected_user
+                else:
+                    messages.warning(request, 'Esta turma não tem nenhum aluno associado')
+                    return redirect('/contracts/select_student_to_contract')
                 return redirect('/contracts/createacontract')
             else:
                 messages.warning(request, 'Você selecionou a escola mas não selecionou a turma')
