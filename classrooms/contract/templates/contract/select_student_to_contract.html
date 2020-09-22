@@ -40,15 +40,15 @@
 												<option id="" value="0" selected>--------</option>
 											</select>
 										</div>
-										<input type="hidden" id="selected_school" name="selected_school" value="0">
-										<input type="hidden" id="selected_class" name="selected_class" value="0">
+										<input type="hidden" id="selected_school" name="selected_school">
+										<input type="hidden" id="selected_class" name="selected_class">
 										<p>Selecione um Estudante</p>
 										<select id="select_form" class="form-control chosen-select" multiple>
 											{% for student in students %}
 											<option value="{{ student.student_id }}">{{ student.name }}</option>
 											{% endfor %}
 										</select><br>
-										<input type="hidden" id="selected_user" name="selected_user" value="0">
+										<input type="hidden" id="selected_user" name="selected_user">
 
 
 										<div><button type="submit" class="btn btn-info btn-fill btn-sm pull-left mt-2"
