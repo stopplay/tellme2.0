@@ -306,32 +306,6 @@
                             </div>
                           {% endif %}
 
-                          {% if contract.chain.name %}
-                            {% for school in schools %}
-                              {% if contract.chain in school.chains.all %}
-                                {% if school.is_maple_bear %}
-                                  <div class="row">
-                                    <div class="col-md-2">
-                                      {% if contract.is_paid %}
-                                        <div class="margin-5">
-                                          <span class="badge badge-pill badge-success text-success float-right" >.</span>
-                                        </div>
-                                      {% else %}
-                                        <div class="margin-5">
-                                          <span class="badge badge-pill badge-danger text-danger float-right" >.</span>
-                                        </div>
-                                      {% endif %}
-                                    </div>
-
-                                    <div class="col-md-10">
-                                      <label class="label-to-the-middle">CONTRATO PAGO</label>
-                                    </div>
-                                  </div>
-                                {% endif %}
-                              {% endif %}
-                            {% endfor %}
-                          {% endif %}
-
                           <div class="row">
                             <div class="col-md-2">
                               {% if contract.counter_signed %}
@@ -610,33 +584,6 @@
                                       </button>
                                     </div>
                                   </div>
-                                {% endif %}
-                              {% endif %}
-                              {% if request.user.is_superuser or is_supervisor %}
-                                {% if contract.chain.name %}
-                                  {% for school in schools %}
-                                    {% if contract.chain in school.chains.all %}
-                                      {% if school.is_maple_bear %}
-                                        {% if not contract.is_paid %}
-                                          <div class="row">                      
-                                            <div class="col-md-12">
-                                              <a class="btn btn-primary w-100" href="{% url 'contracts:set_contract_paid' contract.contract_id %}">
-                                                Setar contrato como pago
-                                              </a>
-                                            </div>
-                                          </div>
-                                        {% else %}
-                                          <div class="row">                      
-                                            <div class="col-md-12">
-                                              <button type="button" class="btn btn-success btn-block w-100" style="cursor: not-allowed;">
-                                                Contrato pago
-                                              </button>
-                                            </div>
-                                          </div>
-                                        {% endif %}
-                                      {% endif %}
-                                    {% endif %}
-                                  {% endfor %}
                                 {% endif %}
                               {% endif %}
                           </div>
