@@ -84,7 +84,7 @@ class Class(models.Model):
 	class_name = models.TextField(verbose_name = 'Nome da turma')
 	CLASS_UNIT_CHOICES = [('Integral', 'Integral'), ('Manhã','Manhã'), ('Tarde','Tarde'), ('Noite','Noite')]
 	class_unit = models.CharField(max_length = 500, choices = CLASS_UNIT_CHOICES, default = 'Integral', null = True, verbose_name = 'Horário')
-	enrollment_class_year = models.IntegerField(default=2019, verbose_name= 'Ano da turma')
+	enrollment_class_year = models.IntegerField(verbose_name= 'Ano da turma')
 	slm = models.TextField(null=True, blank=True, verbose_name = 'Materiais URL')
 	sku = models.TextField(null=True, blank=True, verbose_name = 'SKU do Material')
 	students = models.ManyToManyField(Student, blank=True, verbose_name = 'Estudantes')

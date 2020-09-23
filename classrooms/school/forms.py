@@ -2,7 +2,9 @@ from django.forms import ModelForm
 from django import forms
 from .models import *
 import datetime
+from django.utils import timezone
 
+today = lambda: timezone.now().date()
 class SchoolModelForm(forms.ModelForm):
 	"""docstring for UserModelForm"""
 	class Meta:
@@ -80,7 +82,7 @@ class ClassModelForm(forms.ModelForm):
 		widgets = {
 			'class_name': forms.TextInput(attrs={'class':'form-control', 'maxlength':255, 'required':True}),
 			'class_unit': forms.Select(attrs={'class':'form-control', 'required':True}),
-			'enrollment_class_year': forms.NumberInput(attrs={'required':True, 'min':datetime.date.today().year}),
+			'enrollment_class_year': forms.NumberInput(attrs={'required':True, 'min':today().year, 'default': today().year}),
 			'slm': forms.TextInput(attrs={'class':'form-control', 'maxlength':255, 'required':False}),
 			'sku': forms.TextInput(attrs={'class':'form-control', 'maxlength':255, 'required':False}),
 			'students': forms.SelectMultiple(attrs={'class':'form-control chosen-select'}),
