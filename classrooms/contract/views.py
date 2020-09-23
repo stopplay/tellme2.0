@@ -1233,7 +1233,7 @@ def select_student_to_contract(request):
                 for student in classe.students.all():
                     if student.needs_parent:
                         if not student.first_parent or not student.second_parent:
-                            students_without_responsible.append('{}-{}'.format(student.profile.first_name. student.student_id))
+                            students_without_responsible.append('{}-{}'.format(student.profile.first_name, student.student_id))
                         else:
                             values.append(student.student_id)
                 if students_without_responsible:
@@ -1303,7 +1303,7 @@ def select_student_to_contract(request):
                 for student in classe.students.all():
                     if student.needs_parent:
                         if not student.first_parent or not student.second_parent:
-                            students_without_responsible.append('{}-{}'.format(student.profile.first_name. student.student_id))
+                            students_without_responsible.append('{}-{}'.format(student.profile.first_name, student.student_id))
                         else:
                             values.append(student.student_id)
                 if students_without_responsible:
