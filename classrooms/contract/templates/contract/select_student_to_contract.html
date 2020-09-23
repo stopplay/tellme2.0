@@ -24,31 +24,44 @@
 							<div class="col-md-11 pr-1">
 								<div class="form-group">
 									<form id="myForm" method="POST" class="" enctype="multipart/form-data"
-										data-urlclasses="{% url 'users:classes_choices_ajax' %}" data-urlstudents="{% url 'users:students_choices_ajax' %}"> {% csrf_token %}
-										<div class="labelandform">
-											<p><label>Selecione a escola que você deseja pesquisar:</label></p>
-											<select class="custom-select chosen-select" id="select_form_school">
-												<option id="" value="0" selected>--------</option>
-												{% for school in schools %}
-													<option value="{{ school.school_id }}">{{ school.school_name }}</option>
+										data-urlclasses="{% url 'users:classes_choices_ajax' %}"
+										data-urlstudents="{% url 'users:students_choices_ajax' %}"> {% csrf_token %}
+										<div style="margin-top: 10px">
+											<p><label>Você deseja criar em lote?</label><br><label
+													style="margin-right: 10px">Não</label><label class="switch">
+													<input type="checkbox" id="first_checkbox" checked>
+													<a id="first_slider" class="slider round"></a>
+												</label><label style="margin-left: 10px">Sim</label></p>
+										</div>
+										<div id="to_hide_schools">
+											<div class="labelandform">
+												<p><label>Selecione a escola que você deseja criar contrato:</label></p>
+												<select class="custom-select chosen-select" id="select_form_school">
+													<option id="" value="0" selected>--------</option>
+													{% for school in schools %}
+													<option value="{{ school.school_id }}">{{ school.school_name }}
+													</option>
+													{% endfor %}
+												</select>
+											</div>
+											<div class="labelandform">
+												<p><label>Selecione a Turma:</label></p>
+												<select class="custom-select" id="select_form_class">
+													<option id="" value="0" selected>--------</option>
+												</select>
+											</div>
+											<input type="hidden" id="selected_school" name="selected_school">
+											<input type="hidden" id="selected_class" name="selected_class">
+										</div>
+										<div id="to_hide_students" style="display: none;">
+											<p>Selecione o(s) Estudante(s)</p>
+											<select id="select_form" class="form-control chosen-select">
+												{% for student in students %}
+												<option value="{{ student.student_id }}">{{ student.name }}</option>
 												{% endfor %}
-											</select>
+											</select><br>
 										</div>
-										<div class="labelandform">
-											<p><label>Selecione a Turma:</label></p>
-											<select class="custom-select" id="select_form_class">
-												<option id="" value="0" selected>--------</option>
-											</select>
-										</div>
-										<input type="hidden" id="selected_school" name="selected_school" value="0">
-										<input type="hidden" id="selected_class" name="selected_class" value="0">
-										<p>Selecione um Estudante</p>
-										<select id="select_form" class="form-control chosen-select" multiple>
-											{% for student in students %}
-											<option value="{{ student.student_id }}">{{ student.name }}</option>
-											{% endfor %}
-										</select><br>
-										<input type="hidden" id="selected_user" name="selected_user" value="0">
+										<input type="hidden" id="selected_user" name="selected_user">
 
 
 										<div><button type="submit" class="btn btn-info btn-fill btn-sm pull-left mt-2"
@@ -67,6 +80,32 @@
 	</div>
 </div>
 <script type="text/javascript">
+	$(document).on("click", "#first_slider", function () {
+		if (!$('#first_checkbox').prop("checked")) {
+			$('#first_checkbox').attr('checked')
+			$('#to_hide_schools').show();
+			$('#to_hide_students').hide();
+			selected_user = document.getElementById('selected_user')
+			if (selected_user.value) {
+				document.getElementById('selected_user').removeAttribute('value');
+			}
+		}
+		else {
+			$('#first_checkbox').removeAttr('checked')
+			$('#to_hide_schools').hide();
+			$('#to_hide_students').show();
+			selected_school = document.getElementById('selected_school');
+			if (selected_school.value) {
+				document.getElementById('selected_school').removeAttribute('value');
+			}
+			selected_class = document.getElementById('selected_class')
+			if (selected_class.value) {
+				document.getElementById('selected_class').removeAttribute('value');
+			}
+		}
+		$('#select_form_chosen').attr('style', 'width: 100%;');
+		$('#select_form_school_chosen').attr('style', 'width: 100%;');
+	});
 	$(document).ready(function () {
 		$('#select_form_school').on('change', function () {
 			let urlClasses = $('#myForm').data('urlclasses')
@@ -86,6 +125,7 @@
 			else {
 				document.getElementById('selected_school').value = selectValor
 			}
+			document.getElementById('selected_user').removeAttribute('value')
 		});
 	});
 
@@ -109,6 +149,7 @@
 			else {
 				document.getElementById('selected_class').value = selectValor
 			}
+			document.getElementById('selected_user').removeAttribute('value')
 		});
 	});
 
@@ -140,18 +181,6 @@
 				document.getElementById('wish_today').value = 'não'
 			}
 		});
-	});
-	$(document).on("click", "#first_slider", function () {
-		if (!$('#first_checkbox').prop("checked")) {
-			document.getElementById('wish').value = 'sim'
-			$('#first_checkbox').attr('checked')
-		}
-		else {
-			$('#pai').children('div').remove();
-			$('#child').children('div').remove();
-			document.getElementById('wish').value = 'não'
-			$('#first_checkbox').removeAttr('checked')
-		}
 	});
 	function select() {
 		if (!$('#second_checkbox').prop("checked")) {

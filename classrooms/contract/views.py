@@ -976,6 +976,8 @@ def seecontractsbyquery(request):
     chains_to_select = []
     is_supervisor = False
     search = None
+    selected_school = None
+    selected_class = None
     schools = []
     if Parent.objects.filter(profile=request.user).count()>=1 or Student.objects.filter(profile=request.user).count()>=1 or Witness.objects.filter(profile=request.user).count()>=1:
         return seemycontracts(request)
@@ -1018,7 +1020,7 @@ def seecontractsbyquery(request):
         if not schools:
             messages.error(request, 'O tipo de usuário que está tentando acessar estes dados não se encaixa em nenhum dos tipos propostos pelo sistema.')
             return seemycontracts(request)
-    return render(request, 'contract/seecontractsbyquery.html', {'search':search, 'chains_to_select':chains_to_select, 'contracts':contracts, 'schools':schools, 'is_supervisor':is_supervisor})
+    return render(request, 'contract/seecontractsbyquery.html', {'search':search, 'chains_to_select':chains_to_select, 'contracts':contracts, 'schools':schools, 'is_supervisor':is_supervisor, 'selected_school': selected_school, 'selected_class': selected_class})
 
 @csrf_exempt
 def createacontract_rest(request):
@@ -1191,75 +1193,134 @@ def seemycontracts(request):
 def select_student_to_contract(request):
     if request.user.is_superuser:
         students = Student.objects.all()
-        schools = School.objects.all()
+        schools = School.objects.all().order_by('school_name')
         if request.method == 'POST':
-            selected_school = request.POST.get('selected_school' or None)
-            selected_class = request.POST.get('selected_class' or None)
             try:
-                school = School.objects.get(school_id=selected_school)
-                classe = Class.objects.get(class_id=selected_class)
-                chain = Chain.objects.get(name="{0}-{1}-{2}-{3}".format(school.school_name, classe.enrollment_class_year, classe.class_unit, classe.class_name)).id
-                request.session['chain'] = chain
-            except:
-                pass
-            selected_user = request.POST.get('selected_user' or None)
-            request.session['selected_user'] = selected_user
-            if ',' not in selected_user:
-                student = Student.objects.get(student_id=selected_user)
-                if student.needs_parent:
-                    if not student.first_parent or not student.second_parent:
-                        messages.warning(request, 'O estudante não tem pelo menos um dos responsáveis necessários associados a ele!')
+                selected_school = request.POST.get('selected_school' or None)
+                selected_class = request.POST.get('selected_class' or None)
+                if selected_school:
+                    if selected_class:
+                        school = School.objects.get(school_id=selected_school)
+                        classe = Class.objects.get(class_id=selected_class)
+                        chain = Chain.objects.get(name="{0}-{1}-{2}-{3}".format(school.school_name, classe.enrollment_class_year, classe.class_unit, classe.class_name)).id
+                        request.session['chain'] = chain
+                    else:
+                        messages.warning(request, 'Você selecionou a escola mas não selecionou a turma')
                         return redirect('/contracts/select_student_to_contract')
-            else:
-                for student_id in selected_user.split(','):
-                    student = Student.objects.get(student_id=student_id)
+            except:
+                school = None
+                classe = None
+            selected_user = request.POST.get('selected_user' or None)
+            if selected_user:
+                request.session['selected_user'] = selected_user
+                if ',' not in selected_user:
+                    student = Student.objects.get(student_id=selected_user)
                     if student.needs_parent:
                         if not student.first_parent or not student.second_parent:
-                            messages.warning(request, 'Um dos estudantes selecionados não tem pelo menos um des responsáveis necessários associados a ele!')
+                            messages.warning(request, 'O estudante não tem pelo menos um dos responsáveis necessários associados a ele!')
                             return redirect('/contracts/select_student_to_contract')
-            return redirect('/contracts/createacontract')
+                else:
+                    for student_id in selected_user.split(','):
+                        student = Student.objects.get(student_id=student_id)
+                        if student.needs_parent:
+                            if not student.first_parent or not student.second_parent:
+                                messages.warning(request, 'Um dos estudantes selecionados não tem pelo menos um dos responsáveis necessários associados a ele!')
+                                return redirect('/contracts/select_student_to_contract')
+                return redirect('/contracts/createacontract')
+            elif classe:
+                students_without_responsible = []
+                values = []
+                for student in classe.students.all():
+                    if student.needs_parent:
+                        if not student.first_parent or not student.second_parent:
+                            students_without_responsible.append('{}-{}'.format(student.profile.first_name, student.student_id))
+                        else:
+                            values.append(student.student_id)
+                if students_without_responsible:
+                    for student in students_without_responsible:
+                        messages.warning(request, 'O aluno {} não será criado pois não tem pelo menos um dos responsáveis associados a ele.'.format(student))
+                if values:
+                    selected_user = str(values).strip('[]')
+                    selected_user = selected_user.replace(' ', '')
+                    request.session['selected_user'] = selected_user
+                else:
+                    messages.warning(request, 'Esta turma não tem nenhum aluno associado')
+                    return redirect('/contracts/select_student_to_contract')
+                return redirect('/contracts/createacontract')
+            else:
+                messages.warning(request, 'Você selecionou a escola mas não selecionou a turma')
+                return redirect('/contracts/select_student_to_contract')
         return render(request, 'contract/select_student_to_contract.html', {'students':students, 'schools': schools})
     elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
         students_ids = []
         if Head.objects.filter(profile=request.user).count()>=1:
-            schools = School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id)
+            schools = School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id).order_by('school_name')
             for school in School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id):
                 for student in school.students.all():
                     students_ids += [(student.student_id)]
         elif Supervisor.objects.filter(profile=request.user).count()>=1:
-            schools = School.objects.filter(Q(adminorsupervisor=Supervisor.objects.get(profile=request.user))|Q(adminorsupervisor_2=Supervisor.objects.get(profile=request.user)))
+            schools = School.objects.filter(Q(adminorsupervisor=Supervisor.objects.get(profile=request.user))|Q(adminorsupervisor_2=Supervisor.objects.get(profile=request.user))).order_by('school_name')
             for school in School.objects.filter(Q(adminorsupervisor=Supervisor.objects.get(profile=request.user))|Q(adminorsupervisor_2=Supervisor.objects.get(profile=request.user))):
                 for student in school.students.all():
                     students_ids += [(student.student_id)]
         students = Student.objects.filter(student_id__in=students_ids)
         if request.method == 'POST':
-            selected_school = request.POST.get('selected_school' or None)
-            selected_class = request.POST.get('selected_class' or None)
             try:
-                school = School.objects.get(school_id=selected_school)
-                classe = Class.objects.get(class_id=selected_class)
-                chain = Chain.objects.get(name="{0}-{1}-{2}-{3}".format(school.school_name, classe.enrollment_class_year, classe.class_unit, classe.class_name)).id
-                request.session['chain'] = chain
-            except:
-                pass
-            selected_user = request.POST.get('selected_user' or None)
-            request.session['selected_user'] = selected_user
-            if ',' not in selected_user:
-                student = Student.objects.get(student_id=selected_user)
-                if student.needs_parent:
-                    if not student.first_parent or not student.second_parent:
-                        messages.warning(request, 'O estudante não tem pelo menos um dos responsáveis necessários associados a ele!')
+                selected_school = request.POST.get('selected_school' or None)
+                selected_class = request.POST.get('selected_class' or None)
+                if selected_school:
+                    if selected_class:
+                        school = School.objects.get(school_id=selected_school)
+                        classe = Class.objects.get(class_id=selected_class)
+                        chain = Chain.objects.get(name="{0}-{1}-{2}-{3}".format(school.school_name, classe.enrollment_class_year, classe.class_unit, classe.class_name)).id
+                        request.session['chain'] = chain
+                    else:
+                        messages.warning(request, 'Você selecionou a escola mas não selecionou a turma')
                         return redirect('/contracts/select_student_to_contract')
-            else:
-                for student_id in selected_user.split(','):
-                    student = Student.objects.get(student_id=student_id)
+            except:
+                school = None
+                classe = None
+            selected_user = request.POST.get('selected_user' or None)
+            if selected_user:
+                request.session['selected_user'] = selected_user
+                if ',' not in selected_user:
+                    student = Student.objects.get(student_id=selected_user)
                     if student.needs_parent:
                         if not student.first_parent or not student.second_parent:
-                            messages.warning(request, 'Um dos estudantes selecionados não tem pelo menos um des responsáveis necessários associados a ele!')
+                            messages.warning(request, 'O estudante não tem pelo menos um dos responsáveis necessários associados a ele!')
                             return redirect('/contracts/select_student_to_contract')
-            return redirect('/contracts/createacontract')
+                else:
+                    for student_id in selected_user.split(','):
+                        student = Student.objects.get(student_id=student_id)
+                        if student.needs_parent:
+                            if not student.first_parent or not student.second_parent:
+                                messages.warning(request, 'Um dos estudantes selecionados não tem pelo menos um dos responsáveis necessários associados a ele!')
+                                return redirect('/contracts/select_student_to_contract')
+                return redirect('/contracts/createacontract')
+            elif classe:
+                students_without_responsible = []
+                values = []
+                for student in classe.students.all():
+                    if student.needs_parent:
+                        if not student.first_parent or not student.second_parent:
+                            students_without_responsible.append('{}-{}'.format(student.profile.first_name, student.student_id))
+                        else:
+                            values.append(student.student_id)
+                if students_without_responsible:
+                    for student in students_without_responsible:
+                        messages.warning(request, 'O aluno {} não será criado pois não tem pelo menos um dos responsáveis associados a ele.'.format(student))
+                if values:
+                    selected_user = str(values).strip('[]')
+                    selected_user = selected_user.replace(' ', '')
+                    request.session['selected_user'] = selected_user
+                else:
+                    messages.warning(request, 'Esta turma não tem nenhum aluno associado')
+                    return redirect('/contracts/select_student_to_contract')
+                return redirect('/contracts/createacontract')
+            else:
+                messages.warning(request, 'Você selecionou a escola mas não selecionou a turma')
+                return redirect('/contracts/select_student_to_contract')
         return render(request, 'contract/select_student_to_contract.html', {'students':students, 'schools': schools, 'is_supervisor':True})
-
 @login_required
 def select_student_to_contract_update(request, contract_id=None):
     if request.user.is_superuser:

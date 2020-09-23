@@ -903,7 +903,7 @@ def classes_choices_ajax(request):
     school_id = request.GET.get('id')
     if School.objects.filter(school_id=school_id).count()>=1:
         school = School.objects.get(school_id=school_id)
-        context = {'classes':school.classes.all()}
+        context = {'classes':school.classes.all().order_by('class_name')}
     else:
         context = {}
     return render(request, 'school_users/classes_choices.html', context)
