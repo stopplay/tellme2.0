@@ -252,7 +252,6 @@ def create_user(request):
                         return redirect('/users/create_user')
                     else:
                         if selected_user == '6':
-                            if selected_user == '6':
                             if not school_to_add or not class_to_add:
                                 messages.error(request, 'Escola e turma são requeridos para criação de alunos')
                                 return redirect('/users/create_user')
