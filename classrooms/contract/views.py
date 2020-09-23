@@ -1192,7 +1192,7 @@ def seemycontracts(request):
 @login_required
 def select_student_to_contract(request):
     if request.user.is_superuser:
-        students = Student.objects.all()
+        students = Student.objects.all().order_by('name')
         schools = School.objects.all().order_by('school_name')
         if request.method == 'POST':
             try:
@@ -1233,7 +1233,7 @@ def select_student_to_contract(request):
                 for student in classe.students.all():
                     if student.needs_parent:
                         if not student.first_parent or not student.second_parent:
-                            students_without_responsible.append('{}-{}'.format(student.profile.first_name, student.student_id))
+                            students_without_responsible.append('{}-{}'.format(student.name, student.student_id))
                         else:
                             values.append(student.student_id)
                 if students_without_responsible:
@@ -1263,7 +1263,7 @@ def select_student_to_contract(request):
             for school in School.objects.filter(Q(adminorsupervisor=Supervisor.objects.get(profile=request.user))|Q(adminorsupervisor_2=Supervisor.objects.get(profile=request.user))):
                 for student in school.students.all():
                     students_ids += [(student.student_id)]
-        students = Student.objects.filter(student_id__in=students_ids)
+        students = Student.objects.filter(student_id__in=students_ids).order_by('name')
         if request.method == 'POST':
             try:
                 selected_school = request.POST.get('selected_school' or None)
@@ -1303,7 +1303,7 @@ def select_student_to_contract(request):
                 for student in classe.students.all():
                     if student.needs_parent:
                         if not student.first_parent or not student.second_parent:
-                            students_without_responsible.append('{}-{}'.format(student.profile.first_name, student.student_id))
+                            students_without_responsible.append('{}-{}'.format(student.name, student.student_id))
                         else:
                             values.append(student.student_id)
                 if students_without_responsible:
@@ -1321,6 +1321,7 @@ def select_student_to_contract(request):
                 messages.warning(request, 'Você selecionou a escola mas não selecionou a turma')
                 return redirect('/contracts/select_student_to_contract')
         return render(request, 'contract/select_student_to_contract.html', {'students':students, 'schools': schools, 'is_supervisor':True})
+
 @login_required
 def select_student_to_contract_update(request, contract_id=None):
     if request.user.is_superuser:
@@ -1461,7 +1462,7 @@ def set_signed(request, contract_id = None):
             email = EmailMessage(
                 mail_subject, message, to=[to_email], attachments=attachments
             )
-            email.send()
+            # email.send()
             messages.success(request, 'Assinado com sucesso!')
         elif Parent.objects.filter(profile=request.user).count()>=1:
             form = BlockModelFormByContract()
@@ -1512,7 +1513,7 @@ def set_signed(request, contract_id = None):
                 email = EmailMessage(
                     mail_subject, message, to=[to_email], attachments=attachments
                 )
-                email.send()
+                # email.send()
                 messages.success(request, 'Assinado com sucesso!')
             if contract.second_auth_signe == parent:
                 contract.second_auth_signed = True
@@ -1535,7 +1536,7 @@ def set_signed(request, contract_id = None):
                 email = EmailMessage(
                     mail_subject, message, to=[to_email], attachments=attachments
                 )
-                email.send()
+                # email.send()
                 messages.success(request, 'Assinado com sucesso!')
             if contract.third_auth_signe == parent:
                 contract.third_auth_signed = True
@@ -1558,7 +1559,7 @@ def set_signed(request, contract_id = None):
                 email = EmailMessage(
                     mail_subject, message, to=[to_email], attachments=attachments
                 )
-                email.send()
+                # email.send()
                 messages.success(request, 'Assinado com sucesso!')
         elif Witness.objects.filter(profile=request.user).count()>=1:
             form = BlockModelFormByContract()
@@ -1609,7 +1610,7 @@ def set_signed(request, contract_id = None):
                 email = EmailMessage(
                     mail_subject, message, to=[to_email], attachments=attachments
                 )
-                email.send()
+                # email.send()
                 messages.success(request, 'Assinado com sucesso!')
             if contract.second_witness_signe == witness:
                 contract.second_witness_signed = True
@@ -1632,7 +1633,7 @@ def set_signed(request, contract_id = None):
                 email = EmailMessage(
                     mail_subject, message, to=[to_email], attachments=attachments
                 )
-                email.send()
+                # email.send()
                 messages.success(request, 'Assinado com sucesso!')
         elif Student.objects.filter(profile=request.user).count()>=1:
             form = BlockModelFormByContract()
@@ -1681,7 +1682,7 @@ def set_signed(request, contract_id = None):
             email = EmailMessage(
                 mail_subject, message, to=[to_email], attachments=attachments
             )
-            email.send()
+            # email.send()
             messages.success(request, 'Assinado com sucesso!')
         contract = Contract.objects.get(contract_id=contract_id)
         if contract.first_witness_signe and contract.first_witness_signe:
