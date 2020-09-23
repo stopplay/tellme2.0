@@ -251,6 +251,10 @@ def create_user(request):
                         messages.error(request, 'Você não pode adicionar pais e estudantes ao mesmo tempo desta forma, por favor selecione o formato adicionar por CSV!')
                         return redirect('/users/create_user')
                     else:
+                        if selected_user == '6':
+                            if not school_to_add or not class_to_add:
+                                messages.error(request, 'Escola e turma são requeridos para criação de alunos')
+                                return redirect('/users/create_user')
                         user = form.save(commit=False)
                         user.username = user.first_name.lower()+user.last_name.lower()
                         i=0
@@ -616,6 +620,10 @@ def create_user(request):
                         messages.error(request, 'Você não pode adicionar pais e estudantes ao mesmo tempo desta forma, por favor selecione o formato adicionar por CSV!')
                         return redirect('/users/create_user')
                     else:
+                        if selected_user == '6':
+                            if not school_to_add or not class_to_add:
+                                messages.error(request, 'Escola e turma são requeridos para criação de alunos')
+                                return redirect('/users/create_user')
                         user = form.save(commit=False)
                         user.username = user.first_name.lower()+user.last_name.lower()
                         i=0
