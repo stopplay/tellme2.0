@@ -389,10 +389,11 @@ def createacontract(request):
                 else:
                     messages.warning(request, 'Por favor selecione um estudante')
                     return redirect('/contracts/select_student_to_contract')
-        for school in School.objects.all():
-            for classe in school.classes.all():
-                if student in classe.students.all():
-                    chains += [(Chain.objects.get(name="{0}-{1}-{2}-{3}".format(school.school_name, classe.enrollment_class_year, classe.class_unit, classe.class_name)).id)]
+        if student:
+            for school in School.objects.all():
+                if school in student.school_set.all():
+                    for classe in student.class_set.all():
+                        chains += [(Chain.objects.get(name="{0}-{1}-{2}-{3}".format(school.school_name, classe.enrollment_class_year, classe.class_unit, classe.class_name)).id)]
         form.fields["chain"].queryset = Chain.objects.filter(id__in=chains)
         if request.method == 'POST':
             if form.is_valid():
@@ -627,15 +628,17 @@ def createacontract(request):
                     messages.warning(request, 'Por favor selecione um estudante')
                     return redirect('/contracts/select_student_to_contract')
         if Head.objects.filter(profile=request.user).count()>=1:
-            for school in School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id):
-                for classe in school.classes.all():
-                    if student in classe.students.all():
-                        chains += [(Chain.objects.get(name="{0}-{1}-{2}-{3}".format(school.school_name, classe.enrollment_class_year, classe.class_unit, classe.class_name)).id)]
+            if student:
+                for school in School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id):
+                    if school in student.school_set.all():
+                        for classe in student.class_set.all():
+                            chains += [(Chain.objects.get(name="{0}-{1}-{2}-{3}".format(school.school_name, classe.enrollment_class_year, classe.class_unit, classe.class_name)).id)]
         elif Supervisor.objects.filter(profile=request.user).count()>=1:
-            for school in School.objects.filter(Q(adminorsupervisor=Supervisor.objects.get(profile=request.user))|Q(adminorsupervisor_2=Supervisor.objects.get(profile=request.user))):
-                for classe in school.classes.all():
-                    if student in classe.students.all():
-                        chains += [(Chain.objects.get(name="{0}-{1}-{2}-{3}".format(school.school_name, classe.enrollment_class_year, classe.class_unit, classe.class_name)).id)]
+            if student:
+                for school in School.objects.filter(Q(adminorsupervisor=Supervisor.objects.get(profile=request.user))|Q(adminorsupervisor_2=Supervisor.objects.get(profile=request.user))):
+                    if school in student.school_set.all():
+                        for classe in student.class_set.all():
+                            chains += [(Chain.objects.get(name="{0}-{1}-{2}-{3}".format(school.school_name, classe.enrollment_class_year, classe.class_unit, classe.class_name)).id)]
         form.fields["chain"].queryset = Chain.objects.filter(id__in=chains)
         if request.method == 'POST':
             if form.is_valid():
