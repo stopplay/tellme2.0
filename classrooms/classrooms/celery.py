@@ -21,5 +21,9 @@ app.conf.beat_schedule = {
     'set_active_daily': {
         'task': 'contract.tasks.set_active_daily',
         'schedule': crontab(hour=0, minute=0)
+    },
+    'import_all_sponte_users': {
+        'task': 'school.tasks.import_all_sponte_users',
+        'schedule': crontab(hour=0, minute=0)
     }
 }
