@@ -132,6 +132,7 @@
 
 	$(document).ready(function () {
 		$('#select_form_class').on('change', function () {
+			var selectValor = $(this).val();
 			if (selectValor == '') {
 				document.getElementById('selected_class').value = '0'
 			}
