@@ -1228,13 +1228,17 @@ def select_student_to_contract(request):
                                 return redirect('/contracts/select_student_to_contract')
                 return redirect('/contracts/createacontract')
             elif classe:
+                students_without_responsible = []
                 values = []
                 for student in classe.students.all():
                     if student.needs_parent:
                         if not student.first_parent or not student.second_parent:
-                            messages.warning(request, 'Um dos estudantes da turma não tem pelo menos um dos responsáveis necessários associados a ele!')
-                            return redirect('/contracts/select_student_to_contract')
-                    values.append(student.student_id)
+                            students_without_responsible.append('{}-{}'.format(student.profile.first_name. student.student_id))
+                        else:
+                            values.append(student.student_id)
+                if students_without_responsible:
+                    for student in students_without_responsible:
+                        messages.warning(request, 'O aluno {} não será criado pois não tem pelo menos um dos responsáveis associados a ele.'.format(student))
                 if values:
                     selected_user = str(values).strip('[]')
                     selected_user = selected_user.replace(' ', '')
@@ -1294,13 +1298,17 @@ def select_student_to_contract(request):
                                 return redirect('/contracts/select_student_to_contract')
                 return redirect('/contracts/createacontract')
             elif classe:
+                students_without_responsible = []
                 values = []
                 for student in classe.students.all():
                     if student.needs_parent:
                         if not student.first_parent or not student.second_parent:
-                            messages.warning(request, 'Um dos estudantes da turma não tem pelo menos um dos responsáveis necessários associados a ele!')
-                            return redirect('/contracts/select_student_to_contract')
-                    values.append(student.student_id)
+                            students_without_responsible.append('{}-{}'.format(student.profile.first_name. student.student_id))
+                        else:
+                            values.append(student.student_id)
+                if students_without_responsible:
+                    for student in students_without_responsible:
+                        messages.warning(request, 'O aluno {} não será criado pois não tem pelo menos um dos responsáveis associados a ele.'.format(student))
                 if values:
                     selected_user = str(values).strip('[]')
                     selected_user = selected_user.replace(' ', '')
