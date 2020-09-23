@@ -1192,7 +1192,7 @@ def seemycontracts(request):
 @login_required
 def select_student_to_contract(request):
     if request.user.is_superuser:
-        students = Student.objects.all()
+        students = Student.objects.all().order_by('name')
         schools = School.objects.all().order_by('school_name')
         if request.method == 'POST':
             try:
@@ -1233,7 +1233,7 @@ def select_student_to_contract(request):
                 for student in classe.students.all():
                     if student.needs_parent:
                         if not student.first_parent or not student.second_parent:
-                            students_without_responsible.append('{}-{}'.format(student.profile.first_name, student.student_id))
+                            students_without_responsible.append('{}-{}'.format(student.name, student.student_id))
                         else:
                             values.append(student.student_id)
                 if students_without_responsible:
@@ -1263,7 +1263,7 @@ def select_student_to_contract(request):
             for school in School.objects.filter(Q(adminorsupervisor=Supervisor.objects.get(profile=request.user))|Q(adminorsupervisor_2=Supervisor.objects.get(profile=request.user))):
                 for student in school.students.all():
                     students_ids += [(student.student_id)]
-        students = Student.objects.filter(student_id__in=students_ids)
+        students = Student.objects.filter(student_id__in=students_ids).order_by('name')
         if request.method == 'POST':
             try:
                 selected_school = request.POST.get('selected_school' or None)
@@ -1303,7 +1303,7 @@ def select_student_to_contract(request):
                 for student in classe.students.all():
                     if student.needs_parent:
                         if not student.first_parent or not student.second_parent:
-                            students_without_responsible.append('{}-{}'.format(student.profile.first_name, student.student_id))
+                            students_without_responsible.append('{}-{}'.format(student.name, student.student_id))
                         else:
                             values.append(student.student_id)
                 if students_without_responsible:
