@@ -330,7 +330,7 @@ def import_all_sponte_users():
     schools = School.objects.exclude(sponte_client_number=None, sponte_token=None)
     for school in schools:
         result = pull_students(school.school_id)
-        if result.status == 200:
+        if result.status_code == 200:
             print('Escola {} Ok'.format(school.school_name))
         else:
             print('Escola {} Não deu certo'.format(school.school_name))
