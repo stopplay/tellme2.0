@@ -34,6 +34,11 @@ class google_auth:
             os.makedirs(credential_dir)
         credential_path = os.path.join(credential_dir,
                                     self.user.username + '.json')
+        try:
+            f = open(credential_path, 'r')
+        except:
+            f = open(credential_path, 'a+')
+        f.close()
 
         store = Storage(credential_path)
         credentials = store.get()
