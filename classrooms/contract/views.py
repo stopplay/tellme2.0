@@ -36,6 +36,7 @@ import tempfile
 import os
 from django.template.loader import render_to_string
 from classrooms import settings
+from classrooms.upload_to_drive import upload_drive_file
 from svglib.svglib import svg2rlg
 from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.contrib.staticfiles import finders
@@ -2227,3 +2228,20 @@ def redirect_to_slm_link(request, contract_id):
         else:
             return HttpResponse('Não foi encontrada url' + json.dumps(generate_slm_link(school, student)))
     return redirect(url)
+
+def upload_contract_file_to_drive(request, contract_id, type_of_file):
+    contract = Contract.objects.get(contract_id=contract_id)
+    if request.user.head or request.user.is_superuser:
+        if type_of_file == 'contract':
+            upload_drive_file(request.user, contract.pdf.name, contract.pdf.url, 'application/pdf')
+        elif type_of_file == 'terms_1':
+            upload_drive_file(request.user, contract.terms_of_contract.name, contract.terms_of_contract.url, 'application/pdf')
+        elif type_of_file == 'terms_2':
+            upload_drive_file(request.user, contract.terms_of_contract_2.name, contract.terms_of_contract_2.url, 'application/pdf')
+        messages.success(request, 'Contrato enviado para seu drive com sucesso.')
+    else:
+        messages.error(request, 'Você não tem permissão para enviar contratos para o seu drive.')
+    return redirect(request.META.get('HTTP_REFERER'))
+
+def authenticated_google(request):
+    return render('contract/authenticated.html')

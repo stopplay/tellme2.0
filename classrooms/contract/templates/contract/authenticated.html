@@ -1,0 +1,43 @@
+{% extends 'base.html'%}
+
+{% block title %} Você está autenticado com o google {% endblock %}
+
+{% block content %}
+
+{% load static %}
+<script>
+    $(document).ready(function () {
+        $('.container').removeClass('container');
+    });
+</script>
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="card w-50">
+                    <div class="card-header">
+                        <h4 class="card-title" align="left">
+                            Você está autenticado com o google
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div style="margin-top: 10px">
+                                <a href="{% url 'contracts:seemycontracts' %}">
+                                    Voltar Para Contratos
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+</div>
+<script>(function (e, t, n) { var r = e.querySelectorAll("html")[0]; r.className = r.className.replace(/(^|\s)no-js(\s|$)/, "$1js$2") })(document, window, 0);</script>
+
+{% endblock %}
