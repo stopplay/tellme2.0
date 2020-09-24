@@ -22,8 +22,7 @@ def get_or_create_drive_folder(user):
 
     http = credentials.authorize(httplib2.Http())
     drive_service = discovery.build('drive', 'v3', http=http)
-    response = drive_service.files().list(size = 100,
-                                            q="mimeType = 'application/vnd.google-apps.folder'",
+    response = drive_service.files().list(q="mimeType = 'application/vnd.google-apps.folder'",
                                             spaces='drive',
                                             fields='nextPageToken, files(id, name)').execute()
     for file in response.get('files', []):
