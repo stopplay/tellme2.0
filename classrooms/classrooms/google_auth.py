@@ -7,11 +7,8 @@ from oauth2client import client
 from oauth2client import tools
 from oauth2client.file import Storage
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-try:
-    import argparse
-    flags = argparse.ArgumentParser(parents=[tools.argparser].parse_args)
-except:
-    flags = None
+
+flags = None
 
 class google_auth:
     def __init__(self, user, SCOPES, CLIENT_SECRET_FILE, APPLICATION_NAME):
