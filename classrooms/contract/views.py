@@ -2229,6 +2229,7 @@ def redirect_to_slm_link(request, contract_id):
             return HttpResponse('Não foi encontrada url' + json.dumps(generate_slm_link(school, student)))
     return redirect(url)
 
+@login_required
 def upload_contract_file_to_drive(request, contract_id, type_of_file):
     contract = Contract.objects.get(contract_id=contract_id)
     if Head.objects.filter(profile=request.user).count()>=1 or request.user.is_superuser:
