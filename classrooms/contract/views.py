@@ -2231,7 +2231,7 @@ def redirect_to_slm_link(request, contract_id):
 
 def upload_contract_file_to_drive(request, contract_id, type_of_file):
     contract = Contract.objects.get(contract_id=contract_id)
-    if request.user.head or request.user.is_superuser:
+    if Head.objects.filter(profile=request.user).count()>=1 or request.user.is_superuser:
         if type_of_file == 'contract':
             upload_drive_file(request.user, contract.pdf.name, contract.pdf.url, 'application/pdf')
         elif type_of_file == 'terms_1':
