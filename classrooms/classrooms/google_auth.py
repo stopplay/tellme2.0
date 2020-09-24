@@ -29,7 +29,7 @@ class google_auth:
         if not os.path.exists(credential_dir):
             os.makedirs(credential_dir)
         credential_path = os.path.join(credential_dir,
-                                    self.user.profile.username + '.json')
+                                    self.user.username + '.json')
 
         store = Storage(credential_path)
         credentials = store.get()
