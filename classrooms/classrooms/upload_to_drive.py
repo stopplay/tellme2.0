@@ -17,7 +17,7 @@ CLIENT_SECRET_FILE = os.path.join(BASE_DIR, 'classrooms', 'TellMe-Drive.json')
 APPLICATION_NAME = 'Drive API Python Quickstart'
 
 def get_or_create_drive_folder(user):
-    authInst = google_auth.google_auth(SCOPES, CLIENT_SECRET_FILE, APPLICATION_NAME)
+    authInst = google_auth.google_auth(user, SCOPES, CLIENT_SECRET_FILE, APPLICATION_NAME)
     credentials = authInst.get_credentials()
 
     http = credentials.authorize(httplib2.Http())
