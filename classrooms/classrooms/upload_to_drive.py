@@ -13,7 +13,7 @@ from classrooms import google_auth
 # If modifying these scopes, delete your previously saved credentials
 # at ~/.credentials/drive-python-quickstart.json
 SCOPES = 'https://www.googleapis.com/auth/drive'
-CLIENT_SECRET_FILE = os.path.join(BASE_DIR, 'classrooms', 'TellMe-Drive.json')
+CLIENT_SECRET_FILE = os.path.abspath('TellMe-Drive.json')
 APPLICATION_NAME = 'Drive API Python Quickstart'
 
 def get_or_create_drive_folder(user):
