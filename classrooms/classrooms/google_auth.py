@@ -34,6 +34,7 @@ class google_auth:
             f = open(credential_path, 'r')
         except:
             f = open(credential_path, 'a+')
+        f.close()
 
         store = Storage(credential_path)
         credentials = store.get()
