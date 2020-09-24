@@ -27,7 +27,7 @@ SECRET_KEY = 'z8^yw$9(6#o@o#p@qy%=nb^qxg0ebribt7ngud#+x0n^d-#md7'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['52.212.87.244', '127.0.0.1', '34.245.178.93', '18.228.172.18', '52.3.226.200', '3.237.44.3', 'www.tellme.school', 'matricula.tellme.school', 'tellme.school', 'tellme.stopplay.io']
+ALLOWED_HOSTS = ['52.212.87.244', '127.0.0.1', '34.245.178.93', '18.228.172.18', '52.3.226.200', 'www.tellme.school', 'matricula.tellme.school', 'tellme.school', 'tellme.stopplay.io']
 
 
 # Application definition
