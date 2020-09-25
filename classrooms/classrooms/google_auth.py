@@ -23,8 +23,9 @@ class google_auth:
             os.makedirs(credential_dir)
         credential_path = os.path.join(credential_dir,
                                     self.user.username + '.json')
-        with open(credential_path, 'rb') as token:
-            creds = pickle.load(token)
+        if os.path.getsize(credential_path) > 0:
+            with open(credential_path, 'rb') as token:
+                creds = pickle.load(token)
         # If there are no (valid) credentials available, let the user log in.
         if not creds or not creds.valid:
             if creds and creds.expired and creds.refresh_token:
