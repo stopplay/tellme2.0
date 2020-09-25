@@ -2242,7 +2242,7 @@ def upload_contract_file_to_drive(request, contract_id, type_of_file):
         messages.success(request, 'Contrato enviado para seu drive com sucesso.')
     else:
         messages.error(request, 'Você não tem permissão para enviar contratos para o seu drive.')
-    return redirect(request.META.get('HTTP_REFERER'))
+    return redirect('/contracts/all')
 
 def authenticated_google(request):
     return render('contract/authenticated.html')
