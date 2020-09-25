@@ -2,7 +2,7 @@ from __future__ import print_function
 import pickle
 import os.path
 from googleapiclient.discovery import build
-from google_auth_oauthlib.flow import Flow
+from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 
 class google_auth:
@@ -31,10 +31,9 @@ class google_auth:
             if creds and creds.expired and creds.refresh_token:
                 creds.refresh(Request())
             else:
-                flow = Flow.from_client_secrets_file(
-                    self.CLIENT_SECRET_FILE, self.SCOPES, autogenerate_code_verifier=True)
-                flow.fetch_token()
-                creds = flow.credentials()
+                flow = InstalledAppFlow.from_client_secrets_file(
+                self.CLIENT_SECRET_FILE, self.SCOPES)
+                creds = flow.run_local_server(port=0)
             # Save the credentials for the next run
             with open('token.pickle', 'wb') as token:
                 pickle.dump(creds, token)
