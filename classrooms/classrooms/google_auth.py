@@ -33,7 +33,7 @@ class google_auth:
             else:
                 flow = Flow.from_client_secrets_file(
                     self.CLIENT_SECRET_FILE, self.SCOPES, autogenerate_code_verifier=True)
-                flow.fetch_token(self.CLIENT_SECRET_FILE)
+                flow.fetch_token()
                 creds = flow.credentials()
             # Save the credentials for the next run
             with open('token.pickle', 'wb') as token:
