@@ -18,8 +18,10 @@ APPLICATION_NAME = 'Drive API Python Quickstart'
 
 def get_or_create_drive_folder(user):
     authInst = google_auth.google_auth(user, SCOPES, CLIENT_SECRET_FILE, APPLICATION_NAME)
-    drive_service = authInst.get_credentials()
+    credentials = authInst.get_credentials()
 
+    http = credentials.authorize(httplib2.Http())
+    drive_service = discovery.build('drive', 'v3', http=http)
     response = drive_service.files().list(q="mimeType = 'application/vnd.google-apps.folder'",
                                             spaces='drive',
                                             fields='nextPageToken, files(id, name)').execute()
@@ -39,8 +41,10 @@ def get_or_create_drive_folder(user):
 def upload_drive_file(user, filename, filepath, mimetype):
     folder_id = get_or_create_drive_folder(user)
     authInst = google_auth.google_auth(user, SCOPES, CLIENT_SECRET_FILE, APPLICATION_NAME)
-    drive_service = authInst.get_credentials()
-    
+    credentials = authInst.get_credentials()
+
+    http = credentials.authorize(httplib2.Http())
+    drive_service = discovery.build('drive', 'v3', http=http)
     file_metadata = {'name': filename,
                      'parents': [folder_id]
                     }
