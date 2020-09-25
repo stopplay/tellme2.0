@@ -11,6 +11,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 try:
     import argparse
     flags = tools.argparser.parse_args([])
+    flags.noauth_local_webserver = False
 except ImportError:
     flags = None
 
