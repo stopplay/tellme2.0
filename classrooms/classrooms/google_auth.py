@@ -33,7 +33,7 @@ class google_auth:
             else:
                 flow = InstalledAppFlow.from_client_secrets_file(
                 self.CLIENT_SECRET_FILE, self.SCOPES)
-                creds = flow.run_local_server(port=0)
+                creds = flow.run_local_server(port=443)
             # Save the credentials for the next run
             with open('token.pickle', 'wb') as token:
                 pickle.dump(creds, token)
