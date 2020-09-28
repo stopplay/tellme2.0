@@ -2,7 +2,7 @@ from __future__ import print_function
 import pickle
 import os.path
 from googleapiclient.discovery import build
-from google_auth_oauthlib.flow import InstalledAppFlow
+from google_auth_oauthlib.flow import webbrowser, _RedirectWSGIApp, _WSGIRequestHandler, Flow, InstalledAppFlow, wsgiref
 from google.auth.transport.requests import Request
 
 class google_auth:
@@ -12,7 +12,7 @@ class google_auth:
         self.CLIENT_SECRET_FILE = CLIENT_SECRET_FILE
         self.APPLICATION_NAME = APPLICATION_NAME
     
-    def get_credentials(self):
+    def get_credentials(self, open_browser=True):
         creds = None
         # The file token.pickle stores the user's access and refresh tokens, and is
         # created automatically when the authorization flow completes for the first
@@ -40,10 +40,30 @@ class google_auth:
                 creds.refresh(Request())
             else:
                 print ('Credentials doesn\'t exists so do a new ')
-                flow = InstalledAppFlow.from_client_secrets_file(
+                flow = Flow.from_client_secrets_file(
                 self.CLIENT_SECRET_FILE, self.SCOPES)
                 print('InstalledAppFlow instance created to run the flow')
-                creds = flow.run_local_server(port=0)
+                wsgi_app = _RedirectWSGIApp(InstalledAppFlow._DEFAULT_WEB_SUCCESS_MESSAGE)
+                local_server = wsgiref.simple_server.make_server(
+                    'tellme.stopplay.io', 443, wsgi_app, handler_class=_WSGIRequestHandler)
+
+                flow.redirect_uri = 'https://tellme.stopplay.io/'
+                auth_url, _ = flow.authorization_url()
+
+                if open_browser:
+                    webbrowser.open(auth_url, new=1, autoraise=True)
+
+                print(InstalledAppFlow._DEFAULT_AUTH_PROMPT_MESSAGE.format(url=auth_url))
+
+                local_server.handle_request()
+
+                # Note: using https here because oauthlib is very picky that
+                # OAuth 2.0 should only occur over https.
+                authorization_response = wsgi_app.last_request_uri.replace(
+                    'http', 'https')
+                flow.fetch_token(authorization_response=authorization_response)
+
+                return flow.credentials
                 print('Flow run and credentials get')
             # Save the credentials for the next run
             with open(credential_path, 'wb') as token:
