@@ -12,7 +12,7 @@ try:
     import argparse
     flags = tools.argparser.parse_args([])
     flags.auth_host_name = 'https://tellme.stopplay.io/'
-    flags.auth_host_port = ['443']
+    flags.auth_host_port = [443]
 except ImportError:
     flags = None
 
