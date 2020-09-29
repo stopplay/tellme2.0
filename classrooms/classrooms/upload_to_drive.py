@@ -45,7 +45,9 @@ def get_or_create_drive_folder(user):
 def upload_drive_file(user, filename, filepath, mimetype):
     folder_id = get_or_create_drive_folder(user)
     if 'https://accounts.google.com' in folder_id:
+        print ('Parei aqui')
         return redirect(folder_id)
+    print ('Passei daqui')
     authInst = google_auth.google_auth(user, SCOPES, CLIENT_SECRET_FILE, APPLICATION_NAME)
     drive_service = authInst.get_credentials()
     
