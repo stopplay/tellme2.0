@@ -2235,11 +2235,11 @@ def upload_contract_file_to_drive(request, contract_id, type_of_file):
         contract = Contract.objects.get(contract_id=contract_id)
         if Head.objects.filter(profile=request.user).count()>=1 or request.user.is_superuser:
             if type_of_file == 'contract':
-                upload_drive_file(request.user, contract.pdf.name, contract.pdf.url, 'application/pdf')
+                upload_drive_file(request.user, contract.pdf.name, get_pdf_filepath(contract), 'application/pdf')
             elif type_of_file == 'terms_1':
-                upload_drive_file(request.user, contract.terms_of_contract.name, contract.terms_of_contract.url, 'application/pdf')
+                upload_drive_file(request.user, contract.terms_of_contract.name, get_terms_of_contract_1_filepath(contract), 'application/pdf')
             elif type_of_file == 'terms_2':
-                upload_drive_file(request.user, contract.terms_of_contract_2.name, contract.terms_of_contract_2.url, 'application/pdf')
+                upload_drive_file(request.user, contract.terms_of_contract_2.name, get_terms_of_contract_2_filepath(contract), 'application/pdf')
             messages.success(request, 'Contrato enviado para seu drive com sucesso.')
         else:
             messages.error(request, 'Você não tem permissão para enviar contratos para o seu drive.')
