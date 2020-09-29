@@ -2244,7 +2244,8 @@ def upload_contract_file_to_drive(request, contract_id, type_of_file):
         else:
             messages.error(request, 'Você não tem permissão para enviar contratos para o seu drive.')
         return redirect('/contracts/all')
-    except:
+    except Exception as e:
+        print (str(e))
         return redirect('/contracts/authenticated/')
 
 def authenticated_google(request):
