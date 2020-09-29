@@ -10,7 +10,6 @@ from apiclient.http import MediaFileUpload
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 from classrooms import google_auth
 import google.oauth2.credentials
-from django.shortcuts import redirect
 from django.http.response import HttpResponseRedirect
 
 # If modifying these scopes, delete your previously saved credentials
@@ -46,7 +45,7 @@ def upload_drive_file(user, filename, filepath, mimetype):
     folder_id = get_or_create_drive_folder(user)
     if 'https://accounts.google.com' in folder_id:
         print ('Parei aqui')
-        return redirect(folder_id)
+        return HttpResponseRedirect(folder_id)
     print ('Passei daqui')
     authInst = google_auth.google_auth(user, SCOPES, CLIENT_SECRET_FILE, APPLICATION_NAME)
     drive_service = authInst.get_credentials()
