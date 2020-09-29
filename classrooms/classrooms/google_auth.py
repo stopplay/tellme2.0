@@ -6,8 +6,7 @@ from google_auth_oauthlib.flow import Flow
 from google.auth.transport.requests import Request
 
 class google_auth:
-    def __init__(self, request, user, SCOPES, CLIENT_SECRET_FILE, APPLICATION_NAME):
-        self.request = request
+    def __init__(self, user, SCOPES, CLIENT_SECRET_FILE, APPLICATION_NAME):
         self.user = user
         self.SCOPES = SCOPES
         self.CLIENT_SECRET_FILE = CLIENT_SECRET_FILE
@@ -45,7 +44,7 @@ class google_auth:
                 self.CLIENT_SECRET_FILE, self.SCOPES)
                 print('InstalledAppFlow instance created to run the flow')
                 flow.redirect_uri = 'https://tellme.stopplay.io/contracts/authenticated/'
-                authorization_response = self.request.url
+                authorization_response = 'https://tellme.stopplay.io/contracts/authenticated/'
                 flow.fetch_token(authorization_response=authorization_response)
                 creds = flow.credentials
                 print('Flow run and credentials get')
