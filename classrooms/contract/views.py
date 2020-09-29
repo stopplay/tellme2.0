@@ -2245,9 +2245,5 @@ def upload_contract_file_to_drive(request, contract_id, type_of_file):
     return redirect('/contracts/all')
 
 def authenticated_google(request):
-    if not request.method == 'POST':
-        print ('Primeiro passo')
-        authorization_url = get_or_generate_credentials(request.user)
-    else:
-        authorization_url = get_or_generate_credentials(request.user, request.POST)
+    authorization_url = get_or_generate_credentials(request.user, request.GET)
     return render(request, 'contract/authenticated.html', {'authorization_url':authorization_url})
