@@ -36,7 +36,7 @@ import tempfile
 import os
 from django.template.loader import render_to_string
 from classrooms import settings
-from classrooms.upload_to_drive import upload_drive_file
+from classrooms.upload_to_drive import upload_drive_file, get_or_generate_credentials
 from svglib.svglib import svg2rlg
 from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.contrib.staticfiles import finders
@@ -2245,4 +2245,9 @@ def upload_contract_file_to_drive(request, contract_id, type_of_file):
     return redirect('/contracts/all')
 
 def authenticated_google(request):
-    return render('contract/authenticated.html')
+    if not request.method == 'POST':
+        print ('Primeiro passo')
+        authorization_url = get_or_generate_credentials(request.user)
+    else:
+        authorization_url = get_or_generate_credentials(request.user, request.POST)
+    return render(request, 'contract/authenticated.html', {'authorization_url':authorization_url})

@@ -3,18 +3,57 @@ import httplib2
 import os
 
 from apiclient import discovery
-from oauth2client import client
-from oauth2client import tools
-from oauth2client.file import Storage
+import pickle
+import os.path
+from googleapiclient.discovery import build
+from google_auth_oauthlib.flow import Flow
+from google.auth.transport.requests import Request
 from apiclient.http import MediaFileUpload
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 from classrooms import google_auth
+from django.shortcuts import redirect
+import pdb
 
 # If modifying these scopes, delete your previously saved credentials
 # at ~/.credentials/drive-python-quickstart.json
 SCOPES = 'https://www.googleapis.com/auth/drive'
 CLIENT_SECRET_FILE = os.path.abspath('classrooms/TellMe-Drive.json')
 APPLICATION_NAME = 'Drive API Python Quickstart'
+
+def get_or_generate_credentials(user, data = None):
+    pdb.set_trace()
+    if not data:
+        authInst = google_auth.google_auth(user, SCOPES, CLIENT_SECRET_FILE, APPLICATION_NAME)
+        authorization_url = authInst.get_authorization_url()
+        return authorization_url
+    else:
+        flow = Flow.from_client_secrets_file(
+            CLIENT_SECRET_FILE, scopes=SCOPES)
+        flow.redirect_uri = 'https://tellme.stopplay.io/contracts/authenticated/'
+
+        # Use the authorization server's response to fetch the OAuth 2.0 tokens.
+        authorization_response = data
+        flow.fetch_token(authorization_response=authorization_response)
+
+        # Store credentials in the session.
+        # ACTION ITEM: In a production app, you likely want to save these
+        #              credentials in a persistent database instead.
+        creds = flow.credentials
+        print ('Start Getting Credentials')
+        cwd_dir = os.getcwd()
+        print ('CWD_dir get')
+        credential_dir = os.path.join(cwd_dir, '.credentials')
+        print ('Credentials dir Get')
+        if not os.path.exists(credential_dir):
+            print ('Credentials dir doesn\'t existss, create that')
+            os.makedirs(credential_dir)
+        print ('Credentials path Get based in the current user in the session')
+        credential_path = os.path.join(credential_dir,
+                                    self.user.username + '.json')
+        with open(credential_path, 'wb') as token:
+            print('Credentials stored in the json')
+            pickle.dump(creds, token)
+        return None
 
 def get_or_create_drive_folder(user):
     authInst = google_auth.google_auth(user, SCOPES, CLIENT_SECRET_FILE, APPLICATION_NAME)

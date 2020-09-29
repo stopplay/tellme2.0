@@ -18,15 +18,25 @@
                 <div class="card w-50">
                     <div class="card-header">
                         <h4 class="card-title" align="left">
-                            Você está autenticado com o google
+                            {% if authorization_url %}
+                                Clique no botão abaixo para se autorizar com Google
+                            {% else %}
+                                Você está autenticado com o google
+                            {% endif %}
                         </h4>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div style="margin-top: 10px">
-                                <a href="{% url 'contracts:seemycontracts' %}">
-                                    Voltar Para Contratos
-                                </a>
+                                {% if authorization_url %}
+                                    <a href="{{ authorization_url }}" class="btn btn-primary">
+                                        Autorizar com Google
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'contracts:seemycontracts' %}" class="btn btn-success">
+                                        Voltar Para Contratos
+                                    </a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
