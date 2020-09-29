@@ -2,8 +2,9 @@ from __future__ import print_function
 import pickle
 import os.path
 from googleapiclient.discovery import build
-from google_auth_oauthlib.flow import InstalledAppFlow
+from google_auth_oauthlib.flow import Flow
 from google.auth.transport.requests import Request
+from django.shortcuts import redirect
 
 class google_auth:
     def __init__(self, user, SCOPES, CLIENT_SECRET_FILE, APPLICATION_NAME):
@@ -40,10 +41,16 @@ class google_auth:
                 creds.refresh(Request())
             else:
                 print ('Credentials doesn\'t exists so do a new ')
-                flow = InstalledAppFlow.from_client_secrets_file(
+                flow = Flow.from_client_secrets_file(
                 self.CLIENT_SECRET_FILE, self.SCOPES)
                 print('InstalledAppFlow instance created to run the flow')
-                creds = flow.run_local_server(port=0)
+                authorization_url, state = flow.authorization_url(
+                    # Enable offline access so that you can refresh an access token without
+                    # re-prompting the user for permission. Recommended for web server apps.
+                    access_type='offline',
+                    # Enable incremental authorization. Recommended as a best practice.
+                    include_granted_scopes='true')
+                return redirect(authorization_url)
                 print('Flow run and credentials get')
             # Save the credentials for the next run
             with open(credential_path, 'wb') as token:
