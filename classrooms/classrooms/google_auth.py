@@ -44,14 +44,9 @@ class google_auth:
                 self.CLIENT_SECRET_FILE, self.SCOPES)
                 print('InstalledAppFlow instance created to run the flow')
                 flow.redirect_uri = 'https://tellme.stopplay.io/contracts/authenticated/'
-                authorization_url, state = flow.authorization_url(
-                    # Enable offline access so that you can refresh an access token without
-                    # re-prompting the user for permission. Recommended for web server apps.
-                    access_type='offline',
-                    # Enable incremental authorization. Recommended as a best practice.
-                    include_granted_scopes='true')
-                print (type(authorization_url))
-                return authorization_url
+                authorization_response = 'https://tellme.stopplay.io/contracts/authenticated/'
+                flow.fetch_token(authorization_response=authorization_response)
+                creds = flow.credentials
                 print('Flow run and credentials get')
             # Save the credentials for the next run
             with open(credential_path, 'wb') as token:

@@ -9,8 +9,6 @@ from oauth2client.file import Storage
 from apiclient.http import MediaFileUpload
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 from classrooms import google_auth
-import google.oauth2.credentials
-from django.http.response import HttpResponseRedirect
 
 # If modifying these scopes, delete your previously saved credentials
 # at ~/.credentials/drive-python-quickstart.json
@@ -21,9 +19,6 @@ APPLICATION_NAME = 'Drive API Python Quickstart'
 def get_or_create_drive_folder(user):
     authInst = google_auth.google_auth(user, SCOPES, CLIENT_SECRET_FILE, APPLICATION_NAME)
     drive_service = authInst.get_credentials()
-    if isinstance(drive_service, str):
-        print (drive_service)
-        return drive_service
 
     response = drive_service.files().list(q="mimeType = 'application/vnd.google-apps.folder'",
                                             spaces='drive',
@@ -43,10 +38,6 @@ def get_or_create_drive_folder(user):
 
 def upload_drive_file(user, filename, filepath, mimetype):
     folder_id = get_or_create_drive_folder(user)
-    if 'https://accounts.google.com' in folder_id:
-        print ('Parei aqui')
-        return HttpResponseRedirect(folder_id)
-    print ('Passei daqui')
     authInst = google_auth.google_auth(user, SCOPES, CLIENT_SECRET_FILE, APPLICATION_NAME)
     drive_service = authInst.get_credentials()
     
