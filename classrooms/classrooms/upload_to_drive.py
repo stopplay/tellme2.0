@@ -29,7 +29,7 @@ def credentials_to_dict(credentials):
 
 def get_or_generate_credentials(request, user, data = None):
     if not data:
-        authInst = google_auth.google_auth(user, request, SCOPES, CLIENT_SECRET_FILE, APPLICATION_NAME)
+        authInst = google_auth.google_auth(request, user, SCOPES, CLIENT_SECRET_FILE, APPLICATION_NAME)
         authorization_url = authInst.get_authorization_url()
         return authorization_url
     else:
@@ -52,7 +52,7 @@ def get_or_generate_credentials(request, user, data = None):
         return None
 
 def get_or_create_drive_folder(request, user):
-    authInst = google_auth.google_auth(user, request, SCOPES, CLIENT_SECRET_FILE, APPLICATION_NAME)
+    authInst = google_auth.google_auth(request, user, SCOPES, CLIENT_SECRET_FILE, APPLICATION_NAME)
     drive_service = authInst.get_credentials()
 
     response = drive_service.files().list(q="mimeType = 'application/vnd.google-apps.folder'",
