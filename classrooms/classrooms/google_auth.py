@@ -4,7 +4,7 @@ import os.path
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import Flow
 from google.auth.transport.requests import Request
-import webbrowser
+from django.shortcuts import redirect
 
 class google_auth:
     def __init__(self, user, SCOPES, CLIENT_SECRET_FILE, APPLICATION_NAME):
@@ -51,7 +51,7 @@ class google_auth:
                     access_type='offline',
                     # Enable incremental authorization. Recommended as a best practice.
                     include_granted_scopes='true')
-                webbrowser.open(authorization_url, new=1, autoraise=True)
+                return redirect(authorization_url)
                 print('Flow run and credentials get')
             # Save the credentials for the next run
             with open(credential_path, 'wb') as token:
