@@ -48,7 +48,7 @@ def get_or_generate_credentials(request, user, data = None):
         # ACTION ITEM: In a production app, you likely want to save these
         #              credentials in a persistent database instead.
         creds = flow.credentials
-        request.session['credentials']
+        request.session['credentials'] = credentials_to_dict(creds)
         return None
 
 def get_or_create_drive_folder(request, user):
