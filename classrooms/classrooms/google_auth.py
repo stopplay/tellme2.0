@@ -50,7 +50,7 @@ class google_auth:
                     access_type='offline',
                     # Enable incremental authorization. Recommended as a best practice.
                     include_granted_scopes='true')
-                return redirect(authorization_url)
+                redirect(authorization_url)
                 print('Flow run and credentials get')
             # Save the credentials for the next run
             with open(credential_path, 'wb') as token:
