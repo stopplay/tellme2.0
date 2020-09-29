@@ -50,7 +50,7 @@ def get_or_generate_credentials(user, data = None):
             os.makedirs(credential_dir)
         print ('Credentials path Get based in the current user in the session')
         credential_path = os.path.join(credential_dir,
-                                    self.user.username + '.json')
+                                    user.username + '.json')
         with open(credential_path, 'wb') as token:
             print('Credentials stored in the json')
             pickle.dump(creds, token)
