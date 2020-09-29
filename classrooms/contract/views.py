@@ -2245,7 +2245,7 @@ def upload_contract_file_to_drive(request, contract_id, type_of_file):
             messages.error(request, 'Você não tem permissão para enviar contratos para o seu drive.')
         return redirect('/contracts/all')
     except Exception as e:
-        print request.session['credentials']
+        print (request.session['credentials'])
         print (str(e))
         return redirect('/contracts/authenticated/')
 
