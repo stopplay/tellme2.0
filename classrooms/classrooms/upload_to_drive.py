@@ -22,6 +22,7 @@ def get_or_create_drive_folder(user):
     authInst = google_auth.google_auth(user, SCOPES, CLIENT_SECRET_FILE, APPLICATION_NAME)
     drive_service = authInst.get_credentials()
     if isinstance(drive_service, str):
+        print (drive_service)
         return redirect (drive_service)
 
     response = drive_service.files().list(q="mimeType = 'application/vnd.google-apps.folder'",
