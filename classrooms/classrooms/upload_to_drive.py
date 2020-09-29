@@ -43,7 +43,8 @@ def get_or_create_drive_folder(user):
 
 def upload_drive_file(user, filename, filepath, mimetype):
     folder_id = get_or_create_drive_folder(user)
-    print (type(folder_id))
+    if isinstance(folder_id, 'django.http.response.HttpResponseRedirect'):
+        return folder_id
     authInst = google_auth.google_auth(user, SCOPES, CLIENT_SECRET_FILE, APPLICATION_NAME)
     drive_service = authInst.get_credentials()
     
