@@ -2249,7 +2249,7 @@ def upload_contract_file_to_drive(request, contract_id, type_of_file):
 
 def authenticated_google(request):
     if request.GET:
-        authorization_url = get_or_generate_credentials(request.user, request.get_absolut_url())
+        authorization_url = get_or_generate_credentials(request.user, request.get_full_path())
     else:
         authorization_url = get_or_generate_credentials(request.user)
     if not authorization_url:
