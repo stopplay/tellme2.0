@@ -27,9 +27,9 @@ class google_auth:
         return authorization_url
     
     def get_credentials(self):
-        creds = None
         # The file token.pickle stores the user's access and refresh tokens, and is
         # created automatically when the authorization flow completes for the first
         # time.
+        print (self.request.session['credentials'])
         service = build('drive', 'v3', credentials=self.request.session['credentials'])
         return service
