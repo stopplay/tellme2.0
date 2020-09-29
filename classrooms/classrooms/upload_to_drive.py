@@ -16,8 +16,8 @@ SCOPES = 'https://www.googleapis.com/auth/drive'
 CLIENT_SECRET_FILE = os.path.abspath('classrooms/TellMe-Drive.json')
 APPLICATION_NAME = 'Drive API Python Quickstart'
 
-def get_or_create_drive_folder(user):
-    authInst = google_auth.google_auth(user, SCOPES, CLIENT_SECRET_FILE, APPLICATION_NAME)
+def get_or_create_drive_folder(request, user):
+    authInst = google_auth.google_auth(request, user, SCOPES, CLIENT_SECRET_FILE, APPLICATION_NAME)
     drive_service = authInst.get_credentials()
 
     response = drive_service.files().list(q="mimeType = 'application/vnd.google-apps.folder'",
@@ -36,9 +36,9 @@ def get_or_create_drive_folder(user):
     print ('Folder ID: %s' % file.get('id'))
     return file.get('id')
 
-def upload_drive_file(user, filename, filepath, mimetype):
+def upload_drive_file(request, user, filename, filepath, mimetype):
     folder_id = get_or_create_drive_folder(user)
-    authInst = google_auth.google_auth(user, SCOPES, CLIENT_SECRET_FILE, APPLICATION_NAME)
+    authInst = google_auth.google_auth(request, user, SCOPES, CLIENT_SECRET_FILE, APPLICATION_NAME)
     drive_service = authInst.get_credentials()
     
     file_metadata = {'name': filename,
