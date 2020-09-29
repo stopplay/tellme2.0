@@ -11,6 +11,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 from classrooms import google_auth
 import google.oauth2.credentials
 from django.shortcuts import redirect
+from django.http.response import HttpResponseRedirect
 
 # If modifying these scopes, delete your previously saved credentials
 # at ~/.credentials/drive-python-quickstart.json
@@ -43,7 +44,7 @@ def get_or_create_drive_folder(user):
 
 def upload_drive_file(user, filename, filepath, mimetype):
     folder_id = get_or_create_drive_folder(user)
-    if isinstance(folder_id, 'django.http.response.HttpResponseRedirect'):
+    if isinstance(folder_id, HttpResponseRedirect):
         return folder_id
     authInst = google_auth.google_auth(user, SCOPES, CLIENT_SECRET_FILE, APPLICATION_NAME)
     drive_service = authInst.get_credentials()
