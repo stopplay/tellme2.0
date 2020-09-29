@@ -28,7 +28,7 @@ class google_auth:
         print ('Credentials path Get based in the current user in the session')
         credential_path = os.path.join(credential_dir,
                                     self.user.username + '.json')
-        if os.path.getsize(credential_path) > 0:
+        if os.path.exists(credential_path) and os.path.getsize(credential_path) > 0:
             with open(credential_path, 'rb') as token:
                 print ('Credentials path already exists and is fullfilled, so store credentials')
                 creds = pickle.load(token)
