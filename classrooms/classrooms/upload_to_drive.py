@@ -11,8 +11,6 @@ from google.auth.transport.requests import Request
 from apiclient.http import MediaFileUpload
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 from classrooms import google_auth
-from django.shortcuts import redirect
-import pdb
 
 # If modifying these scopes, delete your previously saved credentials
 # at ~/.credentials/drive-python-quickstart.json
@@ -21,7 +19,6 @@ CLIENT_SECRET_FILE = os.path.abspath('classrooms/TellMe-Drive.json')
 APPLICATION_NAME = 'Drive API Python Quickstart'
 
 def get_or_generate_credentials(user, data = None):
-    pdb.set_trace()
     if not data:
         authInst = google_auth.google_auth(user, SCOPES, CLIENT_SECRET_FILE, APPLICATION_NAME)
         authorization_url = authInst.get_authorization_url()
