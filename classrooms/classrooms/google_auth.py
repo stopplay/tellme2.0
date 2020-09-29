@@ -4,6 +4,7 @@ import os.path
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import Flow
 from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials
 
 class google_auth:
     def __init__(self, request, user, SCOPES, CLIENT_SECRET_FILE, APPLICATION_NAME):
@@ -31,5 +32,7 @@ class google_auth:
         # created automatically when the authorization flow completes for the first
         # time.
         print (self.request.session['credentials'])
-        service = build('drive', 'v3', credentials=self.request.session['credentials'])
+        credentials = Credentials(
+      **self.request.session['credentials'])
+        service = build('drive', 'v3', credentials=credentials)
         return service
