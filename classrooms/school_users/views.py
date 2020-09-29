@@ -1799,14 +1799,8 @@ def set_parents(request, student_id=None):
             schools = School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id)
         if Supervisor.objects.filter(profile=request.user).count()>=1:
             schools = School.objects.filter(Q(adminorsupervisor=Supervisor.objects.get(profile=request.user))|Q(adminorsupervisor_2=Supervisor.objects.get(profile=request.user)))
-        for school in schools:
-            for student in school.students.all():
-                if student.first_parent:
-                    parents_ids += [(student.first_parent.parent_id)]
-                if student.second_parent:
-                    parents_ids += [(student.second_parent.parent_id)]
-        form.fields["first_parent"].queryset = Parent.objects.filter(parent_id__in=parents_ids)
-        form.fields["second_parent"].queryset = Parent.objects.filter(parent_id__in=parents_ids)
+        form.fields["first_parent"].queryset = Parent.objects.filter(Q(first_parent__school__in=schools) | Q(second_parent__school__in=schools) | Q(third_parent__school__in=schools))
+        form.fields["second_parent"].queryset = Parent.objects.filter(Q(first_parent__school__in=schools) | Q(second_parent__school__in=schools) | Q(third_parent__school__in=schools))
         if form.is_valid():
             new_student = form.save(commit=False)
             new_student.save(update_fields=['first_parent','second_parent'])
