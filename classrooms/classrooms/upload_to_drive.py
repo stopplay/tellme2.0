@@ -30,7 +30,9 @@ def get_or_generate_credentials(user, data = None):
         flow.redirect_uri = 'https://tellme.stopplay.io/contracts/authenticated/'
 
         # Use the authorization server's response to fetch the OAuth 2.0 tokens.
+        print(data)
         data = re.sub('http://', 'https://', data)
+        print(data)
         authorization_response = data
         flow.fetch_token(authorization_response=authorization_response)
 
