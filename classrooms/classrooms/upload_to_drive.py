@@ -11,6 +11,7 @@ from google.auth.transport.requests import Request
 from apiclient.http import MediaFileUpload
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 from classrooms import google_auth
+import re
 
 # If modifying these scopes, delete your previously saved credentials
 # at ~/.credentials/drive-python-quickstart.json
@@ -29,6 +30,7 @@ def get_or_generate_credentials(user, data = None):
         flow.redirect_uri = 'https://tellme.stopplay.io/contracts/authenticated/'
 
         # Use the authorization server's response to fetch the OAuth 2.0 tokens.
+        data = re.sub('http://', 'https://', data)
         authorization_response = data
         flow.fetch_token(authorization_response=authorization_response)
 
