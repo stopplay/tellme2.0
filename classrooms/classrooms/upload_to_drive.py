@@ -37,7 +37,7 @@ def get_or_create_drive_folder(request, user):
     return file.get('id')
 
 def upload_drive_file(request, user, filename, filepath, mimetype):
-    folder_id = get_or_create_drive_folder(user)
+    folder_id = get_or_create_drive_folder(request, user)
     authInst = google_auth.google_auth(request, user, SCOPES, CLIENT_SECRET_FILE, APPLICATION_NAME)
     drive_service = authInst.get_credentials()
     
