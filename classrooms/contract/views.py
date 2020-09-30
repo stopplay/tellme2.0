@@ -2272,9 +2272,9 @@ def upload_contract_file_to_drive(request, contract_id, type_of_file):
 
 def authenticated_google(request):
     if request.GET:
-        authorization_url = get_or_generate_credentials(request, request.user, 'https://'+request.get_host()+request.get_full_path())
+        authorization_url = get_or_generate_credentials(request, request.user, 'https://'+request.get_host(), 'https://'+request.get_host()+request.get_full_path())
     else:
-        authorization_url = get_or_generate_credentials(request, request.user)
+        authorization_url = get_or_generate_credentials(request, request.user, 'https://'+request.get_host())
     if not authorization_url:
         messages.success(request, 'Agora você pode começar a mandar seus arquivos pro servidor')
     return render(request, 'contract/authenticated.html', {'authorization_url':authorization_url})

@@ -27,7 +27,7 @@ def credentials_to_dict(credentials):
           'client_secret': credentials.client_secret,
           'scopes': credentials.scopes}
 
-def get_or_generate_credentials(request, user, data = None):
+def get_or_generate_credentials(request, user, base_url, data = None):
     if not data:
         authInst = google_auth.google_auth(request, user, SCOPES, CLIENT_SECRET_FILE, APPLICATION_NAME)
         authorization_url = authInst.get_authorization_url()
@@ -35,7 +35,7 @@ def get_or_generate_credentials(request, user, data = None):
     else:
         flow = Flow.from_client_secrets_file(
             CLIENT_SECRET_FILE, scopes=SCOPES, state=request.session['state'])
-        flow.redirect_uri = 'https://tellme.stopplay.io/contracts/authenticated/'
+        flow.redirect_uri = base_url+'/contracts/authenticated/'
 
         # Use the authorization server's response to fetch the OAuth 2.0 tokens.
         print(data)
