@@ -1592,7 +1592,7 @@ def seeusersbyquery_signes(request):
 
             else:
                 if request.user.is_superuser:
-                    school_users = TYPE[type_of_user].objects.all()
+                    school_users = TYPE[type_of_user].objects.exclude(Q(first_parent__school=None) & Q(second_parent__school=None) & Q(third_parent__school=None))
                 else:
                     school_users = TYPE[type_of_user].objects.filter(Q(first_parent__school__in=schools) | Q(second_parent__school__in=schools) | Q(third_parent__school__in=schools))
 
@@ -1609,7 +1609,7 @@ def seeusersbyquery_signes(request):
 
                 if not fetched:
                     if request.user.is_superuser:
-                        school_users = TYPE[type_of_user].objects.all()
+                        school_users = TYPE[type_of_user].objects.exclude(Q(first_parent__school=None) & Q(second_parent__school=None) & Q(third_parent__school=None))
                     else:
                         school_users = TYPE[type_of_user].objects.filter(Q(first_parent__school__in=schools) | Q(second_parent__school__in=schools) | Q(third_parent__school__in=schools))
             
