@@ -58,7 +58,7 @@
 											<select id="select_form" class="form-control chosen-select">
 												<option id="" value="0" selected>--------</option>
 												{% for student in students %}
-												<option value="{{ student.student_id }}">{{ student.name }}</option>
+												<option value="{{ student.student_id }}">{{ student.school_name }} - {{ student.name }}</option>
 												{% endfor %}
 											</select><br>
 										</div>

@@ -6,3 +6,5 @@ classrooms/media_cdn/*
 *.log
 /.vs/*
 /.vscode/*
+classrooms/.credentials/*
+classrooms/classrooms/TellMe-Drive.json

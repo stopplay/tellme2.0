@@ -36,6 +36,7 @@ import tempfile
 import os
 from django.template.loader import render_to_string
 from classrooms import settings
+from classrooms.upload_to_drive import upload_drive_file, get_or_generate_credentials
 from svglib.svglib import svg2rlg
 from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.contrib.staticfiles import finders
@@ -393,7 +394,10 @@ def createacontract(request):
             for school in School.objects.all():
                 if school in student.school_set.all():
                     for classe in student.class_set.all():
-                        chains += [(Chain.objects.get(name="{0}-{1}-{2}-{3}".format(school.school_name, classe.enrollment_class_year, classe.class_unit, classe.class_name)).id)]
+                        try:
+                            chains += [(Chain.objects.get(name="{0}-{1}-{2}-{3}".format(school.school_name, classe.enrollment_class_year, classe.class_unit, classe.class_name)).id)]
+                        except:
+                            pass
         form.fields["chain"].queryset = Chain.objects.filter(id__in=chains)
         if request.method == 'POST':
             if form.is_valid():
@@ -632,13 +636,19 @@ def createacontract(request):
                 for school in School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id):
                     if school in student.school_set.all():
                         for classe in student.class_set.all():
-                            chains += [(Chain.objects.get(name="{0}-{1}-{2}-{3}".format(school.school_name, classe.enrollment_class_year, classe.class_unit, classe.class_name)).id)]
+                            try:
+                                chains += [(Chain.objects.get(name="{0}-{1}-{2}-{3}".format(school.school_name, classe.enrollment_class_year, classe.class_unit, classe.class_name)).id)]
+                            except:
+                                pass
         elif Supervisor.objects.filter(profile=request.user).count()>=1:
             if student:
                 for school in School.objects.filter(Q(adminorsupervisor=Supervisor.objects.get(profile=request.user))|Q(adminorsupervisor_2=Supervisor.objects.get(profile=request.user))):
                     if school in student.school_set.all():
                         for classe in student.class_set.all():
-                            chains += [(Chain.objects.get(name="{0}-{1}-{2}-{3}".format(school.school_name, classe.enrollment_class_year, classe.class_unit, classe.class_name)).id)]
+                            try:
+                                chains += [(Chain.objects.get(name="{0}-{1}-{2}-{3}".format(school.school_name, classe.enrollment_class_year, classe.class_unit, classe.class_name)).id)]
+                            except:
+                                pass
         form.fields["chain"].queryset = Chain.objects.filter(id__in=chains)
         if request.method == 'POST':
             if form.is_valid():
@@ -1194,8 +1204,10 @@ def seemycontracts(request):
 
 @login_required
 def select_student_to_contract(request):
+    school = None
+    classe = None
     if request.user.is_superuser:
-        students = Student.objects.all().order_by('name')
+        students = Student.objects.exclude(school=None).order_by('name')
         schools = School.objects.all().order_by('school_name')
         if request.method == 'POST':
             try:
@@ -1218,6 +1230,9 @@ def select_student_to_contract(request):
                 request.session['selected_user'] = selected_user
                 if ',' not in selected_user:
                     student = Student.objects.get(student_id=selected_user)
+                    if student.class_set.all().count()<1:
+                        messages.warning(request, 'O aluno selecionado não está associado a nenhuma turma')
+                        return redirect('/contracts/select_student_to_contract')
                     if student.needs_parent:
                         if not student.first_parent or not student.second_parent:
                             messages.warning(request, 'O estudante não tem pelo menos um dos responsáveis necessários associados a ele!')
@@ -1225,6 +1240,9 @@ def select_student_to_contract(request):
                 else:
                     for student_id in selected_user.split(','):
                         student = Student.objects.get(student_id=student_id)
+                        if student.class_set.all().count()<1:
+                            messages.warning(request, 'O aluno selecionado não está associado a nenhuma turma')
+                            return redirect('/contracts/select_student_to_contract')
                         if student.needs_parent:
                             if not student.first_parent or not student.second_parent:
                                 messages.warning(request, 'Um dos estudantes selecionados não tem pelo menos um dos responsáveis necessários associados a ele!')
@@ -1288,6 +1306,9 @@ def select_student_to_contract(request):
                 request.session['selected_user'] = selected_user
                 if ',' not in selected_user:
                     student = Student.objects.get(student_id=selected_user)
+                    if student.class_set.all().count()<1:
+                        messages.warning(request, 'O aluno selecionado não está associado a nenhuma turma')
+                        return redirect('/contracts/select_student_to_contract')
                     if student.needs_parent:
                         if not student.first_parent or not student.second_parent:
                             messages.warning(request, 'O estudante não tem pelo menos um dos responsáveis necessários associados a ele!')
@@ -1295,6 +1316,9 @@ def select_student_to_contract(request):
                 else:
                     for student_id in selected_user.split(','):
                         student = Student.objects.get(student_id=student_id)
+                        if student.class_set.all().count()<1:
+                            messages.warning(request, 'O aluno selecionado não está associado a nenhuma turma')
+                            return redirect('/contracts/select_student_to_contract')
                         if student.needs_parent:
                             if not student.first_parent or not student.second_parent:
                                 messages.warning(request, 'Um dos estudantes selecionados não tem pelo menos um dos responsáveis necessários associados a ele!')
@@ -2227,3 +2251,30 @@ def redirect_to_slm_link(request, contract_id):
         else:
             return HttpResponse('Não foi encontrada url' + json.dumps(generate_slm_link(school, student)))
     return redirect(url)
+
+@login_required
+def upload_contract_file_to_drive(request, contract_id, type_of_file):
+    try:
+        contract = Contract.objects.get(contract_id=contract_id)
+        if Head.objects.filter(profile=request.user).count()>=1 or request.user.is_superuser:
+            if type_of_file == 'contract':
+                upload_drive_file(request, request.user, contract.pdf.name, get_pdf_filepath(contract), 'application/pdf')
+            elif type_of_file == 'terms_1':
+                upload_drive_file(request, request.user, contract.terms_of_contract.name, get_terms_of_contract_1_filepath(contract), 'application/pdf')
+            elif type_of_file == 'terms_2':
+                upload_drive_file(request, request.user, contract.terms_of_contract_2.name, get_terms_of_contract_2_filepath(contract), 'application/pdf')
+            messages.success(request, 'Contrato enviado para seu drive com sucesso.')
+        else:
+            messages.error(request, 'Você não tem permissão para enviar contratos para o seu drive.')
+        return redirect('/contracts/all')
+    except Exception as e:
+        return redirect('/contracts/authenticated/')
+
+def authenticated_google(request):
+    if request.GET:
+        authorization_url = get_or_generate_credentials(request, request.user, 'https://'+request.get_host(), 'https://'+request.get_host()+request.get_full_path())
+    else:
+        authorization_url = get_or_generate_credentials(request, request.user, 'https://'+request.get_host())
+    if not authorization_url:
+        messages.success(request, 'Agora você pode começar a mandar seus arquivos pro servidor')
+    return render(request, 'contract/authenticated.html', {'authorization_url':authorization_url})

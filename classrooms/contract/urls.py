@@ -32,4 +32,6 @@ urlpatterns = [
     path('set_contract_paid/<int:contract_id>', views.set_contract_paid, name='set_contract_paid'),
     path('directors/ajax', views.directors_choices_ajax, name='directors_choices_ajax'),
     path('receive_maple_result/', views.receive_maple_result, name='receive_maple_result'),
+    path('authenticated/', views.authenticated_google, name='authenticated'),
+    path('upload_contract_file_to_drive/<int:contract_id>/<type_of_file>', views.upload_contract_file_to_drive, name='upload_contract_file_to_drive'),
 ]
