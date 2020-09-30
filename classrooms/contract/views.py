@@ -1237,6 +1237,9 @@ def select_student_to_contract(request):
                 else:
                     for student_id in selected_user.split(','):
                         student = Student.objects.get(student_id=student_id)
+                        if student.class_set.all().count()<1:
+                            messages.warning(request, 'O aluno selecionado não está associado a nenhuma turma')
+                            return redirect('/contracts/select_student_to_contract')
                         if student.needs_parent:
                             if not student.first_parent or not student.second_parent:
                                 messages.warning(request, 'Um dos estudantes selecionados não tem pelo menos um dos responsáveis necessários associados a ele!')
@@ -1307,6 +1310,9 @@ def select_student_to_contract(request):
                 else:
                     for student_id in selected_user.split(','):
                         student = Student.objects.get(student_id=student_id)
+                        if student.class_set.all().count()<1:
+                            messages.warning(request, 'O aluno selecionado não está associado a nenhuma turma')
+                            return redirect('/contracts/select_student_to_contract')
                         if student.needs_parent:
                             if not student.first_parent or not student.second_parent:
                                 messages.warning(request, 'Um dos estudantes selecionados não tem pelo menos um dos responsáveis necessários associados a ele!')
