@@ -1204,6 +1204,8 @@ def seemycontracts(request):
 
 @login_required
 def select_student_to_contract(request):
+    school = None
+    classe = None
     if request.user.is_superuser:
         students = Student.objects.all().order_by('name')
         schools = School.objects.all().order_by('school_name')
