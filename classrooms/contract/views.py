@@ -1207,7 +1207,7 @@ def select_student_to_contract(request):
     school = None
     classe = None
     if request.user.is_superuser:
-        students = Student.objects.all().order_by('name')
+        students = Student.objects.exclude(school=None).order_by('name')
         schools = School.objects.all().order_by('school_name')
         if request.method == 'POST':
             try:
