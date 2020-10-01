@@ -2241,7 +2241,14 @@ def receive_maple_result(request):
 def redirect_to_slm_link(request, contract_id):
     contract = Contract.objects.get(contract_id=contract_id)
     school = School.objects.get(chains__id__exact=contract.chain.id)
-    student = school.students.get(name=contract.student_name)
+    try:
+        student = school.students.get(name=contract.student_name)
+    except:
+        try:
+            student = school.students.get(student_id=contract.student_id)
+        except:
+            messages.error(request, 'Estudante não entrado')
+            student = None
     try:
         url = generate_slm_link(school, student)['url']
     except Exception as e:
