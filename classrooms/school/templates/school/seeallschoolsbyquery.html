@@ -8,7 +8,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-9">
-                <div class="card w-50">
+                <div class="card w-70">
                     <div class="card-header">
                         <h4 class="card-title">Pesquisar Escolas</h4>
                     </div>
@@ -255,6 +255,11 @@
         });
         $(document).on("change", "#initial_date", function () {
             document.getElementById("final_date").min = this.value
+        });
+        $(document).ready(function(){      
+            jQuery(window).on('resize', function (){
+                $("#select_form_school_chosen").attr('style','width: 100%');
+            });
         });
     </script>
     {% endblock %}
