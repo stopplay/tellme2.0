@@ -34,4 +34,5 @@ urlpatterns = [
     path('receive_maple_result/', views.receive_maple_result, name='receive_maple_result'),
     path('authenticated/', views.authenticated_google, name='authenticated'),
     path('upload_contract_file_to_drive/<int:contract_id>/<type_of_file>', views.upload_contract_file_to_drive, name='upload_contract_file_to_drive'),
+    path('extend_expire_date/<int:contract_id>', views.extend_expire_date, name='extend_expire_date'),
 ]

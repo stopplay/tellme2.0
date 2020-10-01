@@ -19,7 +19,6 @@ from rest_framework.status import (
 from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from django.views.decorators.csrf import csrf_exempt
-import datetime
 from block.utils import SymmetricEncryption, JsonApi, EncryptionApi
 from block.models import *
 from block.forms import *
@@ -48,7 +47,6 @@ from school_users.views import current_user, get_data
 from django.contrib import messages
 import pdb
 from . import tasks
-import datetime
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.views.static import serve
@@ -64,6 +62,7 @@ from django.db.models import Q
 import operator
 from functools import reduce
 from .utils import *
+import datetime
 
 try:
     from StringIO import StringIO
@@ -2278,3 +2277,15 @@ def authenticated_google(request):
     if not authorization_url:
         messages.success(request, 'Agora você pode começar a mandar seus arquivos pro servidor')
     return render(request, 'contract/authenticated.html', {'authorization_url':authorization_url})
+
+def extend_expire_date(request, contract_id):
+    try:
+        contract = Contract.objects.get(contract_id=contract_id)
+        contract.expiration = contract.expiration + datetime.timedelta(days=7)
+        contract.is_expired = False
+        contract.save()
+        messages.success(request, 'Prazo de expiração do contrato extendido')
+        return redirect('/contracts/all')
+    except Exception as e:
+        messages.error(request, 'Contrato não encontrado')
+        return redirect('/contracts/all')

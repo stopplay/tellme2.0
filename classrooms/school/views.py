@@ -107,6 +107,41 @@ def seeallschools(request):
 	return redirect('/contracts/all')
 
 @login_required
+def seeallschoolsbyquery(request):
+	current_school = None
+	selected_school = None
+	if request.user.is_superuser:
+		schools = School.objects.all().order_by('school_name')
+		if request.method == 'POST':
+			selected_school = request.POST.get('selected_school' or None)
+			try:
+				current_school = School.objects.get(school_id=selected_school)
+			except:
+				messages.warning(request, 'Escola não selecionada')
+		return render(request, 'school/seeallschoolsbyquery.html', {'schools':schools, 'current_school':current_school, 'selected_school':selected_school})
+	elif Head.objects.filter(profile=request.user).count()>=1:
+		is_supervisor = True
+		schools = School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id).order_by('school_name')
+		if request.method == 'POST':
+			selected_school = request.POST.get('selected_school' or None)
+			try:
+				current_school = School.objects.get(school_id=selected_school)
+			except:
+				messages.warning(request, 'Escola não selecionada')
+		return render(request, 'school/seeallschoolsbyquery.html', {'schools':schools, 'current_school':current_school, 'selected_school':selected_school, 'is_supervisor':is_supervisor})
+	elif Supervisor.objects.filter(profile=request.user).count()>=1:
+		is_supervisor = True
+		schools = School.objects.filter(Q(adminorsupervisor=Supervisor.objects.get(profile=request.user))|Q(adminorsupervisor_2=Supervisor.objects.get(profile=request.user))).order_by('school_name')
+		if request.method == 'POST':
+			selected_school = request.POST.get('selected_school' or None)
+			try:
+				current_school = School.objects.get(school_id=selected_school)
+			except:
+				messages.warning(request, 'Escola não selecionada')
+		return render(request, 'school/seeallschoolsbyquery.html', {'schools':schools, 'current_school':current_school, 'selected_school':selected_school, 'is_supervisor':is_supervisor})
+	return redirect('/contracts/all')
+
+@login_required
 def seeschooldetails(request, school_id = None):
 	if request.user.is_superuser:
 		school = School.objects.get(school_id=school_id)
