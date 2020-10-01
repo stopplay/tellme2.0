@@ -1,0 +1,260 @@
+{% extends 'base.html'%}
+
+{% block title %} Ver Todas as Escolas {% endblock %}
+
+{% block content %}
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="card w-50">
+                    <div class="card-header">
+                        <h4 class="card-title">Pesquisar Escolas</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-11 pr-1">
+                                <div class="form-group">
+                                    <form method="POST" enctype="multipart/form-data"> {% csrf_token %}
+
+                                        <div class="clearfix"></div>
+                                        <!-- <div class="labelandform">
+										<p><label>Selecione a cadeia que você deseja pesquisar:</label></p>
+										<select class="custom-select chosen-select" id="select_form">
+											<option id="" value="" selected>--------</option>
+											{% for chain in chains_to_select %}
+												<option value="{{ chain.id }}">{{ chain.name }}</option>
+											{% endfor %}
+										</select>
+									</div> -->
+                                        <div class="labelandform">
+                                            <p><label>Selecione a escola que você deseja pesquisar:</label></p>
+                                            <select class="custom-select chosen-select" id="select_form_school">
+                                                <option id="" value="0" selected>--------</option>
+                                                {% for school in schools %}
+                                                <option value="{{ school.school_id }}">{{ school.school_name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <input type="hidden" id="selected_school" name="selected_school" value="0">
+                                        Contratos de <input type="date" id="initial_date" name="initial_date">
+                                        a <input type="date" id="final_date" name="final_date">
+                                        <div style="margin-top: 10px"><button class="btn btn-info btn-fill pull-left"
+                                                type="submit"
+                                                style="background-color: #213f99; border-color: #213f99">Pesquisar
+                                                Escola</button>
+                                            <!-- <button class="btn btn-info btn-fill pull-right" id="generate_password" style="background-color: #213f99; border-color: #213f99" onclick="generate_password()">
+															Gerar Senha</button> -->
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {% if current_school %}
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card strpied-tabled-with-hover">
+
+                        <div class="card-header ">
+                            <h4 class="card-title">Escola(s)</h4>
+                        </div>
+
+                        <div class="card-body table-full-width table-responsive">
+                            <table class="table table-hover table-striped" id="schoolstable">
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>
+                                            Contratos <br>
+                                            Assinados
+                                        </th>
+                                        <!-- <th>Contratos Não Assinados</th> -->
+                                        <th>
+                                            Número de <br>
+                                            Alunos <br>
+                                            Associados
+                                        </th>
+                                        <th>
+                                            Número de Pais/Mães <br>
+                                            Associados
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th>{{ current_school.school_name }}
+
+                                            <div class="dropdown show">
+                                                <a class="btn btn-danger dropdown-toggle btn-sm" href="#" role="button"
+                                                    id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                                                    aria-expanded="false">
+                                                    Ações
+                                                </a>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                    <a class="dropdown-item"
+                                                        href="{% url 'school:add_class' current_school.school_id %}"
+                                                        data-baloon="Remove this item from the cart"
+                                                        class="text-danger">Adicionar Turma à Escola</a>
+                                                    <a class="dropdown-item"
+                                                        href="{% url 'school:set_witnesses' current_school.school_id %}"
+                                                        data-baloon="Remove this item from the cart"
+                                                        class="text-danger">Selecionar Testemunhas Para Escola</a>
+                                                    <!-- <a class="dropdown-item" href="{% url 'school:add_students_to_school' current_school.school_id %}"
+                          data-baloon="Remove this item from the cart" class="text-danger">Selecionar Estudantes Para
+                          Escola</a> -->
+                                                    <!-- <a class="dropdown-item"href="{% url 'school:add_teachers_to_school' current_school.school_id %}" data-baloon="Remove this item from the cart" class="text-danger">Selecionar Professores Para Escola</a> -->
+                                                    <a class="dropdown-item"
+                                                        href="{% url 'school:update_school' current_school.school_id %}"
+                                                        data-baloon="Remove this item from the cart"
+                                                        class="text-danger">Atualizar Escola</a>
+                                                    {% if request.user.is_superuser %}
+                                                    <a class="dropdown-item"
+                                                        href="{% url 'school:delete_school' current_school.school_id %}"
+                                                        data-baloon="Remove this item from the cart"
+                                                        class="text-danger">Deletar Escola</a>
+                                                    {% endif %}
+                                                    {% if request.user.is_superuser or is_supervisor %}
+                                                    <a class="dropdown-item"
+                                                        href="{% url 'school:seeschooldetails' current_school.school_id %}"
+                                                        data-baloon="Remove this item from the cart"
+                                                        class="text-danger">Ver Detalhes da Escola</a>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </th>
+
+                                        <th>{{ current_school.quantity_of_contracts_signed }}/{{ current_school.quantity_of_contracts_total }}
+                                        </th>
+                                        <!-- <th>{{ school.quantity_of_contracts_not_signed }}/{{ school.quantity_of_contracts_total }}</th> -->
+                                        <th>{{ current_school.quantity_of_students_associated }}</th>
+                                        <th>{{ current_school.quantity_of_parents_associated }}</th>
+
+                                        {% if current_school.classes %}
+                                        <td>
+
+                                            <div class="flex-column-alignment" style="width: 100%">
+                                                {% for class in current_school.classes.all|dictsort:"class_id" %}
+
+                                                <div class="row width-full margin-bottom-5">
+                                                    <div class="col-md-6">
+                                                        <label>{{ class.class_name }},
+                                                            {{ class.enrollment_class_year }}</label>
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <div class="dropdown show">
+                                                            <a class="btn btn-danger dropdown-toggle btn-sm" href=""
+                                                                role="button" id="dropdownMenuLink"
+                                                                data-toggle="dropdown" aria-haspopup="true"
+                                                                aria-expanded="false">
+                                                                Ações
+                                                            </a>
+
+                                                            <div class="dropdown-menu"
+                                                                aria-labelledby="dropdownMenuLink">
+                                                                <a class="dropdown-item"
+                                                                    href="{% url 'school:verifyvalidchain' class.class_id %}"
+                                                                    data-baloon="Remove this item from the cart"
+                                                                    class="text-danger">Verificar Validade do Blockchain
+                                                                    Para a Turma</a>
+                                                                <!-- <a class="dropdown-item" href="{% url 'school:add_student_to_class' class.class_id %}"
+                              data-baloon="Remove this item from the cart" class="text-danger">Selecionar Estudantes Para
+                              Turma</a> -->
+                                                                <!-- <a class="dropdown-item" href="{% url 'school:add_teacher_to_class' class.class_id %}" data-baloon="Remove this item from the cart" class="text-danger">Selecionar Professores Para Turma</a> -->
+                                                                <a class="dropdown-item"
+                                                                    href="{% url 'school:update_class' class.class_id %}"
+                                                                    data-baloon="Remove this item from the cart"
+                                                                    class="text-danger">Atualizar Turma</a>
+                                                                <a class="dropdown-item"
+                                                                    href="{% url 'school:delete_class' class.class_id %}"
+                                                                    data-baloon="Remove this item from the cart"
+                                                                    class="text-danger">Deletar Turma</a>
+                                                                <a class="dropdown-item"
+                                                                    href="{% url 'school:seeclassbyid' class.class_id %}"
+                                                                    data-baloon="Remove this item from the cart"
+                                                                    class="text-danger">Ver Detalhes da Turma</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                                {% endfor %}
+                                            </div>
+                                        </td>
+                                        {% endif %}
+                                        {% if current_school.chains %}
+                                        <td style="width: 100%;">
+                                            <div class="flex-column-alignment">
+                                                {% for chain in current_school.chains.all|dictsort:"id" %}
+                                                <div class="row width-full margin-bottom-5">
+
+                                                    <div class="col-md-6">
+                                                        <label>{{ chain.name }}</label>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <a class="btn btn-secondary btn-sm"
+                                                            href="{% url 'school:seechainbyid' chain.id %}"
+                                                            role="button" data-baloon="Remove this item from the cart"
+                                                            class="text-danger">Ver Blockchain</a>
+                                                    </div>
+
+                                                </div>
+
+                                                {% endfor %}
+                                            </div>
+
+                                        </td>
+                                        {% endif %}
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {% else %}
+    {% if selected_school %}
+    <h4>Não há nenhum resultado para a pesquisa feita</h4>
+    {% endif %}
+    {% endif %}
+
+    <script>
+        $(document).ready(function () {
+            $('#select_form_school').on('change', function () {
+                var selectValor = $(this).val();
+                if (selectValor == '') {
+                    document.getElementById('selected_school').value = '0'
+                }
+                else {
+                    document.getElementById('selected_school').value = selectValor
+                }
+            });
+        });
+        $(document).ready(function () {
+            var dt = $('#schoolstable').DataTable();
+            $(window).on('resize', function () {
+                $('#schoolstable').DataTable();
+            })
+        });
+        $(document).on("change", "#initial_date", function () {
+            document.getElementById("final_date").min = this.value
+        });
+    </script>
+    {% endblock %}
