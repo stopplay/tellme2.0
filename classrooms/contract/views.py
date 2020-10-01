@@ -2286,6 +2286,7 @@ def extend_expire_date(request, contract_id):
         contract.save()
         messages.success(request, 'Prazo de expiração do contrato extendido')
         return redirect('/contracts/all')
-    except:
+    except Exception as e:
+        print (str(e))
         messages.error(request, 'Contrato não encontrado')
         return redirect('/contracts/all')
