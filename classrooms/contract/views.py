@@ -19,7 +19,6 @@ from rest_framework.status import (
 from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from django.views.decorators.csrf import csrf_exempt
-import datetime
 from block.utils import SymmetricEncryption, JsonApi, EncryptionApi
 from block.models import *
 from block.forms import *
@@ -63,6 +62,7 @@ from django.db.models import Q
 import operator
 from functools import reduce
 from .utils import *
+import datetime
 
 try:
     from StringIO import StringIO
@@ -2287,6 +2287,5 @@ def extend_expire_date(request, contract_id):
         messages.success(request, 'Prazo de expiração do contrato extendido')
         return redirect('/contracts/all')
     except Exception as e:
-        print (str(e))
         messages.error(request, 'Contrato não encontrado')
         return redirect('/contracts/all')
