@@ -386,7 +386,13 @@
                                   {% endif %}
                                 </div>
                               </div>
-
+                              <div class="row" >                        
+                                <div class="col-md-12">
+                                  <a  class="btn btn-primary btn-block w-100" href="{% url 'contracts:extend_expire_date' contract.contract_id %}" data-baloon="Remove this item from the cart">
+                                      Extender Prazo
+                                  </a>
+                                </div>
+                              </div>
                               <div class="row">
                                 <div class="col-md-12">
                                   <a class="btn btn-danger btn-block" onclick="changeYesLink('{% url 'contracts:delete_contract' contract.contract_id %}')" href="#" data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal" data-target="#delete-contract-modal">
@@ -515,7 +521,6 @@
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                           <a class="dropdown-item" onclick="changeYesLink('{% url 'contracts:delete_contract' contract.contract_id %}')" href="#" data-baloon="Remove this item from the cart" data-toggle="modal" data-target="#delete-contract-modal">Deletar Contrato</a>
                                           <a class="dropdown-item" href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart">Ver Detalhes</a>
-                    
                                         </div>
                                       </div>
                                     {% endif %}
@@ -527,7 +532,15 @@
                                 </div>
                               </div>
                               {% endif %}
-                          
+                              {% if is_supervisor %}
+                                <div class="row" >                        
+                                  <div class="col-md-12">
+                                    <a  class="btn btn-primary btn-block w-100" href="{% url 'contracts:extend_expire_date' contract.contract_id %}" data-baloon="Remove this item from the cart">
+                                        Extender Prazo
+                                    </a>
+                                  </div>
+                                </div>
+                              {% endif %}
                               {% if contract.pdf %}
                                 <div class="row" >                        
                                   <div class="col-md-12">
