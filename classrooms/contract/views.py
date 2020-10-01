@@ -2288,3 +2288,4 @@ def extend_expire_date(request, contract_id):
         return redirect('/contracts/all')
     except:
         messages.error(request, 'Contrato não encontrado')
+        return redirect('/contracts/all')
