@@ -307,6 +307,17 @@
             });
         });
         $(document).ready(function () {
+			$('#select_form_class').on('change', function () {
+				var selectValor = $(this).val();
+				if (selectValor == '') {
+					document.getElementById('selected_class').value = '0'
+				}
+				else {
+					document.getElementById('selected_class').value = selectValor
+				}
+			});
+		});
+        $(document).ready(function () {
             var dt = $('#schoolstable').DataTable();
             $(window).on('resize', function () {
                 $('#schoolstable').DataTable();
