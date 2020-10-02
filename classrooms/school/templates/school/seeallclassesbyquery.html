@@ -139,10 +139,10 @@
                                                                 data-baloon="Remove this item from the cart"
                                                                 class="text-danger">Verificar Validade do Blockchain
                                                                 Para a Turma</a>
-                                                            <!-- <a class="dropdown-item" href="{% url 'school:add_student_to_class' class.class_id %}"
+                                                            <!-- <a class="dropdown-item" href="{% url 'school:add_student_to_class' current_class.class_id %}"
                                                     data-baloon="Remove this item from the cart" class="text-danger">Selecionar Estudantes Para
                                                     Turma</a> -->
-                                                            <!-- <a class="dropdown-item" href="{% url 'school:add_teacher_to_class' class.class_id %}" data-baloon="Remove this item from the cart" class="text-danger">Selecionar Professores Para Turma</a> -->
+                                                            <!-- <a class="dropdown-item" href="{% url 'school:add_teacher_to_class' current_class.class_id %}" data-baloon="Remove this item from the cart" class="text-danger">Selecionar Professores Para Turma</a> -->
                                                             <a class="dropdown-item"
                                                                 href="{% url 'school:update_class' current_class.class_id %}"
                                                                 data-baloon="Remove this item from the cart"
