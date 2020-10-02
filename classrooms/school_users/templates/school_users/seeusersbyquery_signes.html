@@ -28,7 +28,7 @@
 
 										<div class="clearfix"></div>
 										<div class="row">
-											<div class="labelandform col-md-4">
+											<div class="labelandform col-md-6">
 												<p><label>Selecione a Escola:</label></p>
 												<select class="custom-select chosen-select" id="select_form_school">
 													<option id="" value="" selected>--------</option>
@@ -38,7 +38,7 @@
 													{% endfor %}
 												</select>
 											</div>
-											<div class="labelandform col-md-4">
+											<div class="labelandform col-md-6">
 												<p><label>Selecione a Turma:</label></p>
 												<select class="custom-select chosen-select" id="select_form_class">
 													<option id="" value="0" selected>--------</option>
@@ -46,8 +46,10 @@
 											</div>
 											<input type="hidden" id="selected_school" name="selected_school">
 											<input type="hidden" id="selected_class" name="selected_class">
-											<div class="labelandform col-md-4">
-												<p><label>Selecionar Tipo de Usuário:</label></p>
+										</div>
+										<div class="row">
+											<div class="labelandform col-md-12">
+												<p><label>Tipo de Usuário:</label></p>
 												<select class="custom-select chosen-select" id="select_form">
 													<option id="" value="" selected>--------</option>
 													<option value="parent">Responsáveis</option>
