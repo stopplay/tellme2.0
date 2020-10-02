@@ -92,6 +92,34 @@ class Class(models.Model):
 	def __str__(self):
 		return self.class_name
 
+	@property
+	def registered_contracts(self):
+		school = self.school_set.all().first()
+		chain = school.chains.get(name="{0}-{1}-{2}-{3}".format(school.school_name, self.enrollment_class_year, self.class_unit, self.class_name))
+		registered_contracts = Contract.objects.filter(chain=chain).count()
+		return registered_contracts
+
+	@property
+	def complete_contracts(self):
+		school = self.school_set.all().first()
+		chain = school.chains.get(name="{0}-{1}-{2}-{3}".format(school.school_name, self.enrollment_class_year, self.class_unit, self.class_name))
+		registered_contracts = Contract.objects.filter(chain=chain, all_signed=True).count()
+		return registered_contracts
+
+	@property
+	def quantity_of_students_associated(self):
+		return self.students.all().count()
+
+	@property
+	def quantity_of_parents_associated(self):
+		count = 0
+		for student in self.students.all():
+			if student.first_parent:
+				count+=1
+			if student.second_parent:
+				count+=1
+		return count
+
 	def preliminary_students(self):
 		"""Remember to do this as well later, confirm student"""
 		pass

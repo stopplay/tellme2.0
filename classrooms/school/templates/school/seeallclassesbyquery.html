@@ -1,0 +1,330 @@
+{% extends 'base.html'%}
+
+{% block title %} Ver Todas as Turmas {% endblock %}
+
+{% block content %}
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="card w-70">
+                    <div class="card-header">
+                        <h4 class="card-title">Pesquisar Turmas</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-11 pr-1">
+                                <div class="form-group">
+                                    <form id="myForm" method="POST" enctype="multipart/form-data"
+                                        data-urlclasses="{% url 'users:classes_choices_ajax' %}"> {% csrf_token %}
+
+                                        <div class="clearfix"></div>
+                                        <!-- <div class="labelandform">
+										<p><label>Selecione a cadeia que você deseja pesquisar:</label></p>
+										<select class="custom-select chosen-select" id="select_form">
+											<option id="" value="" selected>--------</option>
+											{% for chain in chains_to_select %}
+												<option value="{{ chain.id }}">{{ chain.name }}</option>
+											{% endfor %}
+										</select>
+									</div> -->
+                                        <div class="labelandform">
+                                            <p><label>Selecione a Escola:</label></p>
+                                            <select class="custom-select chosen-select" id="select_form_school">
+                                                <option id="" value="0" selected>--------</option>
+                                                {% for school in schools %}
+                                                <option value="{{ school.school_id }}">{{ school.school_name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="labelandform">
+                                            <p><label>Selecione a Turma:</label></p>
+                                            <select class="custom-select" id="select_form_class">
+                                                <option id="" value="0" selected>--------</option>
+                                            </select>
+                                        </div>
+                                        <input type="hidden" id="selected_school" name="selected_school">
+                                        <input type="hidden" id="selected_class" name="selected_class">
+                                        <div style="margin-top: 10px"><button class="btn btn-info btn-fill pull-left"
+                                                type="submit"
+                                                style="background-color: #213f99; border-color: #213f99">Pesquisar
+                                                Turma</button>
+                                            <!-- <button class="btn btn-info btn-fill pull-right" id="generate_password" style="background-color: #213f99; border-color: #213f99" onclick="generate_password()">
+															Gerar Senha</button> -->
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {% if current_school and current_class %}
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card strpied-tabled-with-hover">
+
+                        <div class="card-header ">
+                            <h4 class="card-title">Turma(s)</h4>
+                        </div>
+
+                        <div class="card-body table-full-width table-responsive">
+                            <table class="table table-hover table-striped" id="schoolstable">
+                                <thead>
+                                    <tr>
+                                        <th>Escola</th>
+                                        <th>
+                                            Contratos registrados
+                                        </th>
+                                        <th>
+                                            Contratos assinados <br>
+                                            com processo completo
+                                        </th>
+                                        <!-- <th>Contratos Não Assinados</th> -->
+                                        <th>
+                                            Número de <br>
+                                            Alunos <br>
+                                            Cadastrados
+                                        </th>
+                                        <th>
+                                            Número de Assinantes <br>
+                                            Cadastrados
+                                        </th>
+                                        <th>
+                                            Turmas
+                                        </th>
+                                        <th>
+                                            Ações
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th>{{ current_school.school_name }}
+                                        </th>
+
+                                        <th>
+                                            {{ current_class.registered_contracts }}
+                                        </th>
+                                        <th>
+                                            {{ current_class.registered_contracts }}
+                                        </th>
+                                        <!-- <th>{{ school.quantity_of_contracts_not_signed }}/{{ school.quantity_of_contracts_total }}</th> -->
+                                        <th>{{ current_class.quantity_of_students_associated }}</th>
+                                        <th>{{ current_class.quantity_of_parents_associated }}</th>
+                                        <td>
+                                            <div class="row width-full margin-bottom-5">
+                                                <div class="col-md-6">
+                                                    <label>{{ current_class.class_name }},
+                                                        {{ current_class.enrollment_class_year }}</label>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="dropdown show">
+                                                        <a class="btn btn-danger dropdown-toggle btn-sm" href=""
+                                                            role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                                                            aria-haspopup="true" aria-expanded="false">
+                                                            Ações
+                                                        </a>
+
+                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                            <a class="dropdown-item"
+                                                                href="{% url 'school:verifyvalidchain' current_class.class_id %}"
+                                                                data-baloon="Remove this item from the cart"
+                                                                class="text-danger">Verificar Validade do Blockchain
+                                                                Para a Turma</a>
+                                                            <!-- <a class="dropdown-item" href="{% url 'school:add_student_to_class' class.class_id %}"
+                                                    data-baloon="Remove this item from the cart" class="text-danger">Selecionar Estudantes Para
+                                                    Turma</a> -->
+                                                            <!-- <a class="dropdown-item" href="{% url 'school:add_teacher_to_class' class.class_id %}" data-baloon="Remove this item from the cart" class="text-danger">Selecionar Professores Para Turma</a> -->
+                                                            <a class="dropdown-item"
+                                                                href="{% url 'school:update_class' current_class.class_id %}"
+                                                                data-baloon="Remove this item from the cart"
+                                                                class="text-danger">Atualizar Turma</a>
+                                                            <a class="dropdown-item"
+                                                                href="{% url 'school:delete_class' current_class.class_id %}"
+                                                                data-baloon="Remove this item from the cart"
+                                                                class="text-danger">Deletar Turma</a>
+                                                            <a class="dropdown-item"
+                                                                href="{% url 'school:seeclassbyid' current_class.class_id %}"
+                                                                data-baloon="Remove this item from the cart"
+                                                                class="text-danger">Ver Detalhes da Turma</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {% elif current_school %}
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card strpied-tabled-with-hover">
+
+                        <div class="card-header ">
+                            <h4 class="card-title">Turma(s)</h4>
+                        </div>
+
+                        <div class="card-body table-full-width table-responsive">
+                            <table class="table table-hover table-striped" id="schoolstable">
+                                <thead>
+                                    <tr>
+                                        <th>Escola</th>
+                                        <th>
+                                            Contratos registrados
+                                        </th>
+                                        <th>
+                                            Contratos assinados <br>
+                                            com processo completo
+                                        </th>
+                                        <!-- <th>Contratos Não Assinados</th> -->
+                                        <th>
+                                            Número de <br>
+                                            Alunos <br>
+                                            Cadastrados
+                                        </th>
+                                        <th>
+                                            Número de Assinantes <br>
+                                            Cadastrados
+                                        </th>
+                                        <th>
+                                            Turmas
+                                        </th>
+                                        <th>
+                                            Ações
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for class in current_school.classes.all %}
+                                    <tr>
+                                        <th>{{ current_school.school_name }}
+                                        </th>
+
+                                        <th>
+                                            {{ class.registered_contracts }}
+                                        </th>
+                                        <th>
+                                            {{ class.registered_contracts }}
+                                        </th>
+                                        <!-- <th>{{ school.quantity_of_contracts_not_signed }}/{{ school.quantity_of_contracts_total }}</th> -->
+                                        <th>{{ class.quantity_of_students_associated }}</th>
+                                        <th>{{ class.quantity_of_parents_associated }}</th>
+                                        <td>
+                                            <div class="row width-full margin-bottom-5">
+                                                <div class="col-md-6">
+                                                    <label>{{ class.class_name }},
+                                                        {{ class.enrollment_class_year }}</label>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="dropdown show">
+                                                        <a class="btn btn-danger dropdown-toggle btn-sm" href=""
+                                                            role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                                                            aria-haspopup="true" aria-expanded="false">
+                                                            Ações
+                                                        </a>
+
+                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                            <a class="dropdown-item"
+                                                                href="{% url 'school:verifyvalidchain' class.class_id %}"
+                                                                data-baloon="Remove this item from the cart"
+                                                                class="text-danger">Verificar Validade do Blockchain
+                                                                Para a Turma</a>
+                                                            <!-- <a class="dropdown-item" href="{% url 'school:add_student_to_class' class.class_id %}"
+                                                    data-baloon="Remove this item from the cart" class="text-danger">Selecionar Estudantes Para
+                                                    Turma</a> -->
+                                                            <!-- <a class="dropdown-item" href="{% url 'school:add_teacher_to_class' class.class_id %}" data-baloon="Remove this item from the cart" class="text-danger">Selecionar Professores Para Turma</a> -->
+                                                            <a class="dropdown-item"
+                                                                href="{% url 'school:update_class' class.class_id %}"
+                                                                data-baloon="Remove this item from the cart"
+                                                                class="text-danger">Atualizar Turma</a>
+                                                            <a class="dropdown-item"
+                                                                href="{% url 'school:delete_class' class.class_id %}"
+                                                                data-baloon="Remove this item from the cart"
+                                                                class="text-danger">Deletar Turma</a>
+                                                            <a class="dropdown-item"
+                                                                href="{% url 'school:seeclassbyid' class.class_id %}"
+                                                                data-baloon="Remove this item from the cart"
+                                                                class="text-danger">Ver Detalhes da Turma</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {% else %}
+    {% if selected_school or selected_class %}
+    <h4>Não há nenhum resultado para a pesquisa feita</h4>
+    {% endif %}
+    {% endif %}
+
+    <script>
+        $(document).ready(function () {
+            $('#select_form_school').on('change', function () {
+                let urlClasses = $('#myForm').data('urlclasses')
+                var selectValor = $(this).val();
+                $.ajax({
+                    url: urlClasses,
+                    data: {
+                        id: selectValor
+                    },
+                    success: function (response) {
+                        $('#select_form_class').html(response)
+                    }
+                })
+                if (selectValor == '') {
+                    document.getElementById('selected_school').value = '0'
+                }
+                else {
+                    document.getElementById('selected_school').value = selectValor
+                }
+            });
+        });
+        $(document).ready(function () {
+            var dt = $('#schoolstable').DataTable();
+            $(window).on('resize', function () {
+                $('#schoolstable').DataTable();
+            })
+        });
+        $(document).on("change", "#initial_date", function () {
+            document.getElementById("final_date").min = this.value
+        });
+        $(document).ready(function () {
+            jQuery(window).on('resize', function () {
+                $("#select_form_school_chosen").attr('style', 'width: 100%');
+            });
+        });
+    </script>
+    {% endblock %}

@@ -199,6 +199,70 @@ def seeallschoolsbyquery(request):
 	return redirect('/contracts/all')
 
 @login_required
+def seeallclassesbyquery(request):
+	current_school = None
+	current_class = None
+	selected_school = None
+	selected_class = None
+	all_contracts = Contract.objects.all()
+	complete_contracts_in_period = 0
+	contracts_in_period = 0
+	contracts_to_pay = 0
+	value_to_pay = 0
+	contracts_paid = 0
+	if request.user.is_superuser:
+		schools = School.objects.all().order_by('school_name')
+		if request.method == 'POST':
+			selected_school = request.POST.get('selected_school' or None)
+			selected_class = request.POST.get('selected_class' or None)
+			initial_date = request.POST.get('initial_date' or None)
+			final_date = request.POST.get('final_date' or None)
+			try:
+				current_school = School.objects.get(school_id=selected_school)
+				try:
+					current_class = Class.objects.get(class_id=selected_class)
+				except:
+					current_class = None
+			except:
+				messages.warning(request, 'Escola não selecionada')
+		return render(request, 'school/seeallclassesbyquery.html', {'schools':schools, 'current_school':current_school, 'current_class': current_class, 'selected_school':selected_school, 'selected_class': selected_class})
+	elif Head.objects.filter(profile=request.user).count()>=1:
+		is_supervisor = True
+		schools = School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id).order_by('school_name')
+		if request.method == 'POST':
+			selected_school = request.POST.get('selected_school' or None)
+			selected_class = request.POST.get('selected_class' or None)
+			initial_date = request.POST.get('initial_date' or None)
+			final_date = request.POST.get('final_date' or None)
+			try:
+				current_school = School.objects.get(school_id=selected_school)
+				try:
+					current_class = Class.objects.get(class_id=selected_class)
+				except:
+					current_class = None
+			except:
+				messages.warning(request, 'Escola não selecionada')
+		return render(request, 'school/seeallclassesbyquery.html', {'schools':schools, 'current_school':current_school, 'current_class': current_class, 'selected_school':selected_school, 'selected_class': selected_class})
+	elif Supervisor.objects.filter(profile=request.user).count()>=1:
+		is_supervisor = True
+		schools = School.objects.filter(Q(adminorsupervisor=Supervisor.objects.get(profile=request.user))|Q(adminorsupervisor_2=Supervisor.objects.get(profile=request.user))).order_by('school_name')
+		if request.method == 'POST':
+			selected_school = request.POST.get('selected_school' or None)
+			selected_class = request.POST.get('selected_class' or None)
+			initial_date = request.POST.get('initial_date' or None)
+			final_date = request.POST.get('final_date' or None)
+			try:
+				current_school = School.objects.get(school_id=selected_school)
+				try:
+					current_class = Class.objects.get(class_id=selected_class)
+				except:
+					current_class = None
+			except:
+				messages.warning(request, 'Escola não selecionada')
+		return render(request, 'school/seeallclassesbyquery.html', {'schools':schools, 'current_school':current_school, 'current_class': current_class, 'selected_school':selected_school, 'selected_class': selected_class})
+	return redirect('/contracts/all')
+
+@login_required
 def seeschooldetails(request, school_id = None):
 	if request.user.is_superuser:
 		school = School.objects.get(school_id=school_id)
