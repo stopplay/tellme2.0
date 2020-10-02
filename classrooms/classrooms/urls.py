@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import include, path, re_path
 from django.conf.urls.static import static
 from classrooms import settings
-from school.views import seeallschools
+from school.views import seeallschoolsbyquery
 from django.views.static import serve 
 
 urlpatterns = [
@@ -26,7 +26,7 @@ urlpatterns = [
     url(r'^jet/', include('jet.urls', 'jet')),  # Django JET URLS
     url(r'^jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
     path('admin/', admin.site.urls),
-    url(r'^$', seeallschools),
+    url(r'^$', seeallschoolsbyquery),
     url('chain/', include('block.urls')),
     url('contracts/', include('contract.urls')),
     url('schools/', include('school.urls')),
