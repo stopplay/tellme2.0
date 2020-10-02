@@ -1511,27 +1511,41 @@ def seeusersbyquery_signes(request):
     supervisor = request.user.supervisor if hasattr(request.user, 'supervisor') else None
     is_supervisor = False
     schools = []  
+    classes = []
     
     if request.user.is_superuser:
         schools = School.objects.all().order_by('school_name')
+        classes = Class.objects.all().order_by('class_name')
     elif head or supervisor:
         is_supervisor = True
         if head:
             schools = School.objects.filter(heads__head_id__exact=head.head_id).order_by('school_name')
+            for school in schools:
+                classes += [classe.class_id for classe in school.classes.all()]
+            classes = Class.objects.filter(class_id__in=classes)
         elif supervisor:
             schools = School.objects.filter(Q(adminorsupervisor=supervisor)|Q(adminorsupervisor_2=supervisor)).order_by('school_name')
+            for school in schools:
+                classes += [classe.class_id for classe in school.classes.all()]
+            classes = Class.objects.filter(class_id__in=classes)
 
     
     if request.method == 'POST':
         fetched = False
         type_of_user = request.POST.get('type_of_user', None)
         selected_school = request.POST.get('selected_school', 0)
+        selected_class = request.POST.get('selected_class', 0)
         name = request.POST.get('name' or None)
         school_users = []
 
         try:
             school = schools.get(school_id=selected_school)
         except School.DoesNotExist:
+            school = None
+
+        try:
+            classe = classes.get(class_id=selected_class)
+        except Class.DoesNotExist:
             school = None
 
         if type_of_user:
@@ -1576,6 +1590,9 @@ def seeusersbyquery_signes(request):
                     if school:
                         school_users = school_users.filter(school=school)
                         fetched = True
+                    if classe:
+                        school_users = school_users.filter(class__class_id__exact=classe.class_id)
+                        fetched = True
                         
                     if name:
                         if fetched:
@@ -1598,6 +1615,9 @@ def seeusersbyquery_signes(request):
 
                 if school:
                     school_users = school_users.filter(Q(first_parent__school=school) | Q(second_parent__school=school) | Q(third_parent__school=school))
+                    fetched = True
+                if classe:
+                    school_users = school_users.filter(Q(first_parent__class__class_id__exact=classe.class_id) | Q(second_parent__class__class_id__exact=classe.class_id) | Q(third_parent__class__class_id__exact=classe.class_id))
                     fetched = True
                     
                 if name:

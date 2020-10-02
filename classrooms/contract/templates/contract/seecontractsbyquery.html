@@ -34,21 +34,23 @@
 												<option value="{{ chain.id }}">{{ chain.name }}</option>
 											{% endfor %}
 										</select>
-									</div> -->
-                  <div class="labelandform">
-                    <p><label>Selecione a escola que você deseja pesquisar:</label></p>
-                    <select class="custom-select chosen-select" id="select_form_school">
-                      <option id="" value="0" selected>--------</option>
-                      {% for school in schools %}
-                        <option value="{{ school.school_id }}">{{ school.school_name }}</option>
-                      {% endfor %}
-                    </select>
-                  </div>
-                  <div class="labelandform">
-                    <p><label>Selecione a Turma:</label></p>
-                    <select class="custom-select" id="select_form_class">
-                      <option id="" value="0" selected>--------</option>
-                    </select>
+                  </div> -->
+                  <div class="row">
+                    <div class="labelandform col-md-6">
+                      <p><label>Selecione a Escola:</label></p>
+                      <select class="custom-select chosen-select" id="select_form_school">
+                        <option id="" value="0" selected>--------</option>
+                        {% for school in schools %}
+                          <option value="{{ school.school_id }}">{{ school.school_name }}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                    <div class="labelandform col-md-6">
+                      <p><label>Selecione a Turma:</label></p>
+                      <select class="custom-select chosen-select" id="select_form_class">
+                        <option id="" value="0" selected>--------</option>
+                      </select>
+                    </div>
                   </div>
                   <input type="hidden" id="selected_school" name="selected_school" value="0">
                   <input type="hidden" id="selected_class" name="selected_class" value="0">
@@ -991,7 +993,8 @@
               id: selectValor
             },
             success: function (response) {
-              $('#select_form_class').html(response)
+              $('#select_form_class').html(response);
+              $('#select_form_class').trigger("chosen:updated");
             }
           })
           if (selectValor == '') {
