@@ -1546,7 +1546,7 @@ def seeusersbyquery_signes(request):
         try:
             classe = classes.get(class_id=selected_class)
         except:
-            school = None
+            classe = None
 
         if type_of_user:
 
