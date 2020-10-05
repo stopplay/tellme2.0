@@ -1395,7 +1395,7 @@ def seeusersbyquery_administration(request):
 
         try:
             school = schools.get(school_id=selected_school)
-        except School.DoesNotExist:
+        except:
             school = None
 
         if type_of_user:
@@ -1540,12 +1540,12 @@ def seeusersbyquery_signes(request):
 
         try:
             school = schools.get(school_id=selected_school)
-        except School.DoesNotExist:
+        except:
             school = None
 
         try:
             classe = classes.get(class_id=selected_class)
-        except Class.DoesNotExist:
+        except:
             school = None
 
         if type_of_user:
