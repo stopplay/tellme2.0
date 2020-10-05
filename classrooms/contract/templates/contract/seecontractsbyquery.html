@@ -701,163 +701,163 @@
 			  {% endif %}
 			{% endif %}
 <script type="text/javascript">
-  // let chatSocket = new WebSocket(
-  //         'wss://' + window.location.host +
-  //         ':8002/ws/chat/notifications/');
+  let chatSocket = new WebSocket(
+          'wss://' + window.location.host +
+          ':8002/ws/chat/notifications/');
 
-  //     chatSocket.onmessage = function(e) {
-  //         console.log('message_incoming');
-  //         let data = JSON.parse(e.data);
-  //         let message = data['message'];
-  //         var contract = message;
-  //         if (contract['client_responsible_signed'] == true) {
-  //             document.getElementById(`${contract['contract_id']}_client_responsible_signed`).className = 'badge badge-pill badge-success text-success float-right';
-  //             let button = document.getElementById(`${contract['contract_id']}_client_responsible_signed_button`);
-  //             if (button) {
-  //               button.className = 'btn btn-success btn-block w-100';
-  //               button.style = 'cursor: not-allowed;';
-  //               button.innerText = 'Assinado';
-  //               button.removeAttribute('data-togle');
-  //               button.removeAttribute('onclick');
-  //               button.removeAttribute('data-target');
-  //               button.removeAttribute('href');
-  //             }
-  //           }
-  //           if (contract['counter_signed'] == true) {
-  //             document.getElementById(`${contract['contract_id']}_counter_signed`).className = 'badge badge-pill badge-success text-success float-right';
-  //             let button = document.getElementById(`${contract['contract_id']}_counter_signed_button`);
-  //             if (button) {
-  //               button.className = 'btn btn-success btn-block w-100';
-  //               button.style = 'cursor: not-allowed;';
-  //               button.innerText = 'Assinado';
-  //               button.removeAttribute('data-togle');
-  //               button.removeAttribute('onclick');
-  //               button.removeAttribute('data-target');
-  //               button.removeAttribute('href');
-  //             }
-  //           }
-  //           if (contract['first_responsible_signed'] == true) {
-  //             document.getElementById(`${contract['contract_id']}_first_responsible_signed`).className = 'badge badge-pill badge-success text-success float-right';
-  //             let button = document.getElementById(`${contract['contract_id']}_first_responsible_signed_button`);
-  //             if (button) {
-  //               button.className = 'btn btn-success btn-block w-100';
-  //               button.style = 'cursor: not-allowed;';
-  //               button.innerText = 'Assinado';
-  //               button.removeAttribute('data-togle');
-  //               button.removeAttribute('onclick');
-  //               button.removeAttribute('data-target');
-  //               button.removeAttribute('href');
-  //             }
-  //           }
-  //           if (contract['second_responsible_signed'] == true) {
-  //             document.getElementById(`${contract['contract_id']}_second_responsible_signed`).className = 'badge badge-pill badge-success text-success float-right';
-  //             let button = document.getElementById(`${contract['contract_id']}_second_responsible_signed_button`);
-  //             if (button) {
-  //               button.className = 'btn btn-success btn-block w-100';
-  //               button.style = 'cursor: not-allowed;';
-  //               button.innerText = 'Assinado';
-  //               button.removeAttribute('data-togle');
-  //               button.removeAttribute('onclick');
-  //               button.removeAttribute('data-target');
-  //               button.removeAttribute('href');
-  //             }
-  //           }
-  //           if (contract['first_auth_signed'] == true) {
-  //             document.getElementById(`${contract['contract_id']}_first_auth_signed`).className = 'badge badge-pill badge-success text-success float-right';
-  //             let button = document.getElementById(`${contract['contract_id']}_first_auth_signed_button`);
-  //             if (button) {
-  //               button.className = 'btn btn-success btn-block w-100';
-  //               button.style = 'cursor: not-allowed;';
-  //               button.innerText = 'Assinado';
-  //               button.removeAttribute('data-togle');
-  //               button.removeAttribute('onclick');
-  //               button.removeAttribute('data-target');
-  //               button.removeAttribute('href');
-  //             }
-  //           }
-  //           if (contract['second_auth_signed'] == true) {
-  //             document.getElementById(`${contract['contract_id']}_second_auth_signed`).className = 'badge badge-pill badge-success text-success float-right';
-  //             let button = document.getElementById(`${contract['contract_id']}_second_auth_signed_button`);
-  //             if (button) {
-  //               button.className = 'btn btn-success btn-block w-100';
-  //               button.style = 'cursor: not-allowed;';
-  //               button.innerText = 'Assinado';
-  //               button.removeAttribute('data-togle');
-  //               button.removeAttribute('onclick');
-  //               button.removeAttribute('data-target');
-  //               button.removeAttribute('href');
-  //             }
-  //           }
-  //           if (contract['third_auth_signed'] == true) {
-  //             document.getElementById(`${contract['contract_id']}_third_auth_signed`).className = 'badge badge-pill badge-success text-success float-right';
-  //             let button = document.getElementById(`${contract['contract_id']}_third_auth_signed_button`);
-  //             if (button) {
-  //               button.className = 'btn btn-success btn-block w-100';
-  //               button.style = 'cursor: not-allowed;';
-  //               button.innerText = 'Assinado';
-  //               button.removeAttribute('data-togle');
-  //               button.removeAttribute('onclick');
-  //               button.removeAttribute('data-target');
-  //               button.removeAttribute('href');
-  //             }
-  //           }
-  //           if (contract['first_witness_signed'] == true) {
-  //             document.getElementById(`${contract['contract_id']}_first_witness_signed`).className = 'badge badge-pill badge-success text-success float-right';
-  //             let button = document.getElementById(`${contract['contract_id']}_first_witness_signed_button`);
-  //             if (button) {
-  //               button.className = 'btn btn-success btn-block w-100';
-  //               button.style = 'cursor: not-allowed;';
-  //               button.innerText = 'Assinado';
-  //               button.removeAttribute('data-togle');
-  //               button.removeAttribute('onclick');
-  //               button.removeAttribute('data-target');
-  //               button.removeAttribute('href');
-  //             }
-  //           }
-  //           if (contract['second_witness_signed'] == true) {
-  //             document.getElementById(`${contract['contract_id']}_second_witness_signed`).className = 'badge badge-pill badge-success text-success float-right';
-  //             let button = document.getElementById(`${contract['contract_id']}_second_witness_signed_button`);
-  //             if (button) {
-  //               button.className = 'btn btn-success btn-block w-100';
-  //               button.style = 'cursor: not-allowed;';
-  //               button.innerText = 'Assinado';
-  //               button.removeAttribute('data-togle');
-  //               button.removeAttribute('onclick');
-  //               button.removeAttribute('data-target');
-  //               button.removeAttribute('href');
-  //             }
-  //           }
-  //           if (contract['all_signiture_signed'] == true) {
-  //             document.getElementById(`${contract['contract_id']}_all_signe_signed`).className = 'badge badge-pill badge-success text-success float-right';
-  //             let button = document.getElementById(`${contract['contract_id']}_all_signe_signed_button`);
-  //             if (button) {
-  //               button.className = 'btn btn-success btn-block w-100';
-  //               button.style = 'cursor: not-allowed;';
-  //               button.innerText = 'Assinado';
-  //               button.removeAttribute('data-togle');
-  //               button.removeAttribute('onclick');
-  //               button.removeAttribute('data-target');
-  //               button.removeAttribute('href');
-  //             }
-  //           }
-  //           if (contract['all_signed'] == true) {
-  //             document.getElementById(`${contract['contract_id']}_all_signed`).className = 'badge badge-pill badge-success text-success float-right';
-  //             let button = document.getElementById(`${contract['contract_id']}_all_signed_button`);
-  //             if (button) {
-  //               button.className = 'btn btn-success btn-block w-100';
-  //               button.style = 'cursor: not-allowed;';
-  //               button.innerText = 'Assinado';
-  //               button.removeAttribute('data-togle');
-  //               button.removeAttribute('onclick');
-  //               button.removeAttribute('data-target');
-  //               button.removeAttribute('href');
-  //             }
-  //           }
-  //           $("#sign-contract-modal").modal('hide');
-  //       }
-  //     chatSocket.onclose = function(e) {
-  //         console.error('Chat socket closed unexpectedly');
-  //     };
+      chatSocket.onmessage = function(e) {
+          console.log('message_incoming');
+          let data = JSON.parse(e.data);
+          let message = data['message'];
+          var contract = message;
+          if (contract['client_responsible_signed'] == true) {
+              document.getElementById(`${contract['contract_id']}_client_responsible_signed`).className = 'badge badge-pill badge-success text-success float-right';
+              let button = document.getElementById(`${contract['contract_id']}_client_responsible_signed_button`);
+              if (button) {
+                button.className = 'btn btn-success btn-block w-100';
+                button.style = 'cursor: not-allowed;';
+                button.innerText = 'Assinado';
+                button.removeAttribute('data-togle');
+                button.removeAttribute('onclick');
+                button.removeAttribute('data-target');
+                button.removeAttribute('href');
+              }
+            }
+            if (contract['counter_signed'] == true) {
+              document.getElementById(`${contract['contract_id']}_counter_signed`).className = 'badge badge-pill badge-success text-success float-right';
+              let button = document.getElementById(`${contract['contract_id']}_counter_signed_button`);
+              if (button) {
+                button.className = 'btn btn-success btn-block w-100';
+                button.style = 'cursor: not-allowed;';
+                button.innerText = 'Assinado';
+                button.removeAttribute('data-togle');
+                button.removeAttribute('onclick');
+                button.removeAttribute('data-target');
+                button.removeAttribute('href');
+              }
+            }
+            if (contract['first_responsible_signed'] == true) {
+              document.getElementById(`${contract['contract_id']}_first_responsible_signed`).className = 'badge badge-pill badge-success text-success float-right';
+              let button = document.getElementById(`${contract['contract_id']}_first_responsible_signed_button`);
+              if (button) {
+                button.className = 'btn btn-success btn-block w-100';
+                button.style = 'cursor: not-allowed;';
+                button.innerText = 'Assinado';
+                button.removeAttribute('data-togle');
+                button.removeAttribute('onclick');
+                button.removeAttribute('data-target');
+                button.removeAttribute('href');
+              }
+            }
+            if (contract['second_responsible_signed'] == true) {
+              document.getElementById(`${contract['contract_id']}_second_responsible_signed`).className = 'badge badge-pill badge-success text-success float-right';
+              let button = document.getElementById(`${contract['contract_id']}_second_responsible_signed_button`);
+              if (button) {
+                button.className = 'btn btn-success btn-block w-100';
+                button.style = 'cursor: not-allowed;';
+                button.innerText = 'Assinado';
+                button.removeAttribute('data-togle');
+                button.removeAttribute('onclick');
+                button.removeAttribute('data-target');
+                button.removeAttribute('href');
+              }
+            }
+            if (contract['first_auth_signed'] == true) {
+              document.getElementById(`${contract['contract_id']}_first_auth_signed`).className = 'badge badge-pill badge-success text-success float-right';
+              let button = document.getElementById(`${contract['contract_id']}_first_auth_signed_button`);
+              if (button) {
+                button.className = 'btn btn-success btn-block w-100';
+                button.style = 'cursor: not-allowed;';
+                button.innerText = 'Assinado';
+                button.removeAttribute('data-togle');
+                button.removeAttribute('onclick');
+                button.removeAttribute('data-target');
+                button.removeAttribute('href');
+              }
+            }
+            if (contract['second_auth_signed'] == true) {
+              document.getElementById(`${contract['contract_id']}_second_auth_signed`).className = 'badge badge-pill badge-success text-success float-right';
+              let button = document.getElementById(`${contract['contract_id']}_second_auth_signed_button`);
+              if (button) {
+                button.className = 'btn btn-success btn-block w-100';
+                button.style = 'cursor: not-allowed;';
+                button.innerText = 'Assinado';
+                button.removeAttribute('data-togle');
+                button.removeAttribute('onclick');
+                button.removeAttribute('data-target');
+                button.removeAttribute('href');
+              }
+            }
+            if (contract['third_auth_signed'] == true) {
+              document.getElementById(`${contract['contract_id']}_third_auth_signed`).className = 'badge badge-pill badge-success text-success float-right';
+              let button = document.getElementById(`${contract['contract_id']}_third_auth_signed_button`);
+              if (button) {
+                button.className = 'btn btn-success btn-block w-100';
+                button.style = 'cursor: not-allowed;';
+                button.innerText = 'Assinado';
+                button.removeAttribute('data-togle');
+                button.removeAttribute('onclick');
+                button.removeAttribute('data-target');
+                button.removeAttribute('href');
+              }
+            }
+            if (contract['first_witness_signed'] == true) {
+              document.getElementById(`${contract['contract_id']}_first_witness_signed`).className = 'badge badge-pill badge-success text-success float-right';
+              let button = document.getElementById(`${contract['contract_id']}_first_witness_signed_button`);
+              if (button) {
+                button.className = 'btn btn-success btn-block w-100';
+                button.style = 'cursor: not-allowed;';
+                button.innerText = 'Assinado';
+                button.removeAttribute('data-togle');
+                button.removeAttribute('onclick');
+                button.removeAttribute('data-target');
+                button.removeAttribute('href');
+              }
+            }
+            if (contract['second_witness_signed'] == true) {
+              document.getElementById(`${contract['contract_id']}_second_witness_signed`).className = 'badge badge-pill badge-success text-success float-right';
+              let button = document.getElementById(`${contract['contract_id']}_second_witness_signed_button`);
+              if (button) {
+                button.className = 'btn btn-success btn-block w-100';
+                button.style = 'cursor: not-allowed;';
+                button.innerText = 'Assinado';
+                button.removeAttribute('data-togle');
+                button.removeAttribute('onclick');
+                button.removeAttribute('data-target');
+                button.removeAttribute('href');
+              }
+            }
+            if (contract['all_signiture_signed'] == true) {
+              document.getElementById(`${contract['contract_id']}_all_signe_signed`).className = 'badge badge-pill badge-success text-success float-right';
+              let button = document.getElementById(`${contract['contract_id']}_all_signe_signed_button`);
+              if (button) {
+                button.className = 'btn btn-success btn-block w-100';
+                button.style = 'cursor: not-allowed;';
+                button.innerText = 'Assinado';
+                button.removeAttribute('data-togle');
+                button.removeAttribute('onclick');
+                button.removeAttribute('data-target');
+                button.removeAttribute('href');
+              }
+            }
+            if (contract['all_signed'] == true) {
+              document.getElementById(`${contract['contract_id']}_all_signed`).className = 'badge badge-pill badge-success text-success float-right';
+              let button = document.getElementById(`${contract['contract_id']}_all_signed_button`);
+              if (button) {
+                button.className = 'btn btn-success btn-block w-100';
+                button.style = 'cursor: not-allowed;';
+                button.innerText = 'Assinado';
+                button.removeAttribute('data-togle');
+                button.removeAttribute('onclick');
+                button.removeAttribute('data-target');
+                button.removeAttribute('href');
+              }
+            }
+            $("#sign-contract-modal").modal('hide');
+        }
+      chatSocket.onclose = function(e) {
+          console.error('Chat socket closed unexpectedly');
+      };
   function signContract(url) {
       setTimeout(function () {
         // window.location.assign(url);
