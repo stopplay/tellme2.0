@@ -1014,6 +1014,8 @@ def seecontractsbyquery(request):
         school = None
         classe = None
         selected_school = request.POST.get('selected_school' or None)
+        initial_date = request.POST.get('initial_date' or None)
+        final_date = request.POST.get('final_date' or None)
         selected_class = request.POST.get('selected_class' or None)
         if School.objects.filter(school_id=selected_school).count()>=1:
             school = School.objects.get(school_id=selected_school)
@@ -1029,6 +1031,10 @@ def seecontractsbyquery(request):
 
         if search:
             contracts = contracts.filter(reduce(operator.and_, (Q(name__icontains=x) for x in search.split(" "))))
+        if initial_date:
+            contracts = contracts.filter(date__gte=initial_date)
+        if final_date:
+            contracts = contracts.filter(date__lte=final_date)
         if not schools:
             messages.error(request, 'O tipo de usuário que está tentando acessar estes dados não se encaixa em nenhum dos tipos propostos pelo sistema.')
             return seemycontracts(request)

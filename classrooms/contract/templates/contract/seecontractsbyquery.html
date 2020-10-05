@@ -52,6 +52,11 @@
                       </select>
                     </div>
                   </div>
+                  <div class="labelandform">
+                    <p><label>Período:</label></p>
+                    Contratos de: <input type="date" id="initial_date" name="initial_date">
+                    a : <input type="date" id="final_date" name="final_date">
+                  </div>
                   <input type="hidden" id="selected_school" name="selected_school" value="0">
                   <input type="hidden" id="selected_class" name="selected_class" value="0">
 									<input type="text" id="search" name="search" placeholder="Insira o nome do aluno, o nome da escola ou o nome da turma">
@@ -983,6 +988,9 @@
           });
       }, 1);
     }
+    $(document).on("change", "#initial_date", function () {
+            document.getElementById("final_date").min = this.value
+        });
   $(document).ready(function () {
         $('#select_form_school').on('change', function () {
           let urlClasses = $('#myForm').data('urlclasses')
@@ -1091,6 +1099,12 @@
       }
     }
   })
+  $(document).ready(function () {
+    jQuery(window).on('resize', function () {
+      $("#select_form_school_chosen").attr('style', 'width: 100%');
+      $("#select_form_class_chosen").attr('style', 'width: 100%');
+    });
+  });
 
 </script>
 
