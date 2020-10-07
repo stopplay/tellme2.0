@@ -88,7 +88,7 @@ class MagentoSoap():
         return self.client.service.salesOrderList(sessionId=self.session_id, filters=filters)
 
 def generate_slm_link(school, student):
-    url = "https://maplebear.loja.biz/schools/api/createtoken"
+    url = "https://maplebearstore.com.br/schools/api/createtoken"
     querystring = {"id":student.student_id_sponte,"school":school.sponte_client_number}
     headers = {
         'user': "tellme",
