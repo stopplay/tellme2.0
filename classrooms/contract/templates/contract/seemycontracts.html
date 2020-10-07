@@ -61,7 +61,24 @@
                             <input type="checkbox" name="checks" value="{{ contract.contract_id }}">
                             {% endif %}
                           </td>
+                        {% elif is_witness %}
+                          <td>
+                            {% if request.user == contract.first_witness_signe %}
+                              {% if contract.first_witness_signed %}
+                              <label><input type="checkbox" name="checks" value="{{ contract.contract_id }}" checked></label>
+                              {% else %}
+                              <input type="checkbox" name="checks" value="{{ contract.contract_id }}">
+                              {% endif %}
+                            {% elif request.user == contract.second_witness_signe %}
+                              {% if contract.second_witness_signed %}
+                              <label><input type="checkbox" name="checks" value="{{ contract.contract_id }}" checked></label>
+                              {% else %}
+                              <input type="checkbox" name="checks" value="{{ contract.contract_id }}">
+                              {% endif %}
+                            {% endif %}
+                          </td>
                         {% endif %}
+
 
                         <th>
                           {{contract.contract_id}}
