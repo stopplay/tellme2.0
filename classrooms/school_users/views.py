@@ -1504,7 +1504,8 @@ def seeusersbyquery_administration(request):
                         school_users = TYPE[type_of_user].objects.all()
                     else:
                         school_users = TYPE[type_of_user].objects.filter(Q(first_parent__school__in=schools) | Q(second_parent__school__in=schools) | Q(third_parent__school__in=schools))
-            
+        else:
+            messages.error(request, 'Você não selecionou o tipo de usuário que você deseja pesquisar, selecione e pesquise novamente')
         
         return render(request, 'school_users/seeusersbyquery_administration.html', {'type_of_user':type_of_user, 'school_users':school_users, 'schools':schools, 'is_supervisor': is_supervisor})
 
@@ -1638,8 +1639,8 @@ def seeusersbyquery_signes(request):
                         school_users = TYPE[type_of_user].objects.exclude(Q(first_parent__school=None) & Q(second_parent__school=None) & Q(third_parent__school=None))
                     else:
                         school_users = TYPE[type_of_user].objects.filter(Q(first_parent__school__in=schools) | Q(second_parent__school__in=schools) | Q(third_parent__school__in=schools))
-            
-        
+        else:
+            messages.error(request, 'Você não selecionou o tipo de usuário que você deseja pesquisar, selecione e pesquise novamente')
         return render(request, 'school_users/seeusersbyquery_signes.html', {'type_of_user':type_of_user, 'school_users':school_users, 'schools':schools, 'is_supervisor': is_supervisor})
 
             
