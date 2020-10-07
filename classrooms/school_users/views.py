@@ -247,6 +247,9 @@ def create_user(request):
                     return redirect('/users/create_user')
             else:
                 if form.is_valid():
+                    if selected_user == '0':
+                        messages.error(request, 'Você não selecionou o tipo de usuário a ser criado')
+                        return redirect('/users/create_user')
                     if selected_user == '7':
                         messages.error(request, 'Você não pode adicionar pais e estudantes ao mesmo tempo desta forma, por favor selecione o formato adicionar por CSV!')
                         return redirect('/users/create_user')
@@ -616,6 +619,9 @@ def create_user(request):
                     return redirect('/users/create_user')
             elif yesorno == 'não':
                 if form.is_valid():
+                    if selected_user == '0':
+                        messages.error(request, 'Você não selecionou o tipo de usuário a ser criado')
+                        return redirect('/users/create_user')
                     if selected_user == '7':
                         messages.error(request, 'Você não pode adicionar pais e estudantes ao mesmo tempo desta forma, por favor selecione o formato adicionar por CSV!')
                         return redirect('/users/create_user')
