@@ -1192,8 +1192,7 @@ def seemycontracts(request):
         select_all = request.POST.get('variable' or None)
         if select_all:
             for contract in contracts:
-                if not (contract.counter_signed):
-                    set_signed(request, contract.contract_id)
+                set_signed(request, contract.contract_id)
         else:
             checked_contract_ids_on_form = request.POST.getlist('checks')
             print('checked_contract_ids_on_form', checked_contract_ids_on_form)
