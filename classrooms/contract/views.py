@@ -2288,7 +2288,7 @@ def authenticated_google(request):
 def extend_expire_date(request, contract_id):
     try:
         contract = Contract.objects.get(contract_id=contract_id)
-        contract.expiration = contract.expiration + datetime.timedelta(days=7)
+        contract.expiration = timezone.now().date() + datetime.timedelta(days=7)
         contract.is_expired = False
         contract.save()
         messages.success(request, 'Prazo de expiração do contrato extendido')
