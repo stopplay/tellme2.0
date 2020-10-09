@@ -14,9 +14,9 @@ import os
 import datetime
 from corsheaders.defaults import *
 from django.utils.translation import ugettext_lazy as _
-from dateutil.relativedelta import relativedelta
-from google.cloud import logging
-import sys
+# from dateutil.relativedelta import relativedelta
+# from google.cloud import logging
+# import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -71,7 +71,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'requestlogs.middleware.RequestLogsMiddleware',
+    # 'requestlogs.middleware.RequestLogsMiddleware',
 ]
 
 ROOT_URLCONF = 'classrooms.urls'
@@ -228,25 +228,53 @@ CHANNEL_LAYERS = {
 
 from django.utils import timezone
 
-client = logging.Client()
-client.setup_logging()
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {
-        'stackdriver': {
-            'class': 'google.cloud.logging.handlers.CloudLoggingHandler',
-            'client': client
-        }
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', f'{timezone.now().date()}.log'),
+        },
+    },
+    'root': {
+        'handlers': ['console', 'file'],
+        'level': 'WARNING',
     },
     'loggers': {
-        '': {
-            'handlers': ['stackdriver'],
-            'level': 'INFO',
-            'name': 'blockdoc'
-        }
-    },
+        'django.request': {
+            'handlers': ['file'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+    }
 }
+
+# from django.utils import timezone
+
+# client = logging.Client()
+# client.setup_logging()
+
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'stackdriver': {
+#             'class': 'google.cloud.logging.handlers.CloudLoggingHandler',
+#             'client': client
+#         }
+#     },
+#     'loggers': {
+#         '': {
+#             'handlers': ['stackdriver'],
+#             'level': 'INFO',
+#             'name': 'blockdoc'
+#         }
+#     },
+# }
 
 REQUEST_LOGGING_ENABLE_COLORIZE = False
