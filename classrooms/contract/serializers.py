@@ -15,3 +15,8 @@ class ContractSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contract
         fields = '__all__'
+
+class ContractSerializerMinimal(serializers.ModelSerializer):
+    class Meta:
+        model = Contract
+        fields = '__all__'

@@ -1404,7 +1404,7 @@ def seemycontracts_rest(request):
 @login_required
 def set_signed(request, contract_id = None):
     contract = Contract.objects.get(contract_id=contract_id)
-    contract_rest = ContractSerializer(contract)
+    contract_rest = ContractSerializerMinimal(contract)
     if not contract.is_active:
         send_data(request, contract_rest)
         return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
@@ -1723,7 +1723,7 @@ def set_signed(request, contract_id = None):
                     write_pdf(request, contract, 'all_signed')
                     messages.success(request, 'Todos os responsáveis desse contrato assinaram!')
                     contract.save(update_fields=['all_signed'])
-                    contract_rest = ContractSerializer(contract)
+                    contract_rest = ContractSerializerMinimal(contract)
                     send_data(request, contract_rest)
                     return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
             else:
@@ -1732,7 +1732,7 @@ def set_signed(request, contract_id = None):
                         write_pdf(request, contract, 'all_signed')
                         messages.success(request, 'Todos os responsáveis desse contrato assinaram!')
                         contract.save(update_fields=['all_signed'])
-                        contract_rest = ContractSerializer(contract)
+                        contract_rest = ContractSerializerMinimal(contract)
                         send_data(request, contract_rest)
                         return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
         else:
@@ -1742,7 +1742,7 @@ def set_signed(request, contract_id = None):
                     write_pdf(request, contract, 'all_signed')
                     messages.success(request, 'Todos os responsáveis desse contrato assinaram!')
                     contract.save(update_fields=['all_signed'])
-                    contract_rest = ContractSerializer(contract)
+                    contract_rest = ContractSerializerMinimal(contract)
                     send_data(request, contract_rest)
                     return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
             else:
@@ -1751,13 +1751,13 @@ def set_signed(request, contract_id = None):
                     write_pdf(request, contract, 'all_signed')
                     messages.success(request, 'Todos os responsáveis desse contrato assinaram!')
                     contract.save(update_fields=['all_signed'])
-                    contract_rest = ContractSerializer(contract)
+                    contract_rest = ContractSerializerMinimal(contract)
                     send_data(request, contract_rest)
                     return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
 
     else:
         messages.warning(request, 'Você não é diretor nem pai do estudante deste contrato!')
-    contract_rest = ContractSerializer(contract)
+    contract_rest = ContractSerializerMinimal(contract)
     send_data(request, contract_rest)
     return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
 
