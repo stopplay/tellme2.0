@@ -1404,40 +1404,41 @@ def seemycontracts_rest(request):
 @login_required
 def set_signed(request, contract_id = None):
     contract = Contract.objects.get(contract_id=contract_id)
+    contract_rest = ContractSerializer(contract)
     if not contract.is_active:
-        messages.warning(request, 'Este contrato está inativo!')
-        return redirect('/contracts/all')
+        send_data(request, contract_rest)
+        return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
     if contract.is_expired:
-        messages.warning(request, 'Este contrato está expirado!')
-        return redirect('/contracts/all')
+        send_data(request, contract_rest)
+        return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
     if Head.objects.filter(profile=request.user).count()>=1:
         if contract.counter_signed:
-            messages.warning(request, 'O diretor já assinou este contrato!')
-            return redirect('/contracts/all')
+            send_data(request, contract_rest)
+            return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
     if Parent.objects.filter(profile=request.user).count()>=1:
         parent = Parent.objects.get(profile=request.user)
         if contract.first_auth_signe == parent:
             if contract.first_auth_signed:
-                messages.warning(request, 'O responsável financeiro já assinou este contrato!')
-                return redirect('/contracts/all')
+                send_data(request, contract_rest)
+                return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
         if contract.second_auth_signe == parent:
             if contract.second_auth_signed:
-                messages.warning(request, 'O responsável pedagógico já assinou este contrato!')
-                return redirect('/contracts/all')
+                send_data(request, contract_rest)
+                return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
     if Student.objects.filter(profile=request.user).count()>=1:
         if contract.student_auth_signed:
-            messages.warning(request, 'O responsável estudante já assinou este contrato!')
-            return redirect('/contracts/all')
+            send_data(request, contract_rest)
+            return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
     if Witness.objects.filter(profile=request.user).count()>=1:
         witness = Witness.objects.get(profile=request.user)
         if contract.first_witness_signe == witness:
             if contract.first_witness_signed:
-                messages.warning(request, 'A primeira testemunha já assinou este contrato!')
-                return redirect('/contracts/all')
+                send_data(request, contract_rest)
+                return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
         if contract.second_witness_signe == witness:
             if contract.second_witness_signed:
-                messages.warning(request, 'A segunda testemunha já assinou este contrato!')
-                return redirect('/contracts/all')
+                send_data(request, contract_rest)
+                return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
     if Head.objects.filter(profile=request.user).count()>=1 or Parent.objects.filter(profile=request.user).count()>=1 or Student.objects.filter(profile=request.user).count()>=1 or Witness.objects.filter(profile=request.user).count()>=1:
         if Head.objects.filter(profile=request.user).count()>=1:
             form = BlockModelFormByContract()
