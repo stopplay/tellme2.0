@@ -1394,10 +1394,16 @@ def seeusersbyquery_administration(request):
     
     if request.method == 'POST':
         fetched = False
+        error = ''
         type_of_user = request.POST.get('type_of_user', None)
         selected_school = request.POST.get('selected_school', 0)
         name = request.POST.get('name' or None)
         school_users = []
+        query = {   
+            'type_of_user': type_of_user,
+            'selected_school': int(selected_school),
+            'name': name
+        }
 
         try:
             school = schools.get(school_id=selected_school)
@@ -1505,9 +1511,9 @@ def seeusersbyquery_administration(request):
                     else:
                         school_users = TYPE[type_of_user].objects.filter(Q(first_parent__school__in=schools) | Q(second_parent__school__in=schools) | Q(third_parent__school__in=schools))
         else:
-            messages.error(request, 'Você não selecionou o tipo de usuário que você deseja pesquisar, selecione e pesquise novamente')
+            error = 'Você não selecionou o tipo de usuário que você deseja pesquisar, selecione e pesquise novamente'
         
-        return render(request, 'school_users/seeusersbyquery_administration.html', {'type_of_user':type_of_user, 'school_users':school_users, 'schools':schools, 'is_supervisor': is_supervisor})
+        return render(request, 'school_users/seeusersbyquery_administration.html', {'type_of_user':type_of_user, 'school_users':school_users, 'schools':schools, 'is_supervisor': is_supervisor, 'error': error, 'query': query})
 
             
     return render(request, 'school_users/seeusersbyquery_administration.html', {'schools':schools, 'is_supervisor': is_supervisor})
@@ -1539,11 +1545,18 @@ def seeusersbyquery_signes(request):
     
     if request.method == 'POST':
         fetched = False
+        error = ''
         type_of_user = request.POST.get('type_of_user', None)
         selected_school = request.POST.get('selected_school', 0)
         selected_class = request.POST.get('selected_class', 0)
         name = request.POST.get('name' or None)
         school_users = []
+        query = {   
+            'type_of_user': type_of_user,
+            'selected_school': int(selected_school) if selected_school else 0,
+            'name': name,
+            'selected_class': int(selected_class) if selected_class else 0
+        }
 
         try:
             school = schools.get(school_id=selected_school)
@@ -1640,8 +1653,8 @@ def seeusersbyquery_signes(request):
                     else:
                         school_users = TYPE[type_of_user].objects.filter(Q(first_parent__school__in=schools) | Q(second_parent__school__in=schools) | Q(third_parent__school__in=schools))
         else:
-            messages.error(request, 'Você não selecionou o tipo de usuário que você deseja pesquisar, selecione e pesquise novamente')
-        return render(request, 'school_users/seeusersbyquery_signes.html', {'type_of_user':type_of_user, 'school_users':school_users, 'schools':schools, 'is_supervisor': is_supervisor})
+            error = 'Você não selecionou o tipo de usuário que você deseja pesquisar, selecione e pesquise novamente'
+        return render(request, 'school_users/seeusersbyquery_signes.html', {'type_of_user':type_of_user, 'school_users':school_users, 'schools':schools, 'is_supervisor': is_supervisor, 'error': error, 'query': query})
 
             
     return render(request, 'school_users/seeusersbyquery_signes.html', {'schools':schools, 'is_supervisor': is_supervisor})
