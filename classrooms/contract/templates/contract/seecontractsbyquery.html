@@ -720,7 +720,6 @@
               }
             }
             if (contract['first_witness_signed'] == true) {
-              document.getElementById(`${contract['contract_id']}_first_witness_signed`).className = 'badge badge-pill badge-success text-success float-right';
               let button = document.getElementById(`${contract['contract_id']}_first_witness_signed_button`);
               if (button) {
                 button.className = 'btn btn-success btn-block w-100';
@@ -733,7 +732,6 @@
               }
             }
             if (contract['second_witness_signed'] == true) {
-              document.getElementById(`${contract['contract_id']}_second_witness_signed`).className = 'badge badge-pill badge-success text-success float-right';
               let button = document.getElementById(`${contract['contract_id']}_second_witness_signed_button`);
               if (button) {
                 button.className = 'btn btn-success btn-block w-100';
