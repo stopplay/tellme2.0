@@ -116,14 +116,17 @@
 
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                                         <a class="dropdown-item"
-                                                            href="{% url 'school:verifyvalidchain' current_class.class_id %}"
-                                                            data-baloon="Remove this item from the cart"
-                                                            class="text-danger">Verificar Validade do Blockchain
-                                                            Para a Turma</a>
-                                                        <a class="dropdown-item"
                                                             href="{% url 'school:update_class' current_class.class_id %}"
                                                             data-baloon="Remove this item from the cart"
-                                                            class="text-danger">Atualizar Turma</a>
+                                                            class="text-danger">
+                                                            Editar Turma
+                                                        </a>
+                                                        <a class="dropdown-item"
+                                                            href="{% url 'school:seeclassbyid' current_class.class_id %}"
+                                                            data-baloon="Remove this item from the cart"
+                                                            class="text-danger">
+                                                            Detalhes da Turma
+                                                        </a>
                                                         <a class="dropdown-item"
                                                             onclick="changeYesLink('{% url 'school:delete_class' current_class.class_id %}')"
                                                             href="#" data-baloon="Remove this item from the cart"
@@ -131,10 +134,6 @@
                                                             data-target="#delete-class-modal">
                                                             Deletar Turma
                                                         </a>
-                                                        <a class="dropdown-item"
-                                                            href="{% url 'school:seeclassbyid' current_class.class_id %}"
-                                                            data-baloon="Remove this item from the cart"
-                                                            class="text-danger">Ver Detalhes da Turma</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -222,18 +221,17 @@
 
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                                         <a class="dropdown-item"
-                                                            href="{% url 'school:verifyvalidchain' class.class_id %}"
-                                                            data-baloon="Remove this item from the cart"
-                                                            class="text-danger">Verificar Validade do Blockchain
-                                                            Para a Turma</a>
-                                                        <!-- <a class="dropdown-item" href="{% url 'school:add_student_to_class' class.class_id %}"
-                                                data-baloon="Remove this item from the cart" class="text-danger">Selecionar Estudantes Para
-                                                Turma</a> -->
-                                                        <!-- <a class="dropdown-item" href="{% url 'school:add_teacher_to_class' class.class_id %}" data-baloon="Remove this item from the cart" class="text-danger">Selecionar Professores Para Turma</a> -->
-                                                        <a class="dropdown-item"
                                                             href="{% url 'school:update_class' class.class_id %}"
                                                             data-baloon="Remove this item from the cart"
-                                                            class="text-danger">Atualizar Turma</a>
+                                                            class="text-danger">
+                                                            Editar Turma
+                                                        </a>
+                                                        <a class="dropdown-item"
+                                                            href="{% url 'school:seeclassbyid' class.class_id %}"
+                                                            data-baloon="Remove this item from the cart"
+                                                            class="text-danger">
+                                                            Detalhes da Turma
+                                                        </a>
                                                         <a class="dropdown-item"
                                                             onclick="changeYesLink('{% url 'school:delete_class' class.class_id %}')"
                                                             href="#" data-baloon="Remove this item from the cart"
@@ -241,10 +239,6 @@
                                                             data-target="#delete-class-modal">
                                                             Deletar Turma
                                                         </a>
-                                                        <a class="dropdown-item"
-                                                            href="{% url 'school:seeclassbyid' class.class_id %}"
-                                                            data-baloon="Remove this item from the cart"
-                                                            class="text-danger">Ver Detalhes da Turma</a>
                                                     </div>
                                                 </div>
                                             </div>
