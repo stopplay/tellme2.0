@@ -27,7 +27,9 @@
 								<select class="custom-select chosen-select" id="select_form_school">
 									<option id="" value="">--------</option>
 									{% for school in schools %}
-									<option value="{{ school.school_id }}" {% if school.school_id == query.selected_school %} selected {% endif %}>{{ school.school_name }}
+									<option value="{{ school.school_id }}"
+										{% if school.school_id == query.selected_school %} selected {% endif %}>
+										{{ school.school_name }}
 									</option>
 									{% endfor %}
 								</select>
@@ -46,17 +48,20 @@
 								<p><label>Tipo de Usuário:</label></p>
 								<select class="custom-select chosen-select" id="select_form">
 									<option id="" value="" selected>--------</option>
-									<option value="parent" {% if query.type_of_user == 'parent' %} selected {% endif %}>Responsáveis</option>
-									<option value="student" {% if query.type_of_user == 'student' %} selected {% endif %}>Estudante</option>
+									<option value="parent" {% if query.type_of_user == 'parent' %} selected {% endif %}>
+										Responsáveis</option>
+									<option value="student" {% if query.type_of_user == 'student' %} selected
+										{% endif %}>Estudante</option>
 								</select>
 							</div>
 						</div>
-						<input type="text" id="name" name="name" placeholder="Insira o nome do usuário aqui..." value="{{query.name}}">
+						<input type="text" id="name" name="name" placeholder="Insira o nome do usuário aqui..."
+							value="{{query.name}}">
 						<input type="hidden" id="type_of_user" name="type_of_user">
 						<p class="text-warning">{{error}}</p>
 						<div style="margin-top: 10px"><button class="btn btn-info btn-fill pull-left" type="submit"
 								style="background-color: #213f99; border-color: #213f99">Pesquisar
-								usuários</button>
+								Assinantes</button>
 						</div>
 
 					</form>
@@ -159,25 +164,45 @@
 												<div class="row">
 													<div class="col-md-12">
 														{% if type_of_user == 'director' %}
-														<a href="{% url 'users:delete_user' user.head_id 'head' %}"
-															data-baloon="Remove this item from the cart"
-															class="btn btn-danger btn-block">Deletar Diretor </a>
+														<a class="btn btn-danger btn-block"
+															onclick="changeYesLink('{% url 'users:delete_user' user.head_id 'head' %}')"
+															href="#" data-baloon="Remove this item from the cart"
+															class="text-light" data-toggle="modal"
+															data-target="#delete-assinante-modal">
+															Deletar Diretor
+														</a>
 														{% elif type_of_user == 'supervisor' %}
-														<a href="{% url 'users:delete_user' user.supervisor_id 'supervisor' %}"
-															data-baloon="Remove this item from the cart"
-															class="btn btn-danger btn-block">Deletar Supervisor</a>
+														<a class="btn btn-danger btn-block"
+															onclick="changeYesLink('{% url 'users:delete_user' user.supervisor_id 'supervisor' %}')"
+															href="#" data-baloon="Remove this item from the cart"
+															class="text-light" data-toggle="modal"
+															data-target="#delete-assinante-modal">
+															Deletar Supervisor
+														</a>
 														{% elif type_of_user == 'witness' %}
-														<a href="{% url 'users:delete_user' user.witness_id 'witness' %}"
-															data-baloon="Remove this item from the cart"
-															class="btn btn-danger btn-block">Deletar Supervisor</a>
+														<a class="btn btn-danger btn-block"
+															onclick="changeYesLink('{% url 'users:delete_user' user.witness_id 'witness' %}')"
+															href="#" data-baloon="Remove this item from the cart"
+															class="text-light" data-toggle="modal"
+															data-target="#delete-assinante-modal">
+															Deletar Testemunha
+														</a>
 														{% elif type_of_user == 'parent' %}
-														<a href="{% url 'users:delete_user' user.parent_id 'parent' %}"
-															data-baloon="Remove this item from the cart"
-															class="btn btn-danger btn-block">Deletar Responsável</a>
+														<a class="btn btn-danger btn-block"
+															onclick="changeYesLink('{% url 'users:delete_user' user.parent_id 'parent' %}')"
+															href="#" data-baloon="Remove this item from the cart"
+															class="text-light" data-toggle="modal"
+															data-target="#delete-assinante-modal">
+															Deletar Responsável
+														</a>
 														{% elif type_of_user == 'student' %}
-														<a href="{% url 'users:delete_user' user.student_id 'student'%}"
-															data-baloon="Remove this item from the cart"
-															class="btn btn-danger btn-block">Deletar Estudante</a>
+														<a class="btn btn-danger btn-block"
+															onclick="changeYesLink('{% url 'users:delete_user' user.student_id 'student' %}')"
+															href="#" data-baloon="Remove this item from the cart"
+															class="text-light" data-toggle="modal"
+															data-target="#delete-assinante-modal">
+															Deletar Estudante
+														</a>
 														{% endif %}
 													</div>
 												</div>
@@ -254,6 +279,31 @@
 				}
 			});
 		});
+		function changeYesLink(url) {
+			console.log('Entrei aqui');
+			document.getElementById("link_to_delete").href = url;
+			console.log('Passei daqui');
+		};
 	</script>
+	<div id="delete-assinante-modal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">x</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>Você tem certeza que deseja este assinante? Essa operação não pode ser desfeita!</p>
+				</div>
+				<div class="modal-footer">
+					<a id="link_to_delete" class="btn btn-danger btn-block" href="">Sim</a>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
 
 	{% endblock %}
