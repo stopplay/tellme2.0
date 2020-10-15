@@ -125,7 +125,7 @@ def seeallschoolsbyquery(request):
 			initial_date = request.POST.get('initial_date' or None)
 			final_date = request.POST.get('final_date' or None)
 			query = {
-				'selected_school': int(selected_school),
+				'selected_school': int(selected_school) if selected_school else 0,
 				'initial_date': initial_date,
 				'final_date': final_date
 			}
@@ -155,11 +155,11 @@ def seeallschoolsbyquery(request):
 		is_supervisor = True
 		schools = School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id).order_by('school_name')
 		if request.method == 'POST':
-			selected_school = request.POST.get('selected_school' or None)
+			selected_school = request.POST.get('selected_school' or 0)
 			initial_date = request.POST.get('initial_date' or None)
 			final_date = request.POST.get('final_date' or None)
 			query = {
-				'selected_school': int(selected_school),
+				'selected_school': int(selected_school) if selected_school else 0,
 				'initial_date': initial_date,
 				'final_date': final_date
 			}
@@ -187,11 +187,11 @@ def seeallschoolsbyquery(request):
 		is_supervisor = True
 		schools = School.objects.filter(Q(adminorsupervisor=Supervisor.objects.get(profile=request.user))|Q(adminorsupervisor_2=Supervisor.objects.get(profile=request.user))).order_by('school_name')
 		if request.method == 'POST':
-			selected_school = request.POST.get('selected_school' or None)
+			selected_school = request.POST.get('selected_school' or 0)
 			initial_date = request.POST.get('initial_date' or None)
 			final_date = request.POST.get('final_date' or None)
 			query = {
-				'selected_school': int(selected_school),
+				'selected_school': int(selected_school) if selected_school else 0,
 				'initial_date': initial_date,
 				'final_date': final_date
 			}
@@ -239,7 +239,7 @@ def seeallclassesbyquery(request):
 			initial_date = request.POST.get('initial_date' or None)
 			final_date = request.POST.get('final_date' or None)
 			query = {
-				'selected_school': int(selected_school),
+				'selected_school': int(selected_school) if selected_school else 0,
 				'initial_date': initial_date,
 				'final_date': final_date,
 				'selected_class': int(selected_class) if selected_class else 0
@@ -262,7 +262,7 @@ def seeallclassesbyquery(request):
 			initial_date = request.POST.get('initial_date' or None)
 			final_date = request.POST.get('final_date' or None)
 			query = {
-				'selected_school': int(selected_school),
+				'selected_school': int(selected_school) if selected_school else 0,
 				'initial_date': initial_date,
 				'final_date': final_date,
 				'selected_class': int(selected_class) if selected_class else 0
@@ -285,7 +285,7 @@ def seeallclassesbyquery(request):
 			initial_date = request.POST.get('initial_date' or None)
 			final_date = request.POST.get('final_date' or None)
 			query = {
-				'selected_school': int(selected_school),
+				'selected_school': int(selected_school) if selected_school else 0,
 				'initial_date': initial_date,
 				'final_date': final_date,
 				'selected_class': int(selected_class) if selected_class else 0
