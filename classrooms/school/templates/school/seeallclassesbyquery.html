@@ -60,6 +60,9 @@
                                     <tr>
                                         <th>Escola</th>
                                         <th>
+                                            Turmas
+                                        </th>
+                                        <th>
                                             Contratos registrados
                                         </th>
                                         <th>
@@ -75,9 +78,6 @@
                                             Número de Assinantes <br>
                                             Cadastrados
                                         </th>
-                                        <th>
-                                            Turmas
-                                        </th>
                                         <th> Ações </th>
                                     </tr>
                                 </thead>
@@ -85,15 +85,6 @@
                                     <tr>
                                         <th>{{ current_school.school_name }}
                                         </th>
-
-                                        <th>
-                                            {{ current_class.registered_contracts }}
-                                        </th>
-                                        <th>
-                                            {{ current_class.registered_contracts }}
-                                        </th>
-                                        <th>{{ current_class.quantity_of_students_associated }}</th>
-                                        <th>{{ current_class.quantity_of_parents_associated }}</th>
                                         <td>
                                             <div class="row width-full margin-bottom-5">
                                                 <div class="col-md-6">
@@ -102,10 +93,16 @@
                                                         {{ current_class.enrollment_class_year }}
                                                     </label>
                                                 </div>
-
                                             </div>
-
                                         </td>
+                                        <th>
+                                            {{ current_class.registered_contracts }}
+                                        </th>
+                                        <th>
+                                            {{ current_class.registered_contracts }}
+                                        </th>
+                                        <th>{{ current_class.quantity_of_students_associated }}</th>
+                                        <th>{{ current_class.quantity_of_parents_associated }}</th>
                                         <td>
                                             <div class="col-md-6">
                                                 <div class="dropdown show">
@@ -166,6 +163,9 @@
                                     <tr>
                                         <th>Escola</th>
                                         <th>
+                                            Turmas
+                                        </th>
+                                        <th>
                                             Contratos registrados
                                         </th>
                                         <th>
@@ -182,9 +182,6 @@
                                             Número de Assinantes <br>
                                             Cadastrados
                                         </th>
-                                        <th>
-                                            Turmas
-                                        </th>
                                         <th> Ações </th>
                                     </tr>
                                 </thead>
@@ -193,7 +190,14 @@
                                     <tr>
                                         <th>{{ current_school.school_name }}
                                         </th>
-
+                                        <td>
+                                            <div class="row width-full margin-bottom-5">
+                                                <div class="col-md-6">
+                                                    <label>{{ class.class_name }},
+                                                        {{ class.enrollment_class_year }}</label>
+                                                </div>
+                                            </div>
+                                        </td>
                                         <th>
                                             {{ class.registered_contracts }}
                                         </th>
@@ -203,14 +207,6 @@
                                         <!-- <th>{{ school.quantity_of_contracts_not_signed }}/{{ school.quantity_of_contracts_total }}</th> -->
                                         <th>{{ class.quantity_of_students_associated }}</th>
                                         <th>{{ class.quantity_of_parents_associated }}</th>
-                                        <td>
-                                            <div class="row width-full margin-bottom-5">
-                                                <div class="col-md-6">
-                                                    <label>{{ class.class_name }},
-                                                        {{ class.enrollment_class_year }}</label>
-                                                </div>
-                                            </div>
-                                        </td>
                                         <td>
                                             <div class="col-md-6">
                                                 <div class="dropdown show">
