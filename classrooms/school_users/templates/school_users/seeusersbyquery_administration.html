@@ -240,6 +240,12 @@
 	{% endif %}
 	<script type="text/javascript">
 		$(document).ready(function () {
+            jQuery(window).on('resize', function () {
+				$("#select_form_school_chosen").attr('style', 'width: 100%');
+				$("#select_form_chosen").attr('style', 'width: 100%');
+            });
+        });
+		$(document).ready(function () {
 			$('#select_form_school').on('change', function () {
 				setGenPasswordToFields(['id_{{user_form.password1.name}}', 'id_{{user_form.password2.name}}']);
 				var selectValor = $(this).val();

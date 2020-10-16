@@ -83,39 +83,77 @@
 							<table class="table table-hover table-striped display mb-4" id="headstable">
 								<thead>
 									<tr>
-										{% if type_of_user == 'student' or type_of_user == 'parent' %}
-										<th>Escola</th>
+										{% if query.type_of_user == 'student' %}
+											<th>Escolas</th>
+										{% elif query.type_of_user == 'parent' %}
+											<th>Escola</th>
 										{% endif %}
 										<th>Nome</th>
-										<th>Sponte Id</th>
-										<th>Email</th>
-										{% if type_of_user == 'student' %}
-										<th>Responsável Financeiro</th>
-										<th>Responsável Pedagógico</th>
+										{% if query.type_of_user == 'student' %}
+											<th>Turmas</th>
+											<th>Responsáveis</th>
 										{% endif %}
-										<th>Origem</th>
 										<th>Ações</th>
 									</tr>
 								</thead>
 								<tbody>
 									{% for user in school_users %}
 									<tr>
-										{% if type_of_user == 'student' or type_of_user == 'parent' %}
-										<th>{{ user.school_name }}</th>
+										{% if query.type_of_user == 'student' %}
+											<td>
+												<div class="container" style="white-space: nowrap; text-align: center">
+													{% for school in user.school_set.all %}
+														<div class="row" style="margin-bottom: 10px">
+															<div class="col-md-12">
+																{{ school.school_name }}
+															</div>
+														</div>
+													{% endfor %}
+												</div>
+											</td>
+										{% elif query.type_of_user == 'parent' %}
+											<th>{{ user.school_name }}</th>
 										{% endif %}
 										<th>{{ user.name }}</th>
-										{% if type_of_user == 'student' %}
-										<td>{{ user.student_id_sponte }}</td>
-										{% elif type_of_user == 'parent' %}
-										<td>{{ user.responsible_id_sponte }}</td>
+										{% if query.type_of_user == 'student' %}
+										<td>
+											<div class="container" style="white-space: nowrap; text-align: center">
+												{% for classe in user.class_set.all %}
+													<div class="row" style="margin-bottom: 10px">
+														<div class="col-md-12">
+															{{ classe.class_name }}
+														</div>
+													</div>
+												{% endfor %}
+											</div>
+										</td>
+										<td>
+											<div class="container" style="white-space: nowrap; text-align: center">
+												{% if user.first_parent %}
+													<div class="row" style="margin-bottom: 10px">
+														<div class="col-md-12">
+															{{ user.first_parent.name }}
+														</div>
+													</div>
+												{% endif %}
+												{% if user.second_parent %}
+													<div class="row" style="margin-bottom: 10px">
+														<div class="col-md-12">
+															{{ user.second_parent.name }}
+														</div>
+													</div>
+												{% endif %}
+												{% if user.third_parent %}
+													<div class="row" style="margin-bottom: 10px">
+														<div class="col-md-12">
+															{{ user.third_parent.name }}
+														</div>
+													</div>
+												{% endif %}
+											</div>
+										</td>
 										{% endif %}
-										<td>{{ user.profile.email }}</td>
-										{% if type_of_user == 'student' %}
-										<td>{{ user.first_parent.name }} </td>
-										<td>{{ user.second_parent.name }}</td>
-										{% endif %}
-										<td>{{ user.origin }}</td>
-										<td class="w-100">
+										<td>
 											<div class="container" style="white-space: nowrap; text-align: center">
 												{% if type_of_user == 'student' %}
 												<div class="row" style="margin-bottom: 10px">
@@ -226,6 +264,13 @@
 	{% endif %}
 	<script type="text/javascript">
 		$(document).ready(function () {
+            jQuery(window).on('resize', function () {
+				$("#select_form_school_chosen").attr('style', 'width: 100%');
+				$("#select_form_class_chosen").attr('style', 'width: 100%');
+				$("#select_form_chosen").attr('style', 'width: 100%');
+            });
+        });
+		$(document).ready(function () {
 			$('#select_form_school').on('change', function () {
 				let urlClasses = $('#myForm').data('urlclasses')
 				var selectValor = $(this).val();
@@ -280,9 +325,7 @@
 			});
 		});
 		function changeYesLink(url) {
-			console.log('Entrei aqui');
 			document.getElementById("link_to_delete").href = url;
-			console.log('Passei daqui');
 		};
 	</script>
 	<div id="delete-assinante-modal" class="modal fade" role="dialog">
