@@ -153,100 +153,91 @@
 											</div>
 										</td>
 										{% endif %}
-										<td>
-											<div class="container" style="white-space: nowrap; text-align: center">
-												{% if type_of_user == 'student' %}
-												<div class="row" style="margin-bottom: 10px">
-													<div class="col-md-12">
-														<a href="{% url 'users:set_parents' user.student_id %}"
-															data-baloon="Remove this item from the cart"
-															class="btn btn-primary w-100">Selecionar Responsáveis</a>
-													</div>
-												</div>
-												{% endif %}
-												{% if user.profile %}
-												<div class="row" style="margin-bottom: 10px">
-													<div class="col-md-12">
+										<th>
+											<div class="dropdown show">
+												<button type="button" class="btn btn-secondary" id="dropdownMenuLink"
+													data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
+														class="fas fa-ellipsis-h"></i></button>
+			
+			
+												<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+													{% if type_of_user == 'student' %}
+															<a href="{% url 'users:set_parents' user.student_id %}"
+																data-baloon="Remove this item from the cart"
+																class="dropdown-item">
+																Selecionar Responsáveis
+															</a>
+													{% endif %}
+													{% if user.profile %}
 														<a href="{% url 'users:change_email' user.profile.id %}"
-															data-baloon="Remove this item from the cart"
-															class="btn btn-primary w-100">Atualizar Email</a>
-													</div>
-												</div>
-												<div class="row" style="margin-bottom: 10px">
-													<div class="col-md-12">
+														data-baloon="Remove this item from the cart"
+														class="dropdown-item">Atualizar Email</a>
 														{% if type_of_user == 'director' %}
 														<a href="{% url 'users:reset_password_send_email' user.head_id 'head' %}"
 															data-baloon="Remove this item from the cart"
-															class="btn btn-primary w-100">Resetar Senha</a>
+															class="dropdown-item">Resetar Senha</a>
 														{% elif type_of_user == 'supervisor' %}
 														<a href="{% url 'users:reset_password_send_email' user.supervisor_id 'supervisor' %}"
 															data-baloon="Remove this item from the cart"
-															class="btn btn-primary w-100">Resetar Senha</a>
+															class="dropdown-item">Resetar Senha</a>
 														{% elif type_of_user == 'witness' %}
 														<a href="{% url 'users:reset_password_send_email' user.witness_id 'witness' %}"
 															data-baloon="Remove this item from the cart"
-															class="btn btn-primary w-100">Resetar Senha</a>
+															class="dropdown-item">Resetar Senha</a>
 														{% elif type_of_user == 'parent' %}
 														<a href="{% url 'users:reset_password_send_email' user.parent_id 'parent' %}"
 															data-baloon="Remove this item from the cart"
-															class="btn btn-primary w-100">Resetar Senha</a>
+															class="dropdown-item">Resetar Senha</a>
 														{% elif type_of_user == 'student' %}
 														<a href="{% url 'users:reset_password_send_email' user.student_id 'student' %}"
 															data-baloon="Remove this item from the cart"
-															class="btn btn-primary w-100">Resetar Senha</a>
+															class="dropdown-item">Resetar Senha</a>
 														{% endif %}
-													</div>
-												</div>
-												{% endif %}
-												{% if request.user.is_superuser %}
-												<div class="row">
-													<div class="col-md-12">
-														{% if type_of_user == 'director' %}
-														<a class="btn btn-danger btn-block"
+													{% endif %}
+													{% if type_of_user == 'director' %}
+														<a class="dropdown-item"
 															onclick="changeYesLink('{% url 'users:delete_user' user.head_id 'head' %}')"
 															href="#" data-baloon="Remove this item from the cart"
 															class="text-light" data-toggle="modal"
-															data-target="#delete-assinante-modal">
+															data-target="#delete-user-modal">
 															Deletar Diretor
 														</a>
 														{% elif type_of_user == 'supervisor' %}
-														<a class="btn btn-danger btn-block"
-															onclick="changeYesLink('{% url 'users:delete_user' user.supervisor_id 'supervisor' %}')"
+														<a class="dropdown-item"
+															onclick="changeYesLink('{% url 'users:delete_user' user.head_id 'supervisor' %}')"
 															href="#" data-baloon="Remove this item from the cart"
 															class="text-light" data-toggle="modal"
-															data-target="#delete-assinante-modal">
+															data-target="#delete-user-modal">
 															Deletar Supervisor
 														</a>
 														{% elif type_of_user == 'witness' %}
-														<a class="btn btn-danger btn-block"
+														<a class="dropdown-item"
 															onclick="changeYesLink('{% url 'users:delete_user' user.witness_id 'witness' %}')"
 															href="#" data-baloon="Remove this item from the cart"
 															class="text-light" data-toggle="modal"
-															data-target="#delete-assinante-modal">
+															data-target="#delete-user-modal">
 															Deletar Testemunha
 														</a>
 														{% elif type_of_user == 'parent' %}
-														<a class="btn btn-danger btn-block"
+														<a class="dropdown-item"
 															onclick="changeYesLink('{% url 'users:delete_user' user.parent_id 'parent' %}')"
 															href="#" data-baloon="Remove this item from the cart"
 															class="text-light" data-toggle="modal"
-															data-target="#delete-assinante-modal">
+															data-target="#delete-user-modal">
 															Deletar Responsável
 														</a>
 														{% elif type_of_user == 'student' %}
-														<a class="btn btn-danger btn-block"
+														<a class="dropdown-item"
 															onclick="changeYesLink('{% url 'users:delete_user' user.student_id 'student' %}')"
 															href="#" data-baloon="Remove this item from the cart"
 															class="text-light" data-toggle="modal"
-															data-target="#delete-assinante-modal">
+															data-target="#delete-user-modal">
 															Deletar Estudante
 														</a>
-														{% endif %}
-													</div>
+													{% endif %}
 												</div>
-												{% endif %}
 											</div>
-										</td>
+										</th>
 									</tr>
 									{% endfor %}
 								</tbody>
