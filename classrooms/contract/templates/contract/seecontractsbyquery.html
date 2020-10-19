@@ -1,6 +1,6 @@
 {% extends 'base.html'%}
 
-{% block title %} Pesquisar contratos {% endblock %}
+{% block title %} Pesquisar Contratos {% endblock %}
 
 {% block content %}
 <script>
@@ -15,7 +15,7 @@
   <div class="container-fluid">
     <div class="card">
       <div class="card-header">
-        <h4 class="card-title">Pesquisar contratos</h4>
+        <h4 class="card-title">Pesquisar Contratos</h4>
       </div>
       <div class="card-body">
         <div class="row">
@@ -84,7 +84,7 @@
               placeholder="Insira o nome do aluno, o nome da escola ou o nome da turma">
             <input type="hidden" id="selected_chain" name="selected_chain">
             <div style="margin-top: 10px"><button class="btn btn-info btn-fill pull-left" type="submit"
-                style="background-color: #213f99; border-color: #213f99">Pesquisar contratos</button>
+                style="background-color: #213f99; border-color: #213f99">Pesquisar Contratos</button>
               <!-- <button class="btn btn-info btn-fill pull-right" id="generate_password" style="background-color: #213f99; border-color: #213f99" onclick="generate_password()">
 															Gerar Senha</button> -->
             </div>
@@ -132,10 +132,10 @@
                     <th>Escola</th>
                     <th>Turma</th>
                     <th>Nome do Estudante</th>
-                    <th>Assinante da Escola</th>
-                    <th>Data Inicial do Contrato</th>
-                    <th>Data Final do Contrato</th>
-                    <th>Data de Expiração</th>
+                    <!-- <th>Assinante da Escola</th> -->
+                    <th>Data de Criação do Contrato</th>
+                    <!-- <th>Data Final do Contrato</th>
+                    <th>Data de Expiração</th> -->
                     <th>Processo do Contrato</th>
                     <th>Ações</th>
                   </tr>
@@ -199,22 +199,22 @@
                     {% else %}
                     <td></td>
                     {% endif %}
-                    {% if contract.counter_signe.name %}
+                    <!-- {% if contract.counter_signe.name %}
                     <td>
                       {{ contract.counter_signe.name }}
                     </td>
                     {% else %}
                     <td></td>
-                    {% endif %}
+                    {% endif %} -->
                     <td>
                       {% if contract.date.day < 10 %}0{{ contract.date.day }}{% else %}{{ contract.date.day }}{% endif %}/{% if contract.date.month < 10 %}0{{ contract.date.month }}{% else %}{{ contract.date.month }}{% endif %}/{{ contract.date.year }}
                     </td>
-                    <td>
+                    <!-- <td>
                       {% if contract.end.day < 10 %}0{{ contract.end.day }}{% else %}{{ contract.end.day }}{% endif %}/{% if contract.end.month < 10 %}0{{ contract.end.month }}{% else %}{{ contract.end.month }}{% endif %}/{{ contract.end.year }}
                     </td>
                     <td>
                       {% if contract.expiration.day < 10 %}0{{ contract.expiration.day }}{% else %}{{ contract.expiration.day }}{% endif %}/{% if contract.expiration.month < 10 %}0{{ contract.expiration.month }}{% else %}{{ contract.expiration.month }}{% endif %}/{{ contract.expiration.year }}
-                    </td>
+                    </td> -->
 
                     <td>
                       <!--sign-->
