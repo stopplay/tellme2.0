@@ -4,29 +4,28 @@
 
 {% block content %}
 <script>
-	$(document).ready(function () {
-		$('.container').removeClass('container');
-	});
-	setGenPasswordToFields(['id_{{user_form.password1.name}}', 'id_{{user_form.password2.name}}']);
+  $(document).ready(function () {
+    $('.container').removeClass('container');
+  });
+  setGenPasswordToFields(['id_{{user_form.password1.name}}', 'id_{{user_form.password2.name}}']);
 </script>
 
 
 <div class="content">
-	<div class="container-fluid">
-		<div class="row">
-			<div class="col-md-9">
-				<div class="card w-50">
-					<div class="card-header">
-						<h4 class="card-title">Pesquisar contratos</h4>
-					</div>
-					<div class="card-body">
-						<div class="row">
-							<div class="col-md-11 pr-1">
-								<div class="form-group">
-									<form id="myForm" method="POST" enctype="multipart/form-data" data-urlclasses="{% url 'users:classes_choices_ajax' %}"> {% csrf_token %}
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">Pesquisar contratos</h4>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-11 pr-1">
+            <div class="form-group">
+              <form id="myForm" method="POST" enctype="multipart/form-data"
+                data-urlclasses="{% url 'users:classes_choices_ajax' %}"> {% csrf_token %}
 
-									<div class="clearfix"></div>
-									<!-- <div class="labelandform">
+                <div class="clearfix"></div>
+                <!-- <div class="labelandform">
 										<p><label>Selecione a cadeia que você deseja pesquisar:</label></p>
 										<select class="custom-select chosen-select" id="select_form">
 											<option id="" value="" selected>--------</option>
@@ -35,1085 +34,1157 @@
 											{% endfor %}
 										</select>
                   </div> -->
-                  <div class="row">
-                    <div class="labelandform col-md-6">
-                      <p><label>Selecione a Escola:</label></p>
-                      <select class="custom-select chosen-select" id="select_form_school">
-                        <option id="" value="0" selected>--------</option>
-                        {% for school in schools %}
-                          <option value="{{ school.school_id }}">{{ school.school_name }}</option>
-                        {% endfor %}
-                      </select>
-                    </div>
-                    <div class="labelandform col-md-6">
-                      <p><label>Selecione a Turma:</label></p>
-                      <select class="custom-select chosen-select" id="select_form_class">
-                        <option id="" value="0" selected>--------</option>
-                      </select>
-                    </div>
+                <div class="row">
+                  <div class="labelandform col-md-6">
+                    <p><label>Selecione a Escola:</label></p>
+                    <select class="custom-select chosen-select" id="select_form_school">
+                      <option id="" value="0" selected>--------</option>
+                      {% for school in schools %}
+                      <option value="{{ school.school_id }}">{{ school.school_name }}</option>
+                      {% endfor %}
+                    </select>
                   </div>
-                  <div class="labelandform">
-                    <p><label>Período:</label></p>
-                    Contratos de: <input style="font-size: 0.78rem" type="date" id="initial_date" name="initial_date">
-                    a: <input style="font-size: 0.78rem" type="date" id="final_date" name="final_date">
+                  <div class="labelandform col-md-6">
+                    <p><label>Selecione a Turma:</label></p>
+                    <select class="custom-select chosen-select" id="select_form_class">
+                      <option id="" value="0" selected>--------</option>
+                    </select>
                   </div>
-                  <p><label>Mostrar contratos assinados pelo Responsável Financeiro e Pedagógico?</label><br><label
+                </div>
+                <div class="labelandform">
+                  <label>Período:</label>
+                  Contratos de: <input style="font-size: 0.78rem" type="date" id="initial_date" name="initial_date">
+                  a: <input style="font-size: 0.78rem" type="date" id="final_date" name="final_date">
+                </div>
+                
+                <label>Mostrar contratos assinados pelo Responsável Financeiro e Pedagógico?</label><br><label
                     style="margin-right: 10px">Não</label><label class="switch">
-                      <input type="checkbox" id="first_checkbox">
-                      <a id="first_slider" class="slider round"></a>
-                    </label><label style="margin-left: 10px">Sim</label></p>
-                  </div>
-                  <div>
-                    <p><label>Mostrar contratos assinados pelo Diretor?</label><br><label
-                      style="margin-right: 10px">Não</label><label class="switch"><input
-                        type="checkbox" id="second_checkbox"><a id="second_slider"
-                        class="slider round"></a></label><label
-                        style="margin-left: 10px">Sim</label></p>
-                      </div>
-                  <div>
-                    <p><label>Mostrar contratos com material já comprado?</label><br><label
-                      style="margin-right: 10px">Não</label><label class="switch"><input
-                      type="checkbox" id="third_checkbox"><a id="third_slider"
-                      class="slider round"></a></label><label
-                      style="margin-left: 10px">Sim</label></p>
-                  </div>
-                  <input type="hidden" id="signed_RF/RP1" name="signed_RF/RP1" value="não">
-                  <input type="hidden" id="signed_DIR" name="signed_DIR" value="não">
-                  <input type="hidden" id="purchased_contract" name="purchased_contract" value="não">
-                  <input type="hidden" id="selected_school" name="selected_school" value="0">
-                  <input type="hidden" id="selected_class" name="selected_class" value="0">
-									<input type="text" id="search" name="search" placeholder="Insira o nome do aluno, o nome da escola ou o nome da turma">
-									<input type="hidden" id="selected_chain" name="selected_chain">
-									<div style="margin-top: 10px"><button class="btn btn-info btn-fill pull-left" type="submit"
-													style="background-color: #213f99; border-color: #213f99">Pesquisar contratos</button>
-															<!-- <button class="btn btn-info btn-fill pull-right" id="generate_password" style="background-color: #213f99; border-color: #213f99" onclick="generate_password()">
-															Gerar Senha</button> --></div>
-									<div class="clearfix"></div>
-								</form>
-							</div>
-						</div>
-					</div>
-				    <div>
-				</div>
-			</div>
-		</div>
+                    <input type="checkbox" id="first_checkbox">
+                    <a id="first_slider" class="slider round"></a>
+                  </label><label style="margin-left: 10px">Sim</label>
+            </div>
+            <div>
+              <p><label>Mostrar contratos assinados pelo Diretor?</label><br><label
+                  style="margin-right: 10px">Não</label><label class="switch"><input type="checkbox"
+                    id="second_checkbox"><a id="second_slider" class="slider round"></a></label><label
+                  style="margin-left: 10px">Sim</label></p>
+            </div>
+            <div>
+              <p><label>Mostrar contratos com material já comprado?</label><br><label
+                  style="margin-right: 10px">Não</label><label class="switch"><input type="checkbox"
+                    id="third_checkbox"><a id="third_slider" class="slider round"></a></label><label
+                  style="margin-left: 10px">Sim</label></p>
+            </div>
+            <input type="hidden" id="signed_RF/RP1" name="signed_RF/RP1" value="não">
+            <input type="hidden" id="signed_DIR" name="signed_DIR" value="não">
+            <input type="hidden" id="purchased_contract" name="purchased_contract" value="não">
+            <input type="hidden" id="selected_school" name="selected_school" value="0">
+            <input type="hidden" id="selected_class" name="selected_class" value="0">
+            <input type="text" id="search" name="search"
+              placeholder="Insira o nome do aluno, o nome da escola ou o nome da turma">
+            <input type="hidden" id="selected_chain" name="selected_chain">
+            <div style="margin-top: 10px"><button class="btn btn-info btn-fill pull-left" type="submit"
+                style="background-color: #213f99; border-color: #213f99">Pesquisar contratos</button>
+              <!-- <button class="btn btn-info btn-fill pull-right" id="generate_password" style="background-color: #213f99; border-color: #213f99" onclick="generate_password()">
+															Gerar Senha</button> -->
+            </div>
+            <div class="clearfix"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div>
+      </div>
 
-	</div>
-</div>
+
+    </div>
+  </div>
 </div>
 {% if contracts %}
-	<div class="content">
-  		<div class="container-fluid">
-			<div class="row">
-				<div class="col-md-12">
-				    <div class="card strpied-tabled-with-hover">
-					    <div class="card-header ">
-				          	<h4 class="card-title">Resultados</h4>
-				        </div>
-                <form>
-				        <div class="card-body table-full-width table-responsive">
-                  {% if is_supervisor %}
-                    <div class="col-md-12">
-                      <button id="sign-multiple-id1" class="multi-select-button btn btn-dark btn-sm btn-block sign-multiples-buttons" data-toggle="modal" data-target="#multi-sign-contract-modal">
-                        Clique Aqui Para Assinar Contratos Selecionados
-                      </button>
-                    </div>
-                  {% endif %}
-				        	<table class="table table-hover table-striped display row-border mb-4" id="contractstable">
-                  <thead>
-                    <tr>
-                      {% if is_supervisor %}
-                        <th>
-                          <input id="check" type="checkbox" name="select_all">
-                        </th>
+<div class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card strpied-tabled-with-hover">
+          <div class="card-header ">
+            <h4 class="card-title">Resultados</h4>
+          </div>
+          <form>
+            <div class="card-body table-full-width table-responsive">
+              {% if is_supervisor %}
+              <div class="col-md-12">
+                <button id="sign-multiple-id1"
+                  class="multi-select-button btn btn-dark btn-sm btn-block sign-multiples-buttons" data-toggle="modal"
+                  data-target="#multi-sign-contract-modal">
+                  Clique Aqui Para Assinar Contratos Selecionados
+                </button>
+              </div>
+              {% endif %}
+              <table class="table table-hover table-striped display row-border mb-4" id="contractstable">
+                <thead>
+                  <tr>
+                    {% if is_supervisor %}
+                    <th>
+                      <input id="check" type="checkbox" name="select_all">
+                    </th>
+                    {% endif %}
+                    <th>Id do Contrato</th>
+                    <th>Escola</th>
+                    <th>Turma</th>
+                    <th>Nome do Estudante</th>
+                    <th>Assinante da Escola</th>
+                    <th>Data Inicial do Contrato</th>
+                    <th>Data Final do Contrato</th>
+                    <th>Data de Expiração</th>
+                    <th>Processo do Contrato</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody class="">
+                  {% for contract in contracts %}
+                  <tr class="pb-5">
+                    {% if is_supervisor %}
+                    <td>
+                      {% if contract.counter_signed %}
+                      <label><input type="checkbox" name="checks" value="{{ contract.contract_id }}" checked></label>
+                      {% else %}
+                      <input type="checkbox" name="checks" value="{{ contract.contract_id }}">
                       {% endif %}
-                      <th>Id do Contrato</th>
-                      <th>Escola</th>
-                      <th>Turma</th>
-                      <th>Nome do Estudante</th>
-                      <th>Assinante da Escola</th>
-                      <th>Data Inicial do Contrato</th>
-                      <th>Data Final do Contrato</th>
-                      <th>Data de Expiração</th>
-                      <th>Processo do Contrato</th>
-                      <th >Ações</th>
-                    </tr>
-                  </thead>
-                  <tbody class="">
-                    {% for contract in contracts %}
-                      <tr class="pb-5">
-                        {% if is_supervisor %}
-                          <td>
-                            {% if contract.counter_signed %}
-                            <label><input type="checkbox" name="checks" value="{{ contract.contract_id }}" checked></label>
-                            {% else %}
-                            <input type="checkbox" name="checks" value="{{ contract.contract_id }}">
-                            {% endif %}
-                          </td>
-                        {% endif %}
+                    </td>
+                    {% endif %}
 
-                        <th>
-                          {{contract.contract_id}}
-                        </th>
-                        
-                        {% if contract.chain.name %}
-                          
-                          {% for school in schools %}
-                          
-                            {% if contract.chain in school.chains.all %}
-                              <td>
-                                {{ school.school_name }}
-                              </td>
-                            {% endif %}
+                    <th>
+                      {{contract.contract_id}}
+                    </th>
 
-                            {% for classe in school.classes.all %}
-                              {% if classe.class_name in contract.chain.name %}
-                                {% if classe.class_unit in contract.chain.name %}
-                                  {% for student in contract.first_auth_signe.first_parent.all %}
-                                    {% if student.name == contract.student_name %}
-                                      {% if student in classe.students.all %}
-                                        <td>
-                                          {{ classe.class_name }}
-                                        </td>
-                                        {{ "<!--" }}
-                                      {% endif %}
-                                    {% endif %}
-                                  {% endfor %}
-                                {% endif %}
-                              {% endif %}
-                            {% endfor %}
+                    {% if contract.chain.name %}
 
-                          {% endfor %}
-                        {{ "-->" }}
-                        
-                        {% else %}
-                          <td></td>
-                          <td></td>
-                        {% endif %}
-                        
-                        {% if contract.student_name %}
-                          <td>
-                            {{ contract.student_name }}
-                          </td>
-                        {% else %}
-                          <td></td>
-                        {% endif %}
-                        {% if contract.counter_signe.name %}
-                          <td>
-                            {{ contract.counter_signe.name }}
-                          </td>
-                        {% else %}
-                          <td></td>
-                        {% endif %}
-                        <td>
-                          {% if contract.date.day < 10 %}0{{ contract.date.day }}{% else %}{{ contract.date.day }}{% endif %}/{% if contract.date.month < 10 %}0{{ contract.date.month }}{% else %}{{ contract.date.month }}{% endif %}/{{ contract.date.year }}
-                        </td>
-                        <td>
-                          {% if contract.end.day < 10 %}0{{ contract.end.day }}{% else %}{{ contract.end.day }}{% endif %}/{% if contract.end.month < 10 %}0{{ contract.end.month }}{% else %}{{ contract.end.month }}{% endif %}/{{ contract.end.year }}
-                        </td>
-                        <td>
-                          {% if contract.expiration.day < 10 %}0{{ contract.expiration.day }}{% else %}{{ contract.expiration.day }}{% endif %}/{% if contract.expiration.month < 10 %}0{{ contract.expiration.month }}{% else %}{{ contract.expiration.month }}{% endif %}/{{ contract.expiration.year }}
-                        </td>
+                    {% for school in schools %}
 
-                        <td>
-                          <!--sign-->
-                          {% if contract.slm %}
-                            <div class="row">
-                              <div class="col-md-2">
-                                {% if contract.purchased_slm %}
-                                  <div class="margin-5">
-                                    <span class="badge badge-pill badge-success text-success float-right" >.</span>
-                                  </div>
-                                {% else %}
-                                  <div class="margin-5">
-                                    <span class="badge badge-pill badge-danger text-danger float-right" >.</span>
-                                  </div>
-                                {% endif %}
-                              </div>
+                    {% if contract.chain in school.chains.all %}
+                    <td>
+                      {{ school.school_name }}
+                    </td>
+                    {% endif %}
 
-                              <div class="col-md-10">
-                                <label class="label-to-the-middle">MATERIAL SLM COMPRADO</label>
-                              </div>
-                            </div>
-                          {% endif %}
-
-                          {% if contract.student_auth_signe %}
-                            <div class="row">
-                              <div class="col-md-2">
-                                {% if contract.student_auth_signed %}
-                                  <div class="margin-5">
-                                    <span id="{{ contract.contract_id }}_student_auth_signed" class="badge badge-pill badge-success text-success float-right" >.</span>
-                                  </div>
-                                {% else %}
-                                  <div class="margin-5">
-                                    <span id="{{ contract.contract_id }}_student_auth_signed" class="badge badge-pill badge-danger text-danger float-right" >.</span>
-                                  </div>
-                                {% endif %}
-                              </div>
-
-                              <div class="col-md-10">
-                                <label class="label-to-the-middle">RESPONSÁVEL ESTUDANTE ASSINADO</label>
-                              </div>
-                            </div>
-                          {% endif %}
-
-                          {% if contract.first_auth_signe %}
-                            <div class="row">
-                              <div class="col-md-2">
-                                {% if contract.first_auth_signed %}
-                                <div class="margin-5">
-                                  <span id="{{ contract.contract_id }}_first_auth_signed" class="badge badge-pill badge-success text-success float-right" >.</span>
-                                </div>
-                                {% else %}
-                                <div class="margin-5">
-                                  <span id="{{ contract.contract_id }}_first_auth_signed" class="badge badge-pill badge-danger text-danger float-right" >.</span>
-                                </div>
-                                {% endif %}
-                              </div>
-
-                              <div class="col-md-10">
-                                <label class="label-to-the-middle">RESPONSÁVEL FINANCEIRO ASSINADO</label>
-                              </div>
-                            </div>
-                          {% endif %}
-
-                          {% if contract.second_auth_signe %}
-                            <div class="row">
-                              <div class="col-md-2">
-                                {% if contract.second_auth_signed %}
-                                <div class="margin-5">
-                                  <span id="{{ contract.contract_id }}_second_auth_signed" class="badge badge-pill badge-success text-success float-right" >.</span>
-                                </div>
-                                {% else %}
-                                <div class="margin-5">
-                                  <span id="{{ contract.contract_id }}_second_auth_signed" class="badge badge-pill badge-danger text-danger float-right" >.</span>
-                                </div>
-                                {% endif %}
-                              </div>
-
-                              <div class="col-md-10">
-                                <label class="label-to-the-middle">RESPONSÁVEL PEDAGÓGICO ASSINADO</label>
-                              </div>
-                            </div>
-                          {% endif %}
-                          {% if contract.third_auth_signe %}
-                            <div class="row">
-                              <div class="col-md-2">
-                                {% if contract.third_auth_signed %}
-                                <div class="margin-5">
-                                  <span id="{{ contract.contract_id }}_third_auth_signed" class="badge badge-pill badge-success text-success float-right" >.</span>
-                                </div>
-                                {% else %}
-                                <div class="margin-5">
-                                  <span id="{{ contract.contract_id }}_third_auth_signed" class="badge badge-pill badge-danger text-danger float-right" >.</span>
-                                </div>
-                                {% endif %}
-                              </div>
-
-                              <div class="col-md-10">
-                                <label class="label-to-the-middle">TERCEIRO RESPONSÁVEL ASSINADO ASSINADO</label>
-                              </div>
-                            </div>
-                          {% endif %}
-
-                          {% if contract.first_witness_signe and contract.second_witness_signe %}
-                            <div class="row">
-                              <div class="col-md-2">
-                                {% if contract.all_witness_signed %}
-                                  <div class="margin-5">
-                                    <span id="{{ contract.contract_id }}_all_witness_signed" class="badge badge-pill badge-success text-success float-right" >.</span>
-                                  </div>
-                                {% else %}
-                                  <div class="margin-5">
-                                    <span id="{{ contract.contract_id }}_all_witness_signed" class="badge badge-pill badge-danger text-danger float-right" >.</span>
-                                  </div>
-                                {% endif %}
-                              </div>
-
-                              <div class="col-md-10">
-                                <label class="label-to-the-middle">TODAS AS TESTEMUNHAS ASSINARAM</label>
-                              </div>
-                            </div>
-                          {% endif %}
-                          {% if contract.chain.name %}
-                            {% for school in schools %}
-                              {% if contract.chain in school.chains.all %}
-                                {% if school.is_maple_bear %}
-                                  <div class="row">
-                                    <div class="col-md-2">
-                                      {% if contract.is_paid %}
-                                        <div class="margin-5">
-                                          <span class="badge badge-pill badge-success text-success float-right" >.</span>
-                                        </div>
-                                      {% else %}
-                                        <div class="margin-5">
-                                          <span class="badge badge-pill badge-danger text-danger float-right" >.</span>
-                                        </div>
-                                      {% endif %}
-                                    </div>
-
-                                    <div class="col-md-10">
-                                      <label class="label-to-the-middle">CONTRATO PAGO</label>
-                                    </div>
-                                  </div>
-                                {% endif %}
-                              {% endif %}
-                            {% endfor %}
-                          {% endif %}
-
-                          <div class="row">
-                            <div class="col-md-2">
-                              {% if contract.counter_signed %}
-                                <div class="margin-5">
-                                  <span id="{{ contract.contract_id }}_counter_signed" class="badge badge-pill badge-success text-success float-right" >.</span>
-                                </div>
-                              {% else %}
-                                <div class="margin-5">
-                                  <span id="{{ contract.contract_id }}_counter_signed" class="badge badge-pill badge-danger text-danger  float-right" >.</span>
-                                </div>
-                              {% endif %}
-                            </div>
-
-                            <div class="col-md-10">
-                              <label class="label-to-the-middle">DIRETOR RESPONSÁVEL ASSINADO</label>
-                            </div>
-                          </div>
-
-                          <div class="row">
-                            <div class="col-md-2">
-                              {% if contract.is_expired %}
-                                <div class="margin-5">
-                                  <span class="badge badge-pill badge-success text-success float-right" >.</span>
-                                </div>
-                              {% else %}
-                                <div class="margin-5">
-                                  <span class="badge badge-pill badge-danger text-danger  float-right" >.</span>
-                                </div>
-                              {% endif %}
-                            </div>
-
-                            <div class="col-md-10">
-                              <label class="label-to-the-middle">CONTRATO EXPIRADO</label>
-                            </div>
-                          </div>
-
-                          <div class="row">
-                            <div class="col-md-2">
-                              {% if contract.is_active %}
-                                <div class="margin-5">
-                                  <span class="badge badge-pill badge-success text-success float-right" >.</span>
-                                </div>
-                              {% else %}
-                                <div class="margin-5">
-                                  <span class="badge badge-pill badge-danger text-danger  float-right" >.</span>
-                                </div>
-                              {% endif %}
-                            </div>
-
-                            <div class="col-md-10">
-                              <label class="label-to-the-middle">CONTRATO ATIVO</label>
-                            </div>
-                          </div>
-
-                        </td>
-
-                        <td class="w-100">
-                          <div class="container" style="white-space: nowrap; text-align: center; width: 92%">
-
-                            {% if request.user.is_superuser %}
-                            
-                              <div class="row">
-                                <div class="col-md-12">
-                                  {% if contract.first_auth_signed or contract.second_auth_signed or contract.counter_signed %}
-                                    <a class="btn btn-secondary w-100" href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart">
-                                      Ver Detalhes
-                                    </a>
-                                  {% else %}
-                                    <div class="dropdown show w-100">
-                                      <a class="btn btn-secondary dropdown-toggle w-100" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Ações
-                                      </a>
-                                      <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                        <a class="dropdown-item" href="{% url 'contracts:select_student_to_contract_update' contract.contract_id %}" data-baloon="Remove this item from the cart">Atualizar Contrato</a>
-                                        <a class="dropdown-item" href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart">Ver Detalhes</a>
-                                      </div>
-                                    </div>
-                                  {% endif %}
-                                </div>
-                              </div>
-                              <div class="row" >                        
-                                <div class="col-md-12">
-                                  <a  class="btn btn-primary btn-block w-100" href="{% url 'contracts:extend_expire_date' contract.contract_id %}" data-baloon="Remove this item from the cart">
-                                      Estender Prazo
-                                  </a>
-                                </div>
-                              </div>
-                              <div class="row">
-                                <div class="col-md-12">
-                                  <a class="btn btn-danger btn-block" onclick="changeYesLink('{% url 'contracts:delete_contract' contract.contract_id %}')" href="#" data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal" data-target="#delete-contract-modal">
-                                    Deletar Contrato
-                                  </a>
-                                </div>
-                              </div>
-
-                            {% else %}
-                              <div class="row">
-                                {% if is_supervisor %}
-                                  {% if request.user == contract.counter_signe.profile %}
-                                    <div class="col-md-12">
-                                      {% if contract.counter_signed %}
-                                        <!--Verde-->
-                                        <button type="button" class="btn btn-success btn-block w-100" style="cursor: not-allowed;">
-                                          Assinado
-                                        </button>
-                                      {% else %}
-                                        <!--Vermelho-->
-                                        <a id="{{ contract.contract_id }}_counter_signed_button" class="btn btn-primary btn-danger btn-block w-100" onclick="signContract('{% url 'contracts:set_signed' contract.contract_id %}');" href="#" data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal" data-target="#sign-contract-modal">
-                                          Assinar Contrato
-                                        </a>
-                                      {% endif %}
-                                    </div>
-                                  {% endif %}
-                                {% elif request.user == contract.first_auth_signe.profile %}
-                                  <div class="col-md-12">
-                                    {% if contract.first_auth_signed %}
-                                      <!--verde-->
-                                      <button type="button" class="btn btn-success btn-block w-100" style="cursor: not-allowed;">
-                                        Assinado
-                                      </button>
-                                    {% else %}
-                                      <!--Vermelho-->
-                                      <a id="{{ contract.contract_id }}_first_auth_signed_button" class="btn btn-primary btn-danger btn-block w-100" onclick="signContract('{% url 'contracts:set_signed' contract.contract_id %}');" href="#" data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal" data-target="#sign-contract-modal">
-                                        Assinar Contrato
-                                      </a>
-                                    {% endif %}                                  
-                                  </div>
-                                {% elif request.user == contract.second_auth_signe.profile %}
-                                  <div class="col-md-12">
-                                    {% if contract.second_auth_signed %}
-                                      <!--verde-->
-                                      <button type="button" class="btn btn-success btn-block w-100" style="cursor: not-allowed;">
-                                        Assinado
-                                      </button>
-                                    {% else %}
-                                      <!--Vermelho-->
-                                      <a id="{{ contract.contract_id }}_second_auth_signed_button" class="btn btn-primary btn-danger btn-block w-100" onclick="signContract('{% url 'contracts:set_signed' contract.contract_id %}');" href="#" data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal" data-target="#sign-contract-modal">
-                                        Assinar Contrato
-                                      </a>
-                                    {% endif %}                                  
-                                  </div>
-                                {% elif request.user == contract.third_auth_signe.profile %}
-                                  <div class="col-md-12">
-                                    {% if contract.third_auth_signed %}
-                                      <!--verde-->
-                                      <button type="button" class="btn btn-success btn-block w-100" style="cursor: not-allowed;">
-                                        Assinado
-                                      </button>
-                                    {% else %}
-                                      <!--Vermelho-->
-                                      <a id="{{ contract.contract_id }}_third_auth_signed_button" class="btn btn-primary btn-danger btn-block w-100" onclick="signContract('{% url 'contracts:set_signed' contract.contract_id %}');" href="#" data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal" data-target="#sign-contract-modal">
-                                        Assinar Contrato
-                                      </a>
-                                    {% endif %}                                  
-                                  </div>
-                                {% elif request.user == contract.student_auth_signe.profile %}
-                                  <div class="col-md-12">
-                                    {% if contract.student_auth_signed %}
-                                      <!--verde-->
-                                      <button id="{{ contract.contract_id }}_student_auth_signed_button" type="button" class="btn btn-success btn-block w-100" style="cursor: not-allowed;">
-                                        Assinado
-                                      </button>
-                                    {% else %}
-                                      <!--Vermelho-->
-                                      <a class="btn btn-primary btn-danger btn-block w-100" onclick="signContract('{% url 'contracts:set_signed' contract.contract_id %}');" href="#" data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal" data-target="#sign-contract-modal">
-                                        Assinar Contrato
-                                      </a>
-                                    {% endif %}                                  
-                                  </div>
-                                {% elif request.user == contract.first_witness_signe.profile %}
-                                  <div class="col-md-12">
-                                    {% if contract.first_witness_signed %}
-                                      <!--verde-->
-                                      <button type="button" class="btn btn-success btn-block w-100" style="cursor: not-allowed;">
-                                        Assinado
-                                      </button>
-                                    {% else %}
-                                      <!--Vermelho-->
-                                      <a id="{{ contract.contract_id }}_first_witness_signed_button" class="btn btn-primary btn-danger btn-block w-100" onclick="signContract('{% url 'contracts:set_signed' contract.contract_id %}');" href="#" data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal" data-target="#sign-contract-modal">
-                                        Assinar Contrato
-                                      </a>
-                                    {% endif %}                                  
-                                  </div>
-                                {% elif request.user == contract.second_witness_signe.profile %}
-                                  <div class="col-md-12">
-                                    {% if contract.second_witness_signed %}
-                                      <!--verde-->
-                                      <button type="button" class="btn btn-success btn-block w-100" style="cursor: not-allowed;">
-                                        Assinado
-                                      </button>
-                                    {% else %}
-                                      <!--Vermelho-->
-                                      <a id="{{ contract.contract_id }}_second_witness_signed_button" class="btn btn-primary btn-danger btn-block w-100" onclick="signContract('{% url 'contracts:set_signed' contract.contract_id %}');" href="#" data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal" data-target="#sign-contract-modal">
-                                        Assinar Contrato
-                                      </a>
-                                    {% endif %}                                  
-                                  </div>
-                                {% endif %}
-                              </div>
-
-                              <div class="row">
-                                <div class="col-md-12">
-                                  {% if is_supervisor %}
-                                    {% if contract.first_auth_signed or contract.second_auth_signed or contract.counter_signed %}
-                                      <a class="btn btn-secondary btn-block w-100" href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart">
-                                        Ver Detalhes
-                                      </a>
-                                    {% else %}
-                                      <div class="dropdown show">
-                                        <a class="btn btn-secondary dropdown-toggle w-100" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                          Ações
-                                        </a>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                          <a class="dropdown-item" onclick="changeYesLink('{% url 'contracts:delete_contract' contract.contract_id %}')" href="#" data-baloon="Remove this item from the cart" data-toggle="modal" data-target="#delete-contract-modal">Deletar Contrato</a>
-                                          <a class="dropdown-item" href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart">Ver Detalhes</a>
-                                        </div>
-                                      </div>
-                                    {% endif %}
-                                  {% else %}
-                                    <a class="btn btn-secondary btn-block w-100" href="{% url 'contracts:seecontractdetails' contract.contract_id %}" data-baloon="Remove this item from the cart">
-                                      Ver Detalhes
-                                    </a>
-                                  {% endif %}
-                                </div>
-                              </div>
-                              {% endif %}
-                              {% if is_supervisor %}
-                                <div class="row" >                        
-                                  <div class="col-md-12">
-                                    <a  class="btn btn-primary btn-block w-100" href="{% url 'contracts:extend_expire_date' contract.contract_id %}" data-baloon="Remove this item from the cart">
-                                        Extender Prazo
-                                    </a>
-                                  </div>
-                                </div>
-                              {% endif %}
-                              {% if contract.pdf %}
-                                <div class="row" >                        
-                                  <div class="col-md-12">
-                                    <a  class="btn btn-primary btn-block w-100" href="{{contract.pdf.url}}" data-baloon="Remove this item from the cart">
-                                      Ver Contrato
-                                    </a>
-                                  </div>
-                                </div>
-                              {% endif %}
-                              
-                              {% if contract.terms_of_contract %}
-                                <div class="row">
-                                  <div class="col-md-12">
-                                    <a class="btn btn-primary w-100" href="{{contract.terms_of_contract.url}}">
-                                      Termos Ad. do Contrato (1)
-                                    </a>
-                                  </div>
-                                </div>
-                              {% endif %}
-
-                              {% if contract.terms_of_contract_2 %}
-                                <div class="row">                      
-                                  <div class="col-md-12">
-                                    <a class="btn btn-primary w-100" href="{{contract.terms_of_contract_2.url}}">
-                                        Termos Ad. do Contrato (2)
-                                    </a>
-                                  </div>
-                                </div>
-                              {% endif %}
-                              {% if contract.slm %}
-                                {% if not contract.purchased_slm %}
-                                  {% if is_supervisor %}
-                                  <div class="row">                      
-                                    <div class="col-md-12">
-                                      <a class="btn btn-primary w-100" href="{% url 'contracts:mark_slm_purchased' contract.contract_id %}">
-                                        Manual SLM
-                                      </a>
-                                    </div>
-                                  </div>
-                                  {% else %}
-                                  <div class="row">                      
-                                    <div class="col-md-12">
-                                      <a class="btn btn-primary w-100" href="{% url 'contracts:redirect_to_slm_link' contract.contract_id %}">
-                                        Comprar Material
-                                      </a>
-                                    </div>
-                                  </div>
-                                  {% endif %}
-                                {% else %}
-                                  <div class="row">                      
-                                    <div class="col-md-12">
-                                      <button type="button" class="btn btn-success btn-block w-100" style="cursor: not-allowed;">
-                                        Material já comprado
-                                      </button>
-                                    </div>
-                                  </div>
-                                {% endif %}
-                              {% endif %}
-                              {% if request.user.is_superuser or is_supervisor %}
-                                {% if contract.chain.name %}
-                                  {% for school in schools %}
-                                    {% if contract.chain in school.chains.all %}
-                                      {% if school.is_maple_bear %}
-                                        {% if not contract.is_paid %}
-                                          <div class="row">                      
-                                            <div class="col-md-12">
-                                              <a class="btn btn-primary w-100" href="{% url 'contracts:set_contract_paid' contract.contract_id %}">
-                                                Setar contrato como pago
-                                              </a>
-                                            </div>
-                                          </div>
-                                        {% else %}
-                                          <div class="row">                      
-                                            <div class="col-md-12">
-                                              <button type="button" class="btn btn-success btn-block w-100" style="cursor: not-allowed;">
-                                                Contrato pago
-                                              </button>
-                                            </div>
-                                          </div>
-                                        {% endif %}
-                                      {% endif %}
-                                    {% endif %}
-                                  {% endfor %}
-                                {% endif %}
-                              {% endif %}
-                          </div>
-                        </td>
-                      </tr>
+                    {% for classe in school.classes.all %}
+                    {% if classe.class_name in contract.chain.name %}
+                    {% if classe.class_unit in contract.chain.name %}
+                    {% for student in contract.first_auth_signe.first_parent.all %}
+                    {% if student.name == contract.student_name %}
+                    {% if student in classe.students.all %}
+                    <td>
+                      {{ classe.class_name }}
+                    </td>
+                    {{ "<!--" }}
+                    {% endif %}
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                    {% endif %}
                     {% endfor %}
 
-                  </tbody>
-                </table>
-				          </div>
-                </form>
-				        </div>
-				      </div>
-				  </div>
-				</div>
-			</div>
-			{% else %}
-			  {% if search or selected_school or selected_class %}
-			  	<h4>Não há nenhum resultado para a pesquisa feita</h4>
-			  {% endif %}
-			{% endif %}
+                    {% endfor %}
+                    {{ "-->" }}
+
+                    {% else %}
+                    <td></td>
+                    <td></td>
+                    {% endif %}
+
+                    {% if contract.student_name %}
+                    <td>
+                      {{ contract.student_name }}
+                    </td>
+                    {% else %}
+                    <td></td>
+                    {% endif %}
+                    {% if contract.counter_signe.name %}
+                    <td>
+                      {{ contract.counter_signe.name }}
+                    </td>
+                    {% else %}
+                    <td></td>
+                    {% endif %}
+                    <td>
+                      {% if contract.date.day < 10 %}0{{ contract.date.day }}{% else %}{{ contract.date.day }}{% endif %}/{% if contract.date.month < 10 %}0{{ contract.date.month }}{% else %}{{ contract.date.month }}{% endif %}/{{ contract.date.year }}
+                    </td>
+                    <td>
+                      {% if contract.end.day < 10 %}0{{ contract.end.day }}{% else %}{{ contract.end.day }}{% endif %}/{% if contract.end.month < 10 %}0{{ contract.end.month }}{% else %}{{ contract.end.month }}{% endif %}/{{ contract.end.year }}
+                    </td>
+                    <td>
+                      {% if contract.expiration.day < 10 %}0{{ contract.expiration.day }}{% else %}{{ contract.expiration.day }}{% endif %}/{% if contract.expiration.month < 10 %}0{{ contract.expiration.month }}{% else %}{{ contract.expiration.month }}{% endif %}/{{ contract.expiration.year }}
+                    </td>
+
+                    <td>
+                      <!--sign-->
+                      {% if contract.slm %}
+                      <div class="row">
+                        <div class="col-md-2">
+                          {% if contract.purchased_slm %}
+                          <div class="margin-5">
+                            <span class="badge badge-pill badge-success text-success float-right">.</span>
+                          </div>
+                          {% else %}
+                          <div class="margin-5">
+                            <span class="badge badge-pill badge-danger text-danger float-right">.</span>
+                          </div>
+                          {% endif %}
+                        </div>
+
+                        <div class="col-md-10">
+                          <label class="label-to-the-middle">MATERIAL SLM COMPRADO</label>
+                        </div>
+                      </div>
+                      {% endif %}
+
+                      {% if contract.student_auth_signe %}
+                      <div class="row">
+                        <div class="col-md-2">
+                          {% if contract.student_auth_signed %}
+                          <div class="margin-5">
+                            <span id="{{ contract.contract_id }}_student_auth_signed"
+                              class="badge badge-pill badge-success text-success float-right">.</span>
+                          </div>
+                          {% else %}
+                          <div class="margin-5">
+                            <span id="{{ contract.contract_id }}_student_auth_signed"
+                              class="badge badge-pill badge-danger text-danger float-right">.</span>
+                          </div>
+                          {% endif %}
+                        </div>
+
+                        <div class="col-md-10">
+                          <label class="label-to-the-middle">RESPONSÁVEL ESTUDANTE ASSINADO</label>
+                        </div>
+                      </div>
+                      {% endif %}
+
+                      {% if contract.first_auth_signe %}
+                      <div class="row">
+                        <div class="col-md-2">
+                          {% if contract.first_auth_signed %}
+                          <div class="margin-5">
+                            <span id="{{ contract.contract_id }}_first_auth_signed"
+                              class="badge badge-pill badge-success text-success float-right">.</span>
+                          </div>
+                          {% else %}
+                          <div class="margin-5">
+                            <span id="{{ contract.contract_id }}_first_auth_signed"
+                              class="badge badge-pill badge-danger text-danger float-right">.</span>
+                          </div>
+                          {% endif %}
+                        </div>
+
+                        <div class="col-md-10">
+                          <label class="label-to-the-middle">RESPONSÁVEL FINANCEIRO ASSINADO</label>
+                        </div>
+                      </div>
+                      {% endif %}
+
+                      {% if contract.second_auth_signe %}
+                      <div class="row">
+                        <div class="col-md-2">
+                          {% if contract.second_auth_signed %}
+                          <div class="margin-5">
+                            <span id="{{ contract.contract_id }}_second_auth_signed"
+                              class="badge badge-pill badge-success text-success float-right">.</span>
+                          </div>
+                          {% else %}
+                          <div class="margin-5">
+                            <span id="{{ contract.contract_id }}_second_auth_signed"
+                              class="badge badge-pill badge-danger text-danger float-right">.</span>
+                          </div>
+                          {% endif %}
+                        </div>
+
+                        <div class="col-md-10">
+                          <label class="label-to-the-middle">RESPONSÁVEL PEDAGÓGICO ASSINADO</label>
+                        </div>
+                      </div>
+                      {% endif %}
+                      {% if contract.third_auth_signe %}
+                      <div class="row">
+                        <div class="col-md-2">
+                          {% if contract.third_auth_signed %}
+                          <div class="margin-5">
+                            <span id="{{ contract.contract_id }}_third_auth_signed"
+                              class="badge badge-pill badge-success text-success float-right">.</span>
+                          </div>
+                          {% else %}
+                          <div class="margin-5">
+                            <span id="{{ contract.contract_id }}_third_auth_signed"
+                              class="badge badge-pill badge-danger text-danger float-right">.</span>
+                          </div>
+                          {% endif %}
+                        </div>
+
+                        <div class="col-md-10">
+                          <label class="label-to-the-middle">TERCEIRO RESPONSÁVEL ASSINADO ASSINADO</label>
+                        </div>
+                      </div>
+                      {% endif %}
+
+                      {% if contract.first_witness_signe and contract.second_witness_signe %}
+                      <div class="row">
+                        <div class="col-md-2">
+                          {% if contract.all_witness_signed %}
+                          <div class="margin-5">
+                            <span id="{{ contract.contract_id }}_all_witness_signed"
+                              class="badge badge-pill badge-success text-success float-right">.</span>
+                          </div>
+                          {% else %}
+                          <div class="margin-5">
+                            <span id="{{ contract.contract_id }}_all_witness_signed"
+                              class="badge badge-pill badge-danger text-danger float-right">.</span>
+                          </div>
+                          {% endif %}
+                        </div>
+
+                        <div class="col-md-10">
+                          <label class="label-to-the-middle">TODAS AS TESTEMUNHAS ASSINARAM</label>
+                        </div>
+                      </div>
+                      {% endif %}
+                      {% if contract.chain.name %}
+                      {% for school in schools %}
+                      {% if contract.chain in school.chains.all %}
+                      {% if school.is_maple_bear %}
+                      <div class="row">
+                        <div class="col-md-2">
+                          {% if contract.is_paid %}
+                          <div class="margin-5">
+                            <span class="badge badge-pill badge-success text-success float-right">.</span>
+                          </div>
+                          {% else %}
+                          <div class="margin-5">
+                            <span class="badge badge-pill badge-danger text-danger float-right">.</span>
+                          </div>
+                          {% endif %}
+                        </div>
+
+                        <div class="col-md-10">
+                          <label class="label-to-the-middle">CONTRATO PAGO</label>
+                        </div>
+                      </div>
+                      {% endif %}
+                      {% endif %}
+                      {% endfor %}
+                      {% endif %}
+
+                      <div class="row">
+                        <div class="col-md-2">
+                          {% if contract.counter_signed %}
+                          <div class="margin-5">
+                            <span id="{{ contract.contract_id }}_counter_signed"
+                              class="badge badge-pill badge-success text-success float-right">.</span>
+                          </div>
+                          {% else %}
+                          <div class="margin-5">
+                            <span id="{{ contract.contract_id }}_counter_signed"
+                              class="badge badge-pill badge-danger text-danger  float-right">.</span>
+                          </div>
+                          {% endif %}
+                        </div>
+
+                        <div class="col-md-10">
+                          <label class="label-to-the-middle">DIRETOR RESPONSÁVEL ASSINADO</label>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-md-2">
+                          {% if contract.is_expired %}
+                          <div class="margin-5">
+                            <span class="badge badge-pill badge-success text-success float-right">.</span>
+                          </div>
+                          {% else %}
+                          <div class="margin-5">
+                            <span class="badge badge-pill badge-danger text-danger  float-right">.</span>
+                          </div>
+                          {% endif %}
+                        </div>
+
+                        <div class="col-md-10">
+                          <label class="label-to-the-middle">CONTRATO EXPIRADO</label>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-md-2">
+                          {% if contract.is_active %}
+                          <div class="margin-5">
+                            <span class="badge badge-pill badge-success text-success float-right">.</span>
+                          </div>
+                          {% else %}
+                          <div class="margin-5">
+                            <span class="badge badge-pill badge-danger text-danger  float-right">.</span>
+                          </div>
+                          {% endif %}
+                        </div>
+
+                        <div class="col-md-10">
+                          <label class="label-to-the-middle">CONTRATO ATIVO</label>
+                        </div>
+                      </div>
+
+                    </td>
+
+                    <td class="w-100">
+                      <div class="container" style="white-space: nowrap; text-align: center; width: 92%">
+
+                        {% if request.user.is_superuser %}
+
+                        <div class="row">
+                          <div class="col-md-12">
+                            {% if contract.first_auth_signed or contract.second_auth_signed or contract.counter_signed %}
+                            <a class="btn btn-secondary w-100"
+                              href="{% url 'contracts:seecontractdetails' contract.contract_id %}"
+                              data-baloon="Remove this item from the cart">
+                              Ver Detalhes
+                            </a>
+                            {% else %}
+                            <div class="dropdown show w-100">
+                              <a class="btn btn-secondary dropdown-toggle w-100" href="#" role="button"
+                                id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Ações
+                              </a>
+                              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                <a class="dropdown-item"
+                                  href="{% url 'contracts:select_student_to_contract_update' contract.contract_id %}"
+                                  data-baloon="Remove this item from the cart">Atualizar Contrato</a>
+                                <a class="dropdown-item"
+                                  href="{% url 'contracts:seecontractdetails' contract.contract_id %}"
+                                  data-baloon="Remove this item from the cart">Ver Detalhes</a>
+                              </div>
+                            </div>
+                            {% endif %}
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12">
+                            <a class="btn btn-primary btn-block w-100"
+                              href="{% url 'contracts:extend_expire_date' contract.contract_id %}"
+                              data-baloon="Remove this item from the cart">
+                              Estender Prazo
+                            </a>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12">
+                            <a class="btn btn-danger btn-block"
+                              onclick="changeYesLink('{% url 'contracts:delete_contract' contract.contract_id %}')"
+                              href="#" data-baloon="Remove this item from the cart" class="text-light"
+                              data-toggle="modal" data-target="#delete-contract-modal">
+                              Deletar Contrato
+                            </a>
+                          </div>
+                        </div>
+
+                        {% else %}
+                        <div class="row">
+                          {% if is_supervisor %}
+                          {% if request.user == contract.counter_signe.profile %}
+                          <div class="col-md-12">
+                            {% if contract.counter_signed %}
+                            <!--Verde-->
+                            <button type="button" class="btn btn-success btn-block w-100" style="cursor: not-allowed;">
+                              Assinado
+                            </button>
+                            {% else %}
+                            <!--Vermelho-->
+                            <a id="{{ contract.contract_id }}_counter_signed_button"
+                              class="btn btn-primary btn-danger btn-block w-100"
+                              onclick="signContract('{% url 'contracts:set_signed' contract.contract_id %}');" href="#"
+                              data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal"
+                              data-target="#sign-contract-modal">
+                              Assinar Contrato
+                            </a>
+                            {% endif %}
+                          </div>
+                          {% endif %}
+                          {% elif request.user == contract.first_auth_signe.profile %}
+                          <div class="col-md-12">
+                            {% if contract.first_auth_signed %}
+                            <!--verde-->
+                            <button type="button" class="btn btn-success btn-block w-100" style="cursor: not-allowed;">
+                              Assinado
+                            </button>
+                            {% else %}
+                            <!--Vermelho-->
+                            <a id="{{ contract.contract_id }}_first_auth_signed_button"
+                              class="btn btn-primary btn-danger btn-block w-100"
+                              onclick="signContract('{% url 'contracts:set_signed' contract.contract_id %}');" href="#"
+                              data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal"
+                              data-target="#sign-contract-modal">
+                              Assinar Contrato
+                            </a>
+                            {% endif %}
+                          </div>
+                          {% elif request.user == contract.second_auth_signe.profile %}
+                          <div class="col-md-12">
+                            {% if contract.second_auth_signed %}
+                            <!--verde-->
+                            <button type="button" class="btn btn-success btn-block w-100" style="cursor: not-allowed;">
+                              Assinado
+                            </button>
+                            {% else %}
+                            <!--Vermelho-->
+                            <a id="{{ contract.contract_id }}_second_auth_signed_button"
+                              class="btn btn-primary btn-danger btn-block w-100"
+                              onclick="signContract('{% url 'contracts:set_signed' contract.contract_id %}');" href="#"
+                              data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal"
+                              data-target="#sign-contract-modal">
+                              Assinar Contrato
+                            </a>
+                            {% endif %}
+                          </div>
+                          {% elif request.user == contract.third_auth_signe.profile %}
+                          <div class="col-md-12">
+                            {% if contract.third_auth_signed %}
+                            <!--verde-->
+                            <button type="button" class="btn btn-success btn-block w-100" style="cursor: not-allowed;">
+                              Assinado
+                            </button>
+                            {% else %}
+                            <!--Vermelho-->
+                            <a id="{{ contract.contract_id }}_third_auth_signed_button"
+                              class="btn btn-primary btn-danger btn-block w-100"
+                              onclick="signContract('{% url 'contracts:set_signed' contract.contract_id %}');" href="#"
+                              data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal"
+                              data-target="#sign-contract-modal">
+                              Assinar Contrato
+                            </a>
+                            {% endif %}
+                          </div>
+                          {% elif request.user == contract.student_auth_signe.profile %}
+                          <div class="col-md-12">
+                            {% if contract.student_auth_signed %}
+                            <!--verde-->
+                            <button id="{{ contract.contract_id }}_student_auth_signed_button" type="button"
+                              class="btn btn-success btn-block w-100" style="cursor: not-allowed;">
+                              Assinado
+                            </button>
+                            {% else %}
+                            <!--Vermelho-->
+                            <a class="btn btn-primary btn-danger btn-block w-100"
+                              onclick="signContract('{% url 'contracts:set_signed' contract.contract_id %}');" href="#"
+                              data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal"
+                              data-target="#sign-contract-modal">
+                              Assinar Contrato
+                            </a>
+                            {% endif %}
+                          </div>
+                          {% elif request.user == contract.first_witness_signe.profile %}
+                          <div class="col-md-12">
+                            {% if contract.first_witness_signed %}
+                            <!--verde-->
+                            <button type="button" class="btn btn-success btn-block w-100" style="cursor: not-allowed;">
+                              Assinado
+                            </button>
+                            {% else %}
+                            <!--Vermelho-->
+                            <a id="{{ contract.contract_id }}_first_witness_signed_button"
+                              class="btn btn-primary btn-danger btn-block w-100"
+                              onclick="signContract('{% url 'contracts:set_signed' contract.contract_id %}');" href="#"
+                              data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal"
+                              data-target="#sign-contract-modal">
+                              Assinar Contrato
+                            </a>
+                            {% endif %}
+                          </div>
+                          {% elif request.user == contract.second_witness_signe.profile %}
+                          <div class="col-md-12">
+                            {% if contract.second_witness_signed %}
+                            <!--verde-->
+                            <button type="button" class="btn btn-success btn-block w-100" style="cursor: not-allowed;">
+                              Assinado
+                            </button>
+                            {% else %}
+                            <!--Vermelho-->
+                            <a id="{{ contract.contract_id }}_second_witness_signed_button"
+                              class="btn btn-primary btn-danger btn-block w-100"
+                              onclick="signContract('{% url 'contracts:set_signed' contract.contract_id %}');" href="#"
+                              data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal"
+                              data-target="#sign-contract-modal">
+                              Assinar Contrato
+                            </a>
+                            {% endif %}
+                          </div>
+                          {% endif %}
+                        </div>
+
+                        <div class="row">
+                          <div class="col-md-12">
+                            {% if is_supervisor %}
+                            {% if contract.first_auth_signed or contract.second_auth_signed or contract.counter_signed %}
+                            <a class="btn btn-secondary btn-block w-100"
+                              href="{% url 'contracts:seecontractdetails' contract.contract_id %}"
+                              data-baloon="Remove this item from the cart">
+                              Ver Detalhes
+                            </a>
+                            {% else %}
+                            <div class="dropdown show">
+                              <a class="btn btn-secondary dropdown-toggle w-100" href="#" role="button"
+                                id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Ações
+                              </a>
+                              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                <a class="dropdown-item"
+                                  onclick="changeYesLink('{% url 'contracts:delete_contract' contract.contract_id %}')"
+                                  href="#" data-baloon="Remove this item from the cart" data-toggle="modal"
+                                  data-target="#delete-contract-modal">Deletar Contrato</a>
+                                <a class="dropdown-item"
+                                  href="{% url 'contracts:seecontractdetails' contract.contract_id %}"
+                                  data-baloon="Remove this item from the cart">Ver Detalhes</a>
+                              </div>
+                            </div>
+                            {% endif %}
+                            {% else %}
+                            <a class="btn btn-secondary btn-block w-100"
+                              href="{% url 'contracts:seecontractdetails' contract.contract_id %}"
+                              data-baloon="Remove this item from the cart">
+                              Ver Detalhes
+                            </a>
+                            {% endif %}
+                          </div>
+                        </div>
+                        {% endif %}
+                        {% if is_supervisor %}
+                        <div class="row">
+                          <div class="col-md-12">
+                            <a class="btn btn-primary btn-block w-100"
+                              href="{% url 'contracts:extend_expire_date' contract.contract_id %}"
+                              data-baloon="Remove this item from the cart">
+                              Extender Prazo
+                            </a>
+                          </div>
+                        </div>
+                        {% endif %}
+                        {% if contract.pdf %}
+                        <div class="row">
+                          <div class="col-md-12">
+                            <a class="btn btn-primary btn-block w-100" href="{{contract.pdf.url}}"
+                              data-baloon="Remove this item from the cart">
+                              Ver Contrato
+                            </a>
+                          </div>
+                        </div>
+                        {% endif %}
+
+                        {% if contract.terms_of_contract %}
+                        <div class="row">
+                          <div class="col-md-12">
+                            <a class="btn btn-primary w-100" href="{{contract.terms_of_contract.url}}">
+                              Termos Ad. do Contrato (1)
+                            </a>
+                          </div>
+                        </div>
+                        {% endif %}
+
+                        {% if contract.terms_of_contract_2 %}
+                        <div class="row">
+                          <div class="col-md-12">
+                            <a class="btn btn-primary w-100" href="{{contract.terms_of_contract_2.url}}">
+                              Termos Ad. do Contrato (2)
+                            </a>
+                          </div>
+                        </div>
+                        {% endif %}
+                        {% if contract.slm %}
+                        {% if not contract.purchased_slm %}
+                        {% if is_supervisor %}
+                        <div class="row">
+                          <div class="col-md-12">
+                            <a class="btn btn-primary w-100"
+                              href="{% url 'contracts:mark_slm_purchased' contract.contract_id %}">
+                              Manual SLM
+                            </a>
+                          </div>
+                        </div>
+                        {% else %}
+                        <div class="row">
+                          <div class="col-md-12">
+                            <a class="btn btn-primary w-100"
+                              href="{% url 'contracts:redirect_to_slm_link' contract.contract_id %}">
+                              Comprar Material
+                            </a>
+                          </div>
+                        </div>
+                        {% endif %}
+                        {% else %}
+                        <div class="row">
+                          <div class="col-md-12">
+                            <button type="button" class="btn btn-success btn-block w-100" style="cursor: not-allowed;">
+                              Material já comprado
+                            </button>
+                          </div>
+                        </div>
+                        {% endif %}
+                        {% endif %}
+                        {% if request.user.is_superuser or is_supervisor %}
+                        {% if contract.chain.name %}
+                        {% for school in schools %}
+                        {% if contract.chain in school.chains.all %}
+                        {% if school.is_maple_bear %}
+                        {% if not contract.is_paid %}
+                        <div class="row">
+                          <div class="col-md-12">
+                            <a class="btn btn-primary w-100"
+                              href="{% url 'contracts:set_contract_paid' contract.contract_id %}">
+                              Setar contrato como pago
+                            </a>
+                          </div>
+                        </div>
+                        {% else %}
+                        <div class="row">
+                          <div class="col-md-12">
+                            <button type="button" class="btn btn-success btn-block w-100" style="cursor: not-allowed;">
+                              Contrato pago
+                            </button>
+                          </div>
+                        </div>
+                        {% endif %}
+                        {% endif %}
+                        {% endif %}
+                        {% endfor %}
+                        {% endif %}
+                        {% endif %}
+                      </div>
+                    </td>
+                  </tr>
+                  {% endfor %}
+
+                </tbody>
+              </table>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% else %}
+{% if search or selected_school or selected_class %}
+<h4>Não há nenhum resultado para a pesquisa feita</h4>
+{% endif %}
+{% endif %}
 <script type="text/javascript">
   let chatSocket = new WebSocket(
-          'wss://' + window.location.host +
-          ':8002/ws/chat/notifications/');
+    'wss://' + window.location.host +
+    ':8002/ws/chat/notifications/');
 
-      chatSocket.onmessage = function(e) {
-          console.log('message_incoming');
-          let data = JSON.parse(e.data);
-          let message = data['message'];
-          var contract = message;
-          if (contract['client_responsible_signed'] == true) {
-              document.getElementById(`${contract['contract_id']}_client_responsible_signed`).className = 'badge badge-pill badge-success text-success float-right';
-              let button = document.getElementById(`${contract['contract_id']}_client_responsible_signed_button`);
-              if (button) {
-                button.className = 'btn btn-success btn-block w-100';
-                button.style = 'cursor: not-allowed;';
-                button.innerText = 'Assinado';
-                button.removeAttribute('data-togle');
-                button.removeAttribute('onclick');
-                button.removeAttribute('data-target');
-                button.removeAttribute('href');
-              }
-            }
-            if (contract['counter_signed'] == true) {
-              document.getElementById(`${contract['contract_id']}_counter_signed`).className = 'badge badge-pill badge-success text-success float-right';
-              let button = document.getElementById(`${contract['contract_id']}_counter_signed_button`);
-              if (button) {
-                button.className = 'btn btn-success btn-block w-100';
-                button.style = 'cursor: not-allowed;';
-                button.innerText = 'Assinado';
-                button.removeAttribute('data-togle');
-                button.removeAttribute('onclick');
-                button.removeAttribute('data-target');
-                button.removeAttribute('href');
-              }
-            }
-            if (contract['first_responsible_signed'] == true) {
-              document.getElementById(`${contract['contract_id']}_first_responsible_signed`).className = 'badge badge-pill badge-success text-success float-right';
-              let button = document.getElementById(`${contract['contract_id']}_first_responsible_signed_button`);
-              if (button) {
-                button.className = 'btn btn-success btn-block w-100';
-                button.style = 'cursor: not-allowed;';
-                button.innerText = 'Assinado';
-                button.removeAttribute('data-togle');
-                button.removeAttribute('onclick');
-                button.removeAttribute('data-target');
-                button.removeAttribute('href');
-              }
-            }
-            if (contract['second_responsible_signed'] == true) {
-              document.getElementById(`${contract['contract_id']}_second_responsible_signed`).className = 'badge badge-pill badge-success text-success float-right';
-              let button = document.getElementById(`${contract['contract_id']}_second_responsible_signed_button`);
-              if (button) {
-                button.className = 'btn btn-success btn-block w-100';
-                button.style = 'cursor: not-allowed;';
-                button.innerText = 'Assinado';
-                button.removeAttribute('data-togle');
-                button.removeAttribute('onclick');
-                button.removeAttribute('data-target');
-                button.removeAttribute('href');
-              }
-            }
-            if (contract['first_auth_signed'] == true) {
-              document.getElementById(`${contract['contract_id']}_first_auth_signed`).className = 'badge badge-pill badge-success text-success float-right';
-              let button = document.getElementById(`${contract['contract_id']}_first_auth_signed_button`);
-              if (button) {
-                button.className = 'btn btn-success btn-block w-100';
-                button.style = 'cursor: not-allowed;';
-                button.innerText = 'Assinado';
-                button.removeAttribute('data-togle');
-                button.removeAttribute('onclick');
-                button.removeAttribute('data-target');
-                button.removeAttribute('href');
-              }
-            }
-            if (contract['second_auth_signed'] == true) {
-              document.getElementById(`${contract['contract_id']}_second_auth_signed`).className = 'badge badge-pill badge-success text-success float-right';
-              let button = document.getElementById(`${contract['contract_id']}_second_auth_signed_button`);
-              if (button) {
-                button.className = 'btn btn-success btn-block w-100';
-                button.style = 'cursor: not-allowed;';
-                button.innerText = 'Assinado';
-                button.removeAttribute('data-togle');
-                button.removeAttribute('onclick');
-                button.removeAttribute('data-target');
-                button.removeAttribute('href');
-              }
-            }
-            if (contract['third_auth_signed'] == true) {
-              document.getElementById(`${contract['contract_id']}_third_auth_signed`).className = 'badge badge-pill badge-success text-success float-right';
-              let button = document.getElementById(`${contract['contract_id']}_third_auth_signed_button`);
-              if (button) {
-                button.className = 'btn btn-success btn-block w-100';
-                button.style = 'cursor: not-allowed;';
-                button.innerText = 'Assinado';
-                button.removeAttribute('data-togle');
-                button.removeAttribute('onclick');
-                button.removeAttribute('data-target');
-                button.removeAttribute('href');
-              }
-            }
-            if (contract['first_witness_signed'] == true) {
-              document.getElementById(`${contract['contract_id']}_first_witness_signed`).className = 'badge badge-pill badge-success text-success float-right';
-              let button = document.getElementById(`${contract['contract_id']}_first_witness_signed_button`);
-              if (button) {
-                button.className = 'btn btn-success btn-block w-100';
-                button.style = 'cursor: not-allowed;';
-                button.innerText = 'Assinado';
-                button.removeAttribute('data-togle');
-                button.removeAttribute('onclick');
-                button.removeAttribute('data-target');
-                button.removeAttribute('href');
-              }
-            }
-            if (contract['second_witness_signed'] == true) {
-              document.getElementById(`${contract['contract_id']}_second_witness_signed`).className = 'badge badge-pill badge-success text-success float-right';
-              let button = document.getElementById(`${contract['contract_id']}_second_witness_signed_button`);
-              if (button) {
-                button.className = 'btn btn-success btn-block w-100';
-                button.style = 'cursor: not-allowed;';
-                button.innerText = 'Assinado';
-                button.removeAttribute('data-togle');
-                button.removeAttribute('onclick');
-                button.removeAttribute('data-target');
-                button.removeAttribute('href');
-              }
-            }
-            if (contract['all_signiture_signed'] == true) {
-              document.getElementById(`${contract['contract_id']}_all_signe_signed`).className = 'badge badge-pill badge-success text-success float-right';
-              let button = document.getElementById(`${contract['contract_id']}_all_signe_signed_button`);
-              if (button) {
-                button.className = 'btn btn-success btn-block w-100';
-                button.style = 'cursor: not-allowed;';
-                button.innerText = 'Assinado';
-                button.removeAttribute('data-togle');
-                button.removeAttribute('onclick');
-                button.removeAttribute('data-target');
-                button.removeAttribute('href');
-              }
-            }
-            if (contract['all_signed'] == true) {
-              document.getElementById(`${contract['contract_id']}_all_signed`).className = 'badge badge-pill badge-success text-success float-right';
-              let button = document.getElementById(`${contract['contract_id']}_all_signed_button`);
-              if (button) {
-                button.className = 'btn btn-success btn-block w-100';
-                button.style = 'cursor: not-allowed;';
-                button.innerText = 'Assinado';
-                button.removeAttribute('data-togle');
-                button.removeAttribute('onclick');
-                button.removeAttribute('data-target');
-                button.removeAttribute('href');
-              }
-            }
-            $("#sign-contract-modal").modal('hide');
-        }
-      chatSocket.onclose = function(e) {
-          console.error('Chat socket closed unexpectedly');
-      };
-  function signContract(url) {
-      setTimeout(function () {
-        // window.location.assign(url);
-        $.get(url)
-          .done(function (response) {
-            var contract = response['contract'];
-            if (contract['client_responsible_signed'] == true) {
-              document.getElementById(`${contract['contract_id']}_client_responsible_signed`).className = 'badge badge-pill badge-success text-success float-right';
-              let button = document.getElementById(`${contract['contract_id']}_client_responsible_signed_button`);
-              if (button) {
-                button.className = 'btn btn-success btn-block w-100';
-                button.style = 'cursor: not-allowed;';
-                button.innerText = 'Assinado';
-                button.removeAttribute('data-togle');
-                button.removeAttribute('onclick');
-                button.removeAttribute('data-target');
-                button.removeAttribute('href');
-              }
-            }
-            if (contract['counter_signed'] == true) {
-              document.getElementById(`${contract['contract_id']}_counter_signed`).className = 'badge badge-pill badge-success text-success float-right';
-              let button = document.getElementById(`${contract['contract_id']}_counter_signed_button`);
-              if (button) {
-                button.className = 'btn btn-success btn-block w-100';
-                button.style = 'cursor: not-allowed;';
-                button.innerText = 'Assinado';
-                button.removeAttribute('data-togle');
-                button.removeAttribute('onclick');
-                button.removeAttribute('data-target');
-                button.removeAttribute('href');
-              }
-            }
-            if (contract['first_responsible_signed'] == true) {
-              document.getElementById(`${contract['contract_id']}_first_responsible_signed`).className = 'badge badge-pill badge-success text-success float-right';
-              let button = document.getElementById(`${contract['contract_id']}_first_responsible_signed_button`);
-              if (button) {
-                button.className = 'btn btn-success btn-block w-100';
-                button.style = 'cursor: not-allowed;';
-                button.innerText = 'Assinado';
-                button.removeAttribute('data-togle');
-                button.removeAttribute('onclick');
-                button.removeAttribute('data-target');
-                button.removeAttribute('href');
-              }
-            }
-            if (contract['second_responsible_signed'] == true) {
-              document.getElementById(`${contract['contract_id']}_second_responsible_signed`).className = 'badge badge-pill badge-success text-success float-right';
-              let button = document.getElementById(`${contract['contract_id']}_second_responsible_signed_button`);
-              if (button) {
-                button.className = 'btn btn-success btn-block w-100';
-                button.style = 'cursor: not-allowed;';
-                button.innerText = 'Assinado';
-                button.removeAttribute('data-togle');
-                button.removeAttribute('onclick');
-                button.removeAttribute('data-target');
-                button.removeAttribute('href');
-              }
-            }
-            if (contract['first_auth_signed'] == true) {
-              document.getElementById(`${contract['contract_id']}_first_auth_signed`).className = 'badge badge-pill badge-success text-success float-right';
-              let button = document.getElementById(`${contract['contract_id']}_first_auth_signed_button`);
-              if (button) {
-                button.className = 'btn btn-success btn-block w-100';
-                button.style = 'cursor: not-allowed;';
-                button.innerText = 'Assinado';
-                button.removeAttribute('data-togle');
-                button.removeAttribute('onclick');
-                button.removeAttribute('data-target');
-                button.removeAttribute('href');
-              }
-            }
-            if (contract['second_auth_signed'] == true) {
-              document.getElementById(`${contract['contract_id']}_second_auth_signed`).className = 'badge badge-pill badge-success text-success float-right';
-              let button = document.getElementById(`${contract['contract_id']}_second_auth_signed_button`);
-              if (button) {
-                button.className = 'btn btn-success btn-block w-100';
-                button.style = 'cursor: not-allowed;';
-                button.innerText = 'Assinado';
-                button.removeAttribute('data-togle');
-                button.removeAttribute('onclick');
-                button.removeAttribute('data-target');
-                button.removeAttribute('href');
-              }
-            }
-            if (contract['third_auth_signed'] == true) {
-              document.getElementById(`${contract['contract_id']}_third_auth_signed`).className = 'badge badge-pill badge-success text-success float-right';
-              let button = document.getElementById(`${contract['contract_id']}_third_auth_signed_button`);
-              if (button) {
-                button.className = 'btn btn-success btn-block w-100';
-                button.style = 'cursor: not-allowed;';
-                button.innerText = 'Assinado';
-                button.removeAttribute('data-togle');
-                button.removeAttribute('onclick');
-                button.removeAttribute('data-target');
-                button.removeAttribute('href');
-              }
-            }
-            if (contract['first_witness_signed'] == true) {
-              document.getElementById(`${contract['contract_id']}_first_witness_signed`).className = 'badge badge-pill badge-success text-success float-right';
-              let button = document.getElementById(`${contract['contract_id']}_first_witness_signed_button`);
-              if (button) {
-                button.className = 'btn btn-success btn-block w-100';
-                button.style = 'cursor: not-allowed;';
-                button.innerText = 'Assinado';
-                button.removeAttribute('data-togle');
-                button.removeAttribute('onclick');
-                button.removeAttribute('data-target');
-                button.removeAttribute('href');
-              }
-            }
-            if (contract['second_witness_signed'] == true) {
-              document.getElementById(`${contract['contract_id']}_second_witness_signed`).className = 'badge badge-pill badge-success text-success float-right';
-              let button = document.getElementById(`${contract['contract_id']}_second_witness_signed_button`);
-              if (button) {
-                button.className = 'btn btn-success btn-block w-100';
-                button.style = 'cursor: not-allowed;';
-                button.innerText = 'Assinado';
-                button.removeAttribute('data-togle');
-                button.removeAttribute('onclick');
-                button.removeAttribute('data-target');
-                button.removeAttribute('href');
-              }
-            }
-            if (contract['all_signiture_signed'] == true) {
-              document.getElementById(`${contract['contract_id']}_all_signe_signed`).className = 'badge badge-pill badge-success text-success float-right';
-              let button = document.getElementById(`${contract['contract_id']}_all_signe_signed_button`);
-              if (button) {
-                button.className = 'btn btn-success btn-block w-100';
-                button.style = 'cursor: not-allowed;';
-                button.innerText = 'Assinado';
-                button.removeAttribute('data-togle');
-                button.removeAttribute('onclick');
-                button.removeAttribute('data-target');
-                button.removeAttribute('href');
-              }
-            }
-            if (contract['all_signed'] == true) {
-              document.getElementById(`${contract['contract_id']}_all_signed`).className = 'badge badge-pill badge-success text-success float-right';
-              let button = document.getElementById(`${contract['contract_id']}_all_signed_button`);
-              if (button) {
-                button.className = 'btn btn-success btn-block w-100';
-                button.style = 'cursor: not-allowed;';
-                button.innerText = 'Assinado';
-                button.removeAttribute('data-togle');
-                button.removeAttribute('onclick');
-                button.removeAttribute('data-target');
-                button.removeAttribute('href');
-              }
-            }
-            $("#sign-contract-modal").modal('hide');
-          });
-      }, 1);
+  chatSocket.onmessage = function (e) {
+    console.log('message_incoming');
+    let data = JSON.parse(e.data);
+    let message = data['message'];
+    var contract = message;
+    if (contract['client_responsible_signed'] == true) {
+      document.getElementById(`${contract['contract_id']}_client_responsible_signed`).className = 'badge badge-pill badge-success text-success float-right';
+      let button = document.getElementById(`${contract['contract_id']}_client_responsible_signed_button`);
+      if (button) {
+        button.className = 'btn btn-success btn-block w-100';
+        button.style = 'cursor: not-allowed;';
+        button.innerText = 'Assinado';
+        button.removeAttribute('data-togle');
+        button.removeAttribute('onclick');
+        button.removeAttribute('data-target');
+        button.removeAttribute('href');
+      }
     }
-    $(document).on("change", "#initial_date", function () {
-            document.getElementById("final_date").min = this.value
-        });
-  $(document).ready(function () {
-        $('#select_form_school').on('change', function () {
-          let urlClasses = $('#myForm').data('urlclasses')
-          var selectValor = $(this).val();
-          $.ajax({
-            url: urlClasses,
-            data: {
-              id: selectValor
-            },
-            success: function (response) {
-              $('#select_form_class').html(response);
-              $('#select_form_class').trigger("chosen:updated");
+    if (contract['counter_signed'] == true) {
+      document.getElementById(`${contract['contract_id']}_counter_signed`).className = 'badge badge-pill badge-success text-success float-right';
+      let button = document.getElementById(`${contract['contract_id']}_counter_signed_button`);
+      if (button) {
+        button.className = 'btn btn-success btn-block w-100';
+        button.style = 'cursor: not-allowed;';
+        button.innerText = 'Assinado';
+        button.removeAttribute('data-togle');
+        button.removeAttribute('onclick');
+        button.removeAttribute('data-target');
+        button.removeAttribute('href');
+      }
+    }
+    if (contract['first_responsible_signed'] == true) {
+      document.getElementById(`${contract['contract_id']}_first_responsible_signed`).className = 'badge badge-pill badge-success text-success float-right';
+      let button = document.getElementById(`${contract['contract_id']}_first_responsible_signed_button`);
+      if (button) {
+        button.className = 'btn btn-success btn-block w-100';
+        button.style = 'cursor: not-allowed;';
+        button.innerText = 'Assinado';
+        button.removeAttribute('data-togle');
+        button.removeAttribute('onclick');
+        button.removeAttribute('data-target');
+        button.removeAttribute('href');
+      }
+    }
+    if (contract['second_responsible_signed'] == true) {
+      document.getElementById(`${contract['contract_id']}_second_responsible_signed`).className = 'badge badge-pill badge-success text-success float-right';
+      let button = document.getElementById(`${contract['contract_id']}_second_responsible_signed_button`);
+      if (button) {
+        button.className = 'btn btn-success btn-block w-100';
+        button.style = 'cursor: not-allowed;';
+        button.innerText = 'Assinado';
+        button.removeAttribute('data-togle');
+        button.removeAttribute('onclick');
+        button.removeAttribute('data-target');
+        button.removeAttribute('href');
+      }
+    }
+    if (contract['first_auth_signed'] == true) {
+      document.getElementById(`${contract['contract_id']}_first_auth_signed`).className = 'badge badge-pill badge-success text-success float-right';
+      let button = document.getElementById(`${contract['contract_id']}_first_auth_signed_button`);
+      if (button) {
+        button.className = 'btn btn-success btn-block w-100';
+        button.style = 'cursor: not-allowed;';
+        button.innerText = 'Assinado';
+        button.removeAttribute('data-togle');
+        button.removeAttribute('onclick');
+        button.removeAttribute('data-target');
+        button.removeAttribute('href');
+      }
+    }
+    if (contract['second_auth_signed'] == true) {
+      document.getElementById(`${contract['contract_id']}_second_auth_signed`).className = 'badge badge-pill badge-success text-success float-right';
+      let button = document.getElementById(`${contract['contract_id']}_second_auth_signed_button`);
+      if (button) {
+        button.className = 'btn btn-success btn-block w-100';
+        button.style = 'cursor: not-allowed;';
+        button.innerText = 'Assinado';
+        button.removeAttribute('data-togle');
+        button.removeAttribute('onclick');
+        button.removeAttribute('data-target');
+        button.removeAttribute('href');
+      }
+    }
+    if (contract['third_auth_signed'] == true) {
+      document.getElementById(`${contract['contract_id']}_third_auth_signed`).className = 'badge badge-pill badge-success text-success float-right';
+      let button = document.getElementById(`${contract['contract_id']}_third_auth_signed_button`);
+      if (button) {
+        button.className = 'btn btn-success btn-block w-100';
+        button.style = 'cursor: not-allowed;';
+        button.innerText = 'Assinado';
+        button.removeAttribute('data-togle');
+        button.removeAttribute('onclick');
+        button.removeAttribute('data-target');
+        button.removeAttribute('href');
+      }
+    }
+    if (contract['first_witness_signed'] == true) {
+      document.getElementById(`${contract['contract_id']}_first_witness_signed`).className = 'badge badge-pill badge-success text-success float-right';
+      let button = document.getElementById(`${contract['contract_id']}_first_witness_signed_button`);
+      if (button) {
+        button.className = 'btn btn-success btn-block w-100';
+        button.style = 'cursor: not-allowed;';
+        button.innerText = 'Assinado';
+        button.removeAttribute('data-togle');
+        button.removeAttribute('onclick');
+        button.removeAttribute('data-target');
+        button.removeAttribute('href');
+      }
+    }
+    if (contract['second_witness_signed'] == true) {
+      document.getElementById(`${contract['contract_id']}_second_witness_signed`).className = 'badge badge-pill badge-success text-success float-right';
+      let button = document.getElementById(`${contract['contract_id']}_second_witness_signed_button`);
+      if (button) {
+        button.className = 'btn btn-success btn-block w-100';
+        button.style = 'cursor: not-allowed;';
+        button.innerText = 'Assinado';
+        button.removeAttribute('data-togle');
+        button.removeAttribute('onclick');
+        button.removeAttribute('data-target');
+        button.removeAttribute('href');
+      }
+    }
+    if (contract['all_signiture_signed'] == true) {
+      document.getElementById(`${contract['contract_id']}_all_signe_signed`).className = 'badge badge-pill badge-success text-success float-right';
+      let button = document.getElementById(`${contract['contract_id']}_all_signe_signed_button`);
+      if (button) {
+        button.className = 'btn btn-success btn-block w-100';
+        button.style = 'cursor: not-allowed;';
+        button.innerText = 'Assinado';
+        button.removeAttribute('data-togle');
+        button.removeAttribute('onclick');
+        button.removeAttribute('data-target');
+        button.removeAttribute('href');
+      }
+    }
+    if (contract['all_signed'] == true) {
+      document.getElementById(`${contract['contract_id']}_all_signed`).className = 'badge badge-pill badge-success text-success float-right';
+      let button = document.getElementById(`${contract['contract_id']}_all_signed_button`);
+      if (button) {
+        button.className = 'btn btn-success btn-block w-100';
+        button.style = 'cursor: not-allowed;';
+        button.innerText = 'Assinado';
+        button.removeAttribute('data-togle');
+        button.removeAttribute('onclick');
+        button.removeAttribute('data-target');
+        button.removeAttribute('href');
+      }
+    }
+    $("#sign-contract-modal").modal('hide');
+  }
+  chatSocket.onclose = function (e) {
+    console.error('Chat socket closed unexpectedly');
+  };
+  function signContract(url) {
+    setTimeout(function () {
+      // window.location.assign(url);
+      $.get(url)
+        .done(function (response) {
+          var contract = response['contract'];
+          if (contract['client_responsible_signed'] == true) {
+            document.getElementById(`${contract['contract_id']}_client_responsible_signed`).className = 'badge badge-pill badge-success text-success float-right';
+            let button = document.getElementById(`${contract['contract_id']}_client_responsible_signed_button`);
+            if (button) {
+              button.className = 'btn btn-success btn-block w-100';
+              button.style = 'cursor: not-allowed;';
+              button.innerText = 'Assinado';
+              button.removeAttribute('data-togle');
+              button.removeAttribute('onclick');
+              button.removeAttribute('data-target');
+              button.removeAttribute('href');
             }
-          })
-          if (selectValor == '') {
-            document.getElementById('selected_school').value = '0'
           }
-          else {
-            document.getElementById('selected_school').value = selectValor
+          if (contract['counter_signed'] == true) {
+            document.getElementById(`${contract['contract_id']}_counter_signed`).className = 'badge badge-pill badge-success text-success float-right';
+            let button = document.getElementById(`${contract['contract_id']}_counter_signed_button`);
+            if (button) {
+              button.className = 'btn btn-success btn-block w-100';
+              button.style = 'cursor: not-allowed;';
+              button.innerText = 'Assinado';
+              button.removeAttribute('data-togle');
+              button.removeAttribute('onclick');
+              button.removeAttribute('data-target');
+              button.removeAttribute('href');
+            }
           }
+          if (contract['first_responsible_signed'] == true) {
+            document.getElementById(`${contract['contract_id']}_first_responsible_signed`).className = 'badge badge-pill badge-success text-success float-right';
+            let button = document.getElementById(`${contract['contract_id']}_first_responsible_signed_button`);
+            if (button) {
+              button.className = 'btn btn-success btn-block w-100';
+              button.style = 'cursor: not-allowed;';
+              button.innerText = 'Assinado';
+              button.removeAttribute('data-togle');
+              button.removeAttribute('onclick');
+              button.removeAttribute('data-target');
+              button.removeAttribute('href');
+            }
+          }
+          if (contract['second_responsible_signed'] == true) {
+            document.getElementById(`${contract['contract_id']}_second_responsible_signed`).className = 'badge badge-pill badge-success text-success float-right';
+            let button = document.getElementById(`${contract['contract_id']}_second_responsible_signed_button`);
+            if (button) {
+              button.className = 'btn btn-success btn-block w-100';
+              button.style = 'cursor: not-allowed;';
+              button.innerText = 'Assinado';
+              button.removeAttribute('data-togle');
+              button.removeAttribute('onclick');
+              button.removeAttribute('data-target');
+              button.removeAttribute('href');
+            }
+          }
+          if (contract['first_auth_signed'] == true) {
+            document.getElementById(`${contract['contract_id']}_first_auth_signed`).className = 'badge badge-pill badge-success text-success float-right';
+            let button = document.getElementById(`${contract['contract_id']}_first_auth_signed_button`);
+            if (button) {
+              button.className = 'btn btn-success btn-block w-100';
+              button.style = 'cursor: not-allowed;';
+              button.innerText = 'Assinado';
+              button.removeAttribute('data-togle');
+              button.removeAttribute('onclick');
+              button.removeAttribute('data-target');
+              button.removeAttribute('href');
+            }
+          }
+          if (contract['second_auth_signed'] == true) {
+            document.getElementById(`${contract['contract_id']}_second_auth_signed`).className = 'badge badge-pill badge-success text-success float-right';
+            let button = document.getElementById(`${contract['contract_id']}_second_auth_signed_button`);
+            if (button) {
+              button.className = 'btn btn-success btn-block w-100';
+              button.style = 'cursor: not-allowed;';
+              button.innerText = 'Assinado';
+              button.removeAttribute('data-togle');
+              button.removeAttribute('onclick');
+              button.removeAttribute('data-target');
+              button.removeAttribute('href');
+            }
+          }
+          if (contract['third_auth_signed'] == true) {
+            document.getElementById(`${contract['contract_id']}_third_auth_signed`).className = 'badge badge-pill badge-success text-success float-right';
+            let button = document.getElementById(`${contract['contract_id']}_third_auth_signed_button`);
+            if (button) {
+              button.className = 'btn btn-success btn-block w-100';
+              button.style = 'cursor: not-allowed;';
+              button.innerText = 'Assinado';
+              button.removeAttribute('data-togle');
+              button.removeAttribute('onclick');
+              button.removeAttribute('data-target');
+              button.removeAttribute('href');
+            }
+          }
+          if (contract['first_witness_signed'] == true) {
+            document.getElementById(`${contract['contract_id']}_first_witness_signed`).className = 'badge badge-pill badge-success text-success float-right';
+            let button = document.getElementById(`${contract['contract_id']}_first_witness_signed_button`);
+            if (button) {
+              button.className = 'btn btn-success btn-block w-100';
+              button.style = 'cursor: not-allowed;';
+              button.innerText = 'Assinado';
+              button.removeAttribute('data-togle');
+              button.removeAttribute('onclick');
+              button.removeAttribute('data-target');
+              button.removeAttribute('href');
+            }
+          }
+          if (contract['second_witness_signed'] == true) {
+            document.getElementById(`${contract['contract_id']}_second_witness_signed`).className = 'badge badge-pill badge-success text-success float-right';
+            let button = document.getElementById(`${contract['contract_id']}_second_witness_signed_button`);
+            if (button) {
+              button.className = 'btn btn-success btn-block w-100';
+              button.style = 'cursor: not-allowed;';
+              button.innerText = 'Assinado';
+              button.removeAttribute('data-togle');
+              button.removeAttribute('onclick');
+              button.removeAttribute('data-target');
+              button.removeAttribute('href');
+            }
+          }
+          if (contract['all_signiture_signed'] == true) {
+            document.getElementById(`${contract['contract_id']}_all_signe_signed`).className = 'badge badge-pill badge-success text-success float-right';
+            let button = document.getElementById(`${contract['contract_id']}_all_signe_signed_button`);
+            if (button) {
+              button.className = 'btn btn-success btn-block w-100';
+              button.style = 'cursor: not-allowed;';
+              button.innerText = 'Assinado';
+              button.removeAttribute('data-togle');
+              button.removeAttribute('onclick');
+              button.removeAttribute('data-target');
+              button.removeAttribute('href');
+            }
+          }
+          if (contract['all_signed'] == true) {
+            document.getElementById(`${contract['contract_id']}_all_signed`).className = 'badge badge-pill badge-success text-success float-right';
+            let button = document.getElementById(`${contract['contract_id']}_all_signed_button`);
+            if (button) {
+              button.className = 'btn btn-success btn-block w-100';
+              button.style = 'cursor: not-allowed;';
+              button.innerText = 'Assinado';
+              button.removeAttribute('data-togle');
+              button.removeAttribute('onclick');
+              button.removeAttribute('data-target');
+              button.removeAttribute('href');
+            }
+          }
+          $("#sign-contract-modal").modal('hide');
         });
-      });
+    }, 1);
+  }
+  $(document).on("change", "#initial_date", function () {
+    document.getElementById("final_date").min = this.value
+  });
   $(document).ready(function () {
-        $('#select_form_class').on('change', function () {
-          var selectValor = $(this).val();
-          if (selectValor == '') {
-            document.getElementById('selected_class').value = '0'
-          }
-          else {
-            document.getElementById('selected_class').value = selectValor
-          }
-        });
-      });
-	$(document).ready(function () {
-		$('#select_form').on('change', function () {
-			setGenPasswordToFields(['id_{{user_form.password1.name}}', 'id_{{user_form.password2.name}}']);
-			var selectValor = $(this).val();
-			if (selectValor == '') {
-				document.getElementById('selected_chain').value = ''
-			}
-			else {
-				document.getElementById('selected_chain').value = selectValor
-			}
-		});
-});
-	$(document).ready( function () {
+    $('#select_form_school').on('change', function () {
+      let urlClasses = $('#myForm').data('urlclasses')
+      var selectValor = $(this).val();
+      $.ajax({
+        url: urlClasses,
+        data: {
+          id: selectValor
+        },
+        success: function (response) {
+          $('#select_form_class').html(response);
+          $('#select_form_class').trigger("chosen:updated");
+        }
+      })
+      if (selectValor == '') {
+        document.getElementById('selected_school').value = '0'
+      }
+      else {
+        document.getElementById('selected_school').value = selectValor
+      }
+    });
+  });
+  $(document).ready(function () {
+    $('#select_form_class').on('change', function () {
+      var selectValor = $(this).val();
+      if (selectValor == '') {
+        document.getElementById('selected_class').value = '0'
+      }
+      else {
+        document.getElementById('selected_class').value = selectValor
+      }
+    });
+  });
+  $(document).ready(function () {
+    $('#select_form').on('change', function () {
+      setGenPasswordToFields(['id_{{user_form.password1.name}}', 'id_{{user_form.password2.name}}']);
+      var selectValor = $(this).val();
+      if (selectValor == '') {
+        document.getElementById('selected_chain').value = ''
+      }
+      else {
+        document.getElementById('selected_chain').value = selectValor
+      }
+    });
+  });
+  $(document).ready(function () {
 
     $('#contractstablebutton').addClass('non-interactable');
     $('#contractstable').DataTable({
-      initComplete: function() {
+      initComplete: function () {
         $('#contractstablebutton').removeClass('non-interactable');
       }
     })
     $(window).on('resize', function () {
       $('#contractstable').DataTable();
     });
-  } );
+  });
 </script>
 
 <script type="text/javascript">
-  function changeYesLink(url){
-    document.getElementById("link_to_delete").href=url;
+  function changeYesLink(url) {
+    document.getElementById("link_to_delete").href = url;
   }
 
-  window.addEventListener('load', function() {
+  window.addEventListener('load', function () {
 
     var element1 = document.getElementById("sign-multiple-id1");
 
     element1.addEventListener('click', trySignMultiples);
 
     function trySignMultiples(/** @type Event */event) {
-      
+
       // event.stopImmediatePropagation();
-      
+
       /** @type NodeList*/
       var allCheckboxes = document.getElementsByName('checks');
       var selectall = document.getElementById('selectall');
-      
+
       var hasAtLeastOneChecked = false;
-      allCheckboxes.forEach(function(checkbox) {
+      allCheckboxes.forEach(function (checkbox) {
         hasAtLeastOneChecked = hasAtLeastOneChecked || checkbox.checked;
       });
       console.log(hasAtLeastOneChecked)
-      
+
       if (!hasAtLeastOneChecked && !selectall.checked) {
         event.preventDefault();
         $('#multi-sign-contract-modal').modal();
         $('#multi-sign-contract-modal-message').text('Por favor, selecione um contrato!');
-      }else{
+      } else {
         event.preventDefault();
-        setTimeout(function() {
+        setTimeout(function () {
           console.log('Entrou Aqui')
           $('#multi-sign-contract-modal').modal("hide");
-          setTimeout(function() {
+          setTimeout(function () {
             $('#multi-sign-contract-modal-message').text('Por favor, espere um pouco. Estamos criptografando seus contratos!');
-            allCheckboxes.forEach(function(checkbox){
-              var myInit = {credentials:'same-origin',
-                            cache: 'default'};
-              if (checkbox.checked || selectall.checked){
-               fetch(`/contracts/set_signed/${checkbox.value}`, myInit)
+            allCheckboxes.forEach(function (checkbox) {
+              var myInit = {
+                credentials: 'same-origin',
+                cache: 'default'
+              };
+              if (checkbox.checked || selectall.checked) {
+                fetch(`/contracts/set_signed/${checkbox.value}`, myInit)
               }
             });
             window.location.assign('/contracts/all/')
@@ -1129,35 +1200,35 @@
     });
   });
   $(document).on("click", "#first_slider", function () {
-	  if (!$('#first_checkbox').prop("checked")) {
-			document.getElementById('signed_RF/RP1').value = 'sim'
-			$('#first_checkbox').attr('checked')
-		}
-		else {
-			document.getElementById('signed_RF/RP1').value = 'não'
-			$('#first_checkbox').removeAttr('checked')
-		}
+    if (!$('#first_checkbox').prop("checked")) {
+      document.getElementById('signed_RF/RP1').value = 'sim'
+      $('#first_checkbox').attr('checked')
+    }
+    else {
+      document.getElementById('signed_RF/RP1').value = 'não'
+      $('#first_checkbox').removeAttr('checked')
+    }
   });
   $(document).on("click", "#second_slider", function () {
-	  if (!$('#second_checkbox').prop("checked")) {
-			document.getElementById('signed_DIR').value = 'sim'
-			$('#second_checkbox').attr('checked')
-		}
-		else {
-			document.getElementById('signed_DIR').value = 'não'
-			$('#second_checkbox').removeAttr('checked')
-		}
+    if (!$('#second_checkbox').prop("checked")) {
+      document.getElementById('signed_DIR').value = 'sim'
+      $('#second_checkbox').attr('checked')
+    }
+    else {
+      document.getElementById('signed_DIR').value = 'não'
+      $('#second_checkbox').removeAttr('checked')
+    }
   });
   $(document).on("click", "#third_slider", function () {
-	  if (!$('#third_checkbox').prop("checked")) {
-			document.getElementById('purchased_contract').value = 'sim'
-			$('#third_checkbox').attr('checked')
-		}
-		else {
-			document.getElementById('purchased_contract').value = 'não'
-			$('#third_checkbox').removeAttr('checked')
-		}
-	});
+    if (!$('#third_checkbox').prop("checked")) {
+      document.getElementById('purchased_contract').value = 'sim'
+      $('#third_checkbox').attr('checked')
+    }
+    else {
+      document.getElementById('purchased_contract').value = 'não'
+      $('#third_checkbox').removeAttr('checked')
+    }
+  });
 
 </script>
 
@@ -1197,13 +1268,13 @@
 <!-- Multiples Contracts Modal -->
 <div id="multi-sign-contract-modal" class="modal fade" role="dialog">
   <div class="modal-dialog">
-    
+
     <div class="modal-content">
       <div class="modal-body">
         <p id="multi-sign-contract-modal-message">Por favor, espere um pouco. Estamos criptografando seus contratos!</p>
       </div>
     </div>
-    
+
   </div>
 </div>
 
