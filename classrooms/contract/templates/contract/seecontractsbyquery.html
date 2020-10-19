@@ -132,7 +132,7 @@
                     <th>Escola</th>
                     <th>Turma</th>
                     <th>Nome do Estudante</th>
-                    <!-- <th>Assinante da Escola</th> -->
+                    <th>Assinante da Escola</th>
                     <th>Data de Criação do Contrato</th>
                     <!-- <th>Data Final do Contrato</th>
                     <th>Data de Expiração</th> -->
@@ -199,13 +199,13 @@
                     {% else %}
                     <td></td>
                     {% endif %}
-                    <!-- {% if contract.counter_signe.name %}
+                    {% if contract.counter_signe.name %}
                     <td>
                       {{ contract.counter_signe.name }}
                     </td>
                     {% else %}
                     <td></td>
-                    {% endif %} -->
+                    {% endif %}
                     <td>
                       {% if contract.date.day < 10 %}0{{ contract.date.day }}{% else %}{{ contract.date.day }}{% endif %}/{% if contract.date.month < 10 %}0{{ contract.date.month }}{% else %}{{ contract.date.month }}{% endif %}/{{ contract.date.year }}
                     </td>
