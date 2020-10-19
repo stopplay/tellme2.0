@@ -1,6 +1,6 @@
 {% extends 'base.html'%}
 
-{% block title %} Pesquisar assinantes {% endblock %}
+{% block title %} Pesquisar Assinantes {% endblock %}
 
 {% block content %}
 <script>
@@ -15,7 +15,7 @@
 	<div class="container-fluid">
 		<div class="card">
 			<div class="card-header">
-				<h4 class="card-title">Pesquisar assinantes</h4>
+				<h4 class="card-title">Pesquisar Assinantes</h4>
 			</div>
 			<div class="card-body">
 				<div class="form-group">
@@ -27,7 +27,9 @@
 								<select class="custom-select chosen-select" id="select_form_school">
 									<option id="" value="">--------</option>
 									{% for school in schools %}
-									<option value="{{ school.school_id }}" {% if school.school_id == query.selected_school %} selected {% endif %}>{{ school.school_name }}
+									<option value="{{ school.school_id }}"
+										{% if school.school_id == query.selected_school %} selected {% endif %}>
+										{{ school.school_name }}
 									</option>
 									{% endfor %}
 								</select>
@@ -46,17 +48,20 @@
 								<p><label>Tipo de Usuário:</label></p>
 								<select class="custom-select chosen-select" id="select_form">
 									<option id="" value="" selected>--------</option>
-									<option value="parent" {% if query.type_of_user == 'parent' %} selected {% endif %}>Responsáveis</option>
-									<option value="student" {% if query.type_of_user == 'student' %} selected {% endif %}>Estudante</option>
+									<option value="parent" {% if query.type_of_user == 'parent' %} selected {% endif %}>
+										Responsáveis</option>
+									<option value="student" {% if query.type_of_user == 'student' %} selected
+										{% endif %}>Estudante</option>
 								</select>
 							</div>
 						</div>
-						<input type="text" id="name" name="name" placeholder="Insira o nome do usuário aqui..." value="{{query.name}}">
+						<input type="text" id="name" name="name" placeholder="Insira o nome do usuário aqui..."
+							value="{{query.name}}">
 						<input type="hidden" id="type_of_user" name="type_of_user">
 						<p class="text-warning">{{error}}</p>
 						<div style="margin-top: 10px"><button class="btn btn-info btn-fill pull-left" type="submit"
 								style="background-color: #213f99; border-color: #213f99">Pesquisar
-								usuários</button>
+								Assinantes</button>
 						</div>
 
 					</form>
@@ -78,39 +83,77 @@
 							<table class="table table-hover table-striped display mb-4" id="headstable">
 								<thead>
 									<tr>
-										{% if type_of_user == 'student' or type_of_user == 'parent' %}
-										<th>Escola</th>
+										{% if query.type_of_user == 'student' %}
+											<th>Escolas</th>
+										{% elif query.type_of_user == 'parent' %}
+											<th>Escola</th>
 										{% endif %}
 										<th>Nome</th>
-										<th>Sponte Id</th>
-										<th>Email</th>
-										{% if type_of_user == 'student' %}
-										<th>Responsável Financeiro</th>
-										<th>Responsável Pedagógico</th>
+										{% if query.type_of_user == 'student' %}
+											<th>Turmas</th>
+											<th>Responsáveis</th>
 										{% endif %}
-										<th>Origem</th>
 										<th>Ações</th>
 									</tr>
 								</thead>
 								<tbody>
 									{% for user in school_users %}
 									<tr>
-										{% if type_of_user == 'student' or type_of_user == 'parent' %}
-										<th>{{ user.school_name }}</th>
+										{% if query.type_of_user == 'student' %}
+											<td>
+												<div class="container" style="white-space: nowrap; text-align: center">
+													{% for school in user.school_set.all %}
+														<div class="row" style="margin-bottom: 10px">
+															<div class="col-md-12">
+																{{ school.school_name }}
+															</div>
+														</div>
+													{% endfor %}
+												</div>
+											</td>
+										{% elif query.type_of_user == 'parent' %}
+											<th>{{ user.school_name }}</th>
 										{% endif %}
 										<th>{{ user.name }}</th>
-										{% if type_of_user == 'student' %}
-										<td>{{ user.student_id_sponte }}</td>
-										{% elif type_of_user == 'parent' %}
-										<td>{{ user.responsible_id_sponte }}</td>
+										{% if query.type_of_user == 'student' %}
+										<td>
+											<div class="container" style="white-space: nowrap; text-align: center">
+												{% for classe in user.class_set.all %}
+													<div class="row" style="margin-bottom: 10px">
+														<div class="col-md-12">
+															{{ classe.class_name }}
+														</div>
+													</div>
+												{% endfor %}
+											</div>
+										</td>
+										<td>
+											<div class="container" style="white-space: nowrap; text-align: center">
+												{% if user.first_parent %}
+													<div class="row" style="margin-bottom: 10px">
+														<div class="col-md-12">
+															{{ user.first_parent.name }}
+														</div>
+													</div>
+												{% endif %}
+												{% if user.second_parent %}
+													<div class="row" style="margin-bottom: 10px">
+														<div class="col-md-12">
+															{{ user.second_parent.name }}
+														</div>
+													</div>
+												{% endif %}
+												{% if user.third_parent %}
+													<div class="row" style="margin-bottom: 10px">
+														<div class="col-md-12">
+															{{ user.third_parent.name }}
+														</div>
+													</div>
+												{% endif %}
+											</div>
+										</td>
 										{% endif %}
-										<td>{{ user.profile.email }}</td>
-										{% if type_of_user == 'student' %}
-										<td>{{ user.first_parent.name }} </td>
-										<td>{{ user.second_parent.name }}</td>
-										{% endif %}
-										<td>{{ user.origin }}</td>
-										<td class="w-100">
+										<td>
 											<div class="container" style="white-space: nowrap; text-align: center">
 												{% if type_of_user == 'student' %}
 												<div class="row" style="margin-bottom: 10px">
@@ -159,25 +202,45 @@
 												<div class="row">
 													<div class="col-md-12">
 														{% if type_of_user == 'director' %}
-														<a href="{% url 'users:delete_user' user.head_id 'head' %}"
-															data-baloon="Remove this item from the cart"
-															class="btn btn-danger btn-block">Deletar Diretor </a>
+														<a class="btn btn-danger btn-block"
+															onclick="changeYesLink('{% url 'users:delete_user' user.head_id 'head' %}')"
+															href="#" data-baloon="Remove this item from the cart"
+															class="text-light" data-toggle="modal"
+															data-target="#delete-assinante-modal">
+															Deletar Diretor
+														</a>
 														{% elif type_of_user == 'supervisor' %}
-														<a href="{% url 'users:delete_user' user.supervisor_id 'supervisor' %}"
-															data-baloon="Remove this item from the cart"
-															class="btn btn-danger btn-block">Deletar Supervisor</a>
+														<a class="btn btn-danger btn-block"
+															onclick="changeYesLink('{% url 'users:delete_user' user.supervisor_id 'supervisor' %}')"
+															href="#" data-baloon="Remove this item from the cart"
+															class="text-light" data-toggle="modal"
+															data-target="#delete-assinante-modal">
+															Deletar Supervisor
+														</a>
 														{% elif type_of_user == 'witness' %}
-														<a href="{% url 'users:delete_user' user.witness_id 'witness' %}"
-															data-baloon="Remove this item from the cart"
-															class="btn btn-danger btn-block">Deletar Supervisor</a>
+														<a class="btn btn-danger btn-block"
+															onclick="changeYesLink('{% url 'users:delete_user' user.witness_id 'witness' %}')"
+															href="#" data-baloon="Remove this item from the cart"
+															class="text-light" data-toggle="modal"
+															data-target="#delete-assinante-modal">
+															Deletar Testemunha
+														</a>
 														{% elif type_of_user == 'parent' %}
-														<a href="{% url 'users:delete_user' user.parent_id 'parent' %}"
-															data-baloon="Remove this item from the cart"
-															class="btn btn-danger btn-block">Deletar Responsável</a>
+														<a class="btn btn-danger btn-block"
+															onclick="changeYesLink('{% url 'users:delete_user' user.parent_id 'parent' %}')"
+															href="#" data-baloon="Remove this item from the cart"
+															class="text-light" data-toggle="modal"
+															data-target="#delete-assinante-modal">
+															Deletar Responsável
+														</a>
 														{% elif type_of_user == 'student' %}
-														<a href="{% url 'users:delete_user' user.student_id 'student'%}"
-															data-baloon="Remove this item from the cart"
-															class="btn btn-danger btn-block">Deletar Estudante</a>
+														<a class="btn btn-danger btn-block"
+															onclick="changeYesLink('{% url 'users:delete_user' user.student_id 'student' %}')"
+															href="#" data-baloon="Remove this item from the cart"
+															class="text-light" data-toggle="modal"
+															data-target="#delete-assinante-modal">
+															Deletar Estudante
+														</a>
 														{% endif %}
 													</div>
 												</div>
@@ -196,6 +259,13 @@
 	</div>
 	{% endif %}
 	<script type="text/javascript">
+		$(document).ready(function () {
+            jQuery(window).on('resize', function () {
+				$("#select_form_school_chosen").attr('style', 'width: 100%');
+				$("#select_form_class_chosen").attr('style', 'width: 100%');
+				$("#select_form_chosen").attr('style', 'width: 100%');
+            });
+        });
 		$(document).ready(function () {
 			$('#select_form_school').on('change', function () {
 				let urlClasses = $('#myForm').data('urlclasses')
@@ -250,6 +320,29 @@
 				}
 			});
 		});
+		function changeYesLink(url) {
+			document.getElementById("link_to_delete").href = url;
+		};
 	</script>
+	<div id="delete-assinante-modal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">x</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>Você tem certeza que deseja este assinante? Essa operação não pode ser desfeita!</p>
+				</div>
+				<div class="modal-footer">
+					<a id="link_to_delete" class="btn btn-danger btn-block" href="">Sim</a>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
 
 	{% endblock %}

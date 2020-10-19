@@ -125,7 +125,7 @@ def seeallschoolsbyquery(request):
 			initial_date = request.POST.get('initial_date' or None)
 			final_date = request.POST.get('final_date' or None)
 			query = {
-				'selected_school': int(selected_school),
+				'selected_school': int(selected_school) if selected_school else 0,
 				'initial_date': initial_date,
 				'final_date': final_date
 			}
@@ -152,11 +152,11 @@ def seeallschoolsbyquery(request):
 		is_supervisor = True
 		schools = School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id).order_by('school_name')
 		if request.method == 'POST':
-			selected_school = request.POST.get('selected_school' or None)
+			selected_school = request.POST.get('selected_school' or 0)
 			initial_date = request.POST.get('initial_date' or None)
 			final_date = request.POST.get('final_date' or None)
 			query = {
-				'selected_school': int(selected_school),
+				'selected_school': int(selected_school) if selected_school else 0,
 				'initial_date': initial_date,
 				'final_date': final_date
 			}
@@ -182,11 +182,11 @@ def seeallschoolsbyquery(request):
 		is_supervisor = True
 		schools = School.objects.filter(Q(adminorsupervisor=Supervisor.objects.get(profile=request.user))|Q(adminorsupervisor_2=Supervisor.objects.get(profile=request.user))).order_by('school_name')
 		if request.method == 'POST':
-			selected_school = request.POST.get('selected_school' or None)
+			selected_school = request.POST.get('selected_school' or 0)
 			initial_date = request.POST.get('initial_date' or None)
 			final_date = request.POST.get('final_date' or None)
 			query = {
-				'selected_school': int(selected_school),
+				'selected_school': int(selected_school) if selected_school else 0,
 				'initial_date': initial_date,
 				'final_date': final_date
 			}
@@ -232,7 +232,7 @@ def seeallclassesbyquery(request):
 			initial_date = request.POST.get('initial_date' or None)
 			final_date = request.POST.get('final_date' or None)
 			query = {
-				'selected_school': int(selected_school),
+				'selected_school': int(selected_school) if selected_school else 0,
 				'initial_date': initial_date,
 				'final_date': final_date,
 				'selected_class': int(selected_class) if selected_class else 0
@@ -255,7 +255,7 @@ def seeallclassesbyquery(request):
 			initial_date = request.POST.get('initial_date' or None)
 			final_date = request.POST.get('final_date' or None)
 			query = {
-				'selected_school': int(selected_school),
+				'selected_school': int(selected_school) if selected_school else 0,
 				'initial_date': initial_date,
 				'final_date': final_date,
 				'selected_class': int(selected_class) if selected_class else 0
@@ -278,7 +278,7 @@ def seeallclassesbyquery(request):
 			initial_date = request.POST.get('initial_date' or None)
 			final_date = request.POST.get('final_date' or None)
 			query = {
-				'selected_school': int(selected_school),
+				'selected_school': int(selected_school) if selected_school else 0,
 				'initial_date': initial_date,
 				'final_date': final_date,
 				'selected_class': int(selected_class) if selected_class else 0
@@ -978,15 +978,18 @@ def create_block(request):
 	return render(request, 'school/create_block.html', {'form':form})
 
 def verifyvalidchain(request, class_id=None):
-	class_to_verify_chain = Class.objects.get(class_id=class_id)
-	school_to_verify_chain = School.objects.get(classes__class_id__exact=class_to_verify_chain.class_id)
-	name_of_chain = "{0}-{1}-{2}-{3}".format(school_to_verify_chain.school_name, class_to_verify_chain.enrollment_class_year, class_to_verify_chain.class_unit, class_to_verify_chain.class_name)
-	chain_to_be_verified = Chain.objects.get(id=class_id)
-	verify = chain_to_be_verified.is_valid_chain()
-	if verify or chain_to_be_verified.block_set.count()==0:
-		messages.success(request, 'O chain para esta turma é válido!')
-		return redirect('/')
-	messages.error(request, 'O chain para esta turma não é válido')
+	try:
+		class_to_verify_chain = Class.objects.get(class_id=class_id)
+		school_to_verify_chain = School.objects.get(classes__class_id__exact=class_to_verify_chain.class_id)
+		name_of_chain = "{0}-{1}-{2}-{3}".format(school_to_verify_chain.school_name, class_to_verify_chain.enrollment_class_year, class_to_verify_chain.class_unit, class_to_verify_chain.class_name)
+		chain_to_be_verified = Chain.objects.get(name=name_of_chain)
+		verify = chain_to_be_verified.is_valid_chain()
+		if verify or chain_to_be_verified.block_set.count()==0:
+			messages.success(request, 'O chain para esta turma é válido!')
+			return redirect('/')
+		messages.error(request, 'O chain para esta turma não é válido')
+	except:
+		messages.error(request, 'Turma ou Escola não encontrados')
 	return redirect('/')
 
 def add_head_to_school(request, school_id=None):
