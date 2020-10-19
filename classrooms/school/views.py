@@ -238,7 +238,7 @@ def seeallclassesbyquery(request):
 				except:
 					current_class = None
 			except:
-				error = 'Escola não selecionada'
+				pass
 		return render(request, 'school/seeallclassesbyquery.html', {'schools': schools, 'current_school': current_school, 'current_class': current_class, 'selected_school': selected_school, 'selected_class': selected_class, 'query': query, 'error': error})
 	elif Head.objects.filter(profile=request.user).count()>=1:
 		is_supervisor = True
@@ -284,7 +284,7 @@ def seeallclassesbyquery(request):
 				except:
 					current_class = None
 			except:
-				error = 'Escola não selecionada'
+				pass
 		return render(request, 'school/seeallclassesbyquery.html', {'schools': schools, 'current_school': current_school, 'current_class': current_class, 'selected_school': selected_school, 'selected_class': selected_class, 'query': query, 'error': error})
 	return redirect('/contracts/all')
 
