@@ -216,12 +216,6 @@ def seeallclassesbyquery(request):
 	current_class = None
 	selected_school = None
 	selected_class = None
-	all_contracts = Contract.objects.all()
-	complete_contracts_in_period = 0
-	contracts_in_period = 0
-	contracts_to_pay = 0
-	value_to_pay = 0
-	contracts_paid = 0
 	query = None
 	error = ''
 	if request.user.is_superuser:

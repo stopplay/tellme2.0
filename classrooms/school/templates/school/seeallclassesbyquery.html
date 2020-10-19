@@ -36,7 +36,7 @@
                         <p class="text-warning">{{error}}</p>
                         <div style="margin-top: 10px"><button class="btn btn-info btn-fill pull-left" type="submit"
                                 style="background-color: #213f99; border-color: #213f99">Pesquisar
-                                Turma</button>
+                                Turma(s)</button>
                         </div>
                     </form>
                 </div>
@@ -99,7 +99,7 @@
                                             {{ current_class.registered_contracts }}
                                         </th>
                                         <th>
-                                            {{ current_class.registered_contracts }}
+                                            {{ current_class.complete_contracts }}
                                         </th>
                                         <th>{{ current_class.quantity_of_students_associated }}</th>
                                         <th>{{ current_class.quantity_of_parents_associated }}</th>
@@ -202,7 +202,7 @@
                                             {{ class.registered_contracts }}
                                         </th>
                                         <th>
-                                            {{ class.registered_contracts }}
+                                            {{ class.complete_contracts }}
                                         </th>
                                         <!-- <th>{{ school.quantity_of_contracts_not_signed }}/{{ school.quantity_of_contracts_total }}</th> -->
                                         <th>{{ class.quantity_of_students_associated }}</th>
@@ -242,6 +242,115 @@
                                         </td>
 
                                     </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {% elif query %}
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card strpied-tabled-with-hover">
+
+                        <div class="card-header ">
+                            <h4 class="card-title">Turma(s)</h4>
+                        </div>
+
+                        <div class="card-body table-full-width table-responsive">
+                            <table class="table table-hover table-striped" id="schoolstable">
+                                <thead>
+                                    <tr>
+                                        <th>Escola</th>
+                                        <th>
+                                            Turmas
+                                        </th>
+                                        <th>
+                                            Contratos registrados
+                                        </th>
+                                        <th>
+                                            Contratos assinados <br>
+                                            com processo completo
+                                        </th>
+                                        <!-- <th>Contratos Não Assinados</th> -->
+                                        <th>
+                                            Número de <br>
+                                            Alunos <br>
+                                            Cadastrados
+                                        </th>
+                                        <th>
+                                            Número de Assinantes <br>
+                                            Cadastrados
+                                        </th>
+                                        <th> Ações </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for school in schools %}
+                                        {% for class in school.classes.all %}
+                                        <tr>
+                                            <th>{{ school.school_name }}
+                                            </th>
+                                            <td>
+                                                <div class="row width-full margin-bottom-5">
+                                                    <div class="col-md-6">
+                                                        <label>{{ class.class_name }},
+                                                            {{ class.enrollment_class_year }}</label>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <th>
+                                                {{ class.registered_contracts }}
+                                            </th>
+                                            <th>
+                                                {{ class.complete_contracts }}
+                                            </th>
+                                            <!-- <th>{{ school.quantity_of_contracts_not_signed }}/{{ school.quantity_of_contracts_total }}</th> -->
+                                            <th>{{ class.quantity_of_students_associated }}</th>
+                                            <th>{{ class.quantity_of_parents_associated }}</th>
+                                            <td>
+                                                <div class="col-md-6">
+                                                    <div class="dropdown show">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            id="dropdownMenuLink" data-toggle="dropdown"
+                                                            aria-haspopup="true" aria-expanded="false"><i
+                                                                class="fas fa-ellipsis-h"></i></button>
+
+                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                            <a class="dropdown-item"
+                                                                href="{% url 'school:update_class' class.class_id %}"
+                                                                data-baloon="Remove this item from the cart"
+                                                                class="text-danger">
+                                                                Editar Turma
+                                                            </a>
+                                                            <a class="dropdown-item"
+                                                                href="{% url 'school:seeclassbyid' class.class_id %}"
+                                                                data-baloon="Remove this item from the cart"
+                                                                class="text-danger">
+                                                                Detalhes da Turma
+                                                            </a>
+                                                            <a class="dropdown-item"
+                                                                onclick="changeYesLink('{% url 'school:delete_class' class.class_id %}')"
+                                                                href="#" data-baloon="Remove this item from the cart"
+                                                                class="text-light" data-toggle="modal"
+                                                                data-target="#delete-class-modal">
+                                                                Deletar Turma
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </td>
+
+                                        </tr>
+                                        {% endfor %}
                                     {% endfor %}
                                 </tbody>
                             </table>
