@@ -1888,7 +1888,7 @@ def set_parents(request, student_id=None):
     	form = SetParentsModelForm(request.POST or None, instance=instance)
     	if form.is_valid():
             new_student = form.save(commit=False)
-            new_student.save(update_fields=['first_parent','second_parent'])
+            new_student.save(update_fields=['first_parent','second_parent', 'third_parent'])
             messages.success(request, 'Responsáveis Selecionados com Sucesso')
             return redirect('/users/all_signes/')
     	return render(request, 'school_users/set_parents.html', {'form':form, 'student_id':student_id})
@@ -1904,9 +1904,10 @@ def set_parents(request, student_id=None):
             schools = School.objects.filter(Q(adminorsupervisor=Supervisor.objects.get(profile=request.user))|Q(adminorsupervisor_2=Supervisor.objects.get(profile=request.user)))
         form.fields["first_parent"].queryset = Parent.objects.filter(Q(first_parent__school__in=schools) | Q(second_parent__school__in=schools) | Q(third_parent__school__in=schools))
         form.fields["second_parent"].queryset = Parent.objects.filter(Q(first_parent__school__in=schools) | Q(second_parent__school__in=schools) | Q(third_parent__school__in=schools))
+        form.fields["third_parent"].queryset = Parent.objects.filter(Q(first_parent__school__in=schools) | Q(second_parent__school__in=schools) | Q(third_parent__school__in=schools))
         if form.is_valid():
             new_student = form.save(commit=False)
-            new_student.save(update_fields=['first_parent','second_parent'])
+            new_student.save(update_fields=['first_parent','second_parent', 'third_parent'])
             messages.success(request, 'Responsáveis Selecionados com Sucesso')
             return redirect('/users/all_signes/')
         return render(request, 'school_users/set_parents.html', {'form':form, 'student_id':student_id, 'is_supervisor':is_supervisor})
