@@ -26,7 +26,7 @@
 							<div class="labelandform col-md-6">
 								<p><label>Selecione a Escola:</label></p>
 								<select class="custom-select chosen-select" id="select_form_school">
-									<option id="" value="">--------</option>
+									<option id="" value="">Todas</option>
 									{% for school in schools %}
 									<option value="{{ school.school_id }}"
 										{% if school.school_id == query.selected_school %} selected {% endif %}>
@@ -38,7 +38,7 @@
 							<div class="labelandform col-md-6">
 								<p><label>Selecione o Tipo de Usuário:</label></p>
 								<select class="custom-select chosen-select" id="select_form">
-									<option id="" value="">--------</option>
+									<option id="" value="">Todos</option>
 									<option value="director" {% if query.type_of_user == 'director' %} selected
 										{% endif %}>Diretor</option>
 									<option value="supervisor" {% if query.type_of_user == 'supervisor' %} selected
