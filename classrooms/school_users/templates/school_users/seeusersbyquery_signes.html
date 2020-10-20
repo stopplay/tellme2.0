@@ -131,29 +131,32 @@
 												</div>
 											</td>
 											<td>
-												<div class="container" style="white-space: nowrap; text-align: center">
-													{% if user.first_parent %}
-														<div class="row" style="margin-bottom: 10px">
-															<div class="col-md-12">
-																{{ user.first_parent.name }}
+												{% if user.first_parent.all or user.second_parent.all or user.third_parent.all %}
+												{% else %}
+													<div class="container" style="white-space: nowrap; text-align: center">
+														{% if user.first_parent %}
+															<div class="row" style="margin-bottom: 10px">
+																<div class="col-md-12">
+																	{{ user.first_parent.name }}
+																</div>
 															</div>
-														</div>
-													{% endif %}
-													{% if user.second_parent %}
-														<div class="row" style="margin-bottom: 10px">
-															<div class="col-md-12">
-																{{ user.second_parent.name }}
+														{% endif %}
+														{% if user.second_parent %}
+															<div class="row" style="margin-bottom: 10px">
+																<div class="col-md-12">
+																	{{ user.second_parent.name }}
+																</div>
 															</div>
-														</div>
-													{% endif %}
-													{% if user.third_parent %}
-														<div class="row" style="margin-bottom: 10px">
-															<div class="col-md-12">
-																{{ user.third_parent.name }}
+														{% endif %}
+														{% if user.third_parent %}
+															<div class="row" style="margin-bottom: 10px">
+																<div class="col-md-12">
+																	{{ user.third_parent.name }}
+																</div>
 															</div>
-														</div>
-													{% endif %}
-												</div>
+														{% endif %}
+													</div>
+												{% endif %}
 											</td>
 										{% endif %}
 										<th>
