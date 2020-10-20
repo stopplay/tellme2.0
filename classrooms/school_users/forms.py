@@ -82,9 +82,9 @@ class SetParentsModelForm(forms.ModelForm):
 		model = Student
 		fields = ['first_parent','second_parent', 'third_parent']
 		widgets = {
-			'first_parent': forms.Select(attrs={'class':'form-control chosen-select'}, choices=Parent.objects.values_list('parent_id', 'name')),
-			'second_parent': forms.Select(attrs={'class':'form-control chosen-select'}, choices=Parent.objects.values_list('parent_id', 'name')),
-			'third_parent': forms.Select(attrs={'class':'form-control chosen-select'}, choices=Parent.objects.values_list('parent_id', 'name')),
+			'first_parent': forms.Select(attrs={'class':'form-control chosen-select'}),
+			'second_parent': forms.Select(attrs={'class':'form-control chosen-select'}),
+			'third_parent': forms.Select(attrs={'class':'form-control chosen-select'}),
 		}
 
 class ProfileForStudentModelForm(forms.ModelForm):
