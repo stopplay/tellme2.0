@@ -1548,7 +1548,7 @@ def seeusersbyquery_signes(request):
         
 
 
-        if type_of_user == 'parent':
+        if type_of_user == 'student':
             if request.user.is_superuser:
                 school_users = TYPE[type_of_user].objects.exclude(school=None)
             else:
@@ -1574,7 +1574,7 @@ def seeusersbyquery_signes(request):
                 else:
                     school_users = TYPE[type_of_user].objects.filter(school__in=schools)
 
-        elif type_of_user == 'student':
+        elif type_of_user == 'parent':
             if request.user.is_superuser:
                 school_users = TYPE[type_of_user].objects.exclude(Q(first_parent__school=None) & Q(second_parent__school=None) & Q(third_parent__school=None))
             else:
