@@ -90,45 +90,39 @@
 									<tr>
 										<th>{{ user.name }}</th>
 										<th>
-											{% if query.type_of_user == 'director' %}
-												Diretor
-											{% elif query.type_of_user == 'supervisor' %}
-												Supervisor
-											{% elif query.type_of_user == 'witness' %}
-												Testemunha
-											{% endif %}
+											{{ user.my_type }}
 										</th>
 										<th>{{ user.profile.username }}</th>
 										<td>
 											<div class="container" style="white-space: nowrap; text-align: center">
-												{% if query.type_of_user == 'director' %}
-												{% for school in user.school_set.all %}
-												<div class="row" style="margin-bottom: 10px;">
-													{{ school.school_name }}
-												</div>
-												{% endfor %}
-												{% elif query.type_of_user == 'supervisor' %}
-												{% for school in user.school_set.all %}
-												<div class="row" style="margin-bottom: 10px;">
-													{{ school.school_name }}
-												</div>
-												{% endfor %}
-												{% for school in user.adminorsupervisor_2.all %}
-												<div class="row" style="margin-bottom: 10px;">
-													{{ school.school_name }}
-												</div>
-												{% endfor %}
-												{% elif query.type_of_user == 'witness' %}
-												{% for school in user.first_witness_school_set.all %}
-												<div class="row" style="margin-bottom: 10px;">
-													{{ school.school_name }}
-												</div>
-												{% endfor %}
-												{% for school in user.second_witness_school.all %}
-												<div class="row" style="margin-bottom: 10px;">
-													{{ school.school_name }}
-												</div>
-												{% endfor %}
+												{% if user.my_type == 'Diretor' %}
+													{% for school in user.school_set.all %}
+														<div class="row" style="margin-bottom: 10px;">
+															{{ school.school_name }}
+														</div>
+													{% endfor %}
+												{% elif user.my_type == 'Supervisor' %}
+													{% for school in user.school_set.all %}
+														<div class="row" style="margin-bottom: 10px;">
+															{{ school.school_name }}
+														</div>
+													{% endfor %}
+													{% for school in user.adminorsupervisor_2.all %}
+														<div class="row" style="margin-bottom: 10px;">
+															{{ school.school_name }}
+														</div>
+													{% endfor %}
+												{% elif user.my_type == 'Testemunha' %}
+													{% for school in user.first_witness_school.all %}
+														<div class="row" style="margin-bottom: 10px;">
+															{{ school.school_name }}
+														</div>
+													{% endfor %}
+													{% for school in user.second_witness_school.all %}
+														<div class="row" style="margin-bottom: 10px;">
+															{{ school.school_name }}
+														</div>
+													{% endfor %}
 												{% endif %}
 											</div>
 										</td>
@@ -140,40 +134,25 @@
 			
 			
 												<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-													{% if type_of_user == 'student' %}
-															<a href="{% url 'users:set_parents' user.student_id %}"
-																data-baloon="Remove this item from the cart"
-																class="dropdown-item">
-																Selecionar Responsáveis
-															</a>
-													{% endif %}
 													{% if user.profile %}
 														<a href="{% url 'users:change_email' user.profile.id %}"
 														data-baloon="Remove this item from the cart"
 														class="dropdown-item">Atualizar Email</a>
-														{% if type_of_user == 'director' %}
-														<a href="{% url 'users:reset_password_send_email' user.head_id 'head' %}"
-															data-baloon="Remove this item from the cart"
-															class="dropdown-item">Resetar Senha</a>
-														{% elif type_of_user == 'supervisor' %}
-														<a href="{% url 'users:reset_password_send_email' user.supervisor_id 'supervisor' %}"
-															data-baloon="Remove this item from the cart"
-															class="dropdown-item">Resetar Senha</a>
-														{% elif type_of_user == 'witness' %}
-														<a href="{% url 'users:reset_password_send_email' user.witness_id 'witness' %}"
-															data-baloon="Remove this item from the cart"
-															class="dropdown-item">Resetar Senha</a>
-														{% elif type_of_user == 'parent' %}
-														<a href="{% url 'users:reset_password_send_email' user.parent_id 'parent' %}"
-															data-baloon="Remove this item from the cart"
-															class="dropdown-item">Resetar Senha</a>
-														{% elif type_of_user == 'student' %}
-														<a href="{% url 'users:reset_password_send_email' user.student_id 'student' %}"
-															data-baloon="Remove this item from the cart"
-															class="dropdown-item">Resetar Senha</a>
+														{% if user.my_type == 'Diretor' %}
+															<a href="{% url 'users:reset_password_send_email' user.head_id 'head' %}"
+																data-baloon="Remove this item from the cart"
+																class="dropdown-item">Resetar Senha</a>
+														{% elif user.my_type == 'Supervisor' %}
+															<a href="{% url 'users:reset_password_send_email' user.supervisor_id 'supervisor' %}"
+																data-baloon="Remove this item from the cart"
+																class="dropdown-item">Resetar Senha</a>
+														{% elif user.my_type == 'Testemunha' %}
+															<a href="{% url 'users:reset_password_send_email' user.witness_id 'witness' %}"
+																data-baloon="Remove this item from the cart"
+																class="dropdown-item">Resetar Senha</a>
 														{% endif %}
 													{% endif %}
-													{% if type_of_user == 'director' %}
+													{% if user.my_type == 'Diretor' %}
 														<a class="dropdown-item"
 															onclick="changeYesLink('{% url 'users:delete_user' user.head_id 'head' %}')"
 															href="#" data-baloon="Remove this item from the cart"
@@ -181,37 +160,21 @@
 															data-target="#delete-user-modal">
 															Deletar Diretor
 														</a>
-														{% elif type_of_user == 'supervisor' %}
+													{% elif user.my_type == 'Supervisor' %}
 														<a class="dropdown-item"
-															onclick="changeYesLink('{% url 'users:delete_user' user.head_id 'supervisor' %}')"
+															onclick="changeYesLink('{% url 'users:delete_user' user.supervisor_id 'supervisor' %}')"
 															href="#" data-baloon="Remove this item from the cart"
 															class="text-light" data-toggle="modal"
 															data-target="#delete-user-modal">
 															Deletar Supervisor
 														</a>
-														{% elif type_of_user == 'witness' %}
+													{% elif user.my_type == 'Testemunha' %}
 														<a class="dropdown-item"
 															onclick="changeYesLink('{% url 'users:delete_user' user.witness_id 'witness' %}')"
 															href="#" data-baloon="Remove this item from the cart"
 															class="text-light" data-toggle="modal"
 															data-target="#delete-user-modal">
 															Deletar Testemunha
-														</a>
-														{% elif type_of_user == 'parent' %}
-														<a class="dropdown-item"
-															onclick="changeYesLink('{% url 'users:delete_user' user.parent_id 'parent' %}')"
-															href="#" data-baloon="Remove this item from the cart"
-															class="text-light" data-toggle="modal"
-															data-target="#delete-user-modal">
-															Deletar Responsável
-														</a>
-														{% elif type_of_user == 'student' %}
-														<a class="dropdown-item"
-															onclick="changeYesLink('{% url 'users:delete_user' user.student_id 'student' %}')"
-															href="#" data-baloon="Remove this item from the cart"
-															class="text-light" data-toggle="modal"
-															data-target="#delete-user-modal">
-															Deletar Estudante
 														</a>
 													{% endif %}
 												</div>

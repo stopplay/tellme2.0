@@ -1485,7 +1485,73 @@ def seeusersbyquery_administration(request):
                 else:
                     school_users = TYPE[type_of_user].objects.filter(school__in=schools)
         else:
-            error = 'Tipo de usuário não selecionado.'
+            if request.user.is_superuser:
+                witness_users = Witness.objects.all()
+            else:
+                witness_users = Witness.objects.filter(Q(first_witness_school__in=schools) | Q(second_witness_school__in=schools))
+
+            if school:
+                witness_users = witness_users.filter(Q(first_witness_school=school) | Q(second_witness_school=school))
+                fetched = True
+                
+            if name:
+                if fetched:
+                    witness_users = witness_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
+                else:
+                    witness_users = witness_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
+                    fetched = True
+
+            if not fetched:
+                if request.user.is_superuser:
+                    witness_users = Witness.objects.all()
+                else:
+                    witness_users = Witness.objects.filter(Q(first_witness_school__in=school) | Q(second_witness_school__in=school))
+
+            if request.user.is_superuser:
+                supervisor_users = Supervisor.objects.all()
+            else:
+                supervisor_users = Supervisor.objects.filter(Q(school_in=school) | Q(adminorsupervisor_2__in=school))
+
+            if school:
+                supervisor_users = supervisor_users.filter(Q(school=school) | Q(adminorsupervisor_2=school))
+                fetched = True
+                
+            if name:
+                if fetched:
+                    supervisor_users = supervisor_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
+                else:
+                    supervisor_users = supervisor_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
+                    fetched = True
+
+            if not fetched:
+                if request.user.is_superuser:
+                    supervisor_users = Supervisor.objects.all()
+                else:
+                    supervisor_users = Supervisor.objects.filter(Q(school__in=school) | Q(adminorsupervisor_2__in=school))
+
+            if request.user.is_superuser:
+                head_users = Head.objects.all()
+            else:
+                head_users = Head.objects.filter(school__in=schools)
+
+            if school:
+                head_users = head_users.filter(school=school)
+                fetched = True
+                
+            if name:
+                if fetched:
+                    head_users = head_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
+                else:
+                    head_users = head_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
+                    fetched = True
+
+            if not fetched:
+                if request.user.is_superuser:
+                    head_users = Head.objects.all()
+                else:
+                    head_users = Head.objects.filter(school__in=schools)
+
+        school_users = [*witness_users, *supervisor_users, *head_users]
         return render(request, 'school_users/seeusersbyquery_administration.html', {'type_of_user':type_of_user, 'school_users':school_users, 'schools':schools, 'is_supervisor': is_supervisor, 'error': error, 'query': query})
 
             
