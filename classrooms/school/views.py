@@ -1985,3 +1985,16 @@ def import_sponte(request):
 		return response
 	except:
 		return HttpResponse(xml_content, content_type='text/xml')
+
+def set_all_classes_chain():
+	for classe in Class.objecs.all():
+		school = School.objects.get(classes__class_id__exact=classe.class_id)
+		try:
+			chain = Chain.objects.get(name="{0}-{1}-{2}-{3}".format(school.school_name, classe.enrollment_class_year, classe.class_unit, classe.class_name))
+			chain.classe = classe
+			chain.save(update_fields=['classe'])
+		except Exception as e:
+			print (classe.class_name)
+			print (str(e))
+			print ('Cadeia não encontrada')
+	return True
