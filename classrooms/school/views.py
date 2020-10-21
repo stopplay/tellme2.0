@@ -1987,7 +1987,7 @@ def import_sponte(request):
 		return HttpResponse(xml_content, content_type='text/xml')
 
 def set_all_classes_chain():
-	for classe in Class.objects.all():
+	for classe in Class.objects.exclude(school=None):
 		school = School.objects.get(classes__class_id__exact=classe.class_id)
 		try:
 			chain = Chain.objects.get(name="{0}-{1}-{2}-{3}".format(school.school_name, classe.enrollment_class_year, classe.class_unit, classe.class_name))
