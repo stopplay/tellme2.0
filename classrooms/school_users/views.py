@@ -1435,7 +1435,7 @@ def seeusersbyquery_administration(request):
                     if request.user.is_superuser:
                         school_users = TYPE[type_of_user].objects.all()
                     else:
-                        school_users = TYPE[type_of_user].objects.filter(Q(school_in=school) | Q(adminorsupervisor_2__in=school))
+                        school_users = TYPE[type_of_user].objects.filter(Q(school__in=school) | Q(adminorsupervisor_2__in=school))
 
                     if school:
                         school_users = school_users.filter(Q(school=school) | Q(adminorsupervisor_2=school))
