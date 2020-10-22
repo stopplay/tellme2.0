@@ -17,6 +17,7 @@ urlpatterns = [
     url('import_xml/', views.import_xml, name='import_xml'),
     url('import_sponte/', views.import_sponte, name='import_sponte'),
     url('seeallschoolsbyquery/', views.seeallschoolsbyquery, name='seeallschoolsbyquery'),
+    url('seeallclassesbyquery/', views.seeallclassesbyquery, name='seeallclassesbyquery'),
     path('seeclassbyid/<int:class_id>', views.seeclassbyid, name="seeclassbyid"),
     path('blockchain/<int:chain_id>', views.seechainbyid, name="seechainbyid"),
     url('add_school/', views.create_school, name="add_school"),

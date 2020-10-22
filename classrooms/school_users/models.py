@@ -10,6 +10,10 @@ class Head(models.Model):
 	tell_me_user_id = models.IntegerField(null=True, blank=True)
 
 	@property
+	def my_type(self):
+		return 'Diretor'
+
+	@property
 	def origin(self):
 		return 'Adicionado Manualmente'
 
@@ -73,6 +77,10 @@ class Supervisor(models.Model):
 	name = models.CharField(max_length = 750, null=True, blank=True)
 	profile = models.OneToOneField(User, on_delete = models.SET_NULL, null=True, blank=True)
 	tell_me_user_id = models.IntegerField(null=True, blank=True)
+
+	@property
+	def my_type(self):
+		return 'Supervisor'
 	
 	@property
 	def origin(self):
@@ -202,6 +210,10 @@ class Witness(models.Model):
 	cpf = models.TextField(null=True, blank=True)
 	profile = models.OneToOneField(User, on_delete = models.SET_NULL, null=True, blank=True)
 	tell_me_user_id = models.IntegerField(null=True, blank=True)
+
+	@property
+	def my_type(self):
+		return 'Testemunha'
 
 	def __str__(self):
 		return '{}'.format(self.name)

@@ -1,0 +1,438 @@
+{% extends 'base.html'%}
+
+{% block title %} Ver Todas as Turmas {% endblock %}
+
+{% block content %}
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Pesquisar Turmas</h4>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <form id="myForm" method="POST" enctype="multipart/form-data"
+                        data-urlclasses="{% url 'users:classes_choices_ajax' %}"> {% csrf_token %}
+                        <div class="labelandform">
+                            <p><label>Selecione a Escola:</label></p>
+                            <select class="custom-select chosen-select" id="select_form_school">
+                                <option id="" value="0">--------</option>
+                                {% for school in schools %}
+                                <option value="{{ school.school_id }}"
+                                    {% if school.school_id == query.selected_school %} selected {% endif %}>
+                                    {{ school.school_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="labelandform">
+                            <p><label>Selecione a Turma:</label></p>
+                            <select class="custom-select" id="select_form_class">
+                                <option id="" value="0">--------</option>
+                            </select>
+                        </div>
+                        <input type="hidden" id="selected_school" name="selected_school">
+                        <input type="hidden" id="selected_class" name="selected_class">
+                        <p class="text-warning">{{error}}</p>
+                        <div style="margin-top: 10px"><button class="btn btn-info btn-fill pull-left" type="submit"
+                                style="background-color: #213f99; border-color: #213f99">Pesquisar
+                                Turma(s)</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if current_class %}
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card strpied-tabled-with-hover">
+
+                        <div class="card-header ">
+                            <h4 class="card-title">Turma(s)</h4>
+                        </div>
+
+                        <div class="card-body table-full-width table-responsive">
+                            <table class="table table-hover table-striped" id="schoolstable">
+                                <thead>
+                                    <tr>
+                                        <th>Escola</th>
+                                        <th>
+                                            Turmas
+                                        </th>
+                                        <th>
+                                            Contratos registrados
+                                        </th>
+                                        <th>
+                                            Contratos assinados <br>
+                                            com processo completo
+                                        </th>
+                                        <th>
+                                            Número de <br>
+                                            Alunos <br>
+                                            Cadastrados
+                                        </th>
+                                        <th>
+                                            Número de Assinantes <br>
+                                            Cadastrados
+                                        </th>
+                                        <th> Ações </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th>{{ current_school.school_name }}
+                                        </th>
+                                        <td>
+                                            <div class="row width-full margin-bottom-5">
+                                                <div class="col-md-6">
+                                                    <label>
+                                                        {{ current_class.class_name }},
+                                                        {{ current_class.enrollment_class_year }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <th>
+                                            {{ current_class.registered_contracts }}
+                                        </th>
+                                        <th>
+                                            {{ current_class.complete_contracts }}
+                                        </th>
+                                        <th>{{ current_class.quantity_of_students_associated }}</th>
+                                        <th>{{ current_class.quantity_of_parents_associated }}</th>
+                                        <td>
+                                            <div class="col-md-6">
+                                                <div class="dropdown show">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        id="dropdownMenuLink" data-toggle="dropdown"
+                                                        aria-haspopup="true" aria-expanded="false"><i
+                                                            class="fas fa-ellipsis-h"></i></button>
+
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                        <a class="dropdown-item"
+                                                            href="{% url 'school:update_class' current_class.class_id %}"
+                                                            data-baloon="Remove this item from the cart"
+                                                            class="text-danger">
+                                                            Editar Turma
+                                                        </a>
+                                                        <a class="dropdown-item"
+                                                            href="{% url 'school:seeclassbyid' current_class.class_id %}"
+                                                            data-baloon="Remove this item from the cart"
+                                                            class="text-danger">
+                                                            Detalhes da Turma
+                                                        </a>
+                                                        <a class="dropdown-item"
+                                                            onclick="changeYesLink('{% url 'school:delete_class' current_class.class_id %}')"
+                                                            href="#" data-baloon="Remove this item from the cart"
+                                                            class="text-light" data-toggle="modal"
+                                                            data-target="#delete-class-modal">
+                                                            Deletar Turma
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {% elif current_school %}
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card strpied-tabled-with-hover">
+
+                        <div class="card-header ">
+                            <h4 class="card-title">Turma(s)</h4>
+                        </div>
+
+                        <div class="card-body table-full-width table-responsive">
+                            <table class="table table-hover table-striped" id="schoolstable">
+                                <thead>
+                                    <tr>
+                                        <th>Escola</th>
+                                        <th>
+                                            Turmas
+                                        </th>
+                                        <th>
+                                            Contratos registrados
+                                        </th>
+                                        <th>
+                                            Contratos assinados <br>
+                                            com processo completo
+                                        </th>
+                                        <!-- <th>Contratos Não Assinados</th> -->
+                                        <th>
+                                            Número de <br>
+                                            Alunos <br>
+                                            Cadastrados
+                                        </th>
+                                        <th>
+                                            Número de Assinantes <br>
+                                            Cadastrados
+                                        </th>
+                                        <th> Ações </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for class in current_school.classes.all %}
+                                    <tr>
+                                        <th>{{ current_school.school_name }}
+                                        </th>
+                                        <td>
+                                            <div class="row width-full margin-bottom-5">
+                                                <div class="col-md-6">
+                                                    <label>{{ class.class_name }},
+                                                        {{ class.enrollment_class_year }}</label>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <th>
+                                            {{ class.registered_contracts }}
+                                        </th>
+                                        <th>
+                                            {{ class.complete_contracts }}
+                                        </th>
+                                        <!-- <th>{{ school.quantity_of_contracts_not_signed }}/{{ school.quantity_of_contracts_total }}</th> -->
+                                        <th>{{ class.quantity_of_students_associated }}</th>
+                                        <th>{{ class.quantity_of_parents_associated }}</th>
+                                        <td>
+                                            <div class="col-md-6">
+                                                <div class="dropdown show">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        id="dropdownMenuLink" data-toggle="dropdown"
+                                                        aria-haspopup="true" aria-expanded="false"><i
+                                                            class="fas fa-ellipsis-h"></i></button>
+
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                        <a class="dropdown-item"
+                                                            href="{% url 'school:update_class' class.class_id %}"
+                                                            data-baloon="Remove this item from the cart"
+                                                            class="text-danger">
+                                                            Editar Turma
+                                                        </a>
+                                                        <a class="dropdown-item"
+                                                            href="{% url 'school:seeclassbyid' class.class_id %}"
+                                                            data-baloon="Remove this item from the cart"
+                                                            class="text-danger">
+                                                            Detalhes da Turma
+                                                        </a>
+                                                        <a class="dropdown-item"
+                                                            onclick="changeYesLink('{% url 'school:delete_class' class.class_id %}')"
+                                                            href="#" data-baloon="Remove this item from the cart"
+                                                            class="text-light" data-toggle="modal"
+                                                            data-target="#delete-class-modal">
+                                                            Deletar Turma
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </td>
+
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {% elif query %}
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card strpied-tabled-with-hover">
+
+                        <div class="card-header ">
+                            <h4 class="card-title">Turma(s)</h4>
+                        </div>
+
+                        <div class="card-body table-full-width table-responsive">
+                            <table class="table table-hover table-striped" id="schoolstable">
+                                <thead>
+                                    <tr>
+                                        <th>Escola</th>
+                                        <th>
+                                            Turmas
+                                        </th>
+                                        <th>
+                                            Contratos registrados
+                                        </th>
+                                        <th>
+                                            Contratos assinados <br>
+                                            com processo completo
+                                        </th>
+                                        <!-- <th>Contratos Não Assinados</th> -->
+                                        <th>
+                                            Número de <br>
+                                            Alunos <br>
+                                            Cadastrados
+                                        </th>
+                                        <th>
+                                            Número de Assinantes <br>
+                                            Cadastrados
+                                        </th>
+                                        <th> Ações </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for school in schools %}
+                                        {% for class in school.classes.all %}
+                                        <tr>
+                                            <th>{{ school.school_name }}
+                                            </th>
+                                            <td>
+                                                <div class="row width-full margin-bottom-5">
+                                                    <div class="col-md-6">
+                                                        <label>{{ class.class_name }},
+                                                            {{ class.enrollment_class_year }}</label>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <th>
+                                                {{ class.registered_contracts }}
+                                            </th>
+                                            <th>
+                                                {{ class.complete_contracts }}
+                                            </th>
+                                            <!-- <th>{{ school.quantity_of_contracts_not_signed }}/{{ school.quantity_of_contracts_total }}</th> -->
+                                            <th>{{ class.quantity_of_students_associated }}</th>
+                                            <th>{{ class.quantity_of_parents_associated }}</th>
+                                            <td>
+                                                <div class="col-md-6">
+                                                    <div class="dropdown show">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            id="dropdownMenuLink" data-toggle="dropdown"
+                                                            aria-haspopup="true" aria-expanded="false"><i
+                                                                class="fas fa-ellipsis-h"></i></button>
+
+                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                            <a class="dropdown-item"
+                                                                href="{% url 'school:update_class' class.class_id %}"
+                                                                data-baloon="Remove this item from the cart"
+                                                                class="text-danger">
+                                                                Editar Turma
+                                                            </a>
+                                                            <a class="dropdown-item"
+                                                                href="{% url 'school:seeclassbyid' class.class_id %}"
+                                                                data-baloon="Remove this item from the cart"
+                                                                class="text-danger">
+                                                                Detalhes da Turma
+                                                            </a>
+                                                            <a class="dropdown-item"
+                                                                onclick="changeYesLink('{% url 'school:delete_class' class.class_id %}')"
+                                                                href="#" data-baloon="Remove this item from the cart"
+                                                                class="text-light" data-toggle="modal"
+                                                                data-target="#delete-class-modal">
+                                                                Deletar Turma
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </td>
+
+                                        </tr>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <script>
+        $(document).ready(function () {
+            $('#select_form_school').on('change', function () {
+                let urlClasses = $('#myForm').data('urlclasses')
+                var selectValor = $(this).val();
+                $.ajax({
+                    url: urlClasses,
+                    data: {
+                        id: selectValor
+                    },
+                    success: function (response) {
+                        $('#select_form_class').html(response)
+                    }
+                })
+                if (selectValor == '') {
+                    document.getElementById('selected_school').value = '0'
+                }
+                else {
+                    document.getElementById('selected_school').value = selectValor
+                }
+            });
+        });
+        $(document).ready(function () {
+            $('#select_form_class').on('change', function () {
+                var selectValor = $(this).val();
+                if (selectValor == '') {
+                    document.getElementById('selected_class').value = '0'
+                }
+                else {
+                    document.getElementById('selected_class').value = selectValor
+                }
+            });
+        });
+        $(document).ready(function () {
+            var dt = $('#schoolstable').DataTable();
+            $(window).on('resize', function () {
+                $('#schoolstable').DataTable();
+            })
+        });
+        $(document).on("change", "#initial_date", function () {
+            document.getElementById("final_date").min = this.value
+        });
+        $(document).ready(function () {
+            jQuery(window).on('resize', function () {
+                $("#select_form_school_chosen").attr('style', 'width: 100%');
+            });
+        });
+        function changeYesLink(url) {
+            document.getElementById("link_to_delete").href = url;
+        }
+    </script>
+    <div id="delete-class-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">x</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Você tem certeza que deseja esta turma? Essa operação não pode ser desfeita!</p>
+                </div>
+                <div class="modal-footer">
+                    <a id="link_to_delete" class="btn btn-danger btn-block" href="">Sim</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    {% endblock %}

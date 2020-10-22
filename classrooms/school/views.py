@@ -110,35 +110,182 @@ def seeallschools(request):
 def seeallschoolsbyquery(request):
 	current_school = None
 	selected_school = None
+	all_contracts = Contract.objects.all()
+	complete_contracts_in_period = 0
+	contracts_in_period = 0
+	contracts_to_pay = 0
+	value_to_pay = 0
+	contracts_paid = 0
+	error = ''
+	query = None
 	if request.user.is_superuser:
 		schools = School.objects.all().order_by('school_name')
 		if request.method == 'POST':
-			selected_school = request.POST.get('selected_school' or None)
+			selected_school = request.POST.get('selected_school' or 0)
+			initial_date = request.POST.get('initial_date' or None)
+			final_date = request.POST.get('final_date' or None)
+			query = {
+				'selected_school': int(selected_school) if selected_school else 0,
+				'initial_date': initial_date,
+				'final_date': final_date
+			}
+			
 			try:
 				current_school = School.objects.get(school_id=selected_school)
+				all_contracts =  all_contracts.filter(chain__in=current_school.chains.all())
+
+				if initial_date:
+					all_contracts = all_contracts.filter(date__date__gte=initial_date)
+				
+				if final_date:
+					all_contracts = all_contracts.filter(date__date__lte=final_date)									
+
+				contracts_in_period = all_contracts.count()
+				complete_contracts_in_period = all_contracts.filter(all_signed=True).count()
+				contracts_to_pay = all_contracts.filter(is_paid=False).count()
+				value_to_pay = current_school.value_per_contract * contracts_to_pay
+				contracts_paid = all_contracts.filter(is_paid=True).count()
 			except:
-				messages.warning(request, 'Escola não selecionada')
-		return render(request, 'school/seeallschoolsbyquery.html', {'schools':schools, 'current_school':current_school, 'selected_school':selected_school})
+				error = 'Escola não selecionada'
+		return render(request, 'school/seeallschoolsbyquery.html', {'schools': schools, 'current_school': current_school, 'contracts_to_pay': contracts_to_pay, 'contracts_paid': contracts_paid, 'contracts_in_period': contracts_in_period, 'complete_contracts_in_period': complete_contracts_in_period, 'value_to_pay': value_to_pay,  'selected_school': selected_school, 'error': error, 'query': query})
 	elif Head.objects.filter(profile=request.user).count()>=1:
 		is_supervisor = True
 		schools = School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id).order_by('school_name')
 		if request.method == 'POST':
-			selected_school = request.POST.get('selected_school' or None)
+			selected_school = request.POST.get('selected_school' or 0)
+			initial_date = request.POST.get('initial_date' or None)
+			final_date = request.POST.get('final_date' or None)
+			query = {
+				'selected_school': int(selected_school) if selected_school else 0,
+				'initial_date': initial_date,
+				'final_date': final_date
+			}
 			try:
 				current_school = School.objects.get(school_id=selected_school)
+				all_contracts =  all_contracts.filter(chain__in=current_school.chains.all())
+
+				if initial_date:
+					all_contracts = all_contracts.filter(date__date__gte=initial_date)
+				
+				if final_date:
+					all_contracts = all_contracts.filter(date__date__lte=final_date)									
+
+				contracts_in_period = all_contracts.count()
+				complete_contracts_in_period = all_contracts.filter(all_signed=True).count()
+				contracts_to_pay = all_contracts.filter(is_paid=False).count()
+				value_to_pay = current_school.value_per_contract * contracts_to_pay
+				contracts_paid = all_contracts.filter(is_paid=True).count()
 			except:
-				messages.warning(request, 'Escola não selecionada')
-		return render(request, 'school/seeallschoolsbyquery.html', {'schools':schools, 'current_school':current_school, 'selected_school':selected_school, 'is_supervisor':is_supervisor})
+				error = 'Escola não selecionada'
+		return render(request, 'school/seeallschoolsbyquery.html', {'schools': schools, 'current_school': current_school, 'contracts_to_pay': contracts_to_pay, 'contracts_paid': contracts_paid, 'contracts_in_period': contracts_in_period, 'complete_contracts_in_period': complete_contracts_in_period, 'value_to_pay': value_to_pay,  'selected_school': selected_school, 'error': error, 'query': query})
 	elif Supervisor.objects.filter(profile=request.user).count()>=1:
 		is_supervisor = True
 		schools = School.objects.filter(Q(adminorsupervisor=Supervisor.objects.get(profile=request.user))|Q(adminorsupervisor_2=Supervisor.objects.get(profile=request.user))).order_by('school_name')
 		if request.method == 'POST':
-			selected_school = request.POST.get('selected_school' or None)
+			selected_school = request.POST.get('selected_school' or 0)
+			initial_date = request.POST.get('initial_date' or None)
+			final_date = request.POST.get('final_date' or None)
+			query = {
+				'selected_school': int(selected_school) if selected_school else 0,
+				'initial_date': initial_date,
+				'final_date': final_date
+			}
 			try:
 				current_school = School.objects.get(school_id=selected_school)
+				all_contracts =  all_contracts.filter(chain__in=current_school.chains.all())
+
+				if initial_date:
+					all_contracts = all_contracts.filter(date__date__gte=initial_date)
+				
+				if final_date:
+					all_contracts = all_contracts.filter(date__date__lte=final_date)									
+
+				contracts_in_period = all_contracts.count()
+				complete_contracts_in_period = all_contracts.filter(all_signed=True).count()
+				contracts_to_pay = all_contracts.filter(is_paid=False).count()
+				value_to_pay = current_school.value_per_contract * contracts_to_pay
+				contracts_paid = all_contracts.filter(is_paid=True).count()
 			except:
-				messages.warning(request, 'Escola não selecionada')
-		return render(request, 'school/seeallschoolsbyquery.html', {'schools':schools, 'current_school':current_school, 'selected_school':selected_school, 'is_supervisor':is_supervisor})
+				error = 'Escola não selecionada'
+		return render(request, 'school/seeallschoolsbyquery.html', {'schools': schools, 'current_school': current_school, 'contracts_to_pay': contracts_to_pay, 'contracts_paid': contracts_paid, 'contracts_in_period': contracts_in_period, 'complete_contracts_in_period': complete_contracts_in_period, 'value_to_pay': value_to_pay,  'selected_school': selected_school, 'error': error, 'query': query})
+	return redirect('/contracts/all')
+
+@login_required
+def seeallclassesbyquery(request):
+	current_school = None
+	current_class = None
+	selected_school = None
+	selected_class = None
+	query = None
+	error = ''
+	if request.user.is_superuser:
+		schools = School.objects.all().order_by('school_name')
+		if request.method == 'POST':
+			selected_school = request.POST.get('selected_school' or 0)
+			selected_class = request.POST.get('selected_class' or 0)
+			initial_date = request.POST.get('initial_date' or None)
+			final_date = request.POST.get('final_date' or None)
+			query = {
+				'selected_school': int(selected_school) if selected_school else 0,
+				'initial_date': initial_date,
+				'final_date': final_date,
+				'selected_class': int(selected_class) if selected_class else 0
+			}
+			try:
+				current_school = School.objects.get(school_id=selected_school)
+				try:
+					current_class = Class.objects.get(class_id=selected_class)
+				except:
+					current_class = None
+			except:
+				pass
+		return render(request, 'school/seeallclassesbyquery.html', {'schools': schools, 'current_school': current_school, 'current_class': current_class, 'selected_school': selected_school, 'selected_class': selected_class, 'query': query, 'error': error})
+	elif Head.objects.filter(profile=request.user).count()>=1:
+		is_supervisor = True
+		schools = School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id).order_by('school_name')
+		if request.method == 'POST':
+			selected_school = request.POST.get('selected_school' or 0)
+			selected_class = request.POST.get('selected_class' or 0)
+			initial_date = request.POST.get('initial_date' or None)
+			final_date = request.POST.get('final_date' or None)
+			query = {
+				'selected_school': int(selected_school) if selected_school else 0,
+				'initial_date': initial_date,
+				'final_date': final_date,
+				'selected_class': int(selected_class) if selected_class else 0
+			}
+			try:
+				current_school = School.objects.get(school_id=selected_school)
+				try:
+					current_class = Class.objects.get(class_id=selected_class)
+				except:
+					current_class = None
+			except:
+				error = 'Escola não selecionada'
+		return render(request, 'school/seeallclassesbyquery.html', {'schools': schools, 'current_school': current_school, 'current_class': current_class, 'selected_school': selected_school, 'selected_class': selected_class, 'query': query, 'error': error})
+	elif Supervisor.objects.filter(profile=request.user).count()>=1:
+		is_supervisor = True
+		schools = School.objects.filter(Q(adminorsupervisor=Supervisor.objects.get(profile=request.user))|Q(adminorsupervisor_2=Supervisor.objects.get(profile=request.user))).order_by('school_name')
+		if request.method == 'POST':
+			selected_school = request.POST.get('selected_school' or 0)
+			selected_class = request.POST.get('selected_class' or 0)
+			initial_date = request.POST.get('initial_date' or None)
+			final_date = request.POST.get('final_date' or None)
+			query = {
+				'selected_school': int(selected_school) if selected_school else 0,
+				'initial_date': initial_date,
+				'final_date': final_date,
+				'selected_class': int(selected_class) if selected_class else 0
+			}
+			try:
+				current_school = School.objects.get(school_id=selected_school)
+				try:
+					current_class = Class.objects.get(class_id=selected_class)
+				except:
+					current_class = None
+			except:
+				pass
+		return render(request, 'school/seeallclassesbyquery.html', {'schools': schools, 'current_school': current_school, 'current_class': current_class, 'selected_school': selected_school, 'selected_class': selected_class, 'query': query, 'error': error})
 	return redirect('/contracts/all')
 
 @login_required
@@ -825,15 +972,18 @@ def create_block(request):
 	return render(request, 'school/create_block.html', {'form':form})
 
 def verifyvalidchain(request, class_id=None):
-	class_to_verify_chain = Class.objects.get(class_id=class_id)
-	school_to_verify_chain = School.objects.get(classes__class_id__exact=class_to_verify_chain.class_id)
-	name_of_chain = "{0}-{1}-{2}-{3}".format(school_to_verify_chain.school_name, class_to_verify_chain.enrollment_class_year, class_to_verify_chain.class_unit, class_to_verify_chain.class_name)
-	chain_to_be_verified = Chain.objects.get(id=class_id)
-	verify = chain_to_be_verified.is_valid_chain()
-	if verify or chain_to_be_verified.block_set.count()==0:
-		messages.success(request, 'O chain para esta turma é válido!')
-		return redirect('/')
-	messages.error(request, 'O chain para esta turma não é válido')
+	try:
+		class_to_verify_chain = Class.objects.get(class_id=class_id)
+		school_to_verify_chain = School.objects.get(classes__class_id__exact=class_to_verify_chain.class_id)
+		name_of_chain = "{0}-{1}-{2}-{3}".format(school_to_verify_chain.school_name, class_to_verify_chain.enrollment_class_year, class_to_verify_chain.class_unit, class_to_verify_chain.class_name)
+		chain_to_be_verified = Chain.objects.get(name=name_of_chain)
+		verify = chain_to_be_verified.is_valid_chain()
+		if verify or chain_to_be_verified.block_set.count()==0:
+			messages.success(request, 'O chain para esta turma é válido!')
+			return redirect('/')
+		messages.error(request, 'O chain para esta turma não é válido')
+	except:
+		messages.error(request, 'Turma ou Escola não encontrados')
 	return redirect('/')
 
 def add_head_to_school(request, school_id=None):
@@ -1835,3 +1985,16 @@ def import_sponte(request):
 		return response
 	except:
 		return HttpResponse(xml_content, content_type='text/xml')
+
+def set_all_classes_chain():
+	for classe in Class.objects.exclude(school=None):
+		school = School.objects.get(classes__class_id__exact=classe.class_id)
+		try:
+			chain = Chain.objects.get(name="{0}-{1}-{2}-{3}".format(school.school_name, classe.enrollment_class_year, classe.class_unit, classe.class_name))
+			chain.classe = classe
+			chain.save(update_fields=['classe'])
+		except Exception as e:
+			print (classe.class_name)
+			print (str(e))
+			print ('Cadeia não encontrada')
+	return True

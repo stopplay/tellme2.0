@@ -16,21 +16,6 @@
 
         <ul class="nav top-nav top-bar-icons">
 
-            <li class="nav-item item-centering list-item-size list-item-hover-background">
-                <p class="text-top-bar-nav">
-                    <i class="fas fa-file-contract"></i>
-                    <a style="color:#FFFFFF;" href="{% url 'contracts:seemycontracts'%}">
-                        Contrato(s) 
-                    </a>                            
-                </p>
-
-                {% if request.user.is_superuser or is_supervisor %}
-                <a href="{% url 'contracts:select_student_to_contract' %}" class="box-rounded flex-div coloring-link">
-                    <p class="fas fa-plus centralize-margin font-size-plus"></p>
-                </a>
-                {% endif %}
-            </li>
-
             {% if request.user.is_superuser or is_supervisor %}
 
             <li class="nav-item item-centering list-item-size list-item-hover-background">
@@ -46,6 +31,24 @@
                     <p class="fas fa-plus centralize-margin font-size-plus"></p>
                 </a>
                 {% endif %}
+            </li>
+            {% endif %}
+
+            {% if request.user.is_superuser or is_supervisor %}
+
+            <li class="nav-item item-centering list-item-size list-item-hover-background">
+                <p class="text-top-bar-nav">
+                    <i class="fas fa-graduation-cap"></i>
+                    <a style="color:#FFFFFF;" href="{% url 'school:seeallclassesbyquery' %}">
+                        Turma(s) 
+                    </a>
+                </p>
+
+                <!-- {% if request.user.is_superuser %}
+                <a class="box-rounded flex-div coloring-link" href="{% url 'school:add_school' %}">
+                    <p class="fas fa-plus centralize-margin font-size-plus"></p>
+                </a>
+                {% endif %} -->
             </li>
             {% endif %}
 
@@ -81,6 +84,21 @@
                 </a>
             </li>
             {% endif %}
+
+            <li class="nav-item item-centering list-item-size list-item-hover-background">
+                <p class="text-top-bar-nav">
+                    <i class="fas fa-file-contract"></i>
+                    <a style="color:#FFFFFF;" href="{% url 'contracts:seemycontracts'%}">
+                        Contrato(s) 
+                    </a>                            
+                </p>
+
+                {% if request.user.is_superuser or is_supervisor %}
+                <a href="{% url 'contracts:select_student_to_contract' %}" class="box-rounded flex-div coloring-link">
+                    <p class="fas fa-plus centralize-margin font-size-plus"></p>
+                </a>
+                {% endif %}
+            </li>
 
 
 
