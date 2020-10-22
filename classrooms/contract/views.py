@@ -1030,10 +1030,10 @@ def seecontractsbyquery(request):
             contracts = Contract.objects.filter(chain__name__icontains=school.school_name)
             fetched = True
         if classe:
-            contracts = Contract.objects.filter(chain__name__icontains=classe.class_name)
+            contracts = contracts.filter(chain__name__icontains=classe.class_name)
             fetched = True
         if not fetched:
-            contracts = Contract.objects.filter(chain__in=chains_to_select)
+            contracts = contracts.filter(chain__in=chains_to_select)
 
         if search:
             contracts = contracts.filter(reduce(operator.and_, (Q(name__icontains=x) for x in search.split(" "))))
