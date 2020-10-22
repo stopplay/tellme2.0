@@ -13,6 +13,10 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 import datetime
 from corsheaders.defaults import *
+from django.utils.translation import ugettext_lazy as _
+# from dateutil.relativedelta import relativedelta
+# from google.cloud import logging
+# import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -67,6 +71,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'requestlogs.middleware.RequestLogsMiddleware',
 ]
 
 ROOT_URLCONF = 'classrooms.urls'
@@ -98,8 +103,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'dbmaster',
         'USER': 'dbmasteruser',
-        'PASSWORD': 'OcVwElo|w8z-U0wk-48)u^NQIn<lGNXh',
-        'HOST': 'ls-067225824febbc530d01117d996c0292ff0352fa.cztxoubiiizv.us-east-1.rds.amazonaws.com',
+        'PASSWORD': '`DsO=)P!+9e[&i`=a?W9(&36`|tKJ8k?',
+        'HOST': 'ls-dd6fedb602e2f839b3beb6c05c7a0f619ae20106.cztxoubiiizv.us-east-1.rds.amazonaws.com',
         'PORT': '5432',
     }
 
@@ -248,5 +253,28 @@ LOGGING = {
         },
     }
 }
+
+# from django.utils import timezone
+
+# client = logging.Client()
+# client.setup_logging()
+
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'stackdriver': {
+#             'class': 'google.cloud.logging.handlers.CloudLoggingHandler',
+#             'client': client
+#         }
+#     },
+#     'loggers': {
+#         '': {
+#             'handlers': ['stackdriver'],
+#             'level': 'INFO',
+#             'name': 'blockdoc'
+#         }
+#     },
+# }
 
 REQUEST_LOGGING_ENABLE_COLORIZE = False

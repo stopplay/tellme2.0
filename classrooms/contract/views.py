@@ -1213,8 +1213,7 @@ def seemycontracts(request):
         select_all = request.POST.get('variable' or None)
         if select_all:
             for contract in contracts:
-                if not (contract.counter_signed):
-                    set_signed(request, contract.contract_id)
+                set_signed(request, contract.contract_id)
         else:
             checked_contract_ids_on_form = request.POST.getlist('checks')
             print('checked_contract_ids_on_form', checked_contract_ids_on_form)
@@ -1426,40 +1425,41 @@ def seemycontracts_rest(request):
 @login_required
 def set_signed(request, contract_id = None):
     contract = Contract.objects.get(contract_id=contract_id)
+    contract_rest = ContractSerializerMinimal(contract)
     if not contract.is_active:
-        messages.warning(request, 'Este contrato está inativo!')
-        return redirect('/contracts/all')
+        send_data(request, contract_rest)
+        return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
     if contract.is_expired:
-        messages.warning(request, 'Este contrato está expirado!')
-        return redirect('/contracts/all')
+        send_data(request, contract_rest)
+        return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
     if Head.objects.filter(profile=request.user).count()>=1:
         if contract.counter_signed:
-            messages.warning(request, 'O diretor já assinou este contrato!')
-            return redirect('/contracts/all')
+            send_data(request, contract_rest)
+            return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
     if Parent.objects.filter(profile=request.user).count()>=1:
         parent = Parent.objects.get(profile=request.user)
         if contract.first_auth_signe == parent:
             if contract.first_auth_signed:
-                messages.warning(request, 'O responsável financeiro já assinou este contrato!')
-                return redirect('/contracts/all')
+                send_data(request, contract_rest)
+                return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
         if contract.second_auth_signe == parent:
             if contract.second_auth_signed:
-                messages.warning(request, 'O responsável pedagógico já assinou este contrato!')
-                return redirect('/contracts/all')
+                send_data(request, contract_rest)
+                return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
     if Student.objects.filter(profile=request.user).count()>=1:
         if contract.student_auth_signed:
-            messages.warning(request, 'O responsável estudante já assinou este contrato!')
-            return redirect('/contracts/all')
+            send_data(request, contract_rest)
+            return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
     if Witness.objects.filter(profile=request.user).count()>=1:
         witness = Witness.objects.get(profile=request.user)
         if contract.first_witness_signe == witness:
             if contract.first_witness_signed:
-                messages.warning(request, 'A primeira testemunha já assinou este contrato!')
-                return redirect('/contracts/all')
+                send_data(request, contract_rest)
+                return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
         if contract.second_witness_signe == witness:
             if contract.second_witness_signed:
-                messages.warning(request, 'A segunda testemunha já assinou este contrato!')
-                return redirect('/contracts/all')
+                send_data(request, contract_rest)
+                return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
     if Head.objects.filter(profile=request.user).count()>=1 or Parent.objects.filter(profile=request.user).count()>=1 or Student.objects.filter(profile=request.user).count()>=1 or Witness.objects.filter(profile=request.user).count()>=1:
         if Head.objects.filter(profile=request.user).count()>=1:
             form = BlockModelFormByContract()
@@ -1509,7 +1509,7 @@ def set_signed(request, contract_id = None):
             email = EmailMessage(
                 mail_subject, message, to=[to_email], attachments=attachments
             )
-            # email.send()
+            email.send()
             messages.success(request, 'Assinado com sucesso!')
         elif Parent.objects.filter(profile=request.user).count()>=1:
             form = BlockModelFormByContract()
@@ -1560,7 +1560,7 @@ def set_signed(request, contract_id = None):
                 email = EmailMessage(
                     mail_subject, message, to=[to_email], attachments=attachments
                 )
-                # email.send()
+                email.send()
                 messages.success(request, 'Assinado com sucesso!')
             if contract.second_auth_signe == parent:
                 contract.second_auth_signed = True
@@ -1583,7 +1583,7 @@ def set_signed(request, contract_id = None):
                 email = EmailMessage(
                     mail_subject, message, to=[to_email], attachments=attachments
                 )
-                # email.send()
+                email.send()
                 messages.success(request, 'Assinado com sucesso!')
             if contract.third_auth_signe == parent:
                 contract.third_auth_signed = True
@@ -1606,7 +1606,7 @@ def set_signed(request, contract_id = None):
                 email = EmailMessage(
                     mail_subject, message, to=[to_email], attachments=attachments
                 )
-                # email.send()
+                email.send()
                 messages.success(request, 'Assinado com sucesso!')
         elif Witness.objects.filter(profile=request.user).count()>=1:
             form = BlockModelFormByContract()
@@ -1657,7 +1657,7 @@ def set_signed(request, contract_id = None):
                 email = EmailMessage(
                     mail_subject, message, to=[to_email], attachments=attachments
                 )
-                # email.send()
+                email.send()
                 messages.success(request, 'Assinado com sucesso!')
             if contract.second_witness_signe == witness:
                 contract.second_witness_signed = True
@@ -1680,7 +1680,7 @@ def set_signed(request, contract_id = None):
                 email = EmailMessage(
                     mail_subject, message, to=[to_email], attachments=attachments
                 )
-                # email.send()
+                email.send()
                 messages.success(request, 'Assinado com sucesso!')
         elif Student.objects.filter(profile=request.user).count()>=1:
             form = BlockModelFormByContract()
@@ -1729,7 +1729,7 @@ def set_signed(request, contract_id = None):
             email = EmailMessage(
                 mail_subject, message, to=[to_email], attachments=attachments
             )
-            # email.send()
+            email.send()
             messages.success(request, 'Assinado com sucesso!')
         contract = Contract.objects.get(contract_id=contract_id)
         if contract.first_witness_signe and contract.first_witness_signe:
@@ -1744,7 +1744,7 @@ def set_signed(request, contract_id = None):
                     write_pdf(request, contract, 'all_signed')
                     messages.success(request, 'Todos os responsáveis desse contrato assinaram!')
                     contract.save(update_fields=['all_signed'])
-                    contract_rest = ContractSerializer(contract)
+                    contract_rest = ContractSerializerMinimal(contract)
                     send_data(request, contract_rest)
                     return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
             else:
@@ -1753,7 +1753,7 @@ def set_signed(request, contract_id = None):
                         write_pdf(request, contract, 'all_signed')
                         messages.success(request, 'Todos os responsáveis desse contrato assinaram!')
                         contract.save(update_fields=['all_signed'])
-                        contract_rest = ContractSerializer(contract)
+                        contract_rest = ContractSerializerMinimal(contract)
                         send_data(request, contract_rest)
                         return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
         else:
@@ -1763,7 +1763,7 @@ def set_signed(request, contract_id = None):
                     write_pdf(request, contract, 'all_signed')
                     messages.success(request, 'Todos os responsáveis desse contrato assinaram!')
                     contract.save(update_fields=['all_signed'])
-                    contract_rest = ContractSerializer(contract)
+                    contract_rest = ContractSerializerMinimal(contract)
                     send_data(request, contract_rest)
                     return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
             else:
@@ -1772,13 +1772,13 @@ def set_signed(request, contract_id = None):
                     write_pdf(request, contract, 'all_signed')
                     messages.success(request, 'Todos os responsáveis desse contrato assinaram!')
                     contract.save(update_fields=['all_signed'])
-                    contract_rest = ContractSerializer(contract)
+                    contract_rest = ContractSerializerMinimal(contract)
                     send_data(request, contract_rest)
                     return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
 
     else:
         messages.warning(request, 'Você não é diretor nem pai do estudante deste contrato!')
-    contract_rest = ContractSerializer(contract)
+    contract_rest = ContractSerializerMinimal(contract)
     send_data(request, contract_rest)
     return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
 
@@ -2309,7 +2309,7 @@ def authenticated_google(request):
 def extend_expire_date(request, contract_id):
     try:
         contract = Contract.objects.get(contract_id=contract_id)
-        contract.expiration = contract.expiration + datetime.timedelta(days=7)
+        contract.expiration = timezone.now().date() + datetime.timedelta(days=7)
         contract.is_expired = False
         contract.save()
         messages.success(request, 'Prazo de expiração do contrato extendido')

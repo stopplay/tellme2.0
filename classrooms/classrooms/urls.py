@@ -25,8 +25,8 @@ urlpatterns = [
     path('datawizard/', include('data_wizard.urls')),
     url(r'^jet/', include('jet.urls', 'jet')),  # Django JET URLS
     url(r'^jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
-    path('admin/', admin.site.urls),
-    url(r'^$', seeallschoolsbyquery),
+    path('admin_url/', admin.site.urls),
+    url(r'^$', seeallschools),
     url('chain/', include('block.urls')),
     url('contracts/', include('contract.urls')),
     url('schools/', include('school.urls')),
