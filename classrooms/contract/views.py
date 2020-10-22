@@ -1013,6 +1013,7 @@ def seecontractsbyquery(request):
     if request.method == 'POST':
         school = None
         classe = None
+        fetched = False
         selected_school = request.POST.get('selected_school' or None)
         signed_RFRP1 = request.POST.get('signed_RF/RP1' or None)
         signed_DIR = request.POST.get('signed_DIR' or None)
@@ -1025,11 +1026,13 @@ def seecontractsbyquery(request):
         if Class.objects.filter(class_id=selected_class).count()>=1:
             classe = Class.objects.get(class_id=selected_class)
         search = request.POST.get('search' or None)
+        if school:
+            contracts = Contract.objects.filter(chain__name__icontains=school.school_name)
+            fetched = True
         if classe:
             contracts = Contract.objects.filter(chain__name__icontains=classe.class_name)
-        elif school:
-            contracts = Contract.objects.filter(chain__name__icontains=school.school_name)
-        else:
+            fetched = True
+        if not fetched:
             contracts = Contract.objects.filter(chain__in=chains_to_select)
 
         if search:
