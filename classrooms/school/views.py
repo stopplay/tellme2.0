@@ -787,6 +787,8 @@ def add_class(request, school_id=None):
 				form.save_m2m()
 				
 				newclassroom = Class.objects.get(class_id=classroom.class_id)
+				newchain.classe = newclassroom
+				newchain.save()
 				school_to_add_class.classes.add(newclassroom)
 				messages.success(request, 'Classe adicionada com sucesso!')
 				if yesorno == 'sim':
@@ -813,6 +815,8 @@ def add_class(request, school_id=None):
 				form.save_m2m()
 				
 				newclassroom = Class.objects.get(class_id=classroom.class_id)
+				newchain.classe = newclassroom
+				newchain.save()
 				school_to_add_class.classes.add(newclassroom)
 				messages.success(request, 'Classe adicionada com sucesso!')
 				if yesorno == 'sim':
