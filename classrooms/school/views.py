@@ -207,7 +207,7 @@ def seeallschoolsbyquery(request):
 				contracts_paid = all_contracts.filter(is_paid=True).count()
 			except:
 				error = 'Escola não selecionada'
-		return render(request, 'school/seeallschoolsbyquery.html', {'schools': schools, 'current_school': current_school, 'contracts_to_pay': contracts_to_pay, 'contracts_paid': contracts_paid, 'contracts_in_period': contracts_in_period, 'complete_contracts_in_period': complete_contracts_in_period, 'value_to_pay': value_to_pay,  'selected_school': selected_school, 'error': error, 'query': query, , 'is_supervisor':is_supervisor})
+		return render(request, 'school/seeallschoolsbyquery.html', {'schools': schools, 'current_school': current_school, 'contracts_to_pay': contracts_to_pay, 'contracts_paid': contracts_paid, 'contracts_in_period': contracts_in_period, 'complete_contracts_in_period': complete_contracts_in_period, 'value_to_pay': value_to_pay,  'selected_school': selected_school, 'error': error, 'query': query, 'is_supervisor':is_supervisor})
 	return redirect('/contracts/all')
 
 @login_required
