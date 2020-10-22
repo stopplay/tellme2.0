@@ -1164,44 +1164,24 @@ def seemycontracts(request):
         contracts += Contract.objects.filter(second_auth_signe=Parent.objects.get(profile=request.user))
         contracts += Contract.objects.filter(third_auth_signe=Parent.objects.get(profile=request.user))
         for contract in contracts:
-            if School.objects.filter(chains__id__exact=contract.chain.id).count()>=1:
-                if School.objects.get(chains__id__exact=contract.chain.id) not in schools:
-                    schools+=[(School.objects.get(chains__id__exact=contract.chain.id).school_id)]
+            if contract.chain.school_set.all().first() and contract.chain.school_set.all().first() not in schools:
+                schools+=[(contract.chain.school_set.all().first().school_id)]
         schools = School.objects.filter(school_id__in=schools)
     elif Witness.objects.filter(profile=request.user).count()>=1:
         is_witness = True
         contracts += Contract.objects.filter(first_witness_signe=Witness.objects.get(profile=request.user))
         contracts += Contract.objects.filter(second_witness_signe=Witness.objects.get(profile=request.user))
         for contract in contracts:
-            if contract.chain and School.objects.filter(chains__id__exact=contract.chain.id).count()>=1:
-                if School.objects.get(chains__id__exact=contract.chain.id) not in schools:
-                    schools+=[(School.objects.get(chains__id__exact=contract.chain.id).school_id)]
+            if contract.chain.school_set.all().first() and contract.chain.school_set.all().first() not in schools:
+                schools+=[(contract.chain.school_set.all().first().school_id)]
         schools = School.objects.filter(school_id__in=schools)
-    elif Head.objects.filter(profile=request.user).count()>=1:
-        is_supervisor = True
-        schools = School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id)
-        for school in schools:
-            for chain in school.chains.all():
-                contracts += Contract.objects.filter(chain__id__exact=chain.id)
-    elif Supervisor.objects.filter(profile=request.user).count()>=1:
-        is_supervisor = True
-        contracts_ids = []
-        schools = School.objects.filter(Q(adminorsupervisor=Supervisor.objects.get(profile=request.user))|Q(adminorsupervisor_2=Supervisor.objects.get(profile=request.user)))
-        for school in schools:
-            for chain in school.chains.all():
-                contracts = Contract.objects.filter(chain__id__exact=chain.id)
-                for contract in contracts:
-                    if contract.contract_id not in contracts_ids:
-                        contracts_ids += [(contract.contract_id)]
-        contracts = Contract.objects.filter(contract_id__in=contracts_ids)
     elif Student.objects.filter(profile=request.user).count()>=1:
         if not Student.objects.get(profile=request.user).needs_parent:
             is_client = True
             contracts = Contract.objects.filter(student_auth_signe=Student.objects.get(profile=request.user))
             for contract in contracts:
-                if School.objects.filter(chains__id__exact=contract.chain.id).count()>=1:
-                    if School.objects.get(chains__id__exact=contract.chain.id) not in schools:
-                        schools+=[(School.objects.get(chains__id__exact=contract.chain.id).school_id)]
+                if contract.chain.school_set.all().first() and contract.chain.school_set.all().first() not in schools:
+                    schools+=[(contract.chain.school_set.all().first().school_id)]
             schools = School.objects.filter(school_id__in=schools)
         else:
             if request.user.is_superuser:
