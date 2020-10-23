@@ -1549,8 +1549,7 @@ def seeusersbyquery_administration(request):
                     head_users = Head.objects.all()
                 else:
                     head_users = Head.objects.filter(school__in=schools)
-
-        school_users = [*witness_users, *supervisor_users, *head_users]
+            school_users = [*witness_users, *supervisor_users, *head_users]
         return render(request, 'school_users/seeusersbyquery_administration.html', {'type_of_user':type_of_user, 'school_users':school_users, 'schools':schools, 'is_supervisor': is_supervisor, 'error': error, 'query': query})
 
             
