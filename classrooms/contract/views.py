@@ -1043,16 +1043,10 @@ def seecontractsbyquery(request):
             contracts = contracts.filter(date__lte=final_date)
         if signed_RFRP1 == 'sim':
             contracts = contracts.filter(first_auth_signed=True, second_auth_signed=True)
-        else:
-            contracts = contracts.filter(Q(first_auth_signed=False) | Q(second_auth_signed=False))
         if signed_DIR == 'sim':
             contracts = contracts.filter(counter_signed=True)
-        else:
-            contracts = contracts.filter(counter_signed=False)
         if purchased_contract == 'sim':
             contracts = contracts.filter(purchased_slm=True)
-        else:
-            contracts = contracts.filter(purchased_slm=False)
         if not schools:
             messages.error(request, 'O tipo de usuário que está tentando acessar estes dados não se encaixa em nenhum dos tipos propostos pelo sistema.')
             return seemycontracts(request)
