@@ -1515,7 +1515,7 @@ def seeusersbyquery_administration(request):
             if request.user.is_superuser:
                 school_users = TYPE[type_of_user].objects.all()
             else:
-                school_users = TYPE[type_of_user].objects.filter(Q(school_in=school) | Q(adminorsupervisor_2__in=school))
+                school_users = TYPE[type_of_user].objects.filter(Q(school__in=school) | Q(adminorsupervisor_2__in=school))
 
             if school:
                 school_users = school_users.filter(Q(school=school) | Q(adminorsupervisor_2=school))
@@ -1581,7 +1581,7 @@ def seeusersbyquery_administration(request):
             if request.user.is_superuser:
                 supervisor_users = Supervisor.objects.all()
             else:
-                supervisor_users = Supervisor.objects.filter(Q(school_in=school) | Q(adminorsupervisor_2__in=school))
+                supervisor_users = Supervisor.objects.filter(Q(school__in=school) | Q(adminorsupervisor_2__in=school))
 
             if school:
                 supervisor_users = supervisor_users.filter(Q(school=school) | Q(adminorsupervisor_2=school))
@@ -1881,7 +1881,9 @@ def seeallusers_by_school(request, school_id=None):
 
 @login_required
 def delete_user(request, user_id=None, type_of_user=None):
-    if request.user.is_superuser:
+    head = getattr(request.user, 'head', None)
+    supervisor = getattr(request.user, 'supervisor', None)
+    if request.user.is_superuser or head or supervisor:
         if(type_of_user=='head'):
             user_to_delete = get_object_or_404(Head, head_id=user_id)
         if(type_of_user=='teacher'):
