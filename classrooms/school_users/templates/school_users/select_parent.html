@@ -1,0 +1,170 @@
+{% extends 'base.html'%}
+
+{% block title %} Pesquisar Responsáveis {% endblock %}
+
+{% block content %}
+<script>
+	$(document).ready(function () {
+		$('.container').removeClass('container');
+	});
+	setGenPasswordToFields(['id_{{user_form.password1.name}}', 'id_{{user_form.password2.name}}']);
+</script>
+
+
+<div class="content">
+	<div class="container-fluid">
+		<div class="card">
+			<div class="card-header">
+				<h4 class="card-title">Pesquisar Responsáveis</h4>
+			</div>
+			<div class="card-body">
+				<div class="form-group">
+					<form method="POST" enctype="multipart/form-data"> {% csrf_token %}
+						<div class="row">
+							<div class="labelandform col-md-12">
+								<p><label>Selecione a Escola:</label></p>
+								<select class="custom-select chosen-select" id="select_form_school">
+									<option id="" value="">Todas</option>
+									{% for school in schools %}
+									<option value="{{ school.school_id }}"
+										{% if school.school_id == query.selected_school %} selected {% endif %}>
+										{{ school.school_name }}
+									</option>
+									{% endfor %}
+								</select>
+							</div>
+							<input type="hidden" id="selected_school" name="selected_school">
+						</div>
+						<input type="text" id="name" name="name" placeholder="Insira o nome do usuário aqui..."
+							value="{{query.name}}">
+						<input type="hidden" id="type_of_user" name="type_of_user">
+						<p class="text-warning">{{error}}</p>
+						<div style="margin-top: 10px"><button class="btn btn-info btn-fill pull-left" type="submit"
+								style="background-color: #213f99; border-color: #213f99">Pesquisar
+								Responsáveis</button>
+						</div>
+
+					</form>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	{% if school_users %}
+	<div class="content">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card strpied-tabled-with-hover">
+						<div class="card-header ">
+							<h4 class="card-title">Resultados</h4>
+						</div>
+						<div class="card-body table-full-width table-responsive">
+							<table class="table table-hover table-striped display mb-4" id="headstable">
+								<thead>
+									<tr>
+										<th>Escola</th>
+										<th>Nome</th>
+										<th>Ações</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for user in school_users %}
+									<tr>
+										<th>
+											{{ user.school_name }}
+										</th>
+										<th>{{ user.name }}</th>
+										<th>
+											<div class="dropdown show">
+												<button type="button" class="btn btn-secondary" id="dropdownMenuLink"
+													data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
+														class="fas fa-ellipsis-h"></i></button>
+			
+			
+												<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                    {% if query.type_of_user == 'first_parent' %}
+                                                        <a href="{% url 'users:confirm_parent' student_id user.parent_id query.type_of_user %}"
+															data-baloon="Remove this item from the cart"
+															class="dropdown-item">
+															Selecionar Como Primeiro Responsável
+														</a>
+													{% elif query.type_of_user == 'second_parent' %}
+														<a href="{% url 'users:confirm_parent' student_id user.parent_id query.type_of_user %}"
+															data-baloon="Remove this item from the cart"
+															class="dropdown-item">
+															Selecionar Como Segundo Responsável
+                                                        </a>
+                                                    {% elif query.type_of_user == 'third_parent' %}
+                                                        <a href="{% url 'users:confirm_parent' student_id user.parent_id query.type_of_user %}"
+															data-baloon="Remove this item from the cart"
+															class="dropdown-item">
+															Selecionar Como Terceiro Responsável
+														</a>
+													{% endif %}
+												</div>
+											</div>
+										</th>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% endif %}
+	<script type="text/javascript">
+		$(document).ready(function () {
+            jQuery(window).on('resize', function () {
+				$("#select_form_school_chosen").attr('style', 'width: 100%');
+            });
+        });
+		$(document).ready(function () {
+			$('#select_form_school').on('change', function () {
+				var selectValor = $(this).val();
+				if (selectValor == '') {
+					document.getElementById('selected_school').value = '0'
+				}
+				else {
+					document.getElementById('selected_school').value = selectValor
+				}
+			});
+		});
+		$(document).ready(function () {
+
+			$('#headstablebutton').addClass('non-interactable');
+			$('#headstable').DataTable({
+				initComplete: function () {
+					$('#headstablebutton').removeClass('non-interactable');
+				}
+			});
+		});
+		function changeYesLink(url) {
+			document.getElementById("link_to_delete").href = url;
+		};
+	</script>
+	<div id="delete-assinante-modal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">x</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>Você tem certeza que deseja este assinante? Essa operação não pode ser desfeita!</p>
+				</div>
+				<div class="modal-footer">
+					<a id="link_to_delete" class="btn btn-danger btn-block" href="">Sim</a>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	{% endblock %}
