@@ -1,0 +1,4 @@
+{
+    "python.pythonPath": "d:\\Sistemas_Stop&Play\\env\\Scripts\\python.exe",
+    "python.formatting.provider": "black"
+}
