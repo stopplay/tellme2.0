@@ -1158,7 +1158,7 @@ def seemycontracts(request):
         contracts += Contract.objects.filter(second_auth_signe=Parent.objects.get(profile=request.user))
         contracts += Contract.objects.filter(third_auth_signe=Parent.objects.get(profile=request.user))
         for contract in contracts:
-            if contract.chain.school_set.all().first() and contract.chain.school_set.all().first() not in schools:
+            if contract.chain and contract.chain.school_set.all().first() and contract.chain.school_set.all().first() not in schools:
                 schools+=[(contract.chain.school_set.all().first().school_id)]
         schools = School.objects.filter(school_id__in=schools)
     elif Witness.objects.filter(profile=request.user).count()>=1:
@@ -1166,7 +1166,7 @@ def seemycontracts(request):
         contracts += Contract.objects.filter(first_witness_signe=Witness.objects.get(profile=request.user))
         contracts += Contract.objects.filter(second_witness_signe=Witness.objects.get(profile=request.user))
         for contract in contracts:
-            if contract.chain.school_set.all().first() and contract.chain.school_set.all().first() not in schools:
+            if contract.chain and contract.chain.school_set.all().first() and contract.chain.school_set.all().first() not in schools:
                 schools+=[(contract.chain.school_set.all().first().school_id)]
         schools = School.objects.filter(school_id__in=schools)
     elif Student.objects.filter(profile=request.user).count()>=1:
@@ -1174,7 +1174,7 @@ def seemycontracts(request):
             is_client = True
             contracts = Contract.objects.filter(student_auth_signe=Student.objects.get(profile=request.user))
             for contract in contracts:
-                if contract.chain.school_set.all().first() and contract.chain.school_set.all().first() not in schools:
+                if contract.chain and contract.chain.school_set.all().first() and contract.chain.school_set.all().first() not in schools:
                     schools+=[(contract.chain.school_set.all().first().school_id)]
             schools = School.objects.filter(school_id__in=schools)
         else:
