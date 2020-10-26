@@ -1375,6 +1375,78 @@ def seeallusers(request):
         return render(request, 'school_users/seeallusers.html', {'head_users':head_users,'teacher_users':teacher_users,'admin_users':admin_users,'supervisor_users':supervisor_users,'parent_users':parent_users,'student_users':student_users, 'is_supervisor':is_supervisor})
     return redirect('/')
 
+def select_parent(request, student_id=None, type_of_user= None):
+    head = getattr(request.user, 'head', None)
+    supervisor = getattr(request.user, 'supervisor', None)
+    is_supervisor = False
+    schools = []  
+    
+    if request.user.is_superuser:
+        schools = School.objects.all().order_by('school_name')
+    elif head or supervisor:
+        is_supervisor = True
+        if head:
+            schools = School.objects.filter(heads__head_id__exact=head.head_id).order_by('school_name')
+        elif supervisor:
+            schools = School.objects.filter(Q(adminorsupervisor=supervisor)|Q(adminorsupervisor_2=supervisor)).order_by('school_name')
+    
+    if request.method == 'POST':
+        fetched = False
+        error = ''
+        selected_school = request.POST.get('selected_school', 0)
+        name = request.POST.get('name' or None)
+        school_users = []
+        query = {   
+            'type_of_user': type_of_user,
+            'selected_school': int(selected_school) if selected_school else 0,
+            'name': name,
+        }
+
+        try:
+            school = schools.get(school_id=selected_school)
+        except:
+            school = None
+
+        if request.user.is_superuser:
+            school_users = Parent.objects.exclude(Q(first_parent__school=None) & Q(second_parent__school=None) & Q(third_parent__school=None))
+        else:
+            school_users = Parent.objects.filter(Q(first_parent__school__in=schools) | Q(second_parent__school__in=schools) | Q(third_parent__school__in=schools))
+
+        if school:
+            school_users = school_users.filter(Q(first_parent__school=school) | Q(second_parent__school=school) | Q(third_parent__school=school))
+            fetched = True
+        if name:
+            if fetched:
+                school_users = school_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
+            else:
+                school_users = school_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
+                fetched = True
+
+        if not fetched:
+            if request.user.is_superuser:
+                school_users = Parent.objects.exclude(Q(first_parent__school=None) & Q(second_parent__school=None) & Q(third_parent__school=None))
+            else:
+                school_users = Parent.objects.filter(Q(first_parent__school__in=schools) | Q(second_parent__school__in=schools) | Q(third_parent__school__in=schools))
+        return render(request, 'school_users/select_parent.html', {'student_id': student_id, 'type_of_user':type_of_user, 'school_users':school_users, 'schools':schools, 'is_supervisor': is_supervisor, 'error': error, 'query': query})
+
+            
+    return render(request, 'school_users/select_parent.html', {'student_id': student_id, 'schools':schools, 'is_supervisor': is_supervisor})
+
+def confirm_parent(request, student_id=None, parent_id=None, type_of_user= None):
+    student = Student.objects.get(student_id=student_id)
+    parent = Parent.objects.get(parent_id=parent_id)
+    if type_of_user == 'first_parent':
+        student.first_parent = parent
+        messages.success(request, 'Primeiro Responsável editado com sucesso')
+    elif type_of_user == 'second_parent':
+        student.second_parent = parent
+        messages.success(request, 'Segundo Responsável editado com sucesso')
+    elif type_of_user == 'third_parent':
+        student.third_parent = parent
+        messages.success(request, 'Terceiro Responsável editado com sucesso')
+    student.save()
+    return redirect('/users/set_parents/{}'.format(student_id))
+
 @login_required
 def seeusersbyquery_administration(request):
     head = getattr(request.user, 'head', None)
@@ -1443,7 +1515,7 @@ def seeusersbyquery_administration(request):
             if request.user.is_superuser:
                 school_users = TYPE[type_of_user].objects.all()
             else:
-                school_users = TYPE[type_of_user].objects.filter(Q(school_in=school) | Q(adminorsupervisor_2__in=school))
+                school_users = TYPE[type_of_user].objects.filter(Q(school__in=school) | Q(adminorsupervisor_2__in=school))
 
             if school:
                 school_users = school_users.filter(Q(school=school) | Q(adminorsupervisor_2=school))
@@ -1509,7 +1581,7 @@ def seeusersbyquery_administration(request):
             if request.user.is_superuser:
                 supervisor_users = Supervisor.objects.all()
             else:
-                supervisor_users = Supervisor.objects.filter(Q(school_in=school) | Q(adminorsupervisor_2__in=school))
+                supervisor_users = Supervisor.objects.filter(Q(school__in=school) | Q(adminorsupervisor_2__in=school))
 
             if school:
                 supervisor_users = supervisor_users.filter(Q(school=school) | Q(adminorsupervisor_2=school))
@@ -1809,7 +1881,9 @@ def seeallusers_by_school(request, school_id=None):
 
 @login_required
 def delete_user(request, user_id=None, type_of_user=None):
-    if request.user.is_superuser:
+    head = getattr(request.user, 'head', None)
+    supervisor = getattr(request.user, 'supervisor', None)
+    if request.user.is_superuser or head or supervisor:
         if(type_of_user=='head'):
             user_to_delete = get_object_or_404(Head, head_id=user_id)
         if(type_of_user=='teacher'):
@@ -1884,14 +1958,24 @@ def reset_password_send_email(request, user_id=None, type_of_user=None):
 @login_required
 def set_parents(request, student_id=None):
     if request.user.is_superuser:
-    	instance = get_object_or_404(Student, student_id=student_id)
-    	form = SetParentsModelForm(request.POST or None, instance=instance)
-    	if form.is_valid():
+        instance = get_object_or_404(Student, student_id=student_id)
+        form = SetParentsModelForm(request.POST or None, instance=instance)
+        parents_ids = []
+        if instance.first_parent:
+            parents_ids += [(instance.first_parent.parent_id)]
+        if instance.second_parent:
+            parents_ids += [(instance.second_parent.parent_id)]
+        if instance.third_parent:
+            parents_ids += [(instance.third_parent.parent_id)]
+        form.fields["first_parent"].queryset = Parent.objects.filter(parent_id__in=parents_ids)
+        form.fields["second_parent"].queryset = Parent.objects.filter(parent_id__in=parents_ids)
+        form.fields["third_parent"].queryset = Parent.objects.filter(parent_id__in=parents_ids)
+        if form.is_valid():
             new_student = form.save(commit=False)
             new_student.save(update_fields=['first_parent','second_parent', 'third_parent'])
             messages.success(request, 'Responsáveis Selecionados com Sucesso')
             return redirect('/users/all_signes/')
-    	return render(request, 'school_users/set_parents.html', {'form':form, 'student_id':student_id})
+        return render(request, 'school_users/set_parents.html', {'form':form, 'student_id':student_id})
     elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
         is_supervisor = True
         instance = get_object_or_404(Student, student_id=student_id)
@@ -1902,9 +1986,16 @@ def set_parents(request, student_id=None):
             schools = School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id)
         if Supervisor.objects.filter(profile=request.user).count()>=1:
             schools = School.objects.filter(Q(adminorsupervisor=Supervisor.objects.get(profile=request.user))|Q(adminorsupervisor_2=Supervisor.objects.get(profile=request.user)))
-        form.fields["first_parent"].queryset = Parent.objects.filter(Q(first_parent__school__in=schools) | Q(second_parent__school__in=schools) | Q(third_parent__school__in=schools))
-        form.fields["second_parent"].queryset = Parent.objects.filter(Q(first_parent__school__in=schools) | Q(second_parent__school__in=schools) | Q(third_parent__school__in=schools))
-        form.fields["third_parent"].queryset = Parent.objects.filter(Q(first_parent__school__in=schools) | Q(second_parent__school__in=schools) | Q(third_parent__school__in=schools))
+        parents_ids = []
+        if instance.first_parent:
+            parents_ids += [(instance.first_parent.parent_id)]
+        if instance.second_parent:
+            parents_ids += [(instance.second_parent.parent_id)]
+        if instance.third_parent:
+            parents_ids += [(instance.third_parent.parent_id)]
+        form.fields["first_parent"].queryset = Parent.objects.filter(parent_id__in=parents_ids)
+        form.fields["second_parent"].queryset = Parent.objects.filter(parent_id__in=parents_ids)
+        form.fields["third_parent"].queryset = Parent.objects.filter(parent_id__in=parents_ids)
         if form.is_valid():
             new_student = form.save(commit=False)
             new_student.save(update_fields=['first_parent','second_parent', 'third_parent'])

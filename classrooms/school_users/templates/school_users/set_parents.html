@@ -20,8 +20,13 @@
 											<label for="id_first_parent">{{ form.first_parent.label }}:</label>
 
 											<div class="row">
-												<div class="col-9">
+												<div class="col-7">
 													{{ form.first_parent }}
+												</div>
+												<div class="col-2">
+													<a class="box-rounded flex-div box-rounded-blue color-link-white vertical-align-with-transform" href="{% url 'users:select_parent' student_id  'first_parent' %}">
+														<p class="fas fa-pencil-alt centralize-margin font-size-plus"></p>
+													</a>
 												</div>
 												<div class="col-2">
 													<a class="box-rounded flex-div box-rounded-blue color-link-white vertical-align-with-transform" href="{% url 'users:add_parent' student_id 'first_parent' %}">
@@ -34,8 +39,13 @@
 											<label for="id_second_parent">{{ form.second_parent.label }}:</label>
 
 											<div class="row">
-												<div class="col-9">
+												<div class="col-7">
 													{{ form.second_parent }}
+												</div>
+												<div class="col-2">
+													<a class="box-rounded flex-div box-rounded-blue color-link-white vertical-align-with-transform" href="{% url 'users:select_parent' student_id  'second_parent' %}">
+														<p class="fas fa-pencil-alt centralize-margin font-size-plus"></p>
+													</a>
 												</div>
 												<div class="col-2">
 													<a class="box-rounded flex-div box-rounded-blue color-link-white vertical-align-with-transform" href="{% url 'users:add_parent' student_id  'second_parent' %}">
@@ -48,8 +58,13 @@
 											<label for="id_second_parent">{{ form.third_parent.label }}:</label>
 
 											<div class="row">
-												<div class="col-9">
+												<div class="col-7">
 													{{ form.third_parent }}
+												</div>
+												<div class="col-2">
+													<a class="box-rounded flex-div box-rounded-blue color-link-white vertical-align-with-transform" href="{% url 'users:select_parent' student_id  'third_parent' %}">
+														<p class="fas fa-pencil-alt centralize-margin font-size-plus"></p>
+													</a>
 												</div>
 												<div class="col-2">
 													<a class="box-rounded flex-div box-rounded-blue color-link-white vertical-align-with-transform" href="{% url 'users:add_parent' student_id  'third_parent' %}">
