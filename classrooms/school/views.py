@@ -933,7 +933,7 @@ def update_class(request, class_id=None):
 			classroom.save(update_fields=['class_name', 'class_unit', 'enrollment_class_year','slm', 'sku'])
 			
 			messages.success(request, 'Classe e blockchain referente à classe atualizadas com sucesso!')
-			return redirect('/')
+			return redirect('school:seeallclassesbyquery')
 		return render(request, 'school/update_class.html', {'form':form, 'is_supervisor':is_supervisor})
 
 @login_required
