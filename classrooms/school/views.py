@@ -179,7 +179,6 @@ def seeallclassesbyquery(request):
 		elif supervisor:
 			schools = School.objects.filter(Q(adminorsupervisor=supervisor)|Q(adminorsupervisor_2=supervisor)).order_by('school_name')
 	if request.user.is_superuser or supervisor or head:
-		schools = School.objects.all().order_by('school_name')
 		if request.method == 'POST':
 			selected_school = request.POST.get('selected_school' or 0)
 			selected_class = request.POST.get('selected_class' or 0)
