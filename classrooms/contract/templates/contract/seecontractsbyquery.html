@@ -648,10 +648,16 @@
                         {% endif %}
                         {% if contract.pdf %}
                         <div class="row">
-                          <div class="col-md-12">
+                          <div class="col-md-10">
                             <a class="btn btn-primary btn-block w-100" href="{{contract.pdf.url}}"
                               data-baloon="Remove this item from the cart">
                               Ver Contrato
+                            </a>
+                          </div>
+                          <div class="col-md-2">
+                            <a class="btn btn-primary btn-block w-100" href="{% url 'contracts:upload_contract_file_to_drive' contract.contract_id 'contract' %}"
+                              data-baloon="Remove this item from the cart">
+                              <i class="fab fa-google-drive"></i>
                             </a>
                           </div>
                         </div>
@@ -659,9 +665,15 @@
 
                         {% if contract.terms_of_contract %}
                         <div class="row">
-                          <div class="col-md-12">
+                          <div class="col-md-10">
                             <a class="btn btn-primary w-100" href="{{contract.terms_of_contract.url}}">
                               Termos Ad. do Contrato (1)
+                            </a>
+                          </div>
+                          <div class="col-md-2">
+                            <a class="btn btn-primary btn-block w-100" href="{% url 'contracts:upload_contract_file_to_drive' contract.contract_id 'terms_1' %}"
+                              data-baloon="Remove this item from the cart">
+                              <i class="fab fa-google-drive"></i>
                             </a>
                           </div>
                         </div>
@@ -669,9 +681,15 @@
 
                         {% if contract.terms_of_contract_2 %}
                         <div class="row">
-                          <div class="col-md-12">
+                          <div class="col-md-10">
                             <a class="btn btn-primary w-100" href="{{contract.terms_of_contract_2.url}}">
                               Termos Ad. do Contrato (2)
+                            </a>
+                          </div>
+                          <div class="col-md-2">
+                            <a class="btn btn-primary btn-block w-100" href="{% url 'contracts:upload_contract_file_to_drive' contract.contract_id 'terms_2' %}"
+                              data-baloon="Remove this item from the cart">
+                              <i class="fab fa-google-drive"></i>
                             </a>
                           </div>
                         </div>
