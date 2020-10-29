@@ -1491,136 +1491,136 @@ def seeusersbyquery_administration(request):
             }
         if type_of_user == 'witness':
             if request.user.is_superuser:
-                school_users = TYPE[type_of_user].objects.all()
+                school_users = TYPE[type_of_user].objects.all().distinct()
             else:
-                school_users = TYPE[type_of_user].objects.filter(Q(first_witness_school__in=schools) | Q(second_witness_school__in=schools))
+                school_users = TYPE[type_of_user].objects.filter(Q(first_witness_school__in=schools) | Q(second_witness_school__in=schools)).distinct()
 
             if school:
-                school_users = school_users.filter(Q(first_witness_school=school) | Q(second_witness_school=school))
+                school_users = school_users.filter(Q(first_witness_school=school) | Q(second_witness_school=school)).distinct()
                 fetched = True
                 
             if name:
                 if fetched:
-                    school_users = school_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
+                    school_users = school_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" ")))).distinct()
                 else:
-                    school_users = school_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
+                    school_users = school_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" ")))).distinct()
                     fetched = True
 
             if not fetched:
                 if request.user.is_superuser:
-                    school_users = TYPE[type_of_user].objects.all()
+                    school_users = TYPE[type_of_user].objects.all().distinct()
                 else:
-                    school_users = TYPE[type_of_user].objects.filter(Q(first_witness_school__in=school) | Q(second_witness_school__in=school))
+                    school_users = TYPE[type_of_user].objects.filter(Q(first_witness_school__in=school) | Q(second_witness_school__in=school)).distinct()
         elif type_of_user == 'supervisor':
             if request.user.is_superuser:
-                school_users = TYPE[type_of_user].objects.all()
+                school_users = TYPE[type_of_user].objects.all().distinct()
             else:
-                school_users = TYPE[type_of_user].objects.filter(Q(school__in=school) | Q(adminorsupervisor_2__in=school))
+                school_users = TYPE[type_of_user].objects.filter(Q(school__in=school) | Q(adminorsupervisor_2__in=school)).distinct()
 
             if school:
-                school_users = school_users.filter(Q(school=school) | Q(adminorsupervisor_2=school))
+                school_users = school_users.filter(Q(school=school) | Q(adminorsupervisor_2=school)).distinct()
                 fetched = True
                 
             if name:
                 if fetched:
-                    school_users = school_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
+                    school_users = school_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" ")))).distinct()
                 else:
-                    school_users = school_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
+                    school_users = school_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" ")))).distinct()
                     fetched = True
 
             if not fetched:
                 if request.user.is_superuser:
-                    school_users = TYPE[type_of_user].objects.all()
+                    school_users = TYPE[type_of_user].objects.all().distinct()
                 else:
-                    school_users = TYPE[type_of_user].objects.filter(Q(school__in=school) | Q(adminorsupervisor_2__in=school))
+                    school_users = TYPE[type_of_user].objects.filter(Q(school__in=school) | Q(adminorsupervisor_2__in=school)).distinct()
         elif type_of_user == 'director':
             if request.user.is_superuser:
-                school_users = TYPE[type_of_user].objects.all()
+                school_users = TYPE[type_of_user].objects.all().distinct()
             else:
-                school_users = TYPE[type_of_user].objects.filter(school__in=schools)
+                school_users = TYPE[type_of_user].objects.filter(school__in=schools).distinct()
 
             if school:
-                school_users = school_users.filter(school=school)
+                school_users = school_users.filter(school=school).distinct()
                 fetched = True
                 
             if name:
                 if fetched:
-                    school_users = school_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
+                    school_users = school_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" ")))).distinct()
                 else:
-                    school_users = school_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
+                    school_users = school_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" ")))).distinct()
                     fetched = True
 
             if not fetched:
                 if request.user.is_superuser:
-                    school_users = TYPE[type_of_user].objects.all()
+                    school_users = TYPE[type_of_user].objects.all().distinct()
                 else:
-                    school_users = TYPE[type_of_user].objects.filter(school__in=schools)
+                    school_users = TYPE[type_of_user].objects.filter(school__in=schools).distinct()
         else:
             if request.user.is_superuser:
-                witness_users = Witness.objects.all()
+                witness_users = Witness.objects.all().distinct()
             else:
-                witness_users = Witness.objects.filter(Q(first_witness_school__in=schools) | Q(second_witness_school__in=schools))
+                witness_users = Witness.objects.filter(Q(first_witness_school__in=schools) | Q(second_witness_school__in=schools)).distinct()
 
             if school:
-                witness_users = witness_users.filter(Q(first_witness_school=school) | Q(second_witness_school=school))
+                witness_users = witness_users.filter(Q(first_witness_school=school) | Q(second_witness_school=school)).distinct()
                 fetched = True
                 
             if name:
                 if fetched:
-                    witness_users = witness_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
+                    witness_users = witness_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" ")))).distinct()
                 else:
-                    witness_users = witness_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
+                    witness_users = witness_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" ")))).distinct()
                     fetched = True
 
             if not fetched:
                 if request.user.is_superuser:
-                    witness_users = Witness.objects.all()
+                    witness_users = Witness.objects.all().distinct()
                 else:
-                    witness_users = Witness.objects.filter(Q(first_witness_school__in=school) | Q(second_witness_school__in=school))
+                    witness_users = Witness.objects.filter(Q(first_witness_school__in=school) | Q(second_witness_school__in=school)).distinct()
 
             if request.user.is_superuser:
-                supervisor_users = Supervisor.objects.all()
+                supervisor_users = Supervisor.objects.all().distinct()
             else:
-                supervisor_users = Supervisor.objects.filter(Q(school__in=school) | Q(adminorsupervisor_2__in=school))
+                supervisor_users = Supervisor.objects.filter(Q(school__in=school) | Q(adminorsupervisor_2__in=school)).distinct()
 
             if school:
-                supervisor_users = supervisor_users.filter(Q(school=school) | Q(adminorsupervisor_2=school))
+                supervisor_users = supervisor_users.filter(Q(school=school) | Q(adminorsupervisor_2=school)).distinct()
                 fetched = True
                 
             if name:
                 if fetched:
-                    supervisor_users = supervisor_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
+                    supervisor_users = supervisor_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" ")))).distinct()
                 else:
-                    supervisor_users = supervisor_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
+                    supervisor_users = supervisor_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" ")))).distinct()
                     fetched = True
 
             if not fetched:
                 if request.user.is_superuser:
-                    supervisor_users = Supervisor.objects.all()
+                    supervisor_users = Supervisor.objects.all().distinct()
                 else:
-                    supervisor_users = Supervisor.objects.filter(Q(school__in=school) | Q(adminorsupervisor_2__in=school))
+                    supervisor_users = Supervisor.objects.filter(Q(school__in=school) | Q(adminorsupervisor_2__in=school)).distinct()
 
             if request.user.is_superuser:
-                head_users = Head.objects.all()
+                head_users = Head.objects.all().distinct()
             else:
-                head_users = Head.objects.filter(school__in=schools)
+                head_users = Head.objects.filter(school__in=schools).distinct()
 
             if school:
-                head_users = head_users.filter(school=school)
+                head_users = head_users.filter(school=school).distinct()
                 fetched = True
                 
             if name:
                 if fetched:
-                    head_users = head_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
+                    head_users = head_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" ")))).distinct()
                 else:
-                    head_users = head_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
+                    head_users = head_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" ")))).distinct()
                     fetched = True
 
             if not fetched:
                 if request.user.is_superuser:
-                    head_users = Head.objects.all()
+                    head_users = Head.objects.all().distinct()
                 else:
-                    head_users = Head.objects.filter(school__in=schools)
+                    head_users = Head.objects.filter(school__in=schools).distinct()
             school_users = [*witness_users, *supervisor_users, *head_users]
         return render(request, 'school_users/seeusersbyquery_administration.html', {'type_of_user':type_of_user, 'school_users':school_users, 'schools':schools, 'is_supervisor': is_supervisor, 'error': error, 'query': query})
 
@@ -1686,29 +1686,29 @@ def seeusersbyquery_signes(request):
 
         if type_of_user == 'student':
             if request.user.is_superuser:
-                school_users = TYPE[type_of_user].objects.exclude(school=None)
+                school_users = TYPE[type_of_user].objects.exclude(school=None).distinct()
             else:
-                school_users = TYPE[type_of_user].objects.filter(school__in=schools)
+                school_users = TYPE[type_of_user].objects.filter(school__in=schools).distinct()
 
             if school:
-                school_users = school_users.filter(school=school)
+                school_users = school_users.filter(school=school).distinct()
                 fetched = True
             if classe:
-                school_users = school_users.filter(class__class_id__exact=classe.class_id)
+                school_users = school_users.filter(class__class_id__exact=classe.class_id).distinct()
                 fetched = True
                 
             if name:
                 if fetched:
-                    school_users = school_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
+                    school_users = school_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" ")))).distinct()
                 else:
-                    school_users = school_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
+                    school_users = school_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" ")))).distinct()
                     fetched = True
 
             if not fetched:
                 if request.user.is_superuser:
-                    school_users = TYPE[type_of_user].objects.exclude(school=None)
+                    school_users = TYPE[type_of_user].objects.exclude(school=None).distinct()
                 else:
-                    school_users = TYPE[type_of_user].objects.filter(school__in=schools)
+                    school_users = TYPE[type_of_user].objects.filter(school__in=schools).distinct()
 
         elif type_of_user == 'parent':
             if request.user.is_superuser:
@@ -1737,29 +1737,29 @@ def seeusersbyquery_signes(request):
                     school_users = TYPE[type_of_user].objects.filter(Q(first_parent__school__in=schools) | Q(second_parent__school__in=schools) | Q(third_parent__school__in=schools)).distinct()
         else:
             if request.user.is_superuser:
-                student_users = Student.objects.exclude(school=None)
+                student_users = Student.objects.exclude(school=None).distinct()
             else:
-                student_users = Student.objects.filter(school__in=schools)
+                student_users = Student.objects.filter(school__in=schools).distinct()
 
             if school:
-                student_users = student_users.filter(school=school)
+                student_users = student_users.filter(school=school).distinct()
                 fetched = True
             if classe:
-                student_users = student_users.filter(class__class_id__exact=classe.class_id)
+                student_users = student_users.filter(class__class_id__exact=classe.class_id).distinct()
                 fetched = True
                 
             if name:
                 if fetched:
-                    student_users = student_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
+                    student_users = student_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" ")))).distinct()
                 else:
-                    student_users = student_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" "))))
+                    student_users = student_users.filter(reduce(operator.and_, (Q(name__icontains=x) for x in name.split(" ")))).distinct()
                     fetched = True
 
             if not fetched:
                 if request.user.is_superuser:
-                    student_users = Student.objects.exclude(school=None)
+                    student_users = Student.objects.exclude(school=None).distinct()
                 else:
-                    student_users = Student.objects.filter(school__in=schools)
+                    student_users = Student.objects.filter(school__in=schools).distinct()
             
             if request.user.is_superuser:
                 parent_users = Parent.objects.exclude(Q(first_parent__school=None) & Q(second_parent__school=None) & Q(third_parent__school=None)).distinct()
