@@ -817,8 +817,8 @@
         dot.className = 'badge badge-pill badge-success text-success float-right';
       }
       let button = document.getElementById(`${contract['contract_id']}_counter_signed_button`);
-      console.log(button)
       if (button) {
+        console.log('Entrei aqui')
         button.className = 'btn btn-success btn-block w-100';
         button.style = 'cursor: not-allowed;';
         button.innerText = 'Assinado';
@@ -1201,7 +1201,6 @@
           setTimeout(function () {
             $('#multi-sign-contract-modal-message').text('Por favor, espere um pouco. Estamos criptografando seus contratos!');
             allCheckboxes.forEach(function (checkbox) {
-              console.log(checkbox.checked)
               var myInit = {
                 credentials: 'same-origin',
                 cache: 'default'
