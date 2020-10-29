@@ -22,7 +22,7 @@
                 <p class="text-top-bar-nav">
                     <i class="fas fa-graduation-cap"></i>
                     <a style="color:#FFFFFF;" href="/">
-                        Escola(s) 
+                        Escolas 
                     </a>
                 </p>
 
@@ -40,15 +40,13 @@
                 <p class="text-top-bar-nav">
                     <i class="fas fa-graduation-cap"></i>
                     <a style="color:#FFFFFF;" href="{% url 'school:seeallclassesbyquery' %}">
-                        Turma(s) 
+                        Turmas 
                     </a>
                 </p>
 
-                <!-- {% if request.user.is_superuser %}
-                <a class="box-rounded flex-div coloring-link" href="{% url 'school:add_school' %}">
+                <a class="box-rounded flex-div coloring-link" href="{% url 'school:select_school' %}">
                     <p class="fas fa-plus centralize-margin font-size-plus"></p>
                 </a>
-                {% endif %} -->
             </li>
             {% endif %}
 
@@ -59,7 +57,7 @@
                 <p class="text-top-bar-nav">
                     <i class="fas fa-user"></i>
                     <a style="color:#FFFFFF;" href="{% url 'users:all_administration' %}">
-                        Usuário(s) 
+                        Usuários
                     </a>
                 </p>
 
@@ -74,7 +72,7 @@
                 <p class="text-top-bar-nav">
                     <i class="fas fa-user"></i>
                     <a style="color:#FFFFFF;" href="{% url 'users:all_signes' %}">
-                        Assinante(s) 
+                        Assinantes 
                     </a>
                 </p>
 
@@ -89,7 +87,7 @@
                 <p class="text-top-bar-nav">
                     <i class="fas fa-file-contract"></i>
                     <a style="color:#FFFFFF;" href="{% url 'contracts:seemycontracts'%}">
-                        Contrato(s) 
+                        Contratos 
                     </a>                            
                 </p>
 

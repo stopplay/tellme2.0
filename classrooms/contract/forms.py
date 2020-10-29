@@ -50,3 +50,14 @@ class ContractModelFormWithoutSponte(forms.ModelForm):
 			'terms_of_contract': forms.FileInput(attrs={'required':False, 'style' : "width: 100%", 'class':'form-control'}),
 			'terms_of_contract_2': forms.FileInput(attrs={'required':False, 'style' : "width: 100%", 'class':'form-control'}),
 		}
+
+class ContractModelFormDates(forms.ModelForm):
+	"""docstring for ManagerModelForm"""
+	class Meta:
+		model = Contract
+		fields = ['date', 'end', 'expiration']
+		widgets = {
+			'date': forms.DateInput(attrs={'type':'date', 'class':'form-control', 'required':True, 'style' : "width: 100%" }),
+			'end': forms.DateInput(attrs={'type':'date', 'class':'form-control', 'required':True, 'style':"width:100%"}),
+			'expiration': forms.DateInput(attrs={'type':'date', 'class':'form-control', 'required':True, 'style':"width:100%"}),
+		}
