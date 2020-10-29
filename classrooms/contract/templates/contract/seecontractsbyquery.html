@@ -1201,6 +1201,7 @@
           setTimeout(function () {
             $('#multi-sign-contract-modal-message').text('Por favor, espere um pouco. Estamos criptografando seus contratos!');
             allCheckboxes.forEach(function (checkbox) {
+              console.log(checkbox.checked)
               var myInit = {
                 credentials: 'same-origin',
                 cache: 'default'
