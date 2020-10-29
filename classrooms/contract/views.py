@@ -2160,13 +2160,18 @@ def set_signed_rest(request, contract_id = None):
 
 @login_required
 def edit_dates(request, contract_id=None):
+    is_superviosr = False
+    head = getattr(request.user, 'head', None)
+    supervisor = getattr(request.user, 'supervisor', None)
+    if head or supervisor:
+        is_supervisor = True
     contract = Contract.objects.get(contract_id=contract_id)
     form =  ContractModelFormDates(request.POST or None, instance=contract)
     if request.method == 'POST':
         if form.is_valid():
             contract = form.save()
             return redirect('contracts:all')
-    return render(request, 'contract/edit_dates.html', {'form':form})
+    return render(request, 'contract/edit_dates.html', {'form':form, 'is_supervisor':is_supervisor})
 
 @login_required
 def delete_contract(request, contract_id = None):
