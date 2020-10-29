@@ -1206,7 +1206,9 @@
               };
               contract = document.getElementById(`${checkbox.value}_counter_signed`)
               if (contract.classList.contains('badge-danger')){
-                if (selectall.checked) {
+                console.log(selectedall)
+                console.log(checkbox.checked)
+                if (checkbox.checked || selectall.checked) {
                   fetch(`/contracts/set_signed/${checkbox.value}`, myInit)
                 }
               }
