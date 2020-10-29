@@ -797,7 +797,7 @@
     let message = data['message'];
     var contract = message;
     var date = document.getElementById(`${contract['contract_id']}_initial_date`)
-    date.innerText = `${contract['date'].day}/${contract['date'].month}/${contract['date'].year}`
+    date.innerText = `${contract['date']}`
     if (contract['client_responsible_signed'] == true) {
       document.getElementById(`${contract['contract_id']}_client_responsible_signed`).className = 'badge badge-pill badge-success text-success float-right';
       let button = document.getElementById(`${contract['contract_id']}_client_responsible_signed_button`);
