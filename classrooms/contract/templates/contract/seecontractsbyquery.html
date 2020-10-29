@@ -447,20 +447,18 @@
                           </div>
                         </div>
                         <div class="row">
-                          <div class="col-md-12">
+                          <div class="col-md-10">
                             <a class="btn btn-primary btn-block w-100"
                               href="{% url 'contracts:extend_expire_date' contract.contract_id %}"
                               data-baloon="Remove this item from the cart">
                               Estender Por 7 Dias
                             </a>
                           </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-md-12">
+                          <div class="col-md-2">
                             <a class="btn btn-primary btn-block w-100"
                               href="{% url 'contracts:edit_dates' contract.contract_id %}"
                               data-baloon="Remove this item from the cart">
-                              Editar Datas
+                              <i class="fas fa-pencil-alt"></i>
                             </a>
                           </div>
                         </div>
@@ -646,20 +644,18 @@
                         {% endif %}
                         {% if is_supervisor %}
                         <div class="row">
-                          <div class="col-md-12">
+                          <div class="col-md-10">
                             <a class="btn btn-primary btn-block w-100"
                               href="{% url 'contracts:extend_expire_date' contract.contract_id %}"
                               data-baloon="Remove this item from the cart">
                               Estender Por 7 Dias
                             </a>
                           </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-md-12">
+                          <div class="col-md-2">
                             <a class="btn btn-primary btn-block w-100"
                               href="{% url 'contracts:edit_dates' contract.contract_id %}"
                               data-baloon="Remove this item from the cart">
-                              Editar Datas
+                              <i class="fas fa-pencil-alt"></i>
                             </a>
                           </div>
                         </div>
