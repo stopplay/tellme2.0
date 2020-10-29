@@ -2160,7 +2160,7 @@ def set_signed_rest(request, contract_id = None):
 
 @login_required
 def edit_dates(request, contract_id=None):
-    contract = Contract.objects.get(contrac_id=contract_id)
+    contract = Contract.objects.get(contract_id=contract_id)
     form =  ContractModelFormDates(request.POST or None, instance=contract)
     if request.method == 'POST':
         if form.is_valid():
