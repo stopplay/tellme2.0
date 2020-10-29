@@ -2158,6 +2158,17 @@ def set_signed_rest(request, contract_id = None):
     contract_rest = ContractSerializer(contract)
     return get_data(request, contract_rest, 'Assinado com sucesso!' , 'success')
 
+@login_required
+def edit_dates(request, contract_id=None):
+    contract = Contract.objects.get(contrac_id=contract_id)
+    form =  ContractModelFormDates(request.POST or None, instance=contract)
+    if request.method == 'POST':
+        if form.is_valid():
+            contract = form.save()
+            return redirect('contracts:all')
+    return render(request, 'contract/edit_dates.html', {'form':form})
+
+@login_required
 def delete_contract(request, contract_id = None):
     if Contract.objects.filter(contract_id=contract_id).count()>=1:
         contract_to_delete = Contract.objects.get(contract_id=contract_id)
