@@ -2170,6 +2170,7 @@ def edit_dates(request, contract_id=None):
     if request.method == 'POST':
         if form.is_valid():
             contract = form.save()
+            messages.success(request, 'Datas editadas com sucesso.')
             return redirect('/contracts/all')
     return render(request, 'contract/edit_dates.html', {'form':form, 'is_supervisor':is_supervisor})
 

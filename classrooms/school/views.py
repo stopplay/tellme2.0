@@ -591,6 +591,30 @@ def update_school(request, school_id=None):
 			return redirect('/')
 		return render(request, 'school/update_school.html', {'form':form, 'is_supervisor':is_supervisor, 'school_id': school_id})
 
+@login_required
+def select_school(request):
+	head = getattr(request.user, 'head', None)
+	supervisor = getattr(request.user, 'supervisor', None)
+	is_supervisor = False
+	if request.user.is_superuser:
+		schools = School.objects.all().order_by('school_name')
+	elif head or supervisor:
+		is_supervisor = True
+		if head:
+			schools = School.objects.filter(heads__head_id__exact=head.head_id).order_by('school_name')
+		elif supervisor:
+			schools = School.objects.filter(Q(adminorsupervisor=supervisor)|Q(adminorsupervisor_2=supervisor)).order_by('school_name')
+	if schools.count() == 1:
+		return redirect('/schools/{}/add_class'.format(schools.first().school_id))
+	if request.method == 'POST':
+		selected_school = request.POST.get('selected_school' or 0)
+		try:
+			school = School.objects.get(school_id=selected_school)
+			return redirect('/schools/{}/add_class'.format(school.school_id))
+		except:
+			messages.error(request, 'Você não selecionou uma escola para criar a turma')
+	return render(request, 'school/select_school.html', {'schools':schools, 'is_supervisor':is_supervisor})
+
 @csrf_exempt
 @api_view(['POST'])
 def update_school_rest(request, school_id=None):

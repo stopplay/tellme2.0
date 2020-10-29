@@ -22,6 +22,7 @@ urlpatterns = [
     path('blockchain/<int:chain_id>', views.seechainbyid, name="seechainbyid"),
     url('add_school/', views.create_school, name="add_school"),
     url('seeallschools/', views.seeallschools, name="seeallschools"),
+    url('select_school/', views.select_school, name="select_school"),
     path('seeschooldetails/<int:school_id>', views.seeschooldetails, name="seeschooldetails"),
     url('seeallschools_rest/', views.seeallschools_rest),
     path('update_school/<int:school_id>', views.update_school, name='update_school'),
