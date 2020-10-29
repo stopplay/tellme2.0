@@ -37,13 +37,13 @@
     </div>
 </div>
 <script>
-    $(document).ready(function () {
+    $(document).on("change", "#id_date", function () {
         document.getElementById("id_end").min = this.value
         document.getElementById("id_expiration").min = this.value
     });
-    $(document).on("change", "#id_date", function () {
-        if ({{ is_closed }} == true){
-            window.close();
+    $(document).ready(function () {
+        if (is_closed == true) {
+            window.close()
         }
     });
 </script>
