@@ -1205,7 +1205,7 @@
                 cache: 'default'
               };
               contract = document.getElementById(`${checkbox.value}_counter_signed`)
-              if ('badge-danger' in contract.classList){
+              if (contract.classList.contains('badge-danger')){
                 if (checkbox.checked || selectall.checked) {
                   fetch(`/contracts/set_signed/${checkbox.value}`, myInit)
                 }
