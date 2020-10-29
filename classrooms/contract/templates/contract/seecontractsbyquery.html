@@ -449,14 +449,14 @@
                         <div class="row">
                           <div class="col-md-9">
                             <a class="btn btn-primary btn-block w-100"
-                            href="{% url 'contracts:extend_expire_date' contract.contract_id %}" target="popup" onclick="window.open('{% url 'contracts:extend_expire_date' contract.contract_id %}','popup','width=600,height=600'); return false;"
+                              href="{% url 'contracts:extend_expire_date' contract.contract_id %}"
                               data-baloon="Remove this item from the cart" style="font-size: 13.5px;justify-content:center;align-items:center; display: flex;">
                               Estender Por 7 Dias
                             </a>
                           </div>
                           <div class="col-md-3">
                             <a class="btn btn-primary btn-block w-100"
-                              href="{% url 'contracts:edit_dates' contract.contract_id %}"
+                            href="{% url 'contracts:edit_dates' contract.contract_id %}" target="popup" onclick="window.open('{% url 'contracts:edit_dates' contract.contract_id %}','popup','width=600,height=600'); return false;"
                               data-baloon="Remove this item from the cart" style="font-size: 13.5px;justify-content:center;align-items:center; display: flex;">
                               <i class="fas fa-pencil-alt"></i>
                             </a>
@@ -646,14 +646,14 @@
                         <div class="row">
                           <div class="col-md-9">
                             <a class="btn btn-primary btn-block w-100"
-                              href="{% url 'contracts:extend_expire_date' contract.contract_id %}" target="popup" onclick="window.open('{% url 'contracts:extend_expire_date' contract.contract_id %}','popup','width=600,height=600'); return false;"
+                              href="{% url 'contracts:extend_expire_date' contract.contract_id %}"
                               data-baloon="Remove this item from the cart" style="font-size: 13.5px;justify-content:center;align-items:center; display: flex;">
                               Estender Por 7 Dias
                             </a>
                           </div>
                           <div class="col-md-3">
                             <a class="btn btn-primary btn-block w-100"
-                              href="{% url 'contracts:edit_dates' contract.contract_id %}"
+                              href="{% url 'contracts:edit_dates' contract.contract_id %}" target="popup" onclick="window.open('{% url 'contracts:edit_dates' contract.contract_id %}','popup','width=600,height=600'); return false;"
                               data-baloon="Remove this item from the cart" style="font-size: 13.5px;justify-content:center;align-items:center; display: flex;">
                               <i class="fas fa-pencil-alt"></i>
                             </a>
