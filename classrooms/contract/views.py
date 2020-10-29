@@ -2161,7 +2161,7 @@ def set_signed_rest(request, contract_id = None):
 @login_required
 def edit_dates(request, contract_id=None):
     is_superviosr = False
-    is_closed = False
+    is_closed = 'Não'
     head = getattr(request.user, 'head', None)
     supervisor = getattr(request.user, 'supervisor', None)
     if head or supervisor:
@@ -2172,7 +2172,7 @@ def edit_dates(request, contract_id=None):
         if form.is_valid():
             contract = form.save()
             messages.success(request, 'Datas editadas com sucesso.')
-            is_closed = True
+            is_closed = 'Sim'
     return render(request, 'contract/edit_dates.html', {'form':form, 'is_supervisor':is_supervisor, 'is_closed':is_closed})
 
 @login_required

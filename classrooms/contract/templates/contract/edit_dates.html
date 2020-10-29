@@ -43,8 +43,7 @@
     });
     $(document).ready(function () {
         var is_closed = "{{ is_closed }}";
-        console.log(is_closed);
-        if (is_closed) {
+        if (is_closed === 'Sim') {
             window.close()
         }
     });
