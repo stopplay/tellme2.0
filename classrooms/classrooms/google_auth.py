@@ -17,7 +17,7 @@ class google_auth:
     def get_authorization_url(self):
         flow = Flow.from_client_secrets_file(
             self.CLIENT_SECRET_FILE, self.SCOPES)
-        flow.redirect_uri = 'https://tellme.stopplay.io/contracts/authenticated/'
+        flow.redirect_uri = 'https://matricula.tellme.school/contracts/authenticated/'
         authorization_url, state = flow.authorization_url(
             # Enable offline access so that you can refresh an access token without
             # re-prompting the user for permission. Recommended for web server apps.
