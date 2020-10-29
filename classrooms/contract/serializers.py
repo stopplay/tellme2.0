@@ -17,6 +17,20 @@ class ContractSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ContractSerializerMinimal(serializers.ModelSerializer):
+    date = serializers.SerializerMethodField()
     class Meta:
         model = Contract
         fields = '__all__'
+
+    def get_date(self, obj):
+        formated = ''
+        if obj.date.day<10:
+            formated += '0'+str(obj.date.day)+'/'
+        else:
+            formated += str(obj.date.day)+'/'
+        if obj.date.month<10:
+            formated += '0'+str(obj.date.month)+'/'
+        else:
+            formated += str(obj.date.month)+'/'
+        formated+=str(obj.date.year)
+        return formated

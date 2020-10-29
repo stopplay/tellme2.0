@@ -125,7 +125,7 @@
                   <tr>
                     {% if is_supervisor %}
                     <th>
-                      <input id="check" type="checkbox" name="select_all">
+                      <input id="selectall" type="checkbox" name="selectall">
                     </th>
                     {% endif %}
                     <th>Id do Contrato</th>
@@ -191,7 +191,7 @@
                     {% else %}
                     <td></td>
                     {% endif %}
-                    <td>
+                    <td id="{{ contract.contract_id }}_initial_date">
                       {% if contract.date.day < 10 %}0{{ contract.date.day }}{% else %}{{ contract.date.day }}{% endif %}/{% if contract.date.month < 10 %}0{{ contract.date.month }}{% else %}{{ contract.date.month }}{% endif %}/{{ contract.date.year }}
                     </td>
                     <!-- <td>
@@ -447,20 +447,18 @@
                           </div>
                         </div>
                         <div class="row">
-                          <div class="col-md-12">
+                          <div class="col-md-9">
                             <a class="btn btn-primary btn-block w-100"
                               href="{% url 'contracts:extend_expire_date' contract.contract_id %}"
-                              data-baloon="Remove this item from the cart">
+                              data-baloon="Remove this item from the cart" style="font-size: 13.5px;justify-content:center;align-items:center; display: flex;">
                               Estender Por 7 Dias
                             </a>
                           </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-md-12">
+                          <div class="col-md-3">
                             <a class="btn btn-primary btn-block w-100"
-                              href="{% url 'contracts:edit_dates' contract.contract_id %}"
-                              data-baloon="Remove this item from the cart">
-                              Editar Datas
+                            href="{% url 'contracts:edit_dates' contract.contract_id %}" target="popup" onclick="window.open('{% url 'contracts:edit_dates' contract.contract_id %}','popup','width=800,height=600'); return false;"
+                              data-baloon="Remove this item from the cart" style="font-size: 13.5px;justify-content:center;align-items:center; display: flex;">
+                              <i class="fas fa-pencil-alt"></i>
                             </a>
                           </div>
                         </div>
@@ -646,20 +644,18 @@
                         {% endif %}
                         {% if is_supervisor %}
                         <div class="row">
-                          <div class="col-md-12">
+                          <div class="col-md-9">
                             <a class="btn btn-primary btn-block w-100"
                               href="{% url 'contracts:extend_expire_date' contract.contract_id %}"
-                              data-baloon="Remove this item from the cart">
+                              data-baloon="Remove this item from the cart" style="font-size: 13.5px;justify-content:center;align-items:center; display: flex;">
                               Estender Por 7 Dias
                             </a>
                           </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-md-12">
+                          <div class="col-md-3">
                             <a class="btn btn-primary btn-block w-100"
-                              href="{% url 'contracts:edit_dates' contract.contract_id %}"
-                              data-baloon="Remove this item from the cart">
-                              Editar Datas
+                              href="{% url 'contracts:edit_dates' contract.contract_id %}" target="popup" onclick="window.open('{% url 'contracts:edit_dates' contract.contract_id %}','popup','width=800,height=600'); return false;"
+                              data-baloon="Remove this item from the cart" style="font-size: 13.5px;justify-content:center;align-items:center; display: flex;">
+                              <i class="fas fa-pencil-alt"></i>
                             </a>
                           </div>
                         </div>
@@ -668,13 +664,13 @@
                         <div class="row">
                           <div class="col-md-9">
                             <a class="btn btn-primary btn-block w-100" href="{{contract.pdf.url}}"
-                              data-baloon="Remove this item from the cart" style="font-size: 13.5px;">
+                              data-baloon="Remove this item from the cart" style="font-size: 13.5px;justify-content:center;align-items:center; display: flex;">
                               Ver Contrato
                             </a>
                           </div>
                           <div class="col-md-3">
                             <a class="btn btn-primary btn-block w-100" href="{% url 'contracts:upload_contract_file_to_drive' contract.contract_id 'contract' %}"
-                              data-baloon="Remove this item from the cart" style="font-size: 13.5px;">
+                              data-baloon="Remove this item from the cart" style="font-size: 13.5px;justify-content:center;align-items:center; display: flex;">
                               <i class="fab fa-google-drive"></i>
                             </a>
                           </div>
@@ -684,13 +680,13 @@
                         {% if contract.terms_of_contract %}
                         <div class="row">
                           <div class="col-md-9">
-                            <a class="btn btn-primary w-100" href="{{contract.terms_of_contract.url}}" style="font-size: 13.5px;">
+                            <a class="btn btn-primary w-100" href="{{contract.terms_of_contract.url}}" style="font-size: 13.5px;justify-content:center;align-items:center; display: flex;">
                               Termos Ad. do Contrato (1)
                             </a>
                           </div>
                           <div class="col-md-3">
                             <a class="btn btn-primary btn-block w-100" href="{% url 'contracts:upload_contract_file_to_drive' contract.contract_id 'terms_1' %}"
-                              data-baloon="Remove this item from the cart" style="font-size: 13.5px;">
+                              data-baloon="Remove this item from the cart" style="font-size: 13.5px;justify-content:center;align-items:center; display: flex;">
                               <i class="fab fa-google-drive"></i>
                             </a>
                           </div>
@@ -700,13 +696,13 @@
                         {% if contract.terms_of_contract_2 %}
                         <div class="row">
                           <div class="col-md-9">
-                            <a class="btn btn-primary w-100" href="{{contract.terms_of_contract_2.url}}" style="font-size: 13.5px;">
+                            <a class="btn btn-primary w-100" href="{{contract.terms_of_contract_2.url}}" style="font-size: 13.5px;justify-content:center;align-items:center; display: flex;">
                               Termos Ad. do Contrato (2)
                             </a>
                           </div>
                           <div class="col-md-3">
                             <a class="btn btn-primary btn-block w-100" href="{% url 'contracts:upload_contract_file_to_drive' contract.contract_id 'terms_2' %}"
-                              data-baloon="Remove this item from the cart" style="font-size: 13.5px;">
+                              data-baloon="Remove this item from the cart" style="font-size: 13.5px;justify-content:center;align-items:center; display: flex;">
                               <i class="fab fa-google-drive"></i>
                             </a>
                           </div>
@@ -800,6 +796,8 @@
     let data = JSON.parse(e.data);
     let message = data['message'];
     var contract = message;
+    var date = document.getElementById(`${contract['contract_id']}_initial_date`)
+    date.innerText = `${contract['date']}`
     if (contract['client_responsible_signed'] == true) {
       document.getElementById(`${contract['contract_id']}_client_responsible_signed`).className = 'badge badge-pill badge-success text-success float-right';
       let button = document.getElementById(`${contract['contract_id']}_client_responsible_signed_button`);
@@ -814,7 +812,10 @@
       }
     }
     if (contract['counter_signed'] == true) {
-      document.getElementById(`${contract['contract_id']}_counter_signed`).className = 'badge badge-pill badge-success text-success float-right';
+      let dot = document.getElementById(`${contract['contract_id']}_counter_signed`)
+      if (dot){
+        dot.className = 'badge badge-pill badge-success text-success float-right';
+      }
       let button = document.getElementById(`${contract['contract_id']}_counter_signed_button`);
       if (button) {
         button.className = 'btn btn-success btn-block w-100';
@@ -1195,7 +1196,6 @@
       } else {
         event.preventDefault();
         setTimeout(function () {
-          console.log('Entrou Aqui')
           $('#multi-sign-contract-modal').modal("hide");
           setTimeout(function () {
             $('#multi-sign-contract-modal-message').text('Por favor, espere um pouco. Estamos criptografando seus contratos!');
@@ -1204,8 +1204,11 @@
                 credentials: 'same-origin',
                 cache: 'default'
               };
-              if (checkbox.checked || selectall.checked) {
-                fetch(`/contracts/set_signed/${checkbox.value}`, myInit)
+              contract = document.getElementById(`${checkbox.value}_counter_signed`)
+              if (contract.classList.contains('badge-danger')){
+                if (checkbox.checked || selectall.checked) {
+                  fetch(`/contracts/set_signed/${checkbox.value}`, myInit)
+                }
               }
             });
             window.location.assign('/contracts/all/')

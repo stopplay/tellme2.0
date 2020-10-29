@@ -41,6 +41,12 @@
         document.getElementById("id_end").min = this.value
         document.getElementById("id_expiration").min = this.value
     });
+    $(document).ready(function () {
+        var is_closed = "{{ is_closed }}";
+        if (is_closed === 'Sim') {
+            window.close()
+        }
+    });
 </script>
 
 
