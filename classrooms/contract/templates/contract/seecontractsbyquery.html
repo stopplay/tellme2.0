@@ -812,7 +812,10 @@
       }
     }
     if (contract['counter_signed'] == true) {
-      document.getElementById(`${contract['contract_id']}_counter_signed`).className = 'badge badge-pill badge-success text-success float-right';
+      let dot = document.getElementById(`${contract['contract_id']}_counter_signed`)
+      if (dot){
+        dot.className = 'badge badge-pill badge-success text-success float-right';
+      }
       let button = document.getElementById(`${contract['contract_id']}_counter_signed_button`);
       if (button) {
         button.className = 'btn btn-success btn-block w-100';
@@ -1193,7 +1196,6 @@
       } else {
         event.preventDefault();
         setTimeout(function () {
-          console.log('Entrou Aqui')
           $('#multi-sign-contract-modal').modal("hide");
           setTimeout(function () {
             $('#multi-sign-contract-modal-message').text('Por favor, espere um pouco. Estamos criptografando seus contratos!');
