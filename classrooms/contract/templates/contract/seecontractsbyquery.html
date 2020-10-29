@@ -19,7 +19,7 @@
       </div>
       <div class="card-body">
         <div class="row">
-          <div class="col-md-11 pr-1">
+          <div class="col-md-12 pr-1">
             <div class="form-group">
               <form id="myForm" method="POST" enctype="multipart/form-data"
                 data-urlclasses="{% url 'users:classes_choices_ajax' %}"> {% csrf_token %}
@@ -52,8 +52,8 @@
                   </div>
                 </div>
                 <div class="labelandform" style="margin-top: -10px;">
-                  Contratos de: <input style="font-size: 0.78rem" type="date" id="initial_date" name="initial_date" width="40%">
-                  a: <input style="font-size: 0.78rem" type="date" id="final_date" name="final_date" width="40%">
+                  Contratos de: <input style="font-size: 0.78rem" type="date" id="initial_date" name="initial_date">
+                  a: <input style="font-size: 0.78rem" type="date" id="final_date" name="final_date">
                 </div>
                 
                 <label>Mostrar contratos assinados pelo Responsável Financeiro e Pedagógico?</label><br><label
