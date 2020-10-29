@@ -24,4 +24,4 @@ class ContractSerializerMinimal(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_date(self, obj):
-        return datetime.date().strftime('%d/%m/%Y'obj.date)
+        return datetime.date().strftime('%d/%m/%Y', obj.date)
