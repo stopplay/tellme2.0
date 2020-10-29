@@ -797,8 +797,10 @@
     let message = data['message'];
     var contract = message;
     var date = document.getElementById(`${contract['contract_id']}_initial_date`)
-    var new_date = new Intl.DateTimeFormat('pt').format(`${contract['date']}`)
-    date.innerText = `${new_date}`
+    var year = new Intl.DateTimeFormat('pt', {year: 'numeric'}).format(`${contract['date']}`)
+    var month = new Intl.DateTimeFormat('pt', {month: 'numeric'}).format(`${contract['date']}`)
+    var year = new Intl.DateTimeFormat('pt', {day: '2-digit'}).format(`${contract['date']}`)
+    date.innerText = `${day}/${month}/${year}`
     if (contract['client_responsible_signed'] == true) {
       document.getElementById(`${contract['contract_id']}_client_responsible_signed`).className = 'badge badge-pill badge-success text-success float-right';
       let button = document.getElementById(`${contract['contract_id']}_client_responsible_signed_button`);
