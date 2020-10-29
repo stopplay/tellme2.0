@@ -2173,6 +2173,8 @@ def edit_dates(request, contract_id=None):
             contract = form.save()
             messages.success(request, 'Datas editadas com sucesso.')
             is_closed = 'Sim'
+            contract_rest = ContractSerializerMinimal(contract)
+            send_data(request, contract_rest)
     return render(request, 'contract/edit_dates.html', {'form':form, 'is_supervisor':is_supervisor, 'is_closed':is_closed})
 
 @login_required
