@@ -818,7 +818,6 @@
       }
       let button = document.getElementById(`${contract['contract_id']}_counter_signed_button`);
       if (button) {
-        console.log('Entrei aqui')
         button.className = 'btn btn-success btn-block w-100';
         button.style = 'cursor: not-allowed;';
         button.innerText = 'Assinado';
@@ -1205,8 +1204,11 @@
                 credentials: 'same-origin',
                 cache: 'default'
               };
-              if (checkbox.checked || selectall.checked) {
-                fetch(`/contracts/set_signed/${checkbox.value}`, myInit)
+              contract = document.getElementById(`${checkbox.value}_counter_signed`)
+              if ('badge-danger' in contract.classList){
+                if (checkbox.checked || selectall.checked) {
+                  fetch(`/contracts/set_signed/${checkbox.value}`, myInit)
+                }
               }
             });
             window.location.assign('/contracts/all/')
