@@ -113,6 +113,7 @@
                 {% if is_client %}
                     <a class="dropdown-item" href="{% url 'users:profile' %}">Perfil</a>
                 {% endif %}
+                <a class="dropdown-item" href="{% url 'contracts:authenticated' %}">Autenticar com Google</a>
                 <a class="dropdown-item" href="{% url 'users:logout' %}">Sair</a>
             </div>
         </li>
