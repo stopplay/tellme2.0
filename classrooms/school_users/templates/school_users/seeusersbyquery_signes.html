@@ -15,7 +15,7 @@
 	<div class="container-fluid">
 		<div class="card">
 			<div class="card-header">
-				<h4 class="card-title">Pesquisar Assinantes</h4>
+				<h4 class="card-title">Filtros de Assinantes</h4>
 			</div>
 			<div class="card-body">
 				<div class="form-group">
@@ -37,7 +37,7 @@
 							<div class="labelandform col-md-6">
 								<p><label>Selecione a Turma:</label></p>
 								<select class="custom-select chosen-select" id="select_form_class">
-									<option id="" value="0" selected>Todas</option>
+									<option id="" value="0" selected>--------</option>
 								</select>
 							</div>
 							<input type="hidden" id="selected_school" name="selected_school">
@@ -59,9 +59,12 @@
 							value="{{query.name}}">
 						<input type="hidden" id="type_of_user" name="type_of_user">
 						<p class="text-warning">{{error}}</p>
-						<div style="margin-top: 10px"><button class="btn btn-info btn-fill pull-left" type="submit"
-								style="background-color: #213f99; border-color: #213f99">Pesquisar
-								Assinantes</button>
+						<div style="margin-top: 10px">
+							<button class="btn btn-info btn-fill pull-left" type="submit"
+                                style="background-color: #3CB371; border-color: #3CB371">Buscar</button>
+                            <input type="button" onClick="limpa()" class="btn btn-info btn-fill pull-left"
+                                style="background-color: #B22222; border-color: #B22222; margin-left: 30px;"
+                                value="Limpar" />
 						</div>
 
 					</form>
@@ -221,6 +224,22 @@
 	</div>
 	{% endif %}
 	<script type="text/javascript">
+		function limpa() {
+            document.getElementById('selected_school').value = "";
+            document.getElementById('selected_class').value = "";
+			document.getElementById('type_of_user').value = "";
+			document.getElementById('name').value = "";
+            $('#select_form_school')
+                .find('option:first-child').prop('selected', true)
+                .end().trigger('chosen:updated');
+            $('#select_form_class').html(`<option id="" value="0">--------</option>`)
+            $('#select_form_class')
+                .find('option:first-child').prop('selected', true)
+                .end().trigger('chosen:updated');
+			$('#select_form')
+                .find('option:first-child').prop('selected', true)
+                .end().trigger('chosen:updated');
+        }
 		$(document).ready(function () {
             jQuery(window).on('resize', function () {
 				$("#select_form_school_chosen").attr('style', 'width: 100%');
