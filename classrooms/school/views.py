@@ -122,6 +122,7 @@ def seeallschoolsbyquery(request):
 	supervisor = getattr(request.user, 'supervisor', None)
 	is_supervisor = False
 	schools = []
+	schools_data = []
 	if request.user.is_superuser:
 		schools = School.objects.all().order_by('school_name')
 	elif head or supervisor:
@@ -144,9 +145,9 @@ def seeallschoolsbyquery(request):
 				current_school = School.objects.get(school_id=selected_school)
 				all_contracts =  all_contracts.filter(chain__in=current_school.chains.all())
 				if initial_date:
-					all_contracts = all_contracts.filter(date__date__gte=initial_date)
+					all_contracts = all_contracts.filter(date__gte=initial_date)
 				if final_date:
-					all_contracts = all_contracts.filter(date__date__lte=final_date)									
+					all_contracts = all_contracts.filter(date__lte=final_date)									
 
 				contracts_in_period = all_contracts.count()
 				complete_contracts_in_period = all_contracts.filter(all_signed=True).count()
@@ -154,8 +155,30 @@ def seeallschoolsbyquery(request):
 				value_to_pay = current_school.value_per_contract * contracts_to_pay
 				contracts_paid = all_contracts.filter(is_paid=True).count()
 			except:
-				error = 'Escola não selecionada'
-		return render(request, 'school/seeallschoolsbyquery.html', {'schools': schools, 'current_school': current_school, 'contracts_to_pay': contracts_to_pay, 'contracts_paid': contracts_paid, 'contracts_in_period': contracts_in_period, 'complete_contracts_in_period': complete_contracts_in_period, 'value_to_pay': value_to_pay,  'selected_school': selected_school, 'error': error, 'query': query, 'is_supervisor':is_supervisor})
+				for school in schools:
+					school_contracts =  all_contracts.filter(chain__in=school.chains.all())
+					if initial_date:
+						school_contracts = school_contracts.filter(date__gte=initial_date)
+					if final_date:
+						school_contracts = school_contracts.filter(date__lte=final_date)									
+
+					contracts_in_period = school_contracts.count()
+					complete_contracts_in_period = school_contracts.filter(all_signed=True).count()
+					contracts_to_pay = school_contracts.filter(is_paid=False).count()
+					value_to_pay = school.value_per_contract * contracts_to_pay
+					contracts_paid = school_contracts.filter(is_paid=True).count()
+					schools_data.append({
+						'school_id': school.school_id,
+						'school_name': school.school_name,
+						'contracts_in_period': contracts_in_period,
+						'complete_contracts_in_period': complete_contracts_in_period,
+						'quantity_of_students_associated': school.quantity_of_students_associated,
+						'quantity_of_parents_associated': school.quantity_of_parents_associated,
+						'contracts_to_pay': contracts_to_pay,
+						'value_to_pay': value_to_pay,
+						'contracts_paid': contracts_paid,
+					})
+		return render(request, 'school/seeallschoolsbyquery.html', {'schools': schools, 'schools_data':schools_data, 'current_school': current_school, 'contracts_to_pay': contracts_to_pay, 'contracts_paid': contracts_paid, 'contracts_in_period': contracts_in_period, 'complete_contracts_in_period': complete_contracts_in_period, 'value_to_pay': value_to_pay,  'selected_school': selected_school, 'error': error, 'query': query, 'is_supervisor':is_supervisor})
 	return redirect('/contracts/all')
 
 @login_required

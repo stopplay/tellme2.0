@@ -16,7 +16,7 @@
                         <div class="labelandform">
                             <p><label>Selecione a escola que você deseja pesquisar:</label></p>
                             <select class="custom-select chosen-select" id="select_form_school">
-                                <option id="" value="0">--------</option>
+                                <option id="" value="0">Todas</option>
                                 {% for school in schools %}
                                 <option value="{{ school.school_id }}"
                                     {% if school.school_id == query.selected_school %} selected {% endif %}>
@@ -134,6 +134,102 @@
                                 </div>
                             </th>
                         </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        {% elif schools_data %}
+        <div class="card strpied-tabled-with-hover">
+            <div class="card-header ">
+                <h4 class="card-title">Escola(s)</h4>
+            </div>
+            <div class="card-body table-full-width table-responsive">
+                <table class="table table-hover table-striped" id="schoolstable">
+                    <thead>
+                        <tr>
+                            <th>Escola</th>
+                            <th>
+                                Contratos registrados
+                            </th>
+                            <th>
+                                Contratos assinados <br>
+                                com processo completo
+                            </th>
+                            <!-- <th>Contratos Não Assinados</th> -->
+                            <th>
+                                Número de <br>
+                                Alunos <br>
+                                Cadastrados
+                            </th>
+                            <th>
+                                Número de Assinantes <br>
+                                Cadastrados
+                            </th>
+                            <th>
+                                Contratos a pagar
+                            </th>
+                            <th>
+                                Valor a pagar
+                            </th>
+                            <th>
+                                Contratos pagos
+                            </th>
+                            <th> Ações </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for school in schools_data %}
+                        <tr>
+                            <th>{{ school.school_name }}</th>
+                            <th>{{ school.contracts_in_period }}</th>
+                            <th>{{ school.complete_contracts_in_period }}</th>
+                            <!-- <th>{{ school.quantity_of_contracts_not_signed }}/{{ school.quantity_of_contracts_total }}</th> -->
+                            <th>{{ school.quantity_of_students_associated }}</th>
+                            <th>{{ school.quantity_of_parents_associated }}</th>
+                            <th>{{ school.contracts_to_pay }}</th>
+                            <th>{{ school.value_to_pay }}</th>
+                            <th>{{ school.contracts_paid }}</th>
+                            <th>
+                                <div class="dropdown show">
+                                    <button type="button" class="btn btn-secondary" id="dropdownMenuLink"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
+                                            class="fas fa-ellipsis-h"></i></button>
+
+
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        <a class="dropdown-item"
+                                            href="{% url 'school:add_class' school.school_id %}"
+                                            data-baloon="Remove this item from the cart" class="text-danger">Adicionar
+                                            Turma à Escola</a>
+                                        <a class="dropdown-item"
+                                            href="{% url 'school:set_witnesses' school.school_id %}"
+                                            data-baloon="Remove this item from the cart" class="text-danger">Selecionar
+                                            Testemunhas Para Escola</a>
+                                        <a class="dropdown-item"
+                                            href="{% url 'school:update_school' school.school_id %}"
+                                            data-baloon="Remove this item from the cart" class="text-danger">Atualizar
+                                            Escola</a>
+                                        {% if request.user.is_superuser %}
+                                        <a class="dropdown-item"
+                                            onclick="changeYesLink('{% url 'school:delete_school' school.school_id %}')"
+                                            href="#" data-baloon="Remove this item from the cart" class="text-light"
+                                            data-toggle="modal" data-target="#delete-school-modal">
+                                            Deletar Escola
+                                        </a>
+
+                                        {% endif %}
+                                        {% if request.user.is_superuser or is_supervisor %}
+                                        <a class="dropdown-item"
+                                            href="{% url 'school:seeschooldetails' school.school_id %}"
+                                            data-baloon="Remove this item from the cart" class="text-danger">Ver
+                                            Detalhes da Escola</a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </th>
+                        </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
