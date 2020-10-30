@@ -991,18 +991,21 @@ def seecontractsbyquery(request):
     selected_school = None
     selected_class = None
     schools = []
-    if Parent.objects.filter(profile=request.user).count()>=1 or Student.objects.filter(profile=request.user).count()>=1 or Witness.objects.filter(profile=request.user).count()>=1:
+    head = getattr(request.user, 'head', None)
+    supervisor = getattr(request.user, 'supervisor', None)
+    parent = getattr(request.user, 'parent', None)
+    student = getattr(request.user, 'student', None)
+    witness = getattr(request.user, 'witness', None)
+    if parent or student or witness:
         return seemycontracts(request)
-    elif Head.objects.filter(profile=request.user).count()>=1:
+    elif head or supervisor:
         is_supervisor = True
-        schools = School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id).order_by('school_name')
-        for school in schools:
-            for chain in school.chains.all():
-                if chain not in chains_to_select:
-                    chains_to_select += [(chain)]
-    elif Supervisor.objects.filter(profile=request.user).count()>=1:
-        is_supervisor = True
-        schools = School.objects.filter(Q(adminorsupervisor=Supervisor.objects.get(profile=request.user))|Q(adminorsupervisor_2=Supervisor.objects.get(profile=request.user))).order_by('school_name')
+        if head:
+            schools = School.objects.filter(heads__head_id__exact=head.head_id).order_by('school_name')
+        elif supervisor:
+            schools = School.objects.filter(Q(adminorsupervisor=supervisor)|Q(adminorsupervisor_2=supervisor)).order_by('school_name')
+        # elif witness:
+        #     schools = School.objects.filter(Q(first_witness_school=witness)|Q(second_witness_school=witness)).order_by('school_name')
         for school in schools:
             for chain in school.chains.all():
                 if chain not in chains_to_select:
