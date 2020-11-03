@@ -998,6 +998,7 @@ def seecontractsbyquery(request):
     parent = getattr(request.user, 'parent', None)
     student = getattr(request.user, 'student', None)
     witness = getattr(request.user, 'witness', None)
+    query = []
     if parent or student:
         return seemycontracts(request)
     elif head or supervisor or witness:
@@ -1041,6 +1042,12 @@ def seecontractsbyquery(request):
         if classe:
             contracts = contracts.filter(chain__name__icontains=classe.class_name)
             fetched = True
+        query = {
+            'selected_school': selected_school,
+            'selected_classe': selected_classe,
+            'selected_filter': selected_filter,
+            'search': search
+        }
         if not fetched:
             contracts = Contract.objects.filter(chain__in=chains_to_select)
 
@@ -1066,7 +1073,7 @@ def seecontractsbyquery(request):
         if not schools:
             messages.error(request, 'O tipo de usuário que está tentando acessar estes dados não se encaixa em nenhum dos tipos propostos pelo sistema.')
             return seemycontracts(request)
-    return render(request, 'contract/seecontractsbyquery.html', {'search':search, 'chains_to_select':chains_to_select, 'contracts':contracts, 'schools':schools, 'is_supervisor':is_supervisor, 'is_witness':is_witness, 'selected_school': selected_school, 'selected_class': selected_class, 'selected_filter':selected_filter})
+    return render(request, 'contract/seecontractsbyquery.html', {'search':search, 'chains_to_select':chains_to_select, 'contracts':contracts, 'schools':schools, 'is_supervisor':is_supervisor, 'is_witness':is_witness, 'selected_school': selected_school, 'selected_class': selected_class, 'selected_filter':selected_filter, 'query': query})
 
 @csrf_exempt
 def createacontract_rest(request):
