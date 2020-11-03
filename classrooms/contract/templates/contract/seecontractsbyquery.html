@@ -968,12 +968,12 @@
     var allCheckboxes = document.getElementsByName('checks');
     var is_witness = `{{ is_witness|yesno:"true,false" }}`;
     allCheckboxes.forEach(function (checkbox) {
-      if (is_witness){
-        var contract = document.getElementById(`${checkbox.value}_all_witness_signed`)
+      if (is_witness === true){
+        contract = document.getElementById(`${checkbox.value}_all_witness_signed`)
       }
-      else{
+      else if (is_witness === false){
         console.log(`${checkbox.value}_counter_signed`)
-        var contract = document.getElementById(`${checkbox.value}_counter_signed`)
+        contract = document.getElementById(`${checkbox.value}_counter_signed`)
       }
       console.log(contract)
       if (ele.checked){
