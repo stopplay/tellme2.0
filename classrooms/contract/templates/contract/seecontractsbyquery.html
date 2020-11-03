@@ -15,7 +15,7 @@
   <div class="container-fluid">
     <div class="card">
       <div class="card-header">
-        <h4 class="card-title">Pesquisar Contratos</h4>
+        <h4 class="card-title">Filtros de Contratos</h4>
       </div>
       <div class="card-body">
         <div class="row">
@@ -71,10 +71,15 @@
                 <input type="text" id="search" name="search"
                   placeholder="Insira o nome do aluno, o nome da escola ou o nome da turma">
                 <input type="hidden" id="selected_chain" name="selected_chain">
-                <div style="margin-top: 10px"><button class="btn btn-info btn-fill pull-left" type="submit"
-                    style="background-color: #213f99; border-color: #213f99">Pesquisar Contratos</button>
-                  <!-- <button class="btn btn-info btn-fill pull-right" id="generate_password" style="background-color: #213f99; border-color: #213f99" onclick="generate_password()">
-                                  Gerar Senha</button> -->
+                <div style="margin-top: 10px">
+                  <button class="btn btn-info btn-fill pull-left" type="submit"
+                    style="background-color: #3CB371; border-color: #3CB371">Buscar</button>
+                  <input type="button" onClick="limpa()" class="btn btn-info btn-fill pull-left"
+                    style="background-color: #B22222; border-color: #B22222; margin-left: 30px;"
+                    value="Limpar" />
+                  <input type="button" onClick="exportTableToCSV('Contratos.csv')" class="btn btn-info btn-fill pull-left"
+                    style="background-color: #1D23D7; border-color: #1D23D7; margin-left: 30px;"
+                    value="Exportar" />
                 </div>
                 <div class="clearfix"></div>
             </form>
@@ -791,6 +796,23 @@
 {% endif %}
 {% endif %}
 <script type="text/javascript">
+  function limpa() {
+    document.getElementById('selected_school').value = "0";
+    document.getElementById('selected_class').value = "0";
+    document.getElementById('selected_filter').value = "";
+    document.getElementById('initial_date').value = "";
+    document.getElementById('final_date').value = "";
+    $('#select_form_school')
+      .find('option:first-child').prop('selected', true)
+      .end().trigger('chosen:updated');
+      $('#select_form_class').html(`<option id="" value="0">--------</option>`)
+      $('#select_form_class')
+        .find('option:first-child').prop('selected', true)
+        .end().trigger('chosen:updated');
+    $('#select_form_filter')
+      .find('option:first-child').prop('selected', true)
+      .end().trigger('chosen:updated');
+  }
   let chatSocket = new WebSocket(
     'wss://' + window.location.host +
     ':8002/ws/chat/notifications/');
