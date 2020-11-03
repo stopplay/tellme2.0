@@ -40,7 +40,7 @@
                     <select class="custom-select chosen-select" id="select_form_school">
                       <option id="" value="0">--------</option>
                       {% for school in schools %}
-                      <option value="{{ school.school_id }}" {% if selected_school == school.school_id  %} selected {% endif %}>{{ school.school_name }}</option>
+                      <option value="{{ school.school_id }}" {% if school.school_id == selected_school  %} selected {% endif %}>{{ school.school_name }}</option>
                       {% endfor %}
                     </select>
                   </div>
