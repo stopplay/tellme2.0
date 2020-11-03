@@ -38,56 +38,45 @@
                   <div class="labelandform col-md-6">
                     <p><label>Selecione a Escola:</label></p>
                     <select class="custom-select chosen-select" id="select_form_school">
-                      <option id="" value="0" selected>--------</option>
+                      <option id="" value="0">--------</option>
                       {% for school in schools %}
-                      <option value="{{ school.school_id }}">{{ school.school_name }}</option>
+                      <option {% if selected_school == school.school_id  %} selected {% endif %} value="{{ school.school_id }}">{{ school.school_name }}</option>
                       {% endfor %}
                     </select>
                   </div>
                   <div class="labelandform col-md-6">
                     <p><label>Selecione a Turma:</label></p>
                     <select class="custom-select chosen-select" id="select_form_class">
-                      <option id="" value="0" selected>--------</option>
+                      <option id="" value="0">--------</option>
                     </select>
                   </div>
                 </div>
-                <div class="labelandform" style="margin-top: 0px;">
-                  <label>Contratos de: <input style="font-size: 0.78rem; width:46.2%;" type="date" id="initial_date" name="initial_date"> 
-                    a: <input style="font-size: 0.78rem; width:46.2%;" type="date" id="final_date" name="final_date"></label>
+                <div class="row">
+                  <div class="labelandform col-md-12">
+                    <p><label>Selecione o Filtro:</label></p>
+                    <select class="custom-select chosen-select" id="select_form_filter">
+                      <option id="" value="">--------</option>
+                      <option value="signed_RF/RP1" {% if selected_filter == 'signed_RF/RP1' %} selected {% endif %}>Contratos assinados pelo Responsável Financeiro e Pedagógico</option>
+                      <option value="signed_DIR" {% if selected_filter == 'signed_DIR' %} selected {% endif %}>Contratos assinados pelo Diretor</option>
+                      <option value="purchased_slm" {% if selected_filter == 'purchased_slm' %} selected {% endif %}>Contratos com material já comprado</option>
+                      <option value="not_signed_RF/RP1" {% if selected_filter == 'not_signed_RF/RP1' %} selected {% endif %}>Contratos não assinados pelo Responsável Financeiro e Pedagógico</option>
+                      <option value="not_signed_DIR" {% if selected_filter == 'not_signed_DIR' %} selected {% endif %}>Contratos não assinados pelo Diretor</option>
+                      <option value="not_purchased_slm" {% if selected_filter == 'not_purchased_slm' %} selected {% endif %}>Contratos com material não comprado</option>
+                    </select>
+                  </div>
                 </div>
-                
-                <label>Mostrar contratos assinados pelo Responsável Financeiro e Pedagógico?</label><br><label
-                    style="margin-right: 10px">Não</label><label class="switch">
-                    <input type="checkbox" id="first_checkbox">
-                    <a id="first_slider" class="slider round"></a>
-                  </label><label style="margin-left: 10px">Sim</label>
-            </div>
-            <div>
-              <p><label>Mostrar contratos assinados pelo Diretor?</label><br><label
-                  style="margin-right: 10px">Não</label><label class="switch"><input type="checkbox"
-                    id="second_checkbox"><a id="second_slider" class="slider round"></a></label><label
-                  style="margin-left: 10px">Sim</label></p>
-            </div>
-            <div>
-              <p><label>Mostrar contratos com material já comprado?</label><br><label
-                  style="margin-right: 10px">Não</label><label class="switch"><input type="checkbox"
-                    id="third_checkbox"><a id="third_slider" class="slider round"></a></label><label
-                  style="margin-left: 10px">Sim</label></p>
-            </div>
-            <input type="hidden" id="signed_RF/RP1" name="signed_RF/RP1" value="não">
-            <input type="hidden" id="signed_DIR" name="signed_DIR" value="não">
-            <input type="hidden" id="purchased_contract" name="purchased_contract" value="não">
-            <input type="hidden" id="selected_school" name="selected_school" value="0">
-            <input type="hidden" id="selected_class" name="selected_class" value="0">
-            <input type="text" id="search" name="search"
-              placeholder="Insira o nome do aluno, o nome da escola ou o nome da turma">
-            <input type="hidden" id="selected_chain" name="selected_chain">
-            <div style="margin-top: 10px"><button class="btn btn-info btn-fill pull-left" type="submit"
-                style="background-color: #213f99; border-color: #213f99">Pesquisar Contratos</button>
-              <!-- <button class="btn btn-info btn-fill pull-right" id="generate_password" style="background-color: #213f99; border-color: #213f99" onclick="generate_password()">
-															Gerar Senha</button> -->
-            </div>
-            <div class="clearfix"></div>
+                <input type="hidden" id="selected_filter" name="selected_filter" value="">
+                <input type="hidden" id="selected_school" name="selected_school" value="0">
+                <input type="hidden" id="selected_class" name="selected_class" value="0">
+                <input type="text" id="search" name="search"
+                  placeholder="Insira o nome do aluno, o nome da escola ou o nome da turma">
+                <input type="hidden" id="selected_chain" name="selected_chain">
+                <div style="margin-top: 10px"><button class="btn btn-info btn-fill pull-left" type="submit"
+                    style="background-color: #213f99; border-color: #213f99">Pesquisar Contratos</button>
+                  <!-- <button class="btn btn-info btn-fill pull-right" id="generate_password" style="background-color: #213f99; border-color: #213f99" onclick="generate_password()">
+                                  Gerar Senha</button> -->
+                </div>
+                <div class="clearfix"></div>
             </form>
           </div>
         </div>
@@ -1156,14 +1145,13 @@
     });
   });
   $(document).ready(function () {
-    $('#select_form').on('change', function () {
-      setGenPasswordToFields(['id_{{user_form.password1.name}}', 'id_{{user_form.password2.name}}']);
+    $('#select_form_filter').on('change', function () {
       var selectValor = $(this).val();
       if (selectValor == '') {
-        document.getElementById('selected_chain').value = ''
+        document.getElementById('selected_filter').value = ''
       }
       else {
-        document.getElementById('selected_chain').value = selectValor
+        document.getElementById('selected_filter').value = selectValor
       }
     });
   });
@@ -1244,37 +1232,8 @@
     jQuery(window).on('resize', function () {
       $("#select_form_school_chosen").attr('style', 'width: 100%');
       $("#select_form_class_chosen").attr('style', 'width: 100%');
+      $("#select_form_filter_chosen").attr('style', 'width: 100%');
     });
-  });
-  $(document).on("click", "#first_slider", function () {
-    if (!$('#first_checkbox').prop("checked")) {
-      document.getElementById('signed_RF/RP1').value = 'sim'
-      $('#first_checkbox').attr('checked')
-    }
-    else {
-      document.getElementById('signed_RF/RP1').value = 'não'
-      $('#first_checkbox').removeAttr('checked')
-    }
-  });
-  $(document).on("click", "#second_slider", function () {
-    if (!$('#second_checkbox').prop("checked")) {
-      document.getElementById('signed_DIR').value = 'sim'
-      $('#second_checkbox').attr('checked')
-    }
-    else {
-      document.getElementById('signed_DIR').value = 'não'
-      $('#second_checkbox').removeAttr('checked')
-    }
-  });
-  $(document).on("click", "#third_slider", function () {
-    if (!$('#third_checkbox').prop("checked")) {
-      document.getElementById('purchased_contract').value = 'sim'
-      $('#third_checkbox').attr('checked')
-    }
-    else {
-      document.getElementById('purchased_contract').value = 'não'
-      $('#third_checkbox').removeAttr('checked')
-    }
   });
 
 </script>
