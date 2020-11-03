@@ -1044,7 +1044,7 @@ def seecontractsbyquery(request):
             fetched = True
         query = {
             'selected_school': selected_school,
-            'selected_classe': selected_classe,
+            'selected_class': selected_class,
             'selected_filter': selected_filter,
             'search': search
         }
