@@ -1021,11 +1021,11 @@ def seecontractsbyquery(request):
         school = None
         classe = None
         fetched = False
-        selected_school = request.POST.get('selected_school' or None)
+        selected_school = request.POST.get('selected_school' or 0)
         selected_filter = request.POST.get('selected_filter' or None)
         initial_date = request.POST.get('initial_date' or None)
         final_date = request.POST.get('final_date' or None)
-        selected_class = request.POST.get('selected_class' or None)
+        selected_class = request.POST.get('selected_class' or 0)
         if School.objects.filter(school_id=selected_school).count()>=1:
             school = School.objects.get(school_id=selected_school)
         if Class.objects.filter(class_id=selected_class).count()>=1:
