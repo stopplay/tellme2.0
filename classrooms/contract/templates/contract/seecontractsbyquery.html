@@ -110,7 +110,7 @@
           </div>
           <form>
             <div class="card-body table-full-width table-responsive">
-              {% if is_supervisor %}
+              {% if is_supervisor or is_witness %}
               <div class="col-md-12">
                 <button id="sign-multiple-id1"
                   class="multi-select-button btn btn-dark btn-sm btn-block sign-multiples-buttons" data-toggle="modal"
@@ -124,7 +124,7 @@
                   <tr>
                     {% if is_supervisor or is_witness %}
                     <th>
-                      <input id="selectall" type="checkbox" name="selectall">
+                      <input id="selectall" type="checkbox" name="selectall" onclick="select_all(this)">
                     </th>
                     {% endif %}
                     <th>Id do Contrato</th>
@@ -954,6 +954,28 @@
   chatSocket.onclose = function (e) {
     console.error('Chat socket closed unexpectedly');
   };
+  function select_all(ele) {
+    var allCheckboxes = document.getElementsByName('checks');
+    var is_witness = `{{ is_witness|yesno:"true,false" }}`;
+    allCheckboxes.forEach(function (checkbox) {
+      if (is_witness){
+        contract = document.getElementById(`${checkbox.value}_all_witness_signed`)
+      }
+      else{
+        contract = document.getElementById(`${checkbox.value}_counter_signed`)
+      }
+      if (ele.checked){
+        if (contract.classList.contains('badge-danger')){
+          checkbox.checked = true;
+        }
+      }
+      else{
+        if (contract.classList.contains('badge-danger')){
+          checkbox.checked = false;
+        }
+      }
+      });
+  }
   function signContract(url) {
     setTimeout(function () {
       // window.location.assign(url);
