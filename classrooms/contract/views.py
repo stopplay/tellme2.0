@@ -987,6 +987,7 @@ def seecontractsbyquery(request):
     contracts = []
     chains_to_select = []
     is_supervisor = False
+    is_witness = False
     search = None
     selected_school = None
     selected_class = None
@@ -996,16 +997,18 @@ def seecontractsbyquery(request):
     parent = getattr(request.user, 'parent', None)
     student = getattr(request.user, 'student', None)
     witness = getattr(request.user, 'witness', None)
-    if parent or student or witness:
+    if parent or student:
         return seemycontracts(request)
-    elif head or supervisor:
-        is_supervisor = True
+    elif head or supervisor or witness:
         if head:
+            is_supervisor = True
             schools = School.objects.filter(heads__head_id__exact=head.head_id).order_by('school_name')
         elif supervisor:
+            is_supervisor = True
             schools = School.objects.filter(Q(adminorsupervisor=supervisor)|Q(adminorsupervisor_2=supervisor)).order_by('school_name')
-        # elif witness:
-        #     schools = School.objects.filter(Q(first_witness_school=witness)|Q(second_witness_school=witness)).order_by('school_name')
+        elif witness:
+            is_witness = True
+            schools = School.objects.filter(Q(first_witness=witness)|Q(second_witness=witness)).order_by('school_name')
         for school in schools:
             for chain in school.chains.all():
                 if chain not in chains_to_select:
@@ -1053,7 +1056,7 @@ def seecontractsbyquery(request):
         if not schools:
             messages.error(request, 'O tipo de usuário que está tentando acessar estes dados não se encaixa em nenhum dos tipos propostos pelo sistema.')
             return seemycontracts(request)
-    return render(request, 'contract/seecontractsbyquery.html', {'search':search, 'chains_to_select':chains_to_select, 'contracts':contracts, 'schools':schools, 'is_supervisor':is_supervisor, 'selected_school': selected_school, 'selected_class': selected_class})
+    return render(request, 'contract/seecontractsbyquery.html', {'search':search, 'chains_to_select':chains_to_select, 'contracts':contracts, 'schools':schools, 'is_supervisor':is_supervisor, 'is_witness':is_witness, 'selected_school': selected_school, 'selected_class': selected_class})
 
 @csrf_exempt
 def createacontract_rest(request):

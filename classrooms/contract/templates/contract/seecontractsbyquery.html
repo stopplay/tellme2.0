@@ -122,7 +122,7 @@
               <table class="table table-hover table-striped display row-border mb-4" id="contractstable">
                 <thead>
                   <tr>
-                    {% if is_supervisor %}
+                    {% if is_supervisor or is_witness %}
                     <th>
                       <input id="selectall" type="checkbox" name="selectall">
                     </th>
@@ -143,13 +143,29 @@
                   {% for contract in contracts %}
                   <tr class="pb-5">
                     {% if is_supervisor %}
-                    <td>
-                      {% if contract.counter_signed %}
-                      <label><input type="checkbox" name="checks" value="{{ contract.contract_id }}" checked></label>
-                      {% else %}
-                      <input type="checkbox" name="checks" value="{{ contract.contract_id }}">
-                      {% endif %}
-                    </td>
+                      <td>
+                        {% if contract.counter_signed %}
+                          <label><input type="checkbox" name="checks" value="{{ contract.contract_id }}" checked></label>
+                        {% else %}
+                          <input type="checkbox" name="checks" value="{{ contract.contract_id }}">
+                        {% endif %}
+                      </td>
+                    {% elif is_witness %}
+                      <td>
+                        {% if request.user == contract.first_witness_signe.profile %}
+                          {% if contract.first_witness_signed %}
+                            <label><input type="checkbox" name="checks" value="{{ contract.contract_id }}" checked></label>
+                          {% else %}
+                            <input type="checkbox" name="checks" value="{{ contract.contract_id }}">
+                          {% endif %}
+                        {% elif request.user == contract.second_witness_signe.profile %}
+                          {% if contract.second_witness_signed %}
+                            <label><input type="checkbox" name="checks" value="{{ contract.contract_id }}" checked></label>
+                          {% else %}
+                            <input type="checkbox" name="checks" value="{{ contract.contract_id }}">
+                          {% endif %}
+                        {% endif %}
+                      </td>
                     {% endif %}
 
                     <th>
@@ -917,18 +933,8 @@
         button.removeAttribute('href');
       }
     }
-    if (contract['all_signiture_signed'] == true) {
-      document.getElementById(`${contract['contract_id']}_all_signe_signed`).className = 'badge badge-pill badge-success text-success float-right';
-      let button = document.getElementById(`${contract['contract_id']}_all_signe_signed_button`);
-      if (button) {
-        button.className = 'btn btn-success btn-block w-100';
-        button.style = 'cursor: not-allowed;';
-        button.innerText = 'Assinado';
-        button.removeAttribute('data-togle');
-        button.removeAttribute('onclick');
-        button.removeAttribute('data-target');
-        button.removeAttribute('href');
-      }
+    if (contract['all_witness_signed'] == true) {
+      document.getElementById(`${contract['contract_id']}_all_witness_signed`).className = 'badge badge-pill badge-success text-success float-right';
     }
     if (contract['all_signed'] == true) {
       document.getElementById(`${contract['contract_id']}_all_signed`).className = 'badge badge-pill badge-success text-success float-right';
@@ -1071,18 +1077,8 @@
               button.removeAttribute('href');
             }
           }
-          if (contract['all_signiture_signed'] == true) {
-            document.getElementById(`${contract['contract_id']}_all_signe_signed`).className = 'badge badge-pill badge-success text-success float-right';
-            let button = document.getElementById(`${contract['contract_id']}_all_signe_signed_button`);
-            if (button) {
-              button.className = 'btn btn-success btn-block w-100';
-              button.style = 'cursor: not-allowed;';
-              button.innerText = 'Assinado';
-              button.removeAttribute('data-togle');
-              button.removeAttribute('onclick');
-              button.removeAttribute('data-target');
-              button.removeAttribute('href');
-            }
+          if (contract['all_witness_signed'] == true) {
+            document.getElementById(`${contract['contract_id']}_all_witness_signed`).className = 'badge badge-pill badge-success text-success float-right';
           }
           if (contract['all_signed'] == true) {
             document.getElementById(`${contract['contract_id']}_all_signed`).className = 'badge badge-pill badge-success text-success float-right';
@@ -1171,6 +1167,7 @@
   window.addEventListener('load', function () {
 
     var element1 = document.getElementById("sign-multiple-id1");
+    var is_witness = `{{ is_witness|yesno:"true,false" }}`;
 
     element1.addEventListener('click', trySignMultiples);
 
@@ -1203,7 +1200,12 @@
                 credentials: 'same-origin',
                 cache: 'default'
               };
-              contract = document.getElementById(`${checkbox.value}_counter_signed`)
+              if (is_witness){
+                contract = document.getElementById(`${checkbox.value}_all_witness_signed`)
+              }
+              else{
+                contract = document.getElementById(`${checkbox.value}_counter_signed`)
+              }
               if (contract.classList.contains('badge-danger')){
                 if (checkbox.checked || selectall.checked) {
                   fetch(`/contracts/set_signed/${checkbox.value}`, myInit)
