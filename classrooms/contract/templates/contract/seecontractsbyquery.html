@@ -969,11 +969,9 @@
     var is_witness = `{{ is_witness|yesno:"true,false" }}`;
     allCheckboxes.forEach(function (checkbox) {
       if (is_witness === 'true'){
-        console.log(`${checkbox.value}_all_witness_signed`)
         contract = document.getElementById(`${checkbox.value}_all_witness_signed`)
       }
       else{
-        console.log(`${checkbox.value}_counter_signed`)
         contract = document.getElementById(`${checkbox.value}_counter_signed`)
       }
       console.log(contract)
