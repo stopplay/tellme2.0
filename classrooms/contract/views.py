@@ -1043,8 +1043,8 @@ def seecontractsbyquery(request):
             contracts = contracts.filter(chain__name__icontains=classe.class_name)
             fetched = True
         query = {
-            'selected_school': selected_school,
-            'selected_class': selected_class,
+            'selected_school': int(selected_school) if selected_school else 0,
+            'selected_class': int(selected_class) if selected_class else 0,
             'selected_filter': selected_filter,
             'search': search
         }
