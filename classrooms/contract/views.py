@@ -1054,9 +1054,9 @@ def seecontractsbyquery(request):
             elif selected_filter == 'purchased_slm':
                 contracts = contracts.filter(purchased_slm=True)
             elif selected_filter == 'not_signed_RF/RP1':
-                contracts = contracts.filter(Q(first_auth_signed=True) | Q(second_auth_signed=True))
+                contracts = contracts.filter(Q(first_auth_signed=False) | Q(second_auth_signed=False))
             elif selected_filter == 'not_signed_DIR':
-                contracts = contracts.filter(counter_signed=True)
+                contracts = contracts.filter(counter_signed=False)
             elif selected_filter == 'not_purchased_slm':
                 contracts = contracts.filter(purchased_slm=False)
         if not schools:
