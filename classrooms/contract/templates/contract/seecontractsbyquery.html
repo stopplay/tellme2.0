@@ -57,10 +57,10 @@
                     <select class="custom-select chosen-select" id="select_form_filter">
                       <option id="" value="">--------</option>
                       <option value="signed_RF/RP1" {% if query.selected_filter == 'signed_RF/RP1' %} selected {% endif %}>Contratos assinados pelo Responsável Financeiro e Pedagógico</option>
-                      <option value="signed_DIR" {% if query.selected_filter == 'signed_DIR' %} selected {% endif %}>Contratos assinados pelo Diretor</option>
-                      <option value="purchased_slm" {% if query.selected_filter == 'purchased_slm' %} selected {% endif %}>Contratos com material já comprado</option>
                       <option value="not_signed_RF/RP1" {% if query.selected_filter == 'not_signed_RF/RP1' %} selected {% endif %}>Contratos não assinados pelo Responsável Financeiro e Pedagógico</option>
+                      <option value="signed_DIR" {% if query.selected_filter == 'signed_DIR' %} selected {% endif %}>Contratos assinados pelo Diretor</option>
                       <option value="not_signed_DIR" {% if query.selected_filter == 'not_signed_DIR' %} selected {% endif %}>Contratos não assinados pelo Diretor</option>
+                      <option value="purchased_slm" {% if query.selected_filter == 'purchased_slm' %} selected {% endif %}>Contratos com material já comprado</option>
                       <option value="not_purchased_slm" {% if query.selected_filter == 'not_purchased_slm' %} selected {% endif %}>Contratos com material não comprado</option>
                     </select>
                   </div>
