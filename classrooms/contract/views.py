@@ -987,22 +987,30 @@ def seecontractsbyquery(request):
     contracts = []
     chains_to_select = []
     is_supervisor = False
+    is_witness = False
     search = None
     selected_school = None
     selected_class = None
+    selected_filter = None
     schools = []
-    if Parent.objects.filter(profile=request.user).count()>=1 or Student.objects.filter(profile=request.user).count()>=1 or Witness.objects.filter(profile=request.user).count()>=1:
+    head = getattr(request.user, 'head', None)
+    supervisor = getattr(request.user, 'supervisor', None)
+    parent = getattr(request.user, 'parent', None)
+    student = getattr(request.user, 'student', None)
+    witness = getattr(request.user, 'witness', None)
+    query = []
+    if parent or student:
         return seemycontracts(request)
-    elif Head.objects.filter(profile=request.user).count()>=1:
-        is_supervisor = True
-        schools = School.objects.filter(heads__head_id__exact=Head.objects.get(profile=request.user).head_id).order_by('school_name')
-        for school in schools:
-            for chain in school.chains.all():
-                if chain not in chains_to_select:
-                    chains_to_select += [(chain)]
-    elif Supervisor.objects.filter(profile=request.user).count()>=1:
-        is_supervisor = True
-        schools = School.objects.filter(Q(adminorsupervisor=Supervisor.objects.get(profile=request.user))|Q(adminorsupervisor_2=Supervisor.objects.get(profile=request.user))).order_by('school_name')
+    elif head or supervisor or witness:
+        if head:
+            is_supervisor = True
+            schools = School.objects.filter(heads__head_id__exact=head.head_id).order_by('school_name')
+        elif supervisor:
+            is_supervisor = True
+            schools = School.objects.filter(Q(adminorsupervisor=supervisor)|Q(adminorsupervisor_2=supervisor)).order_by('school_name')
+        elif witness:
+            is_witness = True
+            schools = School.objects.filter(Q(first_witness=witness)|Q(second_witness=witness)).order_by('school_name')
         for school in schools:
             for chain in school.chains.all():
                 if chain not in chains_to_select:
@@ -1015,16 +1023,18 @@ def seecontractsbyquery(request):
         classe = None
         fetched = False
         selected_school = request.POST.get('selected_school' or None)
-        signed_RFRP1 = request.POST.get('signed_RF/RP1' or None)
-        signed_DIR = request.POST.get('signed_DIR' or None)
-        purchased_contract = request.POST.get('purchased_contract' or None)
+        selected_filter = request.POST.get('selected_filter' or None)
         initial_date = request.POST.get('initial_date' or None)
         final_date = request.POST.get('final_date' or None)
         selected_class = request.POST.get('selected_class' or None)
-        if School.objects.filter(school_id=selected_school).count()>=1:
+        try:
             school = School.objects.get(school_id=selected_school)
-        if Class.objects.filter(class_id=selected_class).count()>=1:
+        except:
+            school = None
+        try:
             classe = Class.objects.get(class_id=selected_class)
+        except:
+            classe = None
         search = request.POST.get('search' or None)
         if school:
             contracts = Contract.objects.filter(chain__name__icontains=school.school_name)
@@ -1032,6 +1042,12 @@ def seecontractsbyquery(request):
         if classe:
             contracts = contracts.filter(chain__name__icontains=classe.class_name)
             fetched = True
+        query = {
+            'selected_school': int(selected_school) if selected_school else 0,
+            'selected_class': int(selected_class) if selected_class else 0,
+            'selected_filter': selected_filter,
+            'search': search
+        }
         if not fetched:
             contracts = Contract.objects.filter(chain__in=chains_to_select)
 
@@ -1041,16 +1057,23 @@ def seecontractsbyquery(request):
             contracts = contracts.filter(date__gte=initial_date)
         if final_date:
             contracts = contracts.filter(date__lte=final_date)
-        if signed_RFRP1 == 'sim':
-            contracts = contracts.filter(first_auth_signed=True, second_auth_signed=True)
-        if signed_DIR == 'sim':
-            contracts = contracts.filter(counter_signed=True)
-        if purchased_contract == 'sim':
-            contracts = contracts.filter(purchased_slm=True)
+        if selected_filter:
+            if selected_filter == 'signed_RF/RP1':
+                contracts = contracts.filter(first_auth_signed=True, second_auth_signed=True)
+            elif selected_filter == 'signed_DIR':
+                contracts = contracts.filter(counter_signed=True)
+            elif selected_filter == 'purchased_slm':
+                contracts = contracts.filter(purchased_slm=True)
+            elif selected_filter == 'not_signed_RF/RP1':
+                contracts = contracts.filter(Q(first_auth_signed=False) | Q(second_auth_signed=False))
+            elif selected_filter == 'not_signed_DIR':
+                contracts = contracts.filter(counter_signed=False)
+            elif selected_filter == 'not_purchased_slm':
+                contracts = contracts.filter(purchased_slm=False)
         if not schools:
             messages.error(request, 'O tipo de usuário que está tentando acessar estes dados não se encaixa em nenhum dos tipos propostos pelo sistema.')
             return seemycontracts(request)
-    return render(request, 'contract/seecontractsbyquery.html', {'search':search, 'chains_to_select':chains_to_select, 'contracts':contracts, 'schools':schools, 'is_supervisor':is_supervisor, 'selected_school': selected_school, 'selected_class': selected_class})
+    return render(request, 'contract/seecontractsbyquery.html', {'search':search, 'chains_to_select':chains_to_select, 'contracts':contracts, 'schools':schools, 'is_supervisor':is_supervisor, 'is_witness':is_witness, 'selected_school': selected_school, 'selected_class': selected_class, 'selected_filter':selected_filter, 'query': query})
 
 @csrf_exempt
 def createacontract_rest(request):
