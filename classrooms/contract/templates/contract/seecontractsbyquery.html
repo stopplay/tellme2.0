@@ -1227,14 +1227,12 @@
                 credentials: 'same-origin',
                 cache: 'default'
               };
-              if (is_witness){
+              if (is_witness === 'true'){
                 contract = document.getElementById(`${checkbox.value}_all_witness_signed`)
               }
               else{
                 contract = document.getElementById(`${checkbox.value}_counter_signed`)
-                console.log('Entrou')
               }
-              console.log(contract.classList.contains('badge-danger'))
               if (contract.classList.contains('badge-danger')){
                 if (checkbox.checked || selectall.checked) {
                   fetch(`/contracts/set_signed/${checkbox.value}`, myInit)
