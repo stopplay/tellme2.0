@@ -1235,13 +1235,13 @@
               }
               if (contract.classList.contains('badge-danger')){
                 if (checkbox.checked || selectall.checked) {
-                  console.log('Entrou 2')
                   fetch(`/contracts/queue_set_signed/${checkbox.value}`, myInit)
+                  console.log('Entrou')
                 }
               }
             });
+            window.location.assign('/contracts/all/')
           }, 10);
-          window.location.assign('/contracts/all/')
         }, 2000);
       }
     }
