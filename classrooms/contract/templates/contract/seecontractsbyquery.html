@@ -1232,6 +1232,8 @@
               }
               else{
                 contract = document.getElementById(`${checkbox.value}_counter_signed`)
+                console.log('Entrou')
+                console.log(contract.classList.contains('badge-danger'))
               }
               if (contract.classList.contains('badge-danger')){
                 if (checkbox.checked || selectall.checked) {
@@ -1240,7 +1242,7 @@
               }
             });
             window.location.assign('/contracts/all/')
-          }, 10000);
+          }, 10);
         }, 2000);
       }
     }
