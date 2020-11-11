@@ -850,6 +850,7 @@ def get_terms_of_contract_2_filepath(contract=None):
 def get_terms_of_contract_2_signed_output_filepath(contract=None):
     return settings.MEDIA_ROOT+'/'+contract.terms_of_contract_2.name+'signed'
 
+@app.task
 def write_pdf(contract=None, whosigned=None, school=None):
     
     packet = StringIO()
@@ -960,14 +961,12 @@ def queue_signiture(contract, who_sign, user_id):
             if block.is_valid_block(block.chain.last_block):
                 print(block.is_valid_block(block.chain.last_block))
                 block.save()
-        attachments = []
-        head = Head.objects.get(head_id=user_id)
         contract.counter_signed = True
         contract.counter_signed_timestamp = block.time_stamp
         contract.counter_auth_hash = block.hash
         school = School.objects.get(chains__id__exact=contract.chain.id)
         contract.save(update_fields=['counter_signed', 'counter_signed_timestamp', 'counter_auth_hash'])
-        write_pdf(contract, 'director', school)
+        write_pdf.delay(contract, 'director', school)
     elif who_sign == 'parent':
         form = BlockModelFormByContract()
         block = form.save(commit=False)
@@ -1002,21 +1001,21 @@ def queue_signiture(contract, who_sign, user_id):
             contract.first_auth_hash = block.hash
             school = School.objects.get(chains__id__exact=contract.chain.id)
             contract.save(update_fields=['first_auth_signed', 'first_auth_signed_timestamp', 'first_auth_hash'])
-            write_pdf(contract, 'first_auth', None)
+            write_pdf.delay(contract, 'first_auth', None)
         if contract.second_auth_signe == parent:
             contract.second_auth_signed = True
             contract.second_auth_signed_timestamp = block.time_stamp
             contract.second_auth_hash = block.hash
             school = School.objects.get(chains__id__exact=contract.chain.id)
             contract.save(update_fields=['second_auth_signed', 'second_auth_signed_timestamp', 'second_auth_hash'])
-            write_pdf(contract, 'second_auth', None)
+            write_pdf.delay(contract, 'second_auth', None)
         if contract.third_auth_signe == parent:
             contract.third_auth_signed = True
             contract.third_auth_signed_timestamp = block.time_stamp
             contract.third_auth_hash = block.hash
             school = School.objects.get(chains__id__exact=contract.chain.id)
             contract.save(update_fields=['third_auth_signed', 'third_auth_signed_timestamp', 'third_auth_hash'])
-            write_pdf(contract, 'third_auth', None)
+            write_pdf.delay(contract, 'third_auth', None)
     elif who_sign == 'student':
         form = BlockModelFormByContract()
         block = form.save(commit=False)
@@ -1043,13 +1042,11 @@ def queue_signiture(contract, who_sign, user_id):
             if block.is_valid_block(block.chain.last_block):
                 print(block.is_valid_block(block.chain.last_block))
                 block.save()
-        attachments = []
-        student = Student.objects.get(student_id=user_id)
         contract.student_auth_signed = True
         contract.student_auth_signed_timestamp = block.time_stamp
         contract.student_auth_hash = block.hash
         contract.save(update_fields=['student_auth_signed', 'student_auth_signed_timestamp', 'student_auth_hash'])
-        write_pdf(contract, 'student_auth')
+        write_pdf.delay(contract, 'student_auth')
     elif who_sign == 'witness':
         form = BlockModelFormByContract()
         block = form.save(commit=False)
@@ -1084,14 +1081,14 @@ def queue_signiture(contract, who_sign, user_id):
             contract.first_witness_hash = block.hash
             school = School.objects.get(chains__id__exact=contract.chain.id)
             contract.save(update_fields=['first_witness_signed', 'first_witness_signed_timestamp', 'first_witness_hash'])
-            write_pdf(contract, 'first_witness', None)
+            write_pdf.delay(contract, 'first_witness', None)
         if contract.second_witness_signe == witness:
             contract.second_witness_signed = True
             contract.second_witness_signed_timestamp = block.time_stamp
             contract.second_witness_hash = block.hash
             school = School.objects.get(chains__id__exact=contract.chain.id)
             contract.save(update_fields=['second_witness_signed', 'second_witness_signed_timestamp', 'second_witness_hash'])
-            write_pdf(contract, 'second_witness', None)
+            write_pdf.delay(contract, 'second_witness', None)
     contract = Contract.objects.get(contract_id=contract.contract_id)
     if contract.first_witness_signe and contract.first_witness_signe:
         if contract.first_witness_signed and contract.second_witness_signed:
@@ -1101,7 +1098,7 @@ def queue_signiture(contract, who_sign, user_id):
         if contract.third_auth_signe:
             if (contract.first_auth_signed and contract.second_auth_signed and contract.third_auth_signe and contract.counter_signed and contract.all_witness_signed) or (contract.student_auth_signed and contract.third_auth_signe and contract.counter_signed and contract.all_witness_signed):
                 contract.all_signed = True
-                write_pdf(request, contract, 'all_signed')
+                write_pdf.delay(contract, 'all_signed')
                 contract.save(update_fields=['all_signed'])
                 contract_rest = ContractSerializerMinimal(contract)
                 send_data(contract_rest)
@@ -1109,7 +1106,7 @@ def queue_signiture(contract, who_sign, user_id):
         else:
                 if (contract.first_auth_signed and contract.second_auth_signed and contract.counter_signed and contract.all_witness_signed) or (contract.student_auth_signed and contract.counter_signed and contract.all_witness_signed):
                     contract.all_signed = True
-                    write_pdf(contract, 'all_signed')
+                    write_pdf.delay(contract, 'all_signed')
                     contract.save(update_fields=['all_signed'])
                     contract_rest = ContractSerializerMinimal(contract)
                     send_data(contract_rest)
@@ -1118,7 +1115,7 @@ def queue_signiture(contract, who_sign, user_id):
         if contract.third_auth_signe:
             if (contract.first_auth_signed and contract.second_auth_signed and contract.third_auth_signe and contract.counter_signed) or (contract.student_auth_signed and contract.third_auth_signe and contract.counter_signed):
                 contract.all_signed = True
-                write_pdf(contract, 'all_signed')
+                write_pdf.delay(contract, 'all_signed')
                 contract.save(update_fields=['all_signed'])
                 contract_rest = ContractSerializerMinimal(contract)
                 send_data(contract_rest)
@@ -1126,7 +1123,7 @@ def queue_signiture(contract, who_sign, user_id):
         else:
             if (contract.first_auth_signed and contract.second_auth_signed and contract.counter_signed) or (contract.student_auth_signed and contract.counter_signed):
                 contract.all_signed = True
-                write_pdf(contract, 'all_signed')
+                write_pdf.delay(contract, 'all_signed')
                 contract.save(update_fields=['all_signed'])
                 contract_rest = ContractSerializerMinimal(contract)
                 send_data(contract_rest)
