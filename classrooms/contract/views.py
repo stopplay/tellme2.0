@@ -1473,7 +1473,6 @@ def queue_set_signed(request, contract_id = None):
             tasks.queue_signiture.delay(contract_rest.data, 'witness', witness.witness_id)
     else:
         messages.warning(request, 'Você não é diretor nem pai do estudante deste contrato!')
-    contract_rest = ContractSerializerMinimal(contract)
     return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
 
 @login_required
