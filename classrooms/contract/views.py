@@ -1464,13 +1464,13 @@ def queue_set_signed(request, contract_id = None):
                 return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
     if head or parent or student or witness:
         if head:
-            tasks.queue_signiture.delay(contract_rest, 'head', head.head_id)
+            tasks.queue_signiture.delay(contract_rest.data, 'head', head.head_id)
         elif parent:
-            tasks.queue_signiture.delay(contract_rest, 'parent', parent.parent_id)
+            tasks.queue_signiture.delay(contract_rest.data, 'parent', parent.parent_id)
         elif student:
-            tasks.queue_signiture.delay(contract_rest, 'student', student.student_id)
+            tasks.queue_signiture.delay(contract_rest.data, 'student', student.student_id)
         elif witness:
-            tasks.queue_signiture.delay(contract_rest, 'witness', witness.witness_id)
+            tasks.queue_signiture.delay(contract_rest.data, 'witness', witness.witness_id)
     else:
         messages.warning(request, 'Você não é diretor nem pai do estudante deste contrato!')
     contract_rest = ContractSerializerMinimal(contract)
