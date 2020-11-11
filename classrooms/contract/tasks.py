@@ -34,6 +34,7 @@ import tempfile
 from classrooms import settings
 import shutil
 from PyPDF2 import PdfFileMerger, PdfFileWriter, PdfFileReader
+from django.http import HttpResponse, Http404, HttpResponseRedirect, JsonResponse
 from svglib.svglib import svg2rlg
 try:
     from StringIO import StringIO
@@ -1096,7 +1097,7 @@ def queue_signiture(contract, who_sign, user_id):
         if contract.first_witness_signed and contract.second_witness_signed:
             contract.all_witness_signed = True
             contract.save(update_fields=['all_witness_signed'])
-        contract = Contract.objects.get(contract_id=contract_id)
+        contract = Contract.objects.get(contract_id=contract.contract_id)
         if contract.third_auth_signe:
             if (contract.first_auth_signed and contract.second_auth_signed and contract.third_auth_signe and contract.counter_signed and contract.all_witness_signed) or (contract.student_auth_signed and contract.third_auth_signe and contract.counter_signed and contract.all_witness_signed):
                 contract.all_signed = True
