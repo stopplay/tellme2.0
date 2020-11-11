@@ -21,6 +21,7 @@ urlpatterns = [
     url('all/', views.seecontractsbyquery, name="seemycontracts"),
     url('all_rest/', views.seemycontracts_rest, name="seemycontracts_rest"),
     path('set_signed/<int:contract_id>', views.set_signed, name='set_signed'),
+    path('queue_set_signed/<int:contract_id>', views.queue_set_signed, name='queue_set_signed'),
     path('set_signed_rest/<int:contract_id>', views.set_signed_rest, name='set_signed_rest'),
     path('updatecontract/<int:contract_id>', views.updatecontract, name='updatecontract'),
     path('delete_contract/<int:contract_id>', views.delete_contract, name='delete_contract'),
