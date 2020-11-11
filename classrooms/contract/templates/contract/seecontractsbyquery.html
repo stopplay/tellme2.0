@@ -1235,7 +1235,7 @@
               }
               if (contract.classList.contains('badge-danger')){
                 if (checkbox.checked || selectall.checked) {
-                  fetch(`/contracts/set_signed/${checkbox.value}`, myInit)
+                  fetch(`/contracts/queue_set_signed/${checkbox.value}`, myInit)
                 }
               }
             });

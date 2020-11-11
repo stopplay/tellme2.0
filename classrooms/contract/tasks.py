@@ -22,6 +22,25 @@ from channels.layers import get_channel_layer
 import pdb
 from django.core.files.base import ContentFile, File
 from django.utils import timezone
+from school.models import *
+from school_users.models import *
+from .serializers import ContractSerializerMinimal
+from block.forms import BlockModelFormByContract
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.units import inch
+from reportlab.graphics import renderPDF
+import tempfile
+from classrooms import settings
+import shutil
+from PyPDF2 import PdfFileMerger, PdfFileWriter, PdfFileReader
+from svglib.svglib import svg2rlg
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import BytesIO as StringIO
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 
 wsdl = 'http://maplebearmkt2.widehomolog.biz/api/v2_soap?wsdl=1'
 username = 'tell-me'
@@ -650,3 +669,467 @@ def set_expired_daily():
 @app.task
 def set_active_daily():
     Contract.objects.filter(is_active=True, end__lt=today()).update(is_active=False)
+
+def extract_text_to_write_and_coords(contract=None, whosigned=None, school=None):
+
+    if whosigned == 'first_auth':
+        date = str(contract.first_auth_signed_timestamp.date().day)+'/'+str(contract.first_auth_signed_timestamp.date().month)+'/'+str(contract.first_auth_signed_timestamp.date().year)
+        if contract.first_auth_signed_timestamp.time().hour<10:
+            time = '0'+str(contract.first_auth_signed_timestamp.time().hour)+':'
+        else:
+            time = str(contract.first_auth_signed_timestamp.time().hour)+':'
+        if contract.first_auth_signed_timestamp.time().minute<10:
+            time += '0'+str(contract.first_auth_signed_timestamp.time().minute)+':'
+        else:
+            time += str(contract.first_auth_signed_timestamp.time().minute)+':'
+        if contract.first_auth_signed_timestamp.time().second<10:
+            time += '0'+str(contract.first_auth_signed_timestamp.time().second)
+        else:
+            time += str(contract.first_auth_signed_timestamp.time().second)
+        if contract.first_witness_signe and contract.second_witness_signe:
+            if contract.third_auth_signe:
+                return { 'x' : 45, 'y' : 80, 'text' : "1. Assinante: {} Hash: {}, em {} às {}".format(contract.first_auth_signe.name, contract.first_auth_hash, date, time) }
+            return { 'x' : 45, 'y' : 70, 'text' : "1. Assinante: {} Hash: {}, em {} às {}".format(contract.first_auth_signe.name, contract.first_auth_hash, date, time) }
+        if contract.third_auth_signe:
+            return { 'x' : 45, 'y' : 40, 'text' : "1. Assinante: {} Hash: {}, em {} às {}".format(contract.first_auth_signe.name, contract.first_auth_hash, date, time) }
+        return { 'x' : 45, 'y' : 30, 'text' : "1. Assinante: {} Hash: {}, em {} às {}".format(contract.first_auth_signe.name, contract.first_auth_hash, date, time) }
+    elif whosigned == 'second_auth':
+        date = str(contract.second_auth_signed_timestamp.date().day)+'/'+str(contract.second_auth_signed_timestamp.date().month)+'/'+str(contract.second_auth_signed_timestamp.date().year)
+        if contract.second_auth_signed_timestamp.time().hour<10:
+            time = '0'+str(contract.second_auth_signed_timestamp.time().hour)+':'
+        else:
+            time = str(contract.second_auth_signed_timestamp.time().hour)+':'
+        if contract.second_auth_signed_timestamp.time().minute<10:
+            time += '0'+str(contract.second_auth_signed_timestamp.time().minute)+':'
+        else:
+            time += str(contract.second_auth_signed_timestamp.time().minute)+':'
+        if contract.second_auth_signed_timestamp.time().second<10:
+            time += '0'+str(contract.second_auth_signed_timestamp.time().second)
+        else:
+            time += str(contract.second_auth_signed_timestamp.time().second)
+        if contract.first_witness_signe and contract.second_witness_signe:
+            if contract.third_auth_signe:
+                return { 'x' : 45, 'y' : 70, 'text' : "2. Assinante: {} Hash: {}, em {} às {}".format(contract.second_auth_signe.name, contract.second_auth_hash, date, time) }
+            return { 'x' : 45, 'y' : 60, 'text' : "2. Assinante: {} Hash: {}, em {} às {}".format(contract.second_auth_signe.name, contract.second_auth_hash, date, time) }
+        if contract.third_auth_signe:
+            return { 'x' : 45, 'y' : 30, 'text' : "2. Assinante: {} Hash: {}, em {} às {}".format(contract.second_auth_signe.name, contract.second_auth_hash, date, time) }
+        return { 'x' : 45, 'y' : 20, 'text' : "2. Assinante: {} Hash: {}, em {} às {}".format(contract.second_auth_signe.name, contract.second_auth_hash, date, time) }
+    elif whosigned == 'third_auth':
+        date = str(contract.third_auth_signed_timestamp.date().day)+'/'+str(contract.third_auth_signed_timestamp.date().month)+'/'+str(contract.third_auth_signed_timestamp.date().year)
+        if contract.third_auth_signed_timestamp.time().hour<10:
+            time = '0'+str(contract.third_auth_signed_timestamp.time().hour)+':'
+        else:
+            time = str(contract.third_auth_signed_timestamp.time().hour)+':'
+        if contract.third_auth_signed_timestamp.time().minute<10:
+            time += '0'+str(contract.third_auth_signed_timestamp.time().minute)+':'
+        else:
+            time += str(contract.third_auth_signed_timestamp.time().minute)+':'
+        if contract.third_auth_signed_timestamp.time().second<10:
+            time += '0'+str(contract.third_auth_signed_timestamp.time().second)
+        else:
+            time += str(contract.third_auth_signed_timestamp.time().second)
+        if contract.first_witness_signe and contract.second_witness_signe:
+            return { 'x' : 45, 'y' : 60, 'text' : "3. Assinante: {} Hash: {}, em {} às {}".format(contract.third_auth_signe.name, contract.third_auth_hash, date, time) }
+        return { 'x' : 45, 'y' : 20, 'text' : "3. Assinante: {} Hash: {}, em {} às {}".format(contract.third_auth_signe.name, contract.third_auth_hash, date, time) }
+    elif whosigned == 'student_auth':
+        date = str(contract.student_auth_signed_timestamp.date().day)+'/'+str(contract.student_auth_signed_timestamp.date().month)+'/'+str(contract.student_auth_signed_timestamp.date().year)
+        if contract.student_auth_signed_timestamp.time().hour<10:
+            time = '0'+str(contract.student_auth_signed_timestamp.time().hour)+':'
+        else:
+            time = str(contract.student_auth_signed_timestamp.time().hour)+':'
+        if contract.student_auth_signed_timestamp.time().minute<10:
+            time += '0'+str(contract.student_auth_signed_timestamp.time().minute)+':'
+        else:
+            time += str(contract.student_auth_signed_timestamp.time().minute)+':'
+        if contract.student_auth_signed_timestamp.time().second<10:
+            time += '0'+str(contract.student_auth_signed_timestamp.time().second)
+        else:
+            time += str(contract.student_auth_signed_timestamp.time().second)
+        if contract.first_witness_signe and contract.second_witness_signe:
+            return { 'x' : 45, 'y' : 60, 'text' : "1. Assinante: {} Hash: {}, em {} às {}".format(contract.student_auth_signe.name, contract.student_auth_hash, date, time) }
+        return { 'x' : 45, 'y' : 20, 'text' : "1. Assinante: {} Hash: {}, em {} às {}".format(contract.student_auth_signe.name, contract.student_auth_hash, date, time) }
+    elif whosigned == 'first_witness':
+        date = str(contract.first_witness_signed_timestamp.date().day)+'/'+str(contract.first_witness_signed_timestamp.date().month)+'/'+str(contract.first_witness_signed_timestamp.date().year)
+        if contract.first_witness_signed_timestamp.time().hour<10:
+            time = '0'+str(contract.first_witness_signed_timestamp.time().hour)+':'
+        else:
+            time = str(contract.first_witness_signed_timestamp.time().hour)+':'
+        if contract.first_witness_signed_timestamp.time().minute<10:
+            time += '0'+str(contract.first_witness_signed_timestamp.time().minute)+':'
+        else:
+            time += str(contract.first_witness_signed_timestamp.time().minute)+':'
+        if contract.first_witness_signed_timestamp.time().second<10:
+            time += '0'+str(contract.first_witness_signed_timestamp.time().second)
+        else:
+            time += str(contract.first_witness_signed_timestamp.time().second)
+        if contract.first_auth_signe and contract.second_auth_signe:
+            if contract.third_auth_signe:
+                return { 'x' : 45, 'y' : 40, 'text' : "5. Primeira Testemunha: {} Hash: {}, em {} às {}".format(contract.first_witness_signe.name, contract.first_witness_hash, date, time) }
+            return { 'x' : 45, 'y' : 40, 'text' : "4. Primeira Testemunha: {} Hash: {}, em {} às {}".format(contract.first_witness_signe.name, contract.first_witness_hash, date, time) }
+        return { 'x' : 45, 'y' : 40, 'text' : "3. Primeira Testemunha: {} Hash: {}, em {} às {}".format(contract.first_witness_signe.name, contract.first_witness_hash, date, time) }
+    elif whosigned == 'first_witness_cpf':
+        return { 'x' : 45, 'y' : 30, 'text' : "RG: {} CPF: {}".format(contract.first_witness_signe.rg, contract.first_witness_signe.cpf) }
+    elif whosigned == 'second_witness':
+        date = str(contract.second_witness_signed_timestamp.date().day)+'/'+str(contract.second_witness_signed_timestamp.date().month)+'/'+str(contract.second_witness_signed_timestamp.date().year)
+        if contract.second_witness_signed_timestamp.time().hour<10:
+            time = '0'+str(contract.second_witness_signed_timestamp.time().hour)+':'
+        else:
+            time = str(contract.second_witness_signed_timestamp.time().hour)+':'
+        if contract.second_witness_signed_timestamp.time().minute<10:
+            time += '0'+str(contract.second_witness_signed_timestamp.time().minute)+':'
+        else:
+            time += str(contract.second_witness_signed_timestamp.time().minute)+':'
+        if contract.second_witness_signed_timestamp.time().second<10:
+            time += '0'+str(contract.second_witness_signed_timestamp.time().second)
+        else:
+            time += str(contract.second_witness_signed_timestamp.time().second)
+        if contract.first_auth_signe and contract.second_auth_signe:
+            if contract.third_auth_signe:
+                return { 'x' : 45, 'y' : 20, 'text' : "6. Segunda Testemunha: {} Hash: {}, em {} às {}".format(contract.second_witness_signe.name, contract.second_witness_hash, date, time) }
+            return { 'x' : 45, 'y' : 20, 'text' : "5. Segunda Testemunha: {} Hash: {}, em {} às {}".format(contract.second_witness_signe.name, contract.second_witness_hash, date, time) }
+        return { 'x' : 45, 'y' : 20, 'text' : "4. Segunda Testemunha: {} Hash: {}, em {} às {}".format(contract.second_witness_signe.name, contract.second_witness_hash, date, time) }
+    elif whosigned == 'second_witness_cpf':
+        return { 'x' : 45, 'y' : 10, 'text' : "RG: {} CPF: {}".format(contract.second_witness_signe.rg, contract.second_witness_signe.cpf) }
+    elif whosigned == 'director':
+        date = str(contract.counter_signed_timestamp.date().day)+'/'+str(contract.counter_signed_timestamp.date().month)+'/'+str(contract.counter_signed_timestamp.date().year)
+        if contract.counter_signed_timestamp.time().hour<10:
+            time = '0'+str(contract.counter_signed_timestamp.time().hour)+':'
+        else:
+            time = str(contract.counter_signed_timestamp.time().hour)+':'
+        if contract.counter_signed_timestamp.time().minute<10:
+            time += '0'+str(contract.counter_signed_timestamp.time().minute)+':'
+        else:
+            time += str(contract.counter_signed_timestamp.time().minute)+':'
+        if contract.counter_signed_timestamp.time().second<10:
+            time += '0'+str(contract.counter_signed_timestamp.time().second)
+        else:
+            time += str(contract.counter_signed_timestamp.time().second)
+        if contract.first_auth_signe and contract.second_auth_signe:
+            if contract.first_witness_signe and contract.second_witness_signe:
+                if contract.third_auth_signe:
+                    return { 'x' : 45, 'y' : 50, 'text' : "4. Representante {}: {} Hash: {}, em {} às {}".format(school.school_name, contract.counter_signe.name, contract.counter_auth_hash, date, time) }
+                return { 'x' : 45, 'y' : 50, 'text' : "3. Representante {}: {} Hash: {}, em {} às {}".format(school.school_name, contract.counter_signe.name, contract.counter_auth_hash, date, time) }
+            if contract.third_auth_signe:
+                return { 'x' : 45, 'y' : 10, 'text' : "4. Representante {}: {} Hash: {}, em {} às {}".format(school.school_name, contract.counter_signe.name, contract.counter_auth_hash, date, time) }
+            return { 'x' : 45, 'y' : 10, 'text' : "3. Representante {}: {} Hash: {}, em {} às {}".format(school.school_name, contract.counter_signe.name, contract.counter_auth_hash, date, time) }
+        elif contract.student_auth_signe:
+            if contract.first_witness_signe and contract.second_witness_signe:
+                return { 'x' : 45, 'y' : 50, 'text' : "2. Representante {}: {} Hash: {}, em {} às {}".format(school.school_name, contract.counter_signe.name, contract.counter_auth_hash, date, time) }
+            return { 'x' : 45, 'y' : 10, 'text' : "2. Representante {}: {} Hash: {}, em {} às {}".format(school.school_name, contract.counter_signe.name, contract.counter_auth_hash, date, time) }
+    elif whosigned == 'all_signed':
+        if contract.first_auth_signe and contract.second_auth_signe:
+            if contract.first_witness_signe and contract.second_witness_signe:
+                if contract.third_auth_signe:
+                    return { 'x' : 45, 'y' : 90, 'text' : "Assinado eletronicamente via blockchain por:" }
+                return { 'x' : 45, 'y' : 80, 'text' : "Assinado eletronicamente via blockchain por:" }
+            if contract.third_auth_signe:
+                return { 'x' : 45, 'y' : 50, 'text' : "Assinado eletronicamente via blockchain por:" }
+            return { 'x' : 45, 'y' : 40, 'text' : "Assinado eletronicamente via blockchain por:" }
+        elif contract.student_auth_signe:
+            if contract.first_witness_signe and contract.second_witness_signe:
+                return { 'x' : 45, 'y' : 70, 'text' : "Assinado eletronicamente via blockchain por:" }
+            return {'x' : 45, 'y' : 30, 'text' : "Assinado eletronicamente via blockchain por:" }
+    return {'x' : 45, 'y' : 10, 'text' : "" }
+
+def get_pdf_filepath(contract=None):
+    return settings.MEDIA_ROOT+'/'+contract.pdf.name
+
+def get_pdf_signed_output_filepath(contract=None):
+    return settings.MEDIA_ROOT+'/'+contract.pdf.name+'signed'
+
+def get_terms_of_contract_1_filepath(contract=None):
+    return settings.MEDIA_ROOT+'/'+contract.terms_of_contract.name
+
+def get_terms_of_contract_1_signed_output_filepath(contract=None):
+    return settings.MEDIA_ROOT+'/'+contract.terms_of_contract.name+'signed'
+
+def get_terms_of_contract_2_filepath(contract=None):
+    return settings.MEDIA_ROOT+'/'+contract.terms_of_contract_2.name
+
+def get_terms_of_contract_2_signed_output_filepath(contract=None):
+    return settings.MEDIA_ROOT+'/'+contract.terms_of_contract_2.name+'signed'
+
+def write_pdf(contract=None, whosigned=None, school=None):
+    
+    packet = StringIO()
+    # create a new PDF with Reportlab
+    can = canvas.Canvas(packet, pagesize=letter)
+    can.setFont("Times-Roman", 8)
+    
+    drawing = svg2rlg('http://matricula.tellme.school/static/img/certificate.svg')  
+    drawing.width = drawing.minWidth() * 0.035
+    drawing.height = drawing.height * 0.035 
+    drawing.scale(0.035, 0.04)
+
+    renderPDF.draw(drawing, can, 5, 10) 
+    text_and_coords = extract_text_to_write_and_coords(contract, whosigned, school)
+    can.drawString(text_and_coords['x'], text_and_coords['y'], text_and_coords['text'])
+    if whosigned == 'first_witness':
+        text_and_coords = extract_text_to_write_and_coords(contract, 'first_witness_cpf', school)
+        can.drawString(text_and_coords['x'], text_and_coords['y'], text_and_coords['text'])
+    if whosigned == 'second_witness':
+        text_and_coords = extract_text_to_write_and_coords(contract, 'second_witness_cpf', school)
+        can.drawString(text_and_coords['x'], text_and_coords['y'], text_and_coords['text'])
+    can.showPage()
+    can.save()
+
+    #move to the beginning of the StringIO buffer
+    packet.seek(0)
+    new_pdf = PdfFileReader(packet)
+    # read your existing PDF
+    existing_pdf = PdfFileReader(open(get_pdf_filepath(contract), "rb"))
+    output = PdfFileWriter()
+    output.removeImages(False)
+    
+    # add the "watermark" (which is the new pdf) on the existing page
+    for i in range(0, existing_pdf.getNumPages()):
+        page = existing_pdf.getPage(i)
+        page.mergePage(new_pdf.getPage(0))
+        output.addPage(page)
+
+    # finally, write "output" to a real file
+    outputStream = open(get_pdf_signed_output_filepath(contract), "wb")
+    output.write(outputStream)
+    outputStream.close()
+
+    shutil.copyfile(get_pdf_signed_output_filepath(contract), get_pdf_filepath(contract))
+
+    if contract.terms_of_contract:
+        existing_pdf = PdfFileReader(open(get_terms_of_contract_1_filepath(contract), "rb"))
+        output = PdfFileWriter()
+        output.removeImages(False)
+        
+        # add the "watermark" (which is the new pdf) on the existing page
+        for i in range(0, existing_pdf.getNumPages()):
+            page = existing_pdf.getPage(i)
+            page.mergePage(new_pdf.getPage(0))
+            output.addPage(page)
+
+        # finally, write "output" to a real file
+        outputStream = open(get_terms_of_contract_1_signed_output_filepath(contract), "wb")
+        output.write(outputStream)
+        outputStream.close()
+
+        shutil.copyfile(get_terms_of_contract_1_signed_output_filepath(contract), get_terms_of_contract_1_filepath(contract))
+
+    if contract.terms_of_contract_2:
+        existing_pdf = PdfFileReader(open(get_terms_of_contract_2_filepath(contract), "rb"))
+        output = PdfFileWriter()
+        output.removeImages(False)
+        
+        # add the "watermark" (which is the new pdf) on the existing page
+        for i in range(0, existing_pdf.getNumPages()):
+            page = existing_pdf.getPage(i)
+            page.mergePage(new_pdf.getPage(0))
+            output.addPage(page)
+
+        # finally, write "output" to a real file
+        outputStream = open(get_terms_of_contract_2_signed_output_filepath(contract), "wb")
+        output.write(outputStream)
+        outputStream.close()
+
+        shutil.copyfile(get_terms_of_contract_2_signed_output_filepath(contract), get_terms_of_contract_2_filepath(contract))
+
+@app.task
+def queue_signiture(contract, who_sign, user_id):
+    contract = Contract.objects.get(contract_id=contract['contract_id'])
+    if who_sign == 'head':
+        form = BlockModelFormByContract()
+        block = form.save(commit=False)
+        block.data = contract.name
+        block.contract = contract
+        block.chain = contract.chain
+        if block.chain.__len__()<1:
+            block.index = 0
+            block.previous_hash = 'NULO'
+            block.time_stamp=timezone.now()
+            block.nonce = SymmetricEncryption.generate_salt(26)
+            while not block.valid_hash():
+                block.nonce = SymmetricEncryption.generate_salt(26)
+            block.hash = block.__hash__()
+            block.save()
+        else:
+            block.index=block.chain.last_block.index + 1
+            block.time_stamp=timezone.now()
+            block.previous_hash=block.chain.last_block.hash
+            block.nonce=SymmetricEncryption.generate_salt(26)
+            while not block.valid_hash():
+                block.nonce = SymmetricEncryption.generate_salt(26)
+            block.hash = block.__hash__()
+            if block.is_valid_block(block.chain.last_block):
+                print(block.is_valid_block(block.chain.last_block))
+                block.save()
+        attachments = []
+        head = Head.objects.get(head_id=user_id)
+        contract.counter_signed = True
+        contract.counter_signed_timestamp = block.time_stamp
+        contract.counter_auth_hash = block.hash
+        school = School.objects.get(chains__id__exact=contract.chain.id)
+        contract.save(update_fields=['counter_signed', 'counter_signed_timestamp', 'counter_auth_hash'])
+        write_pdf(contract, 'director', school)
+    elif who_sign == 'parent':
+        form = BlockModelFormByContract()
+        block = form.save(commit=False)
+        block.data = contract.name
+        block.contract = contract
+        block.chain = contract.chain
+        if block.chain.__len__()<1:
+            block.index = 0
+            block.previous_hash = 'NULO'
+            block.time_stamp=timezone.now()
+            block.nonce = SymmetricEncryption.generate_salt(26)
+            while not block.valid_hash():
+                block.nonce = SymmetricEncryption.generate_salt(26)
+            block.hash = block.__hash__()
+            block.save()
+        else:
+            block.index=block.chain.last_block.index + 1
+            block.time_stamp=timezone.now()
+            block.previous_hash=block.chain.last_block.hash
+            block.nonce=SymmetricEncryption.generate_salt(26)
+            while not block.valid_hash():
+                block.nonce = SymmetricEncryption.generate_salt(26)
+            block.hash = block.__hash__()
+            if block.is_valid_block(block.chain.last_block):
+                print(block.is_valid_block(block.chain.last_block))
+                block.save()
+        attachments = []
+        parent = Parent.objects.get(parent_id=user_id)
+        if contract.first_auth_signe == parent:
+            contract.first_auth_signed = True
+            contract.first_auth_signed_timestamp = block.time_stamp
+            contract.first_auth_hash = block.hash
+            school = School.objects.get(chains__id__exact=contract.chain.id)
+            contract.save(update_fields=['first_auth_signed', 'first_auth_signed_timestamp', 'first_auth_hash'])
+            write_pdf(contract, 'first_auth', None)
+        if contract.second_auth_signe == parent:
+            contract.second_auth_signed = True
+            contract.second_auth_signed_timestamp = block.time_stamp
+            contract.second_auth_hash = block.hash
+            school = School.objects.get(chains__id__exact=contract.chain.id)
+            contract.save(update_fields=['second_auth_signed', 'second_auth_signed_timestamp', 'second_auth_hash'])
+            write_pdf(contract, 'second_auth', None)
+        if contract.third_auth_signe == parent:
+            contract.third_auth_signed = True
+            contract.third_auth_signed_timestamp = block.time_stamp
+            contract.third_auth_hash = block.hash
+            school = School.objects.get(chains__id__exact=contract.chain.id)
+            contract.save(update_fields=['third_auth_signed', 'third_auth_signed_timestamp', 'third_auth_hash'])
+            write_pdf(contract, 'third_auth', None)
+    elif who_sign == 'student':
+        form = BlockModelFormByContract()
+        block = form.save(commit=False)
+        block.data = contract.name
+        block.contract = contract
+        block.chain = contract.chain
+        if block.chain.__len__()<1:
+            block.index = 0
+            block.previous_hash = 'NULO'
+            block.time_stamp=timezone.now()
+            block.nonce = SymmetricEncryption.generate_salt(26)
+            while not block.valid_hash():
+                block.nonce = SymmetricEncryption.generate_salt(26)
+            block.hash = block.__hash__()
+            block.save()
+        else:
+            block.index=block.chain.last_block.index + 1
+            block.time_stamp=timezone.now()
+            block.previous_hash=block.chain.last_block.hash
+            block.nonce=SymmetricEncryption.generate_salt(26)
+            while not block.valid_hash():
+                block.nonce = SymmetricEncryption.generate_salt(26)
+            block.hash = block.__hash__()
+            if block.is_valid_block(block.chain.last_block):
+                print(block.is_valid_block(block.chain.last_block))
+                block.save()
+        attachments = []
+        student = Student.objects.get(student_id=user_id)
+        contract.student_auth_signed = True
+        contract.student_auth_signed_timestamp = block.time_stamp
+        contract.student_auth_hash = block.hash
+        contract.save(update_fields=['student_auth_signed', 'student_auth_signed_timestamp', 'student_auth_hash'])
+        write_pdf(contract, 'student_auth')
+    elif who_sign == 'witness':
+        form = BlockModelFormByContract()
+        block = form.save(commit=False)
+        block.data = contract.name
+        block.contract = contract
+        block.chain = contract.chain
+        if block.chain.__len__()<1:
+            block.index = 0
+            block.previous_hash = 'NULO'
+            block.time_stamp=timezone.now()
+            block.nonce = SymmetricEncryption.generate_salt(26)
+            while not block.valid_hash():
+                block.nonce = SymmetricEncryption.generate_salt(26)
+            block.hash = block.__hash__()
+            block.save()
+        else:
+            block.index=block.chain.last_block.index + 1
+            block.time_stamp=timezone.now()
+            block.previous_hash=block.chain.last_block.hash
+            block.nonce=SymmetricEncryption.generate_salt(26)
+            while not block.valid_hash():
+                block.nonce = SymmetricEncryption.generate_salt(26)
+            block.hash = block.__hash__()
+            if block.is_valid_block(block.chain.last_block):
+                print(block.is_valid_block(block.chain.last_block))
+                block.save()
+        attachments = []
+        witness = Witness.objects.get(witness_id=user_id)
+        if contract.first_witness_signe == witness:
+            contract.first_witness_signed = True
+            contract.first_witness_signed_timestamp = block.time_stamp
+            contract.first_witness_hash = block.hash
+            school = School.objects.get(chains__id__exact=contract.chain.id)
+            contract.save(update_fields=['first_witness_signed', 'first_witness_signed_timestamp', 'first_witness_hash'])
+            write_pdf(contract, 'first_witness', None)
+        if contract.second_witness_signe == witness:
+            contract.second_witness_signed = True
+            contract.second_witness_signed_timestamp = block.time_stamp
+            contract.second_witness_hash = block.hash
+            school = School.objects.get(chains__id__exact=contract.chain.id)
+            contract.save(update_fields=['second_witness_signed', 'second_witness_signed_timestamp', 'second_witness_hash'])
+            write_pdf(contract, 'second_witness', None)
+    contract = Contract.objects.get(contract_id=contract.contract_id)
+    if contract.first_witness_signe and contract.first_witness_signe:
+        if contract.first_witness_signed and contract.second_witness_signed:
+            contract.all_witness_signed = True
+            contract.save(update_fields=['all_witness_signed'])
+        contract = Contract.objects.get(contract_id=contract_id)
+        if contract.third_auth_signe:
+            if (contract.first_auth_signed and contract.second_auth_signed and contract.third_auth_signe and contract.counter_signed and contract.all_witness_signed) or (contract.student_auth_signed and contract.third_auth_signe and contract.counter_signed and contract.all_witness_signed):
+                contract.all_signed = True
+                write_pdf(request, contract, 'all_signed')
+                contract.save(update_fields=['all_signed'])
+                contract_rest = ContractSerializerMinimal(contract)
+                send_data(contract_rest)
+                return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
+        else:
+                if (contract.first_auth_signed and contract.second_auth_signed and contract.counter_signed and contract.all_witness_signed) or (contract.student_auth_signed and contract.counter_signed and contract.all_witness_signed):
+                    contract.all_signed = True
+                    write_pdf(contract, 'all_signed')
+                    contract.save(update_fields=['all_signed'])
+                    contract_rest = ContractSerializerMinimal(contract)
+                    send_data(contract_rest)
+                    return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
+    else:
+        if contract.third_auth_signe:
+            if (contract.first_auth_signed and contract.second_auth_signed and contract.third_auth_signe and contract.counter_signed) or (contract.student_auth_signed and contract.third_auth_signe and contract.counter_signed):
+                contract.all_signed = True
+                write_pdf(contract, 'all_signed')
+                contract.save(update_fields=['all_signed'])
+                contract_rest = ContractSerializerMinimal(contract)
+                send_data(contract_rest)
+                return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
+        else:
+            if (contract.first_auth_signed and contract.second_auth_signed and contract.counter_signed) or (contract.student_auth_signed and contract.counter_signed):
+                contract.all_signed = True
+                write_pdf(contract, 'all_signed')
+                contract.save(update_fields=['all_signed'])
+                contract_rest = ContractSerializerMinimal(contract)
+                send_data(contract_rest)
+                return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
+    contract_rest = ContractSerializerMinimal(contract)
+    send_data(contract_rest)
+    return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
