@@ -1474,7 +1474,6 @@ def queue_set_signed(request, contract_id = None):
     else:
         messages.warning(request, 'Você não é diretor nem pai do estudante deste contrato!')
     contract_rest = ContractSerializerMinimal(contract)
-    send_data(request, contract_rest)
     return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
 
 @login_required
