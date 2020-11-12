@@ -1044,7 +1044,9 @@ def seecontractsbyquery(request):
             fetched = True
         query = {
             'selected_school': int(selected_school) if selected_school else 0,
+            'selected_school_name': school.school_name if school else '',
             'selected_class': int(selected_class) if selected_class else 0,
+            'selected_class_name': classe.class_name if classe else '',
             'selected_filter': selected_filter,
             'search': search
         }
