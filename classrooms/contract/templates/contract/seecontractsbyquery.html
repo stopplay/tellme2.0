@@ -471,16 +471,6 @@
                             </a>
                           </div>
                         </div>
-                        <div class="row">
-                          <div class="col-md-12">
-                            <a class="btn btn-danger btn-block"
-                              onclick="changeYesLink('{% url 'contracts:delete_contract' contract.contract_id %}')"
-                              href="#" data-baloon="Remove this item from the cart" class="text-light"
-                              data-toggle="modal" data-target="#delete-contract-modal">
-                              Deletar Contrato
-                            </a>
-                          </div>
-                        </div>
 
                         {% else %}
                         <div class="row">
@@ -617,37 +607,11 @@
 
                         <div class="row">
                           <div class="col-md-12">
-                            {% if is_supervisor %}
-                            {% if contract.first_auth_signed or contract.second_auth_signed or contract.counter_signed %}
                             <a class="btn btn-secondary btn-block w-100"
                               href="{% url 'contracts:seecontractdetails' contract.contract_id %}"
                               data-baloon="Remove this item from the cart">
                               Ver Detalhes
                             </a>
-                            {% else %}
-                            <div class="dropdown show">
-                              <a class="btn btn-secondary dropdown-toggle w-100" href="#" role="button"
-                                id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Ações
-                              </a>
-                              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                <a class="dropdown-item"
-                                  onclick="changeYesLink('{% url 'contracts:delete_contract' contract.contract_id %}')"
-                                  href="#" data-baloon="Remove this item from the cart" data-toggle="modal"
-                                  data-target="#delete-contract-modal">Deletar Contrato</a>
-                                <a class="dropdown-item"
-                                  href="{% url 'contracts:seecontractdetails' contract.contract_id %}"
-                                  data-baloon="Remove this item from the cart">Ver Detalhes</a>
-                              </div>
-                            </div>
-                            {% endif %}
-                            {% else %}
-                            <a class="btn btn-secondary btn-block w-100"
-                              href="{% url 'contracts:seecontractdetails' contract.contract_id %}"
-                              data-baloon="Remove this item from the cart">
-                              Ver Detalhes
-                            </a>
-                            {% endif %}
                           </div>
                         </div>
                         {% endif %}
@@ -690,7 +654,7 @@
                         <div class="row">
                           <div class="col-md-9">
                             <a class="btn btn-primary w-100" href="{{contract.terms_of_contract.url}}" style="font-size: 13.5px;justify-content:center;align-items:center; display: flex;">
-                              Termos Ad. do Contrato (1)
+                              Termos Ad. (1)
                             </a>
                           </div>
                           <div class="col-md-3">
@@ -706,7 +670,7 @@
                         <div class="row">
                           <div class="col-md-9">
                             <a class="btn btn-primary w-100" href="{{contract.terms_of_contract_2.url}}" style="font-size: 13.5px;justify-content:center;align-items:center; display: flex;">
-                              Termos Ad. do Contrato (2)
+                              Termos Ad. (2)
                             </a>
                           </div>
                           <div class="col-md-3">
@@ -774,6 +738,31 @@
                         {% endif %}
                         {% endif %}
                         {% endfor %}
+                        {% endif %}
+                        {% if is_supervisor %}
+                          {% if contract.first_auth_signed or contract.second_auth_signed or contract.counter_signed %}
+                            <div class="row">
+                              <div class="col-md-12">
+                                <a class="btn btn-danger btn-block"
+                                  onclick="changeYesLink('{% url 'contracts:delete_contract' contract.contract_id %}')"
+                                  href="#" data-baloon="Remove this item from the cart" class="text-light"
+                                  data-toggle="modal" data-target="#delete-contract-modal">
+                                  Deletar Contrato
+                                </a>
+                              </div>
+                            </div>
+                          {% endif %}
+                        {% elif request.user.is_superuser %}
+                          <div class="row">
+                            <div class="col-md-12">
+                              <a class="btn btn-danger btn-block"
+                                onclick="changeYesLink('{% url 'contracts:delete_contract' contract.contract_id %}')"
+                                href="#" data-baloon="Remove this item from the cart" class="text-light"
+                                data-toggle="modal" data-target="#delete-contract-modal">
+                                Deletar Contrato
+                              </a>
+                            </div>
+                          </div>
                         {% endif %}
                         {% endif %}
                       </div>
