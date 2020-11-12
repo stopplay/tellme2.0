@@ -998,6 +998,7 @@ def seecontractsbyquery(request):
     parent = getattr(request.user, 'parent', None)
     student = getattr(request.user, 'student', None)
     witness = getattr(request.user, 'witness', None)
+    today = timezone.now()
     query = []
     if parent or student:
         return seemycontracts(request)
@@ -1048,7 +1049,8 @@ def seecontractsbyquery(request):
             'selected_class': int(selected_class) if selected_class else 0,
             'selected_class_name': classe.class_name if classe else '',
             'selected_filter': selected_filter,
-            'search': search
+            'search': search,
+            'timestamp': today
         }
         if not fetched:
             contracts = Contract.objects.filter(chain__in=chains_to_select)
