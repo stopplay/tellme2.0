@@ -126,8 +126,10 @@
     var csvFile;
     var downloadLink;
 
+    var encoded = new TextEncoder("windows-1252",{ NONSTANDARD_allowLegacyEncoding: true }).encode(csv);
+
     // CSV file
-    csvFile = new Blob([csv], {type: "text/csv"});
+    csvFile = new Blob([encoded], {type: "text/csv"});
 
     // Download link
     downloadLink = document.createElement("a");
