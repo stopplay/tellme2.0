@@ -116,6 +116,13 @@
               <table class="table table-hover table-striped display row-border mb-4" id="contractstable">
                 <thead>
                   <tr>
+                    <th>Selected School: {{query.selected_school}}</th>
+                    <th>Selected Class: {{query.selected_class}}</th>
+                    <th>Selected Filter: {{query.selected_filter}}</th>
+                    <th>Search: {{query.search}}</th>
+                  </tr>
+                  <tr></tr>
+                  <tr>
                     {% if is_supervisor or is_witness %}
                     <th>
                       <input id="selectall" type="checkbox" name="selectall" onclick="select_all(this)">
