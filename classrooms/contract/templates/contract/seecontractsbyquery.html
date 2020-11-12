@@ -116,11 +116,11 @@
               <table class="table table-hover table-striped display row-border mb-4" id="contractstable">
                 <thead>
                   <tr>
-                    <th>Selected School: {{query.selected_school_name}}</th>
-                    <th>Selected Class: {{query.selected_class_name}}</th>
-                    <th>Selected Filter: {{query.selected_filter}}</th>
-                    <th>{{query.search}}</th>
-                    <th>Date: {{query.timestamp}}</th>
+                    <th>Date: <strong>{{query.timestamp}}</strong></th>
+                    <th>School: <strong>{{query.selected_school_name}}</strong></th>
+                    <th>Class: <strong>{{query.selected_class_name}}</strong></th>
+                    <th>Filter: <strong>{{query.selected_filter}}</strong></th>
+                    <th><strong>{{query.search}}</strong></th>
                   </tr>
                   <tr>
                     {% if is_supervisor or is_witness %}
