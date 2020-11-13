@@ -76,7 +76,6 @@
 			</div>
 		</div>
 	</div>
-	{% if school_users %}
 	<div class="content">
 		<div class="container-fluid">
 			<div class="row">
@@ -102,7 +101,8 @@
 										<th>Ações</th>
 									</tr>
 								</thead>
-								<tbody>
+								{% if school_users %}
+								<tbody class="">
 									{% for user in school_users %}
 									<tr>
 										<td>
@@ -218,6 +218,7 @@
 									</tr>
 									{% endfor %}
 								</tbody>
+								{% endif %}
 							</table>
 						</div>
 					</div>
@@ -225,7 +226,6 @@
 			</div>
 		</div>
 	</div>
-	{% endif %}
 	<script type="text/javascript">
 		function limpa() {
             document.getElementById('selected_school').value = "";
@@ -318,7 +318,7 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					<p>Você tem certeza que deseja este assinante? Essa operação não pode ser desfeita!</p>
+					<p>Você tem certeza que deseja deletar este assinante? Essa operação não pode ser desfeita!</p>
 				</div>
 				<div class="modal-footer">
 					<a id="link_to_delete" class="btn btn-danger btn-block" href="">Sim</a>
