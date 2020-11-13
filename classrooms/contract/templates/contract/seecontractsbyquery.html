@@ -93,7 +93,6 @@
     </div>
   </div>
 </div>
-{% if contracts %}
 <div class="content">
   <div class="container-fluid">
     <div class="row">
@@ -115,13 +114,13 @@
               {% endif %}
               <table class="table table-hover table-striped display row-border mb-4" id="contractstable">
                 <thead>
-                  <tr>
+                  <!-- <tr>
                     <th>Date: <strong>{{query.timestamp}}</strong></th>
                     <th>School: <strong>{{query.selected_school_name}}</strong></th>
                     <th>Class: <strong>{{query.selected_class_name}}</strong></th>
                     <th>Filter: <strong>{{query.selected_filter}}</strong></th>
                     <th><strong>{{query.search}}</strong></th>
-                  </tr>
+                  </tr> -->
                   <tr>
                     {% if is_supervisor or is_witness %}
                     <th>
@@ -140,6 +139,7 @@
                     <th>Ações</th>
                   </tr>
                 </thead>
+                {% if contracts %}
                 <tbody class="">
                   {% for contract in contracts %}
                   <tr class="pb-5">
@@ -719,7 +719,7 @@
                         </div>
                         {% endif %}
                         {% endif %}
-                        {% if request.user.is_superuser or is_supervisor %}
+                        {% if request.user.is_superuser %}
                         {% if contract.chain.name %}
                         {% for school in schools %}
                         {% if contract.chain in school.chains.all %}
@@ -778,6 +778,7 @@
                   {% endfor %}
 
                 </tbody>
+                {% endif %}
               </table>
             </div>
           </form>
@@ -786,11 +787,6 @@
     </div>
   </div>
 </div>
-{% else %}
-{% if search or selected_school or selected_class %}
-<h4>Não há nenhum resultado para a pesquisa feita</h4>
-{% endif %}
-{% endif %}
 <script type="text/javascript">
   function limpa() {
     document.getElementById('selected_school').value = "0";

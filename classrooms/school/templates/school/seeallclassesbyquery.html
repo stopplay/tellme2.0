@@ -49,7 +49,6 @@
             </div>
         </div>
     </div>
-    {% if current_class %}
     <div class="content">
         <div class="container-fluid">
             <div class="row">
@@ -87,7 +86,8 @@
                                         <th> Ações </th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                {% if current_class %}
+                                <tbody class="">
                                     <tr>
                                         <th>{{ current_school.school_name }}
                                         </th>
@@ -143,55 +143,8 @@
                                         </td>
                                     </tr>
                                 </tbody>
-                            </table>
-                        </div>
-
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-    {% elif current_school %}
-    <div class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card strpied-tabled-with-hover">
-
-                        <div class="card-header ">
-                            <h4 class="card-title">Turma(s)</h4>
-                        </div>
-
-                        <div class="card-body table-full-width table-responsive">
-                            <table class="table table-hover table-striped" id="schoolstable">
-                                <thead>
-                                    <tr>
-                                        <th>Escola</th>
-                                        <th>
-                                            Turmas
-                                        </th>
-                                        <th>
-                                            Contratos registrados
-                                        </th>
-                                        <th>
-                                            Contratos assinados <br>
-                                            com processo completo
-                                        </th>
-                                        <!-- <th>Contratos Não Assinados</th> -->
-                                        <th>
-                                            Número de <br>
-                                            Alunos <br>
-                                            Cadastrados
-                                        </th>
-                                        <th>
-                                            Número de Assinantes <br>
-                                            Cadastrados
-                                        </th>
-                                        <th> Ações </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                                {% elif current_school %}
+                                <tbody class="">
                                     {% for class in current_school.classes.all %}
                                     <tr>
                                         <th>{{ current_school.school_name }}
@@ -250,55 +203,8 @@
                                     </tr>
                                     {% endfor %}
                                 </tbody>
-                            </table>
-                        </div>
-
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-    {% elif query %}
-    <div class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card strpied-tabled-with-hover">
-
-                        <div class="card-header ">
-                            <h4 class="card-title">Turma(s)</h4>
-                        </div>
-
-                        <div class="card-body table-full-width table-responsive">
-                            <table class="table table-hover table-striped" id="schoolstable">
-                                <thead>
-                                    <tr>
-                                        <th>Escola</th>
-                                        <th>
-                                            Turmas
-                                        </th>
-                                        <th>
-                                            Contratos registrados
-                                        </th>
-                                        <th>
-                                            Contratos assinados <br>
-                                            com processo completo
-                                        </th>
-                                        <!-- <th>Contratos Não Assinados</th> -->
-                                        <th>
-                                            Número de <br>
-                                            Alunos <br>
-                                            Cadastrados
-                                        </th>
-                                        <th>
-                                            Número de Assinantes <br>
-                                            Cadastrados
-                                        </th>
-                                        <th> Ações </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                                {% elif query %}
+                                <tbody class="">
                                     {% for school in schools %}
                                         {% for class in school.classes.all %}
                                         <tr>
@@ -359,6 +265,7 @@
                                         {% endfor %}
                                     {% endfor %}
                                 </tbody>
+                                {% endif %}
                             </table>
                         </div>
 
@@ -368,7 +275,6 @@
             </div>
         </div>
     </div>
-    {% endif %}
 
     <script>
         function limpa() {
@@ -444,7 +350,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>Você tem certeza que deseja esta turma? Essa operação não pode ser desfeita!</p>
+                    <p>Você tem certeza que deseja deletar esta turma? Essa operação não pode ser desfeita!</p>
                 </div>
                 <div class="modal-footer">
                     <a id="link_to_delete" class="btn btn-danger btn-block" href="">Sim</a>

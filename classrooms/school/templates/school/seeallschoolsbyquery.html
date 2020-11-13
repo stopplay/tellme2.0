@@ -47,8 +47,6 @@
                 </div>
             </div>
         </div>
-
-        {% if current_school %}
         <div class="card strpied-tabled-with-hover">
             <div class="card-header ">
                 <h4 class="card-title">Escola(s)</h4>
@@ -59,40 +57,41 @@
                         <tr>
                             <th>Escola</th>
                             <th>
-                                Contratos registrados
+                                Contratos <br> registrados
                             </th>
                             <th>
                                 Contratos assinados <br>
-                                com processo completo
+                                com processo <br>
+                                completo
                             </th>
-                            <!-- <th>Contratos Não Assinados</th> -->
                             <th>
                                 Número de <br>
                                 Alunos <br>
                                 Cadastrados
                             </th>
                             <th>
-                                Número de Assinantes <br>
+                                Número de <br>
+                                Assinantes <br>
                                 Cadastrados
                             </th>
                             <th>
-                                Contratos a pagar
+                                Contratos <br> a pagar
                             </th>
                             <th>
-                                Valor a pagar
+                                Valor <br> a pagar
                             </th>
                             <th>
-                                Contratos pagos
+                                Contratos <br> pagos
                             </th>
-                            <th> Ações </th>
+                            <th>Ações</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    {% if current_school %}
+                    <tbody class="">
                         <tr>
                             <th>{{ current_school.school_name }}</th>
                             <th>{{ contracts_in_period }}</th>
                             <th>{{ complete_contracts_in_period }}</th>
-                            <!-- <th>{{ school.quantity_of_contracts_not_signed }}/{{ school.quantity_of_contracts_total }}</th> -->
                             <th>{{ current_school.quantity_of_students_associated }}</th>
                             <th>{{ current_school.quantity_of_parents_associated }}</th>
                             <th>{{ contracts_to_pay }}</th>
@@ -107,17 +106,15 @@
 
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                         <a class="dropdown-item"
-                                            href="{% url 'school:add_class' current_school.school_id %}"
-                                            data-baloon="Remove this item from the cart" class="text-danger">Adicionar
-                                            Turma à Escola</a>
-                                        <a class="dropdown-item"
-                                            href="{% url 'school:set_witnesses' current_school.school_id %}"
-                                            data-baloon="Remove this item from the cart" class="text-danger">Selecionar
-                                            Testemunhas Para Escola</a>
-                                        <a class="dropdown-item"
                                             href="{% url 'school:update_school' current_school.school_id %}"
                                             data-baloon="Remove this item from the cart" class="text-danger">Atualizar
                                             Escola</a>
+                                        {% if request.user.is_superuser or is_supervisor %}
+                                        <a class="dropdown-item"
+                                            href="{% url 'school:seeschooldetails' current_school.school_id %}"
+                                            data-baloon="Remove this item from the cart" class="text-danger">Ver
+                                            Detalhes da Escola</a>
+                                        {% endif %}
                                         {% if request.user.is_superuser %}
                                         <a class="dropdown-item"
                                             onclick="changeYesLink('{% url 'school:delete_school' current_school.school_id %}')"
@@ -125,62 +122,13 @@
                                             data-toggle="modal" data-target="#delete-school-modal">
                                             Deletar Escola
                                         </a>
-
-                                        {% endif %}
-                                        {% if request.user.is_superuser or is_supervisor %}
-                                        <a class="dropdown-item"
-                                            href="{% url 'school:seeschooldetails' current_school.school_id %}"
-                                            data-baloon="Remove this item from the cart" class="text-danger">Ver
-                                            Detalhes da Escola</a>
                                         {% endif %}
                                     </div>
                                 </div>
                             </th>
                         </tr>
                     </tbody>
-                </table>
-            </div>
-
-        </div>
-        {% elif schools_data %}
-        <div class="card strpied-tabled-with-hover">
-            <div class="card-header ">
-                <h4 class="card-title">Escola(s)</h4>
-            </div>
-            <div class="card-body table-full-width table-responsive">
-                <table class="table table-hover table-striped" id="schoolstable">
-                    <thead>
-                        <tr>
-                            <th>Escola</th>
-                            <th>
-                                Contratos registrados
-                            </th>
-                            <th>
-                                Contratos assinados <br>
-                                com processo completo
-                            </th>
-                            <!-- <th>Contratos Não Assinados</th> -->
-                            <th>
-                                Número de <br>
-                                Alunos <br>
-                                Cadastrados
-                            </th>
-                            <th>
-                                Número de Assinantes <br>
-                                Cadastrados
-                            </th>
-                            <th>
-                                Contratos a pagar
-                            </th>
-                            <th>
-                                Valor a pagar
-                            </th>
-                            <th>
-                                Contratos pagos
-                            </th>
-                            <th> Ações </th>
-                        </tr>
-                    </thead>
+                    {% elif schools_data %}
                     <tbody>
                         {% for school in schools_data %}
                         <tr>
@@ -202,31 +150,22 @@
 
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                         <a class="dropdown-item"
-                                            href="{% url 'school:add_class' school.school_id %}"
-                                            data-baloon="Remove this item from the cart" class="text-danger">Adicionar
-                                            Turma à Escola</a>
-                                        <a class="dropdown-item"
-                                            href="{% url 'school:set_witnesses' school.school_id %}"
-                                            data-baloon="Remove this item from the cart" class="text-danger">Selecionar
-                                            Testemunhas Para Escola</a>
-                                        <a class="dropdown-item"
                                             href="{% url 'school:update_school' school.school_id %}"
                                             data-baloon="Remove this item from the cart" class="text-danger">Atualizar
                                             Escola</a>
-                                        {% if request.user.is_superuser %}
-                                        <a class="dropdown-item"
-                                            onclick="changeYesLink('{% url 'school:delete_school' school.school_id %}')"
-                                            href="#" data-baloon="Remove this item from the cart" class="text-light"
-                                            data-toggle="modal" data-target="#delete-school-modal">
-                                            Deletar Escola
-                                        </a>
-
-                                        {% endif %}
                                         {% if request.user.is_superuser or is_supervisor %}
                                         <a class="dropdown-item"
                                             href="{% url 'school:seeschooldetails' school.school_id %}"
                                             data-baloon="Remove this item from the cart" class="text-danger">Ver
                                             Detalhes da Escola</a>
+                                        {% endif %}
+                                        {% if request.user.is_superuser %}
+                                        <a class="dropdown-item"
+                                            onclick="changeYesLink('{% url 'school:delete_school' current_school.school_id %}')"
+                                            href="#" data-baloon="Remove this item from the cart" class="text-light"
+                                            data-toggle="modal" data-target="#delete-school-modal">
+                                            Deletar Escola
+                                        </a>
                                         {% endif %}
                                     </div>
                                 </div>
@@ -234,11 +173,11 @@
                         </tr>
                         {% endfor %}
                     </tbody>
+                    {% endif %}
                 </table>
             </div>
 
         </div>
-        {% endif %}
     </div>
 
     <script>
@@ -290,7 +229,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>Você tem certeza que deseja esta escola? Essa operação não pode ser desfeita!</p>
+                    <p>Você tem certeza que deseja deletar esta escola? Essa operação não pode ser desfeita!</p>
                 </div>
                 <div class="modal-footer">
                     <a id="link_to_delete" class="btn btn-danger btn-block" href="">Sim</a>
