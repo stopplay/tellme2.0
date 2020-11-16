@@ -1063,7 +1063,7 @@ def seecontractsbyquery(request):
             contracts = contracts.filter(date__lte=final_date)
         if selected_filter:
             if ',' in selected_filter:
-                for min_filter in selected_fielter.split(','):
+                for min_filter in selected_filter.split(','):
                     if min_filter == 'signed_RF/RP1':
                         contracts = contracts.filter(first_auth_signed=True, second_auth_signed=True)
                     elif min_filter == 'signed_DIR':
