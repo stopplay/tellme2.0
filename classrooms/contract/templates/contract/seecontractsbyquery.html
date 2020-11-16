@@ -53,8 +53,8 @@
                 </div>
                 <div class="row">
                   <div class="labelandform col-md-6">
-                    <p><label>Selecione o Filtro:</label></p>
-                    <select class="custom-select chosen-select" id="select_form_filter">
+                    <p><label>Selecione os Filtros:</label></p>
+                    <select class="custom-select chosen-select" id="select_form_filter" multiple>
                       <option id="" value="">--------</option>
                       <option value="signed_RF/RP1" {% if query.selected_filter == 'signed_RF/RP1' %} selected {% endif %}>Contratos assinados pelo Responsável Financeiro e Pedagógico</option>
                       <option value="not_signed_RF/RP1" {% if query.selected_filter == 'not_signed_RF/RP1' %} selected {% endif %}>Contratos não assinados pelo Responsável Financeiro e Pedagógico</option>
@@ -62,12 +62,20 @@
                       <option value="not_signed_DIR" {% if query.selected_filter == 'not_signed_DIR' %} selected {% endif %}>Contratos não assinados pelo Diretor</option>
                       <option value="purchased_slm" {% if query.selected_filter == 'purchased_slm' %} selected {% endif %}>Contratos com material já comprado</option>
                       <option value="not_purchased_slm" {% if query.selected_filter == 'not_purchased_slm' %} selected {% endif %}>Contratos com material não comprado</option>
+                      <option value="is_paid" {% if query.selected_filter == 'is_paid' %} selected {% endif %}>Contratos pagos</option>
+                      <option value="not_paid" {% if query.selected_filter == 'not_paid' %} selected {% endif %}>Contratos não pagos</option>
+                      <option value="signed_witness" {% if query.selected_filter == 'signed_witness' %} selected {% endif %}>Contratos assinados pelas testemunhas</option>
+                      <option value="not_signed_witness" {% if query.selected_filter == 'not_signed_witness' %} selected {% endif %}>Contratos não assinados pelas testemunhas</option>
                     </select>
                   </div>
                 </div>
                 <input type="hidden" id="selected_filter" name="selected_filter">
                 <input type="hidden" id="selected_school" name="selected_school" value="0">
                 <input type="hidden" id="selected_class" name="selected_class" value="0">
+                Período: <input style="font-size: 0.78rem" type="date" id="initial_date" name="initial_date"
+                            value="{{query.initial_date}}">
+                a: <input style="font-size: 0.78rem" type="date" id="final_date" name="final_date"
+                            value="{{query.final_date}}">
                 <input type="text" id="search" name="search"
                   placeholder="Insira o nome do aluno, o nome da escola ou o nome da turma">
                 <input type="hidden" id="selected_chain" name="selected_chain">
