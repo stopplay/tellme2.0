@@ -1062,18 +1062,49 @@ def seecontractsbyquery(request):
         if final_date:
             contracts = contracts.filter(date__lte=final_date)
         if selected_filter:
-            if selected_filter == 'signed_RF/RP1':
-                contracts = contracts.filter(first_auth_signed=True, second_auth_signed=True)
-            elif selected_filter == 'signed_DIR':
-                contracts = contracts.filter(counter_signed=True)
-            elif selected_filter == 'purchased_slm':
-                contracts = contracts.filter(purchased_slm=True)
-            elif selected_filter == 'not_signed_RF/RP1':
-                contracts = contracts.filter(Q(first_auth_signed=False) | Q(second_auth_signed=False))
-            elif selected_filter == 'not_signed_DIR':
-                contracts = contracts.filter(counter_signed=False)
-            elif selected_filter == 'not_purchased_slm':
-                contracts = contracts.filter(purchased_slm=False)
+            if ',' in selected_filter:
+                for min_filter in selected_fielter.split(','):
+                    if min_filter == 'signed_RF/RP1':
+                        contracts = contracts.filter(first_auth_signed=True, second_auth_signed=True)
+                    elif min_filter == 'signed_DIR':
+                        contracts = contracts.filter(counter_signed=True)
+                    elif min_filter == 'purchased_slm':
+                        contracts = contracts.filter(purchased_slm=True)
+                    elif min_filter == 'not_signed_RF/RP1':
+                        contracts = contracts.filter(Q(first_auth_signed=False) | Q(second_auth_signed=False))
+                    elif min_filter == 'not_signed_DIR':
+                        contracts = contracts.filter(counter_signed=False)
+                    elif min_filter == 'not_purchased_slm':
+                        contracts = contracts.filter(purchased_slm=False)
+                    elif min_filter == 'is_paid':
+                        contracts = contracts.filter(is_paid=True)
+                    elif min_filter == 'not_paid':
+                        contracts = contracts.filter(is_paid=False)
+                    elif min_filter == 'signed_witness':
+                        contracts = contracts.filter(all_witness_signed=True)
+                    elif min_filter == 'not_signed_witness':
+                        contracts = contracts.filter(all_witness_signed=False)
+            else:
+                if selected_filter == 'signed_RF/RP1':
+                    contracts = contracts.filter(first_auth_signed=True, second_auth_signed=True)
+                elif selected_filter == 'signed_DIR':
+                    contracts = contracts.filter(counter_signed=True)
+                elif selected_filter == 'purchased_slm':
+                    contracts = contracts.filter(purchased_slm=True)
+                elif selected_filter == 'not_signed_RF/RP1':
+                    contracts = contracts.filter(Q(first_auth_signed=False) | Q(second_auth_signed=False))
+                elif selected_filter == 'not_signed_DIR':
+                    contracts = contracts.filter(counter_signed=False)
+                elif selected_filter == 'not_purchased_slm':
+                    contracts = contracts.filter(purchased_slm=False)
+                elif selected_filter == 'is_paid':
+                    contracts = contracts.filter(is_paid=True)
+                elif selected_filter == 'not_paid':
+                    contracts = contracts.filter(is_paid=False)
+                elif selected_filter == 'signed_witness':
+                    contracts = contracts.filter(all_witness_signed=True)
+                elif selected_filter == 'not_signed_witness':
+                    contracts = contracts.filter(all_witness_signed=False)
         if not schools:
             messages.error(request, 'O tipo de usuário que está tentando acessar estes dados não se encaixa em nenhum dos tipos propostos pelo sistema.')
             return seemycontracts(request)
