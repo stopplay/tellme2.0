@@ -1518,12 +1518,13 @@ def set_signed(request, contract_id = None):
     student = getattr(request.user, 'student', None)
     witness = getattr(request.user, 'witness', None)
     contract_rest = ContractSerializerMinimal(contract)
-    if not contract.is_active:
-        send_data(request, contract_rest)
-        return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
-    if contract.is_expired:
-        send_data(request, contract_rest)
-        return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
+    if not head and not witness:
+        if not contract.is_active:
+            send_data(request, contract_rest)
+            return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
+        if contract.is_expired:
+            send_data(request, contract_rest)
+            return JsonResponse({'status':'OK', 'contract':contract_rest.data}, status=200)
     if head:
         if contract.counter_signed:
             send_data(request, contract_rest)
