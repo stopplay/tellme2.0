@@ -241,7 +241,10 @@ def create_user(request):
                                             if User.objects.filter(username=school_to_add.school_name+'-parent-'+column[0]).count()<1:
                                                 _, created = Parent.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=school_to_add.school_name+'-parent-'+column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[7])
                                             else:
-                                                _, created = Parent.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.get(username=school_to_add.school_name+'-parent-'+column[0]), tell_me_user_id=column[7])
+                                                try:
+                                                    _, created = Parent.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.get(username=school_to_add.school_name+'-parent-'+column[0]), tell_me_user_id=column[7])
+                                                except:
+                                                    _ = Parent.objects.get(profile = User.objects.get(username=school_to_add.school_name+'-parent-'+column[0]))
                     messages.success(request, 'Usuários criados com sucesso!')
                     return redirect('/users/create_user')
                 else:
