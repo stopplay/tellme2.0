@@ -987,6 +987,7 @@ def seecontractsbyquery(request):
     contracts = []
     chains_to_select = []
     is_supervisor = False
+    is_school_supervisor = False
     is_witness = False
     search = None
     selected_school = None
@@ -1008,6 +1009,7 @@ def seecontractsbyquery(request):
             schools = School.objects.filter(heads__head_id__exact=head.head_id).order_by('school_name')
         elif supervisor:
             is_supervisor = True
+            is_school_supervisor = True
             schools = School.objects.filter(Q(adminorsupervisor=supervisor)|Q(adminorsupervisor_2=supervisor)).order_by('school_name')
         elif witness:
             is_witness = True
@@ -1108,7 +1110,7 @@ def seecontractsbyquery(request):
         if not schools:
             messages.error(request, 'O tipo de usuário que está tentando acessar estes dados não se encaixa em nenhum dos tipos propostos pelo sistema.')
             return seemycontracts(request)
-    return render(request, 'contract/seecontractsbyquery.html', {'search':search, 'chains_to_select':chains_to_select, 'contracts':contracts, 'schools':schools, 'is_supervisor':is_supervisor, 'is_witness':is_witness, 'selected_school': selected_school, 'selected_class': selected_class, 'selected_filter':selected_filter, 'query': query})
+    return render(request, 'contract/seecontractsbyquery.html', {'search':search, 'chains_to_select':chains_to_select, 'contracts':contracts, 'schools':schools, 'is_supervisor':is_supervisor, 'is_school_supervisor':is_supervisorschool_, 'is_witness':is_witness, 'selected_school': selected_school, 'selected_class': selected_class, 'selected_filter':selected_filter, 'query': query})
 
 @csrf_exempt
 def createacontract_rest(request):
