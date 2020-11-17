@@ -754,6 +754,7 @@
                         {% endif %}
                         {% endfor %}
                         {% endif %}
+                        {% endif %}
                         {% if is_supervisor %}
                           {% if not contract.first_auth_signed and contract.second_auth_signed and contract.counter_signed %}
                             <div class="row">
@@ -778,7 +779,6 @@
                               </a>
                             </div>
                           </div>
-                        {% endif %}
                         {% endif %}
                       </div>
                     </td>
