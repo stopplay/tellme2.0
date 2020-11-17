@@ -1110,7 +1110,7 @@ def seecontractsbyquery(request):
         if not schools:
             messages.error(request, 'O tipo de usuário que está tentando acessar estes dados não se encaixa em nenhum dos tipos propostos pelo sistema.')
             return seemycontracts(request)
-    return render(request, 'contract/seecontractsbyquery.html', {'search':search, 'chains_to_select':chains_to_select, 'contracts':contracts, 'schools':schools, 'is_supervisor':is_supervisor, 'is_school_supervisor':is_supervisorschool_, 'is_witness':is_witness, 'selected_school': selected_school, 'selected_class': selected_class, 'selected_filter':selected_filter, 'query': query})
+    return render(request, 'contract/seecontractsbyquery.html', {'search':search, 'chains_to_select':chains_to_select, 'contracts':contracts, 'schools':schools, 'is_supervisor':is_supervisor, 'is_school_supervisor':is_school_supervisor, 'is_witness':is_witness, 'selected_school': selected_school, 'selected_class': selected_class, 'selected_filter':selected_filter, 'query': query})
 
 @csrf_exempt
 def createacontract_rest(request):
