@@ -2233,6 +2233,9 @@ def edit_dates(request, contract_id=None):
     if request.method == 'POST':
         if form.is_valid():
             contract = form.save()
+            contract.is_expired = False
+            contract.is_active = True
+            contract.save()
             messages.success(request, 'Datas editadas com sucesso.')
             is_closed = 'Sim'
             contract_rest = ContractSerializerMinimal(contract)
