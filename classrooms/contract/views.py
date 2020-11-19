@@ -2222,7 +2222,7 @@ def set_signed_rest(request, contract_id = None):
 
 @login_required
 def edit_dates(request, contract_id=None):
-    is_supervios = False
+    is_supervisor = False
     is_closed = 'Não'
     head = getattr(request.user, 'head', None)
     supervisor = getattr(request.user, 'supervisor', None)
