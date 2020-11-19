@@ -55,7 +55,6 @@
                   <div class="labelandform col-md-6">
                     <p><label>Selecione os Filtros:</label></p>
                     <select class="custom-select chosen-select" id="select_form_filter" multiple>
-                      <option id="" value="">--------</option>
                       <option value="signed_RF/RP1" {% if query.selected_filter == 'signed_RF/RP1' %} selected {% endif %}>Contratos assinados pelo Responsável Financeiro e Pedagógico</option>
                       <option value="not_signed_RF/RP1" {% if query.selected_filter == 'not_signed_RF/RP1' %} selected {% endif %}>Contratos não assinados pelo Responsável Financeiro e Pedagógico</option>
                       <option value="signed_DIR" {% if query.selected_filter == 'signed_DIR' %} selected {% endif %}>Contratos assinados pelo Diretor</option>
@@ -816,7 +815,7 @@
         .find('option:first-child').prop('selected', true)
         .end().trigger('chosen:updated');
     $('#select_form_filter')
-      .find('option:first-child').prop('selected', true)
+      .find('option:selected').prop('selected', false)
       .end().trigger('chosen:updated');
   }
   let chatSocket = new WebSocket(
