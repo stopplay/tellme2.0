@@ -445,6 +445,7 @@ def create_user(request):
                                     elif selected_type and selected_type == 'second_witness':
                                         school_to_add.second_witness = Witness.objects.get(profile=user_profile)
                                     school_to_add.save(update_fields=['first_witness','second_witness'])
+                                messages.success(request, 'Usuário criado com sucesso!')
                     return redirect('/users/create_user')
         return render(request, 'school_users/createuser.html', {'user_form':form,'head_form':form2,'teacher_form':form3,'admin_form':form4,'supervisor_form':form5,'parent_form':form6,'student_form':form7, 'witness_form':form8, 'schools':schools})
     elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
