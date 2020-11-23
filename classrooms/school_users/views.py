@@ -438,11 +438,12 @@ def create_user(request):
                                             mail_subject, message, to=[to_email]
                                 )
                                 email.send()
-                                if school_to_add and selected_type and selected_type == 'first_witness':
-                                    school_to_add.first_witness = Witness.objects.get(profile=user_profile)
-                                elif school_to_add and selected_type and selected_type == 'second_witness':
-                                    school_to_add.second_witness = Witness.objects.get(profile=user_profile)
-                                school_to_add.save(update_fields=['first_witness','second_witness'])
+                                if school_to_add:
+                                    if selected_type and selected_type == 'first_witness':
+                                        school_to_add.first_witness = Witness.objects.get(profile=user_profile)
+                                    elif selected_type and selected_type == 'second_witness':
+                                        school_to_add.second_witness = Witness.objects.get(profile=user_profile)
+                                    school_to_add.save(update_fields=['first_witness','second_witness'])
                     return redirect('/users/create_user')
         return render(request, 'school_users/createuser.html', {'user_form':form,'head_form':form2,'teacher_form':form3,'admin_form':form4,'supervisor_form':form5,'parent_form':form6,'student_form':form7, 'witness_form':form8, 'schools':schools})
     elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
