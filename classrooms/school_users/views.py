@@ -424,6 +424,7 @@ def create_user(request):
                                 user_creation = form8.save(commit=False)
                                 user_creation.profile = user_profile
                                 user_creation.name = user_profile.first_name+' '+user_profile.last_name
+                                user_creation.save()
                                 current_site = get_current_site(request)
                                 mail_subject = 'Login de acesso ao módulo de Contratos - Tellme School.'
                                 message = render_to_string('school_users/user_login.html', {
