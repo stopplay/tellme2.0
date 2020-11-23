@@ -597,7 +597,7 @@ def update_school(request, school_id=None):
 				except:
 					messages.error(request, 'Não foi possível encontrar a chain da turma: {}'.format(classe.class_name))
 			form.save_m2m()
-			school.save(update_fields=['school_name', 'sponte_client_number', 'sponte_token', 'country', 'state', 'city','app_name', 'adminorsupervisor', 'adminorsupervisor_2', 'tell_me_school_id', 'value_per_contract'])
+			school.save(update_fields=['school_name', 'sponte_client_number', 'sponte_token', 'country', 'state', 'city','app_name', 'adminorsupervisor', 'adminorsupervisor_2', 'first_witness', 'second_witness', 'tell_me_school_id', 'value_per_contract'])
 			messages.success(request, 'A escola foi atualizada com sucesso!')
 			return redirect('/')
 		return render(request, 'school/update_school.html', {'form':form, 'school_id': school_id})
