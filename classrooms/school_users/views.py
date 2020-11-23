@@ -53,6 +53,7 @@ def create_user(request):
         form5 = SupervisorModelForm(request.POST or None)
         form6 = ParentIdTellMeModelForm(request.POST or None)
         form7 = StudentModelForm(request.POST or None)
+        form8 = WitnessModelForm(request.POST or None)
         schools = School.objects.all()
         selected_user = request.POST.get('selected_user', 0)
         selected_school = request.POST.get('selected_school', 0)
@@ -417,8 +418,27 @@ def create_user(request):
                                 email.send()
                                 if not student_to_add.first_parent and not student_to_add.second_parent:
                                     return redirect('/users/add_first_parent/{}'.format(student_to_add.student_id))
+                        elif selected_user == '8':
+                            if form8.is_valid():
+                                user_creation = form7.save(commit=False)
+                                user_creation.profile = user_profile
+                                user_creation.name = user_profile.first_name+' '+user_profile.last_name
+                                current_site = get_current_site(request)
+                                mail_subject = 'Login de acesso ao módulo de Contratos - Tellme School.'
+                                message = render_to_string('school_users/user_login.html', {
+                                    'user': user_creation,
+                                    'domain': current_site.domain,
+                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                                    'token':account_activation_token.make_token(user),
+                                    'type_of_user':'testemunha',
+                                })
+                                to_email = form.cleaned_data.get('email')
+                                email = EmailMessage(
+                                            mail_subject, message, to=[to_email]
+                                )
+                                email.send()
                     return redirect('/users/create_user')
-        return render(request, 'school_users/createuser.html', {'user_form':form,'head_form':form2,'teacher_form':form3,'admin_form':form4,'supervisor_form':form5,'parent_form':form6,'student_form':form7, 'schools':schools})
+        return render(request, 'school_users/createuser.html', {'user_form':form,'head_form':form2,'teacher_form':form3,'admin_form':form4,'supervisor_form':form5,'parent_form':form6,'student_form':form7, 'witness_form':form8, 'schools':schools})
     elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
         schools = None
         if Head.objects.filter(profile=request.user).count()>=1:
