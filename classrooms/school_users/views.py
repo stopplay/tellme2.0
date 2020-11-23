@@ -293,7 +293,7 @@ def create_user(request):
                                 message = render_to_string('school_users/user_login.html', {
                                     'user': user_creation,
                                     'domain': current_site.domain,
-                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).encode().decode(),
+                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
                                     'token':account_activation_token.make_token(user),
                                     'type_of_user':'diretor',
                                 })
@@ -314,7 +314,7 @@ def create_user(request):
                                 message = render_to_string('school_users/user_login.html', {
                                     'user': user_creation,
                                     'domain': current_site.domain,
-                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).encode().decode(),
+                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
                                     'token':account_activation_token.make_token(user),
                                     'type_of_user':'professor',
                                 })
@@ -335,7 +335,7 @@ def create_user(request):
                                 message = render_to_string('school_users/user_login.html', {
                                     'user': user_creation,
                                     'domain': current_site.domain,
-                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).encode().decode(),
+                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
                                     'token':account_activation_token.make_token(user),
                                     'type_of_user':'administrador',
                                 })
@@ -356,7 +356,7 @@ def create_user(request):
                                 message = render_to_string('school_users/user_login.html', {
                                     'user': user_creation,
                                     'domain': current_site.domain,
-                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).encode().decode(),
+                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
                                     'token':account_activation_token.make_token(user),
                                     'type_of_user':'supervisor',
                                 })
@@ -407,7 +407,7 @@ def create_user(request):
                                 message = render_to_string('school_users/user_login.html', {
                                     'user': user_creation,
                                     'domain': current_site.domain,
-                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).encode().decode(),
+                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
                                     'token':account_activation_token.make_token(user),
                                     'type_of_user':'aluno',
                                 })
@@ -429,7 +429,7 @@ def create_user(request):
                                 message = render_to_string('school_users/user_login.html', {
                                     'user': user_creation,
                                     'domain': current_site.domain,
-                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).encode().decode(),
+                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
                                     'token':account_activation_token.make_token(user),
                                     'type_of_user':'testemunha',
                                 })
@@ -687,7 +687,7 @@ def create_user(request):
                                 message = render_to_string('school_users/user_login.html', {
                                     'user': user_creation,
                                     'domain': current_site.domain,
-                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).encode().decode(),
+                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
                                     'token':account_activation_token.make_token(user),
                                     'type_of_user':'diretor',
                                 })
@@ -713,7 +713,7 @@ def create_user(request):
                                 message = render_to_string('school_users/user_login.html', {
                                     'user': user_creation,
                                     'domain': current_site.domain,
-                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).encode().decode(),
+                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
                                     'token':account_activation_token.make_token(user),
                                     'type_of_user':'professor',
                                 })
@@ -734,7 +734,7 @@ def create_user(request):
                                 message = render_to_string('school_users/user_login.html', {
                                     'user': user_creation,
                                     'domain': current_site.domain,
-                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).encode().decode(),
+                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
                                     'token':account_activation_token.make_token(user),
                                     'type_of_user':'administrador',
                                 })
@@ -755,7 +755,7 @@ def create_user(request):
                                 message = render_to_string('school_users/user_login.html', {
                                     'user': user_creation,
                                     'domain': current_site.domain,
-                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).encode().decode(),
+                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
                                     'token':account_activation_token.make_token(user),
                                     'type_of_user':'supervisor',
                                 })
@@ -806,7 +806,7 @@ def create_user(request):
                                 message = render_to_string('school_users/user_login.html', {
                                     'user': user_creation,
                                     'domain': current_site.domain,
-                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).encode().decode(),
+                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
                                     'token':account_activation_token.make_token(user),
                                     'type_of_user':'aluno',
                                 })
