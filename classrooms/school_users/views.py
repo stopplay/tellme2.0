@@ -420,7 +420,8 @@ def create_user(request):
                                     return redirect('/users/add_first_parent/{}'.format(student_to_add.student_id))
                         elif selected_user == '8':
                             if form8.is_valid():
-                                user_creation = form7.save(commit=False)
+                                selected_type = request.POST.get('select_form_type')
+                                user_creation = form8.save(commit=False)
                                 user_creation.profile = user_profile
                                 user_creation.name = user_profile.first_name+' '+user_profile.last_name
                                 current_site = get_current_site(request)
@@ -437,6 +438,11 @@ def create_user(request):
                                             mail_subject, message, to=[to_email]
                                 )
                                 email.send()
+                                if school_to_add and selected_type and selected_type == 'first_witness':
+                                    school_to_add.first_witness = Witness.objects.get(profile=user_profile)
+                                elif school_to_add and selected_type and selected_type == 'second_witness':
+                                    school_to_add.second_witness = Witness.objects.get(profile=user_profile)
+                                school_to_add.save(update_fields=['first_witness','second_witness'])
                     return redirect('/users/create_user')
         return render(request, 'school_users/createuser.html', {'user_form':form,'head_form':form2,'teacher_form':form3,'admin_form':form4,'supervisor_form':form5,'parent_form':form6,'student_form':form7, 'witness_form':form8, 'schools':schools})
     elif Head.objects.filter(profile=request.user).count()>=1 or Supervisor.objects.filter(profile=request.user).count()>=1:
