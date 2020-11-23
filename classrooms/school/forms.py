@@ -46,7 +46,7 @@ class SchoolModelFormWithSupervisorAndDirector(forms.ModelForm):
 	"""docstring for UserModelForm"""
 	class Meta:
 		model = School
-		fields = ['school_name', 'sponte_client_number', 'sponte_token', 'tell_me_school_id', 'country', 'state', 'city', 'app_name', 'adminorsupervisor', 'adminorsupervisor_2', 'heads', 'students', 'value_per_contract']
+		fields = ['school_name', 'sponte_client_number', 'sponte_token', 'tell_me_school_id', 'country', 'state', 'city', 'app_name', 'adminorsupervisor', 'adminorsupervisor_2', 'first_witness', 'second_witness', 'heads', 'students', 'value_per_contract']
 		widgets = {
 			'school_name': forms.TextInput(attrs={'class':'form-control', 'maxlength':255, 'required':True}),
 			'enrollment_year': forms.NumberInput(),
@@ -59,6 +59,8 @@ class SchoolModelFormWithSupervisorAndDirector(forms.ModelForm):
 			'app_name': forms.TextInput(attrs={'class':'form-control', 'required':False}),
 			'adminorsupervisor': forms.Select(attrs={'class':'form-control chosen-select', 'required':False}),
 			'adminorsupervisor_2': forms.Select(attrs={'class':'form-control chosen-select', 'required':False}),
+			'first_witness': forms.Select(attrs={'class':'form-control chosen-select', 'required':False}),
+			'second_witness': forms.Select(attrs={'class':'form-control chosen-select', 'required':False}),
 			'heads': forms.SelectMultiple(attrs={'class':'form-control chosen-select', 'required':False}),
 			'students': forms.SelectMultiple(attrs={'class':'form-control chosen-select', 'required':False}),
 			'value_per_contract': forms.NumberInput(attrs={'class':'form-control', 'required':False, 'min':0}),
