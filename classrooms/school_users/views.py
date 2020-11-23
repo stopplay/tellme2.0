@@ -407,7 +407,7 @@ def create_user(request):
                                 message = render_to_string('school_users/user_login.html', {
                                     'user': user_creation,
                                     'domain': current_site.domain,
-                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).encode().decode(),
                                     'token':account_activation_token.make_token(user),
                                     'type_of_user':'aluno',
                                 })
@@ -429,7 +429,7 @@ def create_user(request):
                                 message = render_to_string('school_users/user_login.html', {
                                     'user': user_creation,
                                     'domain': current_site.domain,
-                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                                    'uid':urlsafe_base64_encode(force_bytes(user.pk)).encode().decode(),
                                     'token':account_activation_token.make_token(user),
                                     'type_of_user':'testemunha',
                                 })
