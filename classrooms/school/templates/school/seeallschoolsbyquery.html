@@ -161,7 +161,7 @@
                                         {% endif %}
                                         {% if request.user.is_superuser %}
                                         <a class="dropdown-item"
-                                            onclick="changeYesLink('{% url 'school:delete_school' current_school.school_id %}')"
+                                            onclick="changeYesLink('{% url 'school:delete_school' school.school_id %}')"
                                             href="#" data-baloon="Remove this item from the cart" class="text-light"
                                             data-toggle="modal" data-target="#delete-school-modal">
                                             Deletar Escola
