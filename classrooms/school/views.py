@@ -740,6 +740,7 @@ def add_class(request, school_id=None):
 			if form.is_valid():
 				classroom = form.save(commit=False)
 				try:
+					print ("{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name))
 					newchain = Chain.objects.get(name="{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name))
 					messages.warning(request, 'Já existe uma turma com este nome nesta escola')
 					return redirect('/schools/{}/add_class'.format(school_id))
