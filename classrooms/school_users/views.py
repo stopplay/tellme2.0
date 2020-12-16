@@ -214,7 +214,7 @@ def create_user(request):
                                         if column[6]:
                                             if column[8] and column[9]:
                                                 _ = None
-                                                if username == 'benjamin.araujo':
+                                                if column[0] == 'benjamin.araujo':
                                                     print(school_to_add.school_name+'-student-'+column[0])
                                                     print(column[1]+' '+column[2])
                                                 if User.objects.filter(username=school_to_add.school_name+'-student-'+column[0]).count()<1:
