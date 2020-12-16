@@ -214,9 +214,7 @@ def create_user(request):
                                         if column[6]:
                                             if column[8] and column[9]:
                                                 _ = None
-                                                if column[0] == 'benjamin.araujo':
-                                                    print(school_to_add.school_name+'-student-'+column[0])
-                                                    print(column[1]+' '+column[2])
+                                                print(school_to_add.school_name+'-student-'+column[0])
                                                 if User.objects.filter(username=school_to_add.school_name+'-student-'+column[0]).count()<1:
                                                     _, created = Student.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=school_to_add.school_name+'-student-'+column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), first_parent=Parent.objects.get(tell_me_user_id=column[8]), second_parent=Parent.objects.get(tell_me_user_id=column[9]), tell_me_user_id=column[6])
                                                 else:
@@ -497,7 +495,7 @@ def create_user(request):
                     if not csv_file.name.endswith('.csv'):
                         messages.warning(request, 'O arquivo enviado não é CSV')
                         return redirect('/users/create_user')
-                    data_set = csv_file.read().decode('latin1')
+                    data_set = csv_file.read().decode()
                     io_string = io.StringIO(data_set)
                     next(io_string)
                     if selected_user == '1':
