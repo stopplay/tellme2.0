@@ -86,7 +86,7 @@ def create_user(request):
                     if not csv_file.name.endswith('.csv'):
                         messages.warning(request, 'O arquivo enviado não é CSV')
                         return redirect('/users/create_user')
-                    data_set = csv_file.read()
+                    data_set = csv_file.read().decode()
                     io_string = io.StringIO(data_set)
                     next(io_string)
                     if selected_user == '1':
