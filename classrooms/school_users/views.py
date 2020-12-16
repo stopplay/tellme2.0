@@ -221,6 +221,7 @@ def create_user(request):
                                                     _ = Student.objects.get(profile = User.objects.get(username=school_to_add.school_name+'-student-'+column[0]))
                                                     _.first_parent=Parent.objects.get(tell_me_user_id=column[8])
                                                     _.second_parent=Parent.objects.get(tell_me_user_id=column[9])
+                                                    _.name = column[1]+' '+column[2]
                                                     _.save()
                                                     _ = Student.objects.get(profile = User.objects.get(username=school_to_add.school_name+'-student-'+column[0]))
                                             else:
@@ -231,6 +232,7 @@ def create_user(request):
                                                     _ = Student.objects.get(profile = User.objects.get(username=school_to_add.school_name+'-student-'+column[0]))
                                                     _.first_parent=Parent.objects.get(tell_me_user_id=column[8])
                                                     _.second_parent=Parent.objects.get(tell_me_user_id=column[9])
+                                                    _.name = column[1]+' '+column[2]
                                                     _.save()
                                                     _ = Student.objects.get(profile = User.objects.get(username=school_to_add.school_name+'-student-'+column[0]))
                                             if school_to_add and _:
@@ -628,6 +630,7 @@ def create_user(request):
                                                     _ = Student.objects.get(profile = User.objects.get(username=school_to_add.school_name+'-student-'+column[0]))
                                                     _.first_parent=Parent.objects.get(tell_me_user_id=column[8])
                                                     _.second_parent=Parent.objects.get(tell_me_user_id=column[9])
+                                                    _.name = column[1]+' '+column[2]
                                                     _.save()
                                                     _ = Student.objects.get(profile = User.objects.get(username=school_to_add.school_name+'-student-'+column[0]))
                                             else:
@@ -638,6 +641,7 @@ def create_user(request):
                                                     _ = Student.objects.get(profile = User.objects.get(username=school_to_add.school_name+'-student-'+column[0]))
                                                     _.first_parent=Parent.objects.get(tell_me_user_id=column[8])
                                                     _.second_parent=Parent.objects.get(tell_me_user_id=column[9])
+                                                    _.name = column[1]+' '+column[2]
                                                     _.save()
                                                     _ = Student.objects.get(profile = User.objects.get(username=school_to_add.school_name+'-student-'+column[0]))
                                             if school_to_add and _:
@@ -648,7 +652,10 @@ def create_user(request):
                                             if User.objects.filter(username=school_to_add.school_name+'-parent-'+column[0]).count()<1:
                                                 _, created = Parent.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.create_user(username=school_to_add.school_name+'-parent-'+column[0], first_name=column[1], last_name=column[2], email=column[3], password=column[4]), tell_me_user_id=column[7])
                                             else:
-                                                _, created = Parent.objects.update_or_create(name = column[1]+' '+column[2], profile = User.objects.get(username=school_to_add.school_name+'-parent-'+column[0]), tell_me_user_id=column[7])
+                                                _ = Parent.objects.get(profile = User.objects.get(username=school_to_add.school_name+'-parent-'+column[0]))
+                                                    _.name = column[1]+' '+column[2]
+                                                    _.tell_me_user_id = column[7]
+                                                    _.save()
                     messages.success(request, 'Usuários criados com sucesso!')
                     return redirect('/users/create_user')
                 else:
