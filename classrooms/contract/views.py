@@ -1058,7 +1058,10 @@ def seecontractsbyquery(request):
             contracts = Contract.objects.filter(chain__in=chains_to_select)
 
         if search:
-            contracts = contracts.filter(reduce(operator.and_, (Q(name__icontains=x) for x in search.split(" "))))
+            if search.isdigit():
+                contracts = contracts.filter(contract_id__in=[search])
+            else:
+                contracts = contracts.filter(reduce(operator.and_, (Q(name__icontains=x) for x in search.split(" "))))
         if initial_date:
             contracts = contracts.filter(date__gte=initial_date)
         if final_date:
