@@ -250,6 +250,9 @@
 					$('#headstablebutton').removeClass('non-interactable');
 				}
 			});
+			$(window).on('resize', function () {
+				$('#headstable').DataTable();
+			});
 		});
 		function changeYesLink(url) {
 			document.getElementById("link_to_delete").href = url;
