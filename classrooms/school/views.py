@@ -891,6 +891,13 @@ def update_class(request, class_id=None):
 		form.fields['students'].queryset = school_to_update_class.students.all()
 		if form.is_valid():
 			classroom = form.save(commit=False)
+			try:
+				newchain = Chain.objects.get(name="{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name))
+				if newchain.name:
+					messages.warning(request, 'Já existe uma turma com este nome nesta escola')
+					return redirect('/schools/{}/add_class'.format(school_id))
+			except:
+				pass
 			chain_to_be_updated.name = "{0}-{1}-{2}-{3}".format(school_to_update_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name)
 			chain_to_be_updated.save(update_fields=['name'])
 			if classroom.slm:
@@ -913,6 +920,13 @@ def update_class(request, class_id=None):
 		form.fields['students'].queryset = school_to_update_class.students.all()
 		if form.is_valid():
 			classroom = form.save(commit=False)
+			try:
+				newchain = Chain.objects.get(name="{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name))
+				if newchain.name:
+					messages.warning(request, 'Já existe uma turma com este nome nesta escola')
+					return redirect('/schools/{}/add_class'.format(school_id))
+			except:
+				pass
 			chain_to_be_updated.name = "{0}-{1}-{2}-{3}".format(school_to_update_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name)
 			chain_to_be_updated.save(update_fields=['name'])
 			if classroom.slm:
