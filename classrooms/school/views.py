@@ -895,7 +895,7 @@ def update_class(request, class_id=None):
 				newchain = Chain.objects.get(name="{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name))
 				if newchain.name:
 					messages.warning(request, 'Já existe uma turma com este nome nesta escola')
-					return redirect('/schools/{}/add_class'.format(school_id))
+					return redirect('/schools/update_class/{}'.format(class_id))
 			except:
 				pass
 			chain_to_be_updated.name = "{0}-{1}-{2}-{3}".format(school_to_update_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name)
@@ -924,7 +924,7 @@ def update_class(request, class_id=None):
 				newchain = Chain.objects.get(name="{0}-{1}-{2}-{3}".format(school_to_add_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name))
 				if newchain.name:
 					messages.warning(request, 'Já existe uma turma com este nome nesta escola')
-					return redirect('/schools/{}/add_class'.format(school_id))
+					return redirect('/schools/update_class/{}'.format(class_id))
 			except:
 				pass
 			chain_to_be_updated.name = "{0}-{1}-{2}-{3}".format(school_to_update_class.school_name, classroom.enrollment_class_year, classroom.class_unit, classroom.class_name)
