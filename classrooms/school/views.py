@@ -891,7 +891,7 @@ def update_class(request, class_id=None):
 		form.fields['students'].queryset = school_to_update_class.students.all()
 		if form.is_valid():
 			classroom = form.save(commit=False)
-			if class_to_update.name == classroom.name:
+			if class_to_update.class_name == classroom.class_name:
 				pass
 			else:
 				try:
@@ -923,7 +923,7 @@ def update_class(request, class_id=None):
 		form.fields['students'].queryset = school_to_update_class.students.all()
 		if form.is_valid():
 			classroom = form.save(commit=False)
-			if class_to_update.name == classroom.name:
+			if class_to_update.class_name == classroom.class_name:
 				pass
 			else:
 				try:
