@@ -87,6 +87,12 @@
                   <input type="button" onClick="exportTableToCSV('Contratos.csv')" class="btn btn-info btn-fill pull-left"
                     style="background-color: #1D23D7; border-color: #1D23D7; margin-left: 30px;"
                     value="Exportar" />
+                  {% if contracts %}
+                    <button onClick="exportContractsToDrive()" class="btn btn-info btn-fill pull-left"
+                    style="background-color: #1D23D7; border-color: #1D23D7; margin-left: 30px;">
+                      <i class="fab fa-google-drive"></i>
+                    </button>
+                  {% endif %}
                 </div>
                 <div class="clearfix"></div>
             </form>
@@ -128,6 +134,10 @@
                       {% if is_supervisor or is_witness %}
                       <th>
                         <input id="selectall" type="checkbox" name="selectall" onclick="select_all(this)">
+                      </th>
+                      {% elif request.user.is_superuser %}
+                      <th>
+                        <input id="selectall" type="checkbox" name="selectall" onclick="select_all_superuser(this)">
                       </th>
                       {% endif %}
                     {% endif %}
@@ -171,6 +181,10 @@
                               <input type="checkbox" name="checks" value="{{ contract.contract_id }}">
                             {% endif %}
                           {% endif %}
+                        </td>
+                      {% elif request.user.is_superuser %}
+                        <td>
+                          <input type="checkbox" name="checks" value="{{ contract.contract_id }}">
                         </td>
                       {% endif %}
                     {% endif %}
@@ -795,6 +809,25 @@
   </div>
 </div>
 <script type="text/javascript">
+  function exportContractsToDrive(){
+    var allCheckboxes = document.getElementsByName('checks');
+    var selectall = document.getElementById('selectall');
+    setTimeout(function () {
+      $('#multi-sign-contract-modal').modal("hide");
+      setTimeout(function () {
+        $('#multi-sign-contract-modal-message').text('Por favor, espere um pouco. Estamos enviando seus contratos pro drive!');
+        allCheckboxes.forEach(function (checkbox) {
+          var myInit = {
+            credentials: 'same-origin',
+            cache: 'default'
+          };
+          if (checkbox.checked || selectall.checked) {
+            fetch(`/contracts/upload_contract_file_to_drive/${checkbox.value}/contract`, myInit).then(response=>response)
+          }
+        });
+      }, 20);
+    }, 2000);
+  }
   function limpa() {
     document.getElementById('selected_school').value = "0";
     document.getElementById('selected_class').value = "0";
@@ -980,6 +1013,18 @@
         if (contract.classList.contains('badge-danger')){
           checkbox.checked = false;
         }
+      }
+      });
+  }
+  function select_all_superuser(ele) {
+    var allCheckboxes = document.getElementsByName('checks');
+    var is_witness = `{{ is_witness|yesno:"true,false" }}`;
+    allCheckboxes.forEach(function (checkbox) {
+      if (ele.checked){
+        checkbox.checked = true;
+      }
+      else{
+        checkbox.checked = false;
       }
       });
   }
