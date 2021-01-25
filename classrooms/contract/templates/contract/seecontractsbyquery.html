@@ -88,9 +88,11 @@
                     style="background-color: #1D23D7; border-color: #1D23D7; margin-left: 30px;"
                     value="Exportar" />
                   {% if contracts and not is_school_supervisor %}
-                    <a class="btn btn-danger btn-block" href="#" data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal" data-target="#delete-multiple-contracts-modal">
+                    <button class="btn btn-danger btn-fill pull-left" href="#"
+                    style="background-color: #B22222; border-color: #B22222; margin-left: 30px;" 
+                    data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal" data-target="#delete-multiple-contracts-modal">
                       Deletar Contratos
-                    </a>
+                    </button>
                     <button onClick="extendContracts7Days()" class="btn btn-info btn-fill pull-left"
                     style="background-color: #1D23D7; border-color: #1D23D7; margin-left: 30px;" data-toggle="modal"
                     data-target="#multi-sign-contract-modal">
