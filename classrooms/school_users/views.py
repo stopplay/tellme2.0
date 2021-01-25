@@ -1517,7 +1517,7 @@ def seeusersbyquery_administration(request):
         school_users = []
         query = {   
             'type_of_user': type_of_user,
-            'selected_school': int(selected_school),
+            'selected_school': int(selected_school) if selected_school else 0,
             'name': name
         }
 
@@ -1755,10 +1755,7 @@ def seeusersbyquery_signes(request):
                     school_users = TYPE[type_of_user].objects.filter(school__in=schools).distinct()
 
         elif type_of_user == 'parent':
-            if request.user.is_superuser:
-                school_users = TYPE[type_of_user].objects.exclude(Q(first_parent__school=None) & Q(second_parent__school=None) & Q(third_parent__school=None)).distinct()
-            else:
-                school_users = TYPE[type_of_user].objects.filter(Q(first_parent__school__in=schools) | Q(second_parent__school__in=schools) | Q(third_parent__school__in=schools)).distinct()
+            school_users = TYPE[type_of_user].objects.filter(Q(first_parent__school__in=schools) | Q(second_parent__school__in=schools) | Q(third_parent__school__in=schools)).distinct()
 
             if school:
                 school_users = school_users.filter(Q(first_parent__school=school) | Q(second_parent__school=school) | Q(third_parent__school=school)).distinct()
@@ -1775,10 +1772,7 @@ def seeusersbyquery_signes(request):
                     fetched = True
 
             if not fetched:
-                if request.user.is_superuser:
-                    school_users = TYPE[type_of_user].objects.exclude(Q(first_parent__school=None) & Q(second_parent__school=None) & Q(third_parent__school=None)).distinct()
-                else:
-                    school_users = TYPE[type_of_user].objects.filter(Q(first_parent__school__in=schools) | Q(second_parent__school__in=schools) | Q(third_parent__school__in=schools)).distinct()
+                school_users = TYPE[type_of_user].objects.filter(Q(first_parent__school__in=schools) | Q(second_parent__school__in=schools) | Q(third_parent__school__in=schools)).distinct()
         else:
             if request.user.is_superuser:
                 student_users = Student.objects.exclude(school=None).distinct()
@@ -1805,10 +1799,7 @@ def seeusersbyquery_signes(request):
                 else:
                     student_users = Student.objects.filter(school__in=schools).distinct()
             
-            if request.user.is_superuser:
-                parent_users = Parent.objects.exclude(Q(first_parent__school=None) & Q(second_parent__school=None) & Q(third_parent__school=None)).distinct()
-            else:
-                parent_users = Parent.objects.filter(Q(first_parent__school__in=schools) | Q(second_parent__school__in=schools) | Q(third_parent__school__in=schools)).distinct()
+            parent_users = Parent.objects.filter(Q(first_parent__school__in=schools) | Q(second_parent__school__in=schools) | Q(third_parent__school__in=schools)).distinct()
 
             if school:
                 parent_users = parent_users.filter(Q(first_parent__school=school) | Q(second_parent__school=school) | Q(third_parent__school=school)).distinct()
@@ -1825,10 +1816,7 @@ def seeusersbyquery_signes(request):
                     fetched = True
 
             if not fetched:
-                if request.user.is_superuser:
-                    parent_users = Parent.objects.exclude(Q(first_parent__school=None) & Q(second_parent__school=None) & Q(third_parent__school=None)).distinct()
-                else:
-                    parent_users = Parent.objects.filter(Q(first_parent__school__in=schools) | Q(second_parent__school__in=schools) | Q(third_parent__school__in=schools)).distinct()
+                parent_users = Parent.objects.filter(Q(first_parent__school__in=schools) | Q(second_parent__school__in=schools) | Q(third_parent__school__in=schools)).distinct()
             
             school_users = [*student_users, *parent_users]
         return render(request, 'school_users/seeusersbyquery_signes.html', {'type_of_user':type_of_user, 'school_users':school_users, 'schools':schools, 'is_supervisor': is_supervisor, 'error': error, 'query': query})
