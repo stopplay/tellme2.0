@@ -87,7 +87,11 @@
                   <input type="button" onClick="exportTableToCSV('Contratos.csv')" class="btn btn-info btn-fill pull-left"
                     style="background-color: #1D23D7; border-color: #1D23D7; margin-left: 30px;"
                     value="Exportar" />
-                  {% if contracts %}
+                  {% if contracts and not is_school_supervisor %}
+                    <button onClick="extendContracts7Days()" class="btn btn-info btn-fill pull-left"
+                    style="background-color: #1D23D7; border-color: #1D23D7; margin-left: 30px;">
+                      Estender Contratos Selecionados Por 7 Dias
+                    </button>
                     <button onClick="exportContractsToDrive()" class="btn btn-info btn-fill pull-left"
                     style="background-color: #1D23D7; border-color: #1D23D7; margin-left: 30px;">
                       <i class="fab fa-google-drive"></i>
@@ -809,6 +813,25 @@
   </div>
 </div>
 <script type="text/javascript">
+  function extendContracts7Days(){
+    var allCheckboxes = document.getElementsByName('checks');
+    var selectall = document.getElementById('selectall');
+    setTimeout(function () {
+      $('#multi-sign-contract-modal').modal("hide");
+      setTimeout(function () {
+        $('#multi-sign-contract-modal-message').text('Por favor, espere um pouco. Estamos extendendo a expiração de seus contratos!');
+        allCheckboxes.forEach(function (checkbox) {
+          var myInit = {
+            credentials: 'same-origin',
+            cache: 'default'
+          };
+          if (checkbox.checked || selectall.checked) {
+            fetch(`/contracts/extend_expire_date/${checkbox.value}`, myInit).then(response=>response)
+          }
+        });
+      }, 20);
+    }, 2000);
+  }
   function exportContractsToDrive(){
     var allCheckboxes = document.getElementsByName('checks');
     var selectall = document.getElementById('selectall');
