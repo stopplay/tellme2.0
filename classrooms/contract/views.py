@@ -2426,6 +2426,9 @@ def extend_expire_date(request, contract_id):
     try:
         contract = Contract.objects.get(contract_id=contract_id)
         contract.expiration = timezone.now().date() + datetime.timedelta(days=7)
+        if contract.end < timezone.now().date() + datetime.timedelta(days=7):
+            contract.end = timezone.now().date() + datetime.timedelta(days=7)
+            contract.is_active = True
         contract.is_expired = False
         contract.save()
         messages.success(request, 'Prazo de expiração do contrato extendido')
