@@ -868,9 +868,11 @@
             credentials: 'same-origin',
             cache: 'default'
           };
-          if (checkbox.checked || selectall.checked) {
+          setTimeout(function(){
+            if (checkbox.checked || selectall.checked) {
             fetch(`/contracts/upload_contract_file_to_drive/${checkbox.value}/contract`, myInit).then(response=>response)
           }
+          }, 10);
         });
       }, 20);
     }, 2000);
