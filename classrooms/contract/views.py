@@ -861,14 +861,7 @@ def updatecontract(request, contract_id=None):
             messages.warning(request, 'Por favor selecione um estudante')
             return redirect('/contracts/select_student_to_contract_update/{}'.format(contract_id))
         instance = Contract.objects.get(contract_id=contract_id)
-        if instance.chain:
-            school = School.objects.get(chains__id__exact=instance.chain.id)
-            if not (school.sponte_client_number==None and school.sponte_token==None):
-                form = ContractModelFormWithSponte(request.POST or None, request.FILES, instance=instance)
-            else:
-                form = ContractModelFormWithoutSponte(request.POST or None, request.FILES, instance=instance)
-        else:
-            form = ContractModelFormWithoutSponte(request.POST or None, request.FILES, instance=instance)
+        form = ContractModelFormWithoutSponte(request.POST or None, request.FILES, instance=instance)
         students = Student.objects.all().order_by('name')
         if request.method=='POST':
             if form.is_valid():
