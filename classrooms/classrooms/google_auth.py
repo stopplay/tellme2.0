@@ -34,5 +34,5 @@ class google_auth:
         print (self.request.session['credentials'])
         credentials = Credentials(
       **self.request.session['credentials'])
-        service = build('drive', 'v3', credentials=credentials)
+        service = build('drive', 'v3', credentials=credentials, cache_discovery=False)
         return service
