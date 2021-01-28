@@ -94,7 +94,7 @@
                     </button>
                     <button onClick="exportContractsToDrive()" class="btn btn-info btn-fill pull-left" type="button"
                     style="background-color: #1D23D7; border-color: #1D23D7; margin-left: 30px;" data-toggle="modal"
-                    data-target="#multi-sign-contract-modal">
+                    data-target="#multi-export-contract-modal">
                       <i class="fab fa-google-drive"></i>
                     </button>
                     <button class="btn btn-danger btn-fill pull-left"
@@ -862,7 +862,6 @@
     var selectall = document.getElementById('selectall');
     setTimeout(function () {
       setTimeout(function () {
-        $('#multi-sign-contract-modal-message').text('Por favor, espere um pouco. Estamos enviando seus contratos pro drive!');
         allCheckboxes.forEach(function (checkbox) {
           var myInit = {
             credentials: 'same-origin',
@@ -1408,6 +1407,18 @@
     <div class="modal-content">
       <div class="modal-body">
         <p id="multi-sign-contract-modal-message">Por favor, espere um pouco. Estamos criptografando seus contratos!</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="multi-export-contract-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+      <div class="modal-body">
+        <p id="multi-export-contract-modal-message">Por favor, espere um pouco. Estamos enviando seus contratos pro drive!</p>
       </div>
     </div>
 
