@@ -679,7 +679,7 @@
                             </a>
                           </div>
                           <div class="col-md-3">
-                            <a class="btn btn-primary btn-block w-100" href="{% url 'contracts:upload_contract_file_to_drive' contract.contract_id 'contract' %}"
+                            <a class="btn {% if contract.is_sent_to_drive %}btn-success{% else %}btn-primary{% endif %} btn-block w-100" href="{% url 'contracts:upload_contract_file_to_drive' contract.contract_id 'contract' %}"
                               data-baloon="Remove this item from the cart" style="font-size: 13.5px;justify-content:center;align-items:center; display: flex;">
                               <i class="fab fa-google-drive"></i>
                             </a>
@@ -695,7 +695,7 @@
                             </a>
                           </div>
                           <div class="col-md-3">
-                            <a class="btn btn-primary btn-block w-100" href="{% url 'contracts:upload_contract_file_to_drive' contract.contract_id 'terms_1' %}"
+                            <a class="btn {% if contract.is_sent_to_drive %}btn-success{% else %}btn-primary{% endif %} btn-block w-100" href="{% url 'contracts:upload_contract_file_to_drive' contract.contract_id 'terms_1' %}"
                               data-baloon="Remove this item from the cart" style="font-size: 13.5px;justify-content:center;align-items:center; display: flex;">
                               <i class="fab fa-google-drive"></i>
                             </a>
@@ -711,7 +711,7 @@
                             </a>
                           </div>
                           <div class="col-md-3">
-                            <a class="btn btn-primary btn-block w-100" href="{% url 'contracts:upload_contract_file_to_drive' contract.contract_id 'terms_2' %}"
+                            <a class="btn {% if contract.is_sent_to_drive %}btn-success{% else %}btn-primary{% endif %} btn-block w-100" href="{% url 'contracts:upload_contract_file_to_drive' contract.contract_id 'terms_2' %}"
                               data-baloon="Remove this item from the cart" style="font-size: 13.5px;justify-content:center;align-items:center; display: flex;">
                               <i class="fab fa-google-drive"></i>
                             </a>

@@ -2400,6 +2400,8 @@ def upload_contract_file_to_drive(request, contract_id, type_of_file):
             elif type_of_file == 'terms_2':
                 upload_drive_file(request, request.user, f'{contract.contract_id} - {contract.chain.classe.class_name} - {contract.student_name} - {contract.date.year} - Term. 2', get_terms_of_contract_2_filepath(contract), 'application/pdf')
             messages.success(request, 'Contrato enviado para seu drive com sucesso.')
+            contract.is_sent_to_drive = True
+            contract.save()
         else:
             messages.error(request, 'Você não tem permissão para enviar contratos para o seu drive.')
         return redirect('/contracts/all')
@@ -2424,7 +2426,7 @@ def extend_expire_date(request, contract_id):
             contract.is_active = True
         contract.is_expired = False
         contract.save()
-        messages.success(request, 'Prazo de expiração do contrato extendido')
+        messages.success(request, 'Prazo de expiração do contrato estendido')
         return redirect('/contracts/all')
     except Exception as e:
         messages.error(request, 'Contrato não encontrado')
