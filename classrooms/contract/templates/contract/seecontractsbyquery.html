@@ -93,7 +93,8 @@
                       Estender Por 7 Dias
                     </button>
                     <button onClick="exportContractsToDrive()" class="btn btn-info btn-fill pull-left" type="button"
-                    style="background-color: #1D23D7; border-color: #1D23D7; margin-left: 30px;">
+                    style="background-color: #1D23D7; border-color: #1D23D7; margin-left: 30px;" data-toggle="modal"
+                    data-target="#multi-sign-contract-modal">
                       <i class="fab fa-google-drive"></i>
                     </button>
                     <button class="btn btn-danger btn-fill pull-left"
@@ -860,7 +861,6 @@
     var allCheckboxes = document.getElementsByName('checks');
     var selectall = document.getElementById('selectall');
     setTimeout(function () {
-      $('#multi-sign-contract-modal').modal("hide");
       setTimeout(function () {
         $('#multi-sign-contract-modal-message').text('Por favor, espere um pouco. Estamos enviando seus contratos pro drive!');
         allCheckboxes.forEach(function (checkbox) {
@@ -872,6 +872,7 @@
             fetch(`/contracts/upload_contract_file_to_drive/${checkbox.value}/contract`, myInit).then(response=>response)
           }
         });
+      $('#multi-sign-contract-modal').modal("hide");
       }, 20);
     }, 2000);
   }
