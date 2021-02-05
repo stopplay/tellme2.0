@@ -868,7 +868,9 @@
             cache: 'default'
           };
           if (checkbox.checked || selectall.checked) {
+            sleep(20);
             fetch(`/contracts/upload_contract_file_to_drive/${checkbox.value}/contract`, myInit).then(response=>response)
+            console.log('Foi')
           }
         });
       $('#multi-export-contract-modal').modal("hide");
