@@ -826,9 +826,6 @@
       end = new Date().getTime();
     }
   }
-  console.log('Antes')
-  wait(10000)
-  console.log('Depois')
   function deleteSelectedContracts(){
     var allCheckboxes = document.getElementsByName('checks');
     var selectall = document.getElementById('selectall');
@@ -878,6 +875,7 @@
             cache: 'default'
           };
           if (checkbox.checked || selectall.checked) {
+            wait(10000)
             fetch(`/contracts/upload_contract_file_to_drive/${checkbox.value}/contract`, myInit).then(response=>response)
           }
         });
