@@ -819,6 +819,16 @@
   </div>
 </div>
 <script type="text/javascript">
+  function wait(ms){
+    var start = new Date().getTime();
+    var end = start;
+    while(end < start + ms) {
+      end = new Date().getTime();
+    }
+  }
+  console.log('Antes')
+  wait(10000)
+  console.log('Depois')
   function deleteSelectedContracts(){
     var allCheckboxes = document.getElementsByName('checks');
     var selectall = document.getElementById('selectall');
