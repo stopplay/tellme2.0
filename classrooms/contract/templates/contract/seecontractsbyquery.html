@@ -86,7 +86,23 @@
                     value="Limpar" />
                   <input type="button" onClick="exportTableToCSV('Contratos.csv')" class="btn btn-info btn-fill pull-left"
                     style="background-color: #1D23D7; border-color: #1D23D7; margin-left: 30px;"
-                    value="Exportar" />
+                    value="Relatório" />
+                  {% if contracts and not is_school_supervisor and not is_witness %}
+                    <button onClick="extendContracts7Days()" class="btn btn-info btn-fill pull-left" type="button"
+                    style="background-color: #1D23D7; border-color: #1D23D7; margin-left: 30px;">
+                      Estender Por 7 Dias
+                    </button>
+                    <button onClick="exportContractsToDrive()" class="btn btn-info btn-fill pull-left" type="button"
+                    style="background-color: #1D23D7; border-color: #1D23D7; margin-left: 30px;" data-toggle="modal"
+                    data-target="#multi-export-contract-modal">
+                      <i class="fab fa-google-drive"></i>
+                    </button>
+                    <button class="btn btn-danger btn-fill pull-left"
+                    style="background-color: #B22222; border-color: #B22222; margin-left: 30px;" 
+                    data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal" data-target="#delete-multiple-contracts-modal">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  {% endif %}
                 </div>
                 <div class="clearfix"></div>
             </form>
@@ -128,6 +144,10 @@
                       {% if is_supervisor or is_witness %}
                       <th>
                         <input id="selectall" type="checkbox" name="selectall" onclick="select_all(this)">
+                      </th>
+                      {% elif request.user.is_superuser %}
+                      <th>
+                        <input id="selectall" type="checkbox" name="selectall" onclick="select_all_superuser(this)">
                       </th>
                       {% endif %}
                     {% endif %}
@@ -171,6 +191,10 @@
                               <input type="checkbox" name="checks" value="{{ contract.contract_id }}">
                             {% endif %}
                           {% endif %}
+                        </td>
+                      {% elif request.user.is_superuser %}
+                        <td>
+                          <input type="checkbox" name="checks" value="{{ contract.contract_id }}">
                         </td>
                       {% endif %}
                     {% endif %}
@@ -655,7 +679,7 @@
                             </a>
                           </div>
                           <div class="col-md-3">
-                            <a class="btn btn-primary btn-block w-100" href="{% url 'contracts:upload_contract_file_to_drive' contract.contract_id 'contract' %}"
+                            <a class="btn {% if contract.is_sent_to_drive %}btn-success{% else %}btn-primary{% endif %} btn-block w-100" href="{% url 'contracts:upload_contract_file_to_drive' contract.contract_id 'contract' %}"
                               data-baloon="Remove this item from the cart" style="font-size: 13.5px;justify-content:center;align-items:center; display: flex;">
                               <i class="fab fa-google-drive"></i>
                             </a>
@@ -671,7 +695,7 @@
                             </a>
                           </div>
                           <div class="col-md-3">
-                            <a class="btn btn-primary btn-block w-100" href="{% url 'contracts:upload_contract_file_to_drive' contract.contract_id 'terms_1' %}"
+                            <a class="btn {% if contract.is_sent_to_drive %}btn-success{% else %}btn-primary{% endif %} btn-block w-100" href="{% url 'contracts:upload_contract_file_to_drive' contract.contract_id 'terms_1' %}"
                               data-baloon="Remove this item from the cart" style="font-size: 13.5px;justify-content:center;align-items:center; display: flex;">
                               <i class="fab fa-google-drive"></i>
                             </a>
@@ -687,7 +711,7 @@
                             </a>
                           </div>
                           <div class="col-md-3">
-                            <a class="btn btn-primary btn-block w-100" href="{% url 'contracts:upload_contract_file_to_drive' contract.contract_id 'terms_2' %}"
+                            <a class="btn {% if contract.is_sent_to_drive %}btn-success{% else %}btn-primary{% endif %} btn-block w-100" href="{% url 'contracts:upload_contract_file_to_drive' contract.contract_id 'terms_2' %}"
                               data-baloon="Remove this item from the cart" style="font-size: 13.5px;justify-content:center;align-items:center; display: flex;">
                               <i class="fab fa-google-drive"></i>
                             </a>
@@ -795,6 +819,70 @@
   </div>
 </div>
 <script type="text/javascript">
+  function wait(ms){
+    var start = new Date().getTime();
+    var end = start;
+    while(end < start + ms) {
+      end = new Date().getTime();
+    }
+  }
+  function deleteSelectedContracts(){
+    var allCheckboxes = document.getElementsByName('checks');
+    var selectall = document.getElementById('selectall');
+    setTimeout(function () {
+      $('#multi-sign-contract-modal').modal("hide");
+      setTimeout(function () {
+        $('#multi-sign-contract-modal-message').text('Por favor, espere um pouco. Estamos deletando seus contratos!');
+        allCheckboxes.forEach(function (checkbox) {
+          var myInit = {
+            credentials: 'same-origin',
+            cache: 'default'
+          };
+          if (checkbox.checked || selectall.checked) {
+            fetch(`/contracts/delete_contract/${checkbox.value}`, myInit).then(response=>response)
+          }
+        });
+      }, 20);
+    }, 2000);
+  }
+  function extendContracts7Days(){
+    var allCheckboxes = document.getElementsByName('checks');
+    var selectall = document.getElementById('selectall');
+    setTimeout(function () {
+      $('#multi-sign-contract-modal').modal("hide");
+      setTimeout(function () {
+        $('#multi-sign-contract-modal-message').text('Por favor, espere um pouco. Estamos extendendo a expiração de seus contratos!');
+        allCheckboxes.forEach(function (checkbox) {
+          var myInit = {
+            credentials: 'same-origin',
+            cache: 'default'
+          };
+          if (checkbox.checked || selectall.checked) {
+            fetch(`/contracts/extend_expire_date/${checkbox.value}`, myInit).then(response=>response)
+          }
+        });
+      }, 20);
+    }, 2000);
+  }
+  function exportContractsToDrive(){
+    var allCheckboxes = document.getElementsByName('checks');
+    var selectall = document.getElementById('selectall');
+    setTimeout(function () {
+      setTimeout(function () {
+        allCheckboxes.forEach(function (checkbox) {
+          var myInit = {
+            credentials: 'same-origin',
+            cache: 'default'
+          };
+          if (checkbox.checked || selectall.checked) {
+            wait(3000)
+            fetch(`/contracts/upload_contract_file_to_drive/${checkbox.value}/contract`, myInit).then(response=>response)
+          }
+        });
+      $('#multi-export-contract-modal').modal("hide");
+      }, 20);
+    }, 2000);
+  }
   function limpa() {
     document.getElementById('selected_school').value = "0";
     document.getElementById('selected_class').value = "0";
@@ -980,6 +1068,18 @@
         if (contract.classList.contains('badge-danger')){
           checkbox.checked = false;
         }
+      }
+      });
+  }
+  function select_all_superuser(ele) {
+    var allCheckboxes = document.getElementsByName('checks');
+    var is_witness = `{{ is_witness|yesno:"true,false" }}`;
+    allCheckboxes.forEach(function (checkbox) {
+      if (ele.checked){
+        checkbox.checked = true;
+      }
+      else{
+        checkbox.checked = false;
       }
       });
   }
@@ -1253,6 +1353,28 @@
 
 </script>
 
+<div id="delete-multiple-contracts-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">x</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Você tem certeza que deseja deletar os contratos selecionados? Essa operação não pode ser desfeita!</p>
+      </div>
+      <div class="modal-footer">
+        <button onClick="deleteSelectedContracts()" class="btn btn-danger btn-block">
+          Sim
+        </button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 <!-- Contract Modal -->
 <div id="delete-contract-modal" class="modal fade" role="dialog">
   <div class="modal-dialog">
@@ -1293,6 +1415,18 @@
     <div class="modal-content">
       <div class="modal-body">
         <p id="multi-sign-contract-modal-message">Por favor, espere um pouco. Estamos criptografando seus contratos!</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="multi-export-contract-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+      <div class="modal-body">
+        <p id="multi-export-contract-modal-message">Por favor, espere um pouco. Estamos enviando seus contratos pro drive!</p>
       </div>
     </div>
 

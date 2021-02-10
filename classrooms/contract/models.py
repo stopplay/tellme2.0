@@ -78,6 +78,7 @@ class Contract(models.Model):
     is_paid = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_expired = models.BooleanField(default=False)
+    is_sent_to_drive = models.BooleanField(default=False)
     
     # end of Basic data of the contract #
 

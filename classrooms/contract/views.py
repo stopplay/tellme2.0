@@ -861,14 +861,7 @@ def updatecontract(request, contract_id=None):
             messages.warning(request, 'Por favor selecione um estudante')
             return redirect('/contracts/select_student_to_contract_update/{}'.format(contract_id))
         instance = Contract.objects.get(contract_id=contract_id)
-        if instance.chain:
-            school = School.objects.get(chains__id__exact=instance.chain.id)
-            if not (school.sponte_client_number==None and school.sponte_token==None):
-                form = ContractModelFormWithSponte(request.POST or None, request.FILES, instance=instance)
-            else:
-                form = ContractModelFormWithoutSponte(request.POST or None, request.FILES, instance=instance)
-        else:
-            form = ContractModelFormWithoutSponte(request.POST or None, request.FILES, instance=instance)
+        form = ContractModelFormWithoutSponte(request.POST or None, request.FILES, instance=instance)
         students = Student.objects.all().order_by('name')
         if request.method=='POST':
             if form.is_valid():
@@ -2401,12 +2394,14 @@ def upload_contract_file_to_drive(request, contract_id, type_of_file):
         contract = Contract.objects.get(contract_id=contract_id)
         if Head.objects.filter(profile=request.user).count()>=1 or request.user.is_superuser:
             if type_of_file == 'contract':
-                upload_drive_file(request, request.user, contract.pdf.name, get_pdf_filepath(contract), 'application/pdf')
+                upload_drive_file(request, request.user, f'{contract.contract_id} - {contract.chain.classe.class_name} - {contract.student_name} - {contract.date.year} - Principal', get_pdf_filepath(contract), 'application/pdf')
             elif type_of_file == 'terms_1':
-                upload_drive_file(request, request.user, contract.terms_of_contract.name, get_terms_of_contract_1_filepath(contract), 'application/pdf')
+                upload_drive_file(request, request.user, f'{contract.contract_id} - {contract.chain.classe.class_name} - {contract.student_name} - {contract.date.year} - Term. 1', get_terms_of_contract_1_filepath(contract), 'application/pdf')
             elif type_of_file == 'terms_2':
-                upload_drive_file(request, request.user, contract.terms_of_contract_2.name, get_terms_of_contract_2_filepath(contract), 'application/pdf')
+                upload_drive_file(request, request.user, f'{contract.contract_id} - {contract.chain.classe.class_name} - {contract.student_name} - {contract.date.year} - Term. 2', get_terms_of_contract_2_filepath(contract), 'application/pdf')
             messages.success(request, 'Contrato enviado para seu drive com sucesso.')
+            contract.is_sent_to_drive = True
+            contract.save()
         else:
             messages.error(request, 'Você não tem permissão para enviar contratos para o seu drive.')
         return redirect('/contracts/all')
@@ -2426,9 +2421,12 @@ def extend_expire_date(request, contract_id):
     try:
         contract = Contract.objects.get(contract_id=contract_id)
         contract.expiration = timezone.now().date() + datetime.timedelta(days=7)
+        if contract.end < timezone.now().date() + datetime.timedelta(days=7):
+            contract.end = timezone.now().date() + datetime.timedelta(days=7)
+            contract.is_active = True
         contract.is_expired = False
         contract.save()
-        messages.success(request, 'Prazo de expiração do contrato extendido')
+        messages.success(request, 'Prazo de expiração do contrato estendido')
         return redirect('/contracts/all')
     except Exception as e:
         messages.error(request, 'Contrato não encontrado')
