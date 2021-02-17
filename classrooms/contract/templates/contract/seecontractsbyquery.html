@@ -97,11 +97,13 @@
                     data-target="#multi-export-contract-modal">
                       <i class="fab fa-google-drive"></i>
                     </button>
-                    <button class="btn btn-danger btn-fill pull-left"
-                    style="background-color: #B22222; border-color: #B22222; margin-left: 30px;" 
-                    data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal" data-target="#delete-multiple-contracts-modal">
-                      <i class="fas fa-trash"></i>
-                    </button>
+                    {% if request.user.is_superuser %}
+                      <button class="btn btn-danger btn-fill pull-left"
+                      style="background-color: #B22222; border-color: #B22222; margin-left: 30px;" 
+                      data-baloon="Remove this item from the cart" class="text-light" data-toggle="modal" data-target="#delete-multiple-contracts-modal">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    {% endif %}
                   {% endif %}
                 </div>
                 <div class="clearfix"></div>
