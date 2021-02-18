@@ -879,6 +879,10 @@
           if (checkbox.checked || selectall.checked) {
             wait(3000)
             fetch(`/contracts/upload_contract_file_to_drive/${checkbox.value}/contract`, myInit).then(response=>response)
+            wait(3000)
+            fetch(`/contracts/upload_contract_file_to_drive/${checkbox.value}/terms_1`, myInit).then(response=>response)
+            wait(3000)
+            fetch(`/contracts/upload_contract_file_to_drive/${checkbox.value}/terms_2`, myInit).then(response=>response)
           }
         });
       $('#multi-export-contract-modal').modal("hide");
