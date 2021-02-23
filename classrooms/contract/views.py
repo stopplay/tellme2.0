@@ -1107,9 +1107,9 @@ def seecontractsbyquery(request):
                     contracts = contracts.filter(all_witness_signed=True)
                 elif selected_filter == 'not_signed_witness':
                     contracts = contracts.filter(all_witness_signed=False)
-                elif min_filter == 'uploaded_drive':
+                elif selected_filter == 'uploaded_drive':
                     contracts = contracts.filter(is_sent_to_drive=True)
-                elif min_filter == 'not_uploaded_drive':
+                elif selected_filter == 'not_uploaded_drive':
                     contracts = contracts.filter(is_sent_to_drive=False)
         if not schools:
             messages.error(request, 'O tipo de usuário que está tentando acessar estes dados não se encaixa em nenhum dos tipos propostos pelo sistema.')
