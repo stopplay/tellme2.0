@@ -65,6 +65,8 @@
                       <option value="not_paid" {% if query.selected_filter == 'not_paid' %} selected {% endif %}>Contratos não pagos</option>
                       <option value="signed_witness" {% if query.selected_filter == 'signed_witness' %} selected {% endif %}>Contratos assinados pelas testemunhas</option>
                       <option value="not_signed_witness" {% if query.selected_filter == 'not_signed_witness' %} selected {% endif %}>Contratos não assinados pelas testemunhas</option>
+                      <option value="uploaded_drive" {% if query.selected_filter == 'uploaded_drive' %} selected {% endif %}>Contratos enviados para o Drive</option>
+                      <option value="not_uploaded_drive" {% if query.selected_filter == 'not_uploaded_drive' %} selected {% endif %}>Contratos não enviados para o Drive</option>
                     </select>
                   </div>
                 </div>
@@ -1432,7 +1434,7 @@
 
     <div class="modal-content">
       <div class="modal-body">
-        <p id="multi-export-contract-modal-message">Por favor, espere um pouco. Estamos enviando seus contratos pro drive!</p>
+        <p id="multi-export-contract-modal-message">Por favor, espere um pouco. Estamos enviando seus contratos para o Drive!</p>
       </div>
     </div>
 
