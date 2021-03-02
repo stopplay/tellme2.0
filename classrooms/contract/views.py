@@ -750,7 +750,11 @@ def createacontract(request):
                                 try:
                                     classe = school.classes.get(class_name__icontains=contract.chain.name.split('-')[-1])
                                 except Exception as e:
-                                    classe = school.classes.get(students__student_id__exact=student.student_id)
+                                    try:
+                                        classe = school.classes.get(students__student_id__exact=student.student_id)
+                                    except Exception as e:
+                                        classe = contract.chain.classe
+
                     try:
                         contract.slm = generate_slm_link(school, student)['url']
                     except Exception as e:
