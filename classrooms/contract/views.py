@@ -283,7 +283,7 @@ def write_pdf(request, contract=None, whosigned=None, school=None):
     packet = StringIO()
     # create a new PDF with Reportlab
     can = canvas.Canvas(packet, pagesize=letter)
-    can.setFont("Times-Roman", 8)
+    can.setFont("Times-Roman", 6)
     current_site = get_current_site(request)
     
     drawing = svg2rlg('http://'+current_site.domain+static('img/certificate.svg'))  
